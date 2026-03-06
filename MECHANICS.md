@@ -19,6 +19,7 @@ Every gameplay-related change must be added here with date and short reason.
 - On-screen mobile controls:
 - left bottom = jump
 - right bottom = left/right buttons
+- Touch controls are shown only on detected mobile devices.
 
 ### HUD
 - Left top: score.
@@ -204,6 +205,12 @@ Every gameplay-related change must be added here with date and short reason.
 - Left bottom button controls jump.
 - Right bottom buttons control left/right movement.
 - Keyboard controls remain unchanged on desktop.
+
+### v0.1.20 - Mobile device detection and responsive viewport fit
+- Added runtime detection of mobile device/browser.
+- On mobile, game shell now auto-fits to current window size while preserving aspect ratio.
+- Mobile layout reapplies on window resize/orientation change.
+- On-screen touch controls are hidden on desktop and enabled on mobile.
 
 ## Update Rule
 - For every mechanic change, append:

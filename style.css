@@ -52,7 +52,7 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  display: flex;
+  display: none;
   justify-content: space-between;
   align-items: flex-end;
   padding: 12px;

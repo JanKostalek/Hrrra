@@ -34,6 +34,8 @@ Main tuning points:
   var Physics = window.HrrraPhysics;
 
   var canvas = document.getElementById("game-canvas");
+  var gameShell = document.getElementById("game-shell");
+  var touchControls = document.getElementById("touch-controls");
   var ctx = canvas.getContext("2d");
   var gameOverEl = document.getElementById("game-over");
   var finalScoreEl = document.getElementById("final-score");
@@ -96,14 +98,62 @@ Main tuning points:
   var physics = new Physics();
   var player = null;
   var lastTime = 0;
+  var baseCanvasWidth = C.canvasWidth;
+  var baseCanvasHeight = C.canvasHeight;
 
   function init() {
-    canvas.width = C.canvasWidth;
-    canvas.height = C.canvasHeight;
+    canvas.width = baseCanvasWidth;
+    canvas.height = baseCanvasHeight;
+    applyResponsiveLayout();
+    window.addEventListener("resize", applyResponsiveLayout);
     restartGame();
     attachInput();
     attachTouchControls();
     requestAnimationFrame(loop);
+  }
+
+  function detectMobileDevice() {
+    var ua = navigator.userAgent || "";
+    var coarsePointer = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    return coarsePointer || /android|iphone|ipad|ipod|mobile/i.test(ua);
+  }
+
+  function applyResponsiveLayout() {
+    var isMobile = detectMobileDevice();
+
+    if (!isMobile) {
+      gameShell.style.width = "";
+      gameShell.style.height = "";
+      canvas.style.width = "";
+      canvas.style.height = "";
+      if (touchControls) {
+        touchControls.style.display = "none";
+      }
+      return;
+    }
+
+    var viewportW = Math.max(320, window.innerWidth || 320);
+    var viewportH = Math.max(320, window.innerHeight || 320);
+    var padding = 10;
+    var availW = Math.max(200, viewportW - padding * 2);
+    var availH = Math.max(200, viewportH - padding * 2);
+    var aspect = baseCanvasWidth / baseCanvasHeight;
+    var targetW = availW;
+    var targetH = targetW / aspect;
+
+    if (targetH > availH) {
+      targetH = availH;
+      targetW = targetH * aspect;
+    }
+
+    gameShell.style.width = Math.floor(targetW) + "px";
+    gameShell.style.height = Math.floor(targetH) + "px";
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+
+    if (touchControls) {
+      touchControls.style.display = "flex";
+    }
   }
 
   function restartGame() {
