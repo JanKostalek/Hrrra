@@ -101,6 +101,7 @@ Main tuning points:
   var baseCanvasWidth = C.canvasWidth;
   var baseCanvasHeight = C.canvasHeight;
   var fullscreenRequested = false;
+  var sessionMaxScore = 0;
 
   function init() {
     canvas.width = baseCanvasWidth;
@@ -378,6 +379,9 @@ Main tuning points:
 
     var distanceScore = Math.max(0, Math.floor(player.x - state.startX));
     state.score = distanceScore + state.bonusScore;
+    if (state.score > sessionMaxScore) {
+      sessionMaxScore = state.score;
+    }
     state.speedPercent = Math.round((state.scrollSpeed / C.worldAutoRunSpeed - 1) * 100);
     updateDoubleJumpSpawner(dt);
     checkDoubleJumpIconPickup();
@@ -950,6 +954,9 @@ Main tuning points:
     ctx.fillStyle = "#111";
     ctx.font = "24px Arial";
     ctx.fillText("Score: " + state.score, 18, 36);
+    ctx.font = "20px Arial";
+    ctx.fillText("Max Score: " + sessionMaxScore, 18, 64);
+    ctx.font = "24px Arial";
     ctx.textAlign = "center";
     if (state.doubleJumpTimeLeft > 0) {
       ctx.fillText("Double Jump: " + state.doubleJumpTimeLeft.toFixed(1) + "s", canvas.width * 0.5, 36);
