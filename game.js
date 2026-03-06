@@ -100,12 +100,16 @@ Main tuning points:
   var lastTime = 0;
   var baseCanvasWidth = C.canvasWidth;
   var baseCanvasHeight = C.canvasHeight;
+  var fullscreenRequested = false;
 
   function init() {
     canvas.width = baseCanvasWidth;
     canvas.height = baseCanvasHeight;
     applyResponsiveLayout();
     window.addEventListener("resize", applyResponsiveLayout);
+    document.addEventListener("fullscreenchange", function () {
+      fullscreenRequested = Boolean(document.fullscreenElement);
+    });
     restartGame();
     attachInput();
     attachTouchControls();
@@ -153,6 +157,40 @@ Main tuning points:
 
     if (touchControls) {
       touchControls.style.display = "flex";
+    }
+  }
+
+  function tryForceFullscreen() {
+    if (!detectMobileDevice()) {
+      return;
+    }
+    if (document.fullscreenElement) {
+      return;
+    }
+    if (fullscreenRequested) {
+      return;
+    }
+
+    var target = document.documentElement;
+    var request =
+      target.requestFullscreen ||
+      target.webkitRequestFullscreen ||
+      target.msRequestFullscreen;
+
+    if (typeof request !== "function") {
+      return;
+    }
+
+    fullscreenRequested = true;
+    try {
+      var result = request.call(target);
+      if (result && typeof result.catch === "function") {
+        result.catch(function () {
+          fullscreenRequested = false;
+        });
+      }
+    } catch (error) {
+      fullscreenRequested = false;
     }
   }
 
@@ -209,6 +247,7 @@ Main tuning points:
 
   function attachInput() {
     window.addEventListener("keydown", function (event) {
+      tryForceFullscreen();
       var key = event.key.toLowerCase();
 
       if ((event.key === " " || event.key === "Enter") && !state.running) {
@@ -244,9 +283,14 @@ Main tuning points:
     });
 
     gameOverEl.addEventListener("click", function () {
+      tryForceFullscreen();
       if (!state.running) {
         restartGame();
       }
+    });
+
+    canvas.addEventListener("pointerdown", function () {
+      tryForceFullscreen();
     });
   }
 
@@ -257,6 +301,7 @@ Main tuning points:
 
     button.addEventListener("pointerdown", function (event) {
       event.preventDefault();
+      tryForceFullscreen();
       if (button.setPointerCapture) {
         button.setPointerCapture(event.pointerId);
       }

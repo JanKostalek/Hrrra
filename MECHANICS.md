@@ -217,6 +217,11 @@ Every gameplay-related change must be added here with date and short reason.
 - Increased touch button transparency (about 50% more transparent than previous state).
 - Game over overlay is now full-screen and acts as a clickable restart button.
 
+### v0.1.22 - Mobile force-fullscreen attempt
+- Added mobile-only fullscreen request logic tied to first user gesture.
+- Fullscreen attempt triggers from key/tap interactions (canvas, touch buttons, game-over tap).
+- Added fullscreen state sync on `fullscreenchange`.
+
 ## Update Rule
 - For every mechanic change, append:
 - date
