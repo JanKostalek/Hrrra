@@ -37,6 +37,9 @@ Main tuning points:
   var ctx = canvas.getContext("2d");
   var gameOverEl = document.getElementById("game-over");
   var finalScoreEl = document.getElementById("final-score");
+  var btnJump = document.getElementById("btn-jump");
+  var btnLeft = document.getElementById("btn-left");
+  var btnRight = document.getElementById("btn-right");
 
   var state = {
     running: true,
@@ -99,6 +102,7 @@ Main tuning points:
     canvas.height = C.canvasHeight;
     restartGame();
     attachInput();
+    attachTouchControls();
     requestAnimationFrame(loop);
   }
 
@@ -187,6 +191,58 @@ Main tuning points:
       if (event.key === " ") {
         input.jumpDown = false;
       }
+    });
+  }
+
+  function bindHoldButton(button, onPress, onRelease) {
+    if (!button) {
+      return;
+    }
+
+    button.addEventListener("pointerdown", function (event) {
+      event.preventDefault();
+      if (button.setPointerCapture) {
+        button.setPointerCapture(event.pointerId);
+      }
+      onPress();
+    });
+
+    button.addEventListener("pointerup", function (event) {
+      event.preventDefault();
+      onRelease();
+    });
+
+    button.addEventListener("pointercancel", function (event) {
+      event.preventDefault();
+      onRelease();
+    });
+
+    button.addEventListener("pointerleave", function (event) {
+      event.preventDefault();
+      onRelease();
+    });
+  }
+
+  function attachTouchControls() {
+    bindHoldButton(btnLeft, function () {
+      input.left = true;
+    }, function () {
+      input.left = false;
+    });
+
+    bindHoldButton(btnRight, function () {
+      input.right = true;
+    }, function () {
+      input.right = false;
+    });
+
+    bindHoldButton(btnJump, function () {
+      if (!input.jumpDown) {
+        input.jumpPressed = true;
+      }
+      input.jumpDown = true;
+    }, function () {
+      input.jumpDown = false;
     });
   }
 

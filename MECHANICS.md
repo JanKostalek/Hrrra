@@ -16,6 +16,9 @@ Every gameplay-related change must be added here with date and short reason.
 - `Right Arrow` / `D`: move right
 - `Space`: jump (hold for higher jump, capped)
 - `Enter` or `Space` on game over: restart
+- On-screen mobile controls:
+- left bottom = jump
+- right bottom = left/right buttons
 
 ### HUD
 - Left top: score.
@@ -195,6 +198,12 @@ Every gameplay-related change must be added here with date and short reason.
 ### v0.1.18 - More forgiving landing overlap
 - Reduced required horizontal overlap for landing to 10% of player width.
 - Kept support/step-off requirement unchanged at 25%.
+
+### v0.1.19 - Mobile on-screen controls
+- Added touch controls overlay for mobile play.
+- Left bottom button controls jump.
+- Right bottom buttons control left/right movement.
+- Keyboard controls remain unchanged on desktop.
 
 ## Update Rule
 - For every mechanic change, append:

@@ -29,6 +29,7 @@ body {
   border: 2px solid #111;
   background: #ffffff;
   display: block;
+  touch-action: none;
 }
 
 #game-over {
@@ -45,4 +46,48 @@ body {
 
 #game-over.hidden {
   display: none;
+}
+
+#touch-controls {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 12px;
+}
+
+#touch-left-cluster,
+#touch-right-cluster {
+  pointer-events: none;
+  display: flex;
+  gap: 10px;
+}
+
+#touch-right-cluster {
+  flex-direction: row;
+}
+
+.touch-btn {
+  pointer-events: auto;
+  width: 72px;
+  height: 72px;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.75);
+  color: #111;
+  font-size: 26px;
+  font-weight: bold;
+  touch-action: none;
+  user-select: none;
+}
+
+.touch-jump {
+  width: 90px;
+  font-size: 18px;
+}
+
+.touch-btn:active {
+  background: rgba(255, 255, 255, 0.95);
 }

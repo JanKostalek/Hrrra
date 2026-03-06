@@ -9,6 +9,15 @@
 <body>
   <div id="game-shell">
     <canvas id="game-canvas" width="1200" height="700"></canvas>
+    <div id="touch-controls">
+      <div id="touch-left-cluster">
+        <button id="btn-jump" class="touch-btn touch-jump" aria-label="Jump">JUMP</button>
+      </div>
+      <div id="touch-right-cluster">
+        <button id="btn-left" class="touch-btn" aria-label="Move left">◀</button>
+        <button id="btn-right" class="touch-btn" aria-label="Move right">▶</button>
+      </div>
+    </div>
     <div id="game-over" class="hidden">
       <h1>Game Over</h1>
       <p id="final-score">Score: 0</p>
