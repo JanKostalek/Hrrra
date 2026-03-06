@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hrrra Prototype</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-shell">
+    <canvas id="game-canvas" width="1200" height="700"></canvas>
+    <div id="game-over" class="hidden">
+      <h1>Game Over</h1>
+      <p id="final-score">Score: 0</p>
+      <p>Press Enter or Space to restart</p>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="platform.js"></script>
+  <script src="elevator.js"></script>
+  <script src="player.js"></script>
+  <script src="world.js"></script>
+  <script src="physics.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
