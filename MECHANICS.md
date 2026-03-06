@@ -212,6 +212,11 @@ Every gameplay-related change must be added here with date and short reason.
 - Mobile layout reapplies on window resize/orientation change.
 - On-screen touch controls are hidden on desktop and enabled on mobile.
 
+### v0.1.21 - Touch visibility/opacity and full-screen game-over restart
+- Touch controls now bind only on detected mobile devices.
+- Increased touch button transparency (about 50% more transparent than previous state).
+- Game over overlay is now full-screen and acts as a clickable restart button.
+
 ## Update Rule
 - For every mechanic change, append:
 - date

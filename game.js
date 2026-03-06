@@ -242,6 +242,12 @@ Main tuning points:
         input.jumpDown = false;
       }
     });
+
+    gameOverEl.addEventListener("click", function () {
+      if (!state.running) {
+        restartGame();
+      }
+    });
   }
 
   function bindHoldButton(button, onPress, onRelease) {
@@ -274,6 +280,10 @@ Main tuning points:
   }
 
   function attachTouchControls() {
+    if (!detectMobileDevice()) {
+      return;
+    }
+
     bindHoldButton(btnLeft, function () {
       input.left = true;
     }, function () {
