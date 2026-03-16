@@ -19,6 +19,7 @@
     projectile2RespawnMaxSeconds: 8,
     projectile2SpeedMultiplier: 2,
     fullscreenAutoEnabled: true,
+    modernVisualsEnabled: true,
     livesCount: 3,
     livesApplyTopDeathZone: true,
     livesApplyProjectiles: true,
@@ -52,6 +53,11 @@
     scoreBagBonus: 2000,
     scoreBagRespawnMinSeconds: 5,
     scoreBagRespawnMaxSeconds: 20,
+
+    // Live
+    liveUnlockScore: 5000,
+    liveRespawnMinSeconds: 10,
+    liveRespawnMaxSeconds: 20,
 
     // Blocker
     blockerUnlockScore: 3000,

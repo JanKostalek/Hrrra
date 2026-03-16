@@ -706,6 +706,161 @@ Every gameplay-related change must be added here with date and short reason.
 - Both splash and game activities remain locked to landscape and keep immersive fullscreen behavior.
 - Why: the desired startup experience is a true full-screen artwork, not the default Android 12+ circular splash icon presentation.
 
+### v0.1.104 - Experimental pixel-art platform and elevator rendering added (2026-03-16)
+- Replaced the plain black platform and elevator bars with tiled sprite rendering using `assets/platform-tile.png` and `assets/elevator-tile.png`.
+- Blue source-background around those assets is now removed at load time via chroma-key transparency, so the art sits cleanly on the game background.
+- Long platforms repeat the provided platform artwork as segments and add a mirrored left end so both ends are visually finished; elevators use the short single-row sprite style.
+- Updated the local Android/web copy workflow so those new art assets are included in `www`.
+- Why: enables visual experimentation with retro platform art without changing gameplay mechanics or source hitboxes.
+
+### v0.1.105 - Moved platform art cleanup from runtime to asset preprocessing (2026-03-16)
+- Generated cleaned platform/elevator PNG assets with removed blue source background and switched the game to load those processed files directly.
+- Removed the runtime canvas pixel-processing step that caused `The operation is insecure` errors under `file://` and prevented art from appearing.
+- Updated the web asset copy workflow to publish the cleaned PNGs into `www/assets`.
+- Why: keeps the pixel-art rendering visible in both local browser runs and Android builds without triggering canvas security restrictions.
+
+### v0.1.106 - Projectile sprites switched to cleaned rocket artwork (2026-03-16)
+- Added cleaned `rocket-clean.png` asset derived from the provided projectile art with removed blue source background.
+- Both `Projectile 1` and `Projectile 2` now render using that rocket sprite instead of the previous red procedural canvas shape.
+- Updated the web/Android copy workflow so the cleaned rocket asset is deployed into `www/assets`.
+- Why: aligns projectile visuals with the new pixel-art direction while keeping the same gameplay behavior and hitboxes.
+
+### v0.1.107 - Projectile rocket flame animation added with 3:2 frame cadence (2026-03-16)
+- Renamed the first cleaned rocket sprite to `rocket01-clean.png` and added `rocket02-clean.png` as an alternate flame frame.
+- Projectiles now animate by showing `rocket01` for `3` frames and `rocket02` for `2` frames in a repeating loop.
+- The animation affects both projectile types and changes only visuals, not collision or movement.
+- Why: gives the rocket flame a stronger sense of motion without changing projectile behavior.
+
+### v0.1.108 - Blocker switched to cleaned sprite artwork (2026-03-16)
+- Added cleaned `blocker01-clean.png` with removed blue/background remnants from the provided blocker art.
+- Blockers now render using that sprite instead of the previous red procedural fence shape.
+- Updated the web/Android copy workflow so the cleaned blocker sprite is published into `www/assets`.
+- Why: aligns blocker visuals with the new pixel-art scene direction while preserving blocker behavior and hitboxes.
+
+### v0.1.109 - HUD lives now use heart artwork instead of colored squares (2026-03-16)
+- Replaced the top HUD life squares under `Jump Mode` / `Full Mode` with the provided `heart01.png` sprite.
+- Remaining lives render as full hearts; lost lives are shown as dimmed grayscale hearts instead of red/blue square blocks.
+- Updated the web/Android copy workflow so the heart asset is included in `www/assets`.
+- Why: gives the life display a more readable and thematic UI treatment than plain colored squares.
+
+### v0.1.110 - Money Bag visuals switched to provided artwork (2026-03-16)
+- Added cleaned `moneybag-clean.png` with black background removed from the provided source image.
+- Replaced the in-game procedural Money Bag icon with that sprite and updated the second briefing legend to use the same artwork.
+- Updated the web/Android copy workflow so the cleaned money bag asset is included in `www/assets`.
+- Why: keeps the bonus pickup visuals consistent with the new art-driven HUD and hazard style.
+
+### v0.1.111 - Coin visuals switched to provided artwork (2026-03-16)
+- Added cleaned `coin01-clean.png` with the pale source background removed from the provided coin image.
+- Replaced both in-game coin renders and the second briefing coin legend with that sprite.
+- Updated the web/Android copy workflow so the cleaned coin asset is included in `www/assets`.
+- Why: keeps coin visuals aligned with the rest of the new asset-driven UI and pickup art.
+
+### v0.1.112 - Second briefing projectile legend now uses rocket sprite (2026-03-16)
+- Replaced the CSS-drawn projectile icon in the second briefing screen with the actual rocket sprite artwork.
+- The `Projectile` legend entry now visually matches the in-game projectile appearance.
+- Why: keeps the second briefing legend consistent with the art now used in gameplay.
+
+### v0.1.113 - Added Live pickup mechanic with per-mode/per-difficulty admin tuning (2026-03-16)
+- Added a new `Live` pickup that spawns on right-edge platforms after `liveUnlockScore` and then respawns repeatedly after a random `liveRespawnMinSeconds` to `liveRespawnMaxSeconds` delay.
+- Collecting a `Live` restores exactly `1` lost life, but never raises lives above the run's starting `livesCount`.
+- If the run is configured with only `1` life, the `Live` mechanic stays disabled because it would have no effect.
+- Added `Live` admin controls to all four mode+difficulty columns through the shared admin section structure.
+- Added a `Live` entry to the second briefing screen legend using the same heart artwork as the HUD lives display.
+- Why: adds a recoverable life mechanic without changing the existing life-loss rules or max-life cap.
+
+### v0.1.114 - Player now uses extracted walk-cycle sprite frames (2026-03-16)
+- Extracted `6` PNG frames from the provided `character-walk.gif` into `assets/hero-walk-01.png` through `assets/hero-walk-06.png`.
+- Updated the player render to cycle those frames during gameplay with a simple looping walk animation.
+- The original blue square remains as a fallback if the hero frames fail to load.
+- Updated the web/Android copy workflow so the new hero walk frames are included in `www/assets`.
+- Why: replaces the placeholder square player with animated pixel-art movement while keeping rendering robust.
+
+### v0.1.115 - Hero sprite no longer rotates, walk cycle replaces square somersaults (2026-03-16)
+- Changed player rendering so the animated hero sprite is never rotated by the old square-spin logic.
+- The `6` hero walk frames now serve as the visible movement animation instead of inheriting the square's tumble behavior.
+- The old rotation still exists only as a fallback for the legacy blue-square render if sprite frames fail to load.
+- Why: the pixel-art character should run in place rather than doing cartwheels like the placeholder square.
+
+### v0.1.117 - Hero walk frames are now cropped to stand on platform surfaces (2026-03-16)
+- Adjusted hero sprite rendering to use the actual non-empty sub-rect of each extracted walk frame instead of scaling the whole `160x160` GIF frame.
+- This removes the transparent padding that made the hero appear to levitate above platforms and elevators.
+- Why: the animated character should visually stand on surfaces the same way the old square did.
+
+### v0.1.118 - Player size reduced to 75% of the previous enlarged version (2026-03-16)
+- Reduced the base `playerSize` from `80` to `60`, making the hero 75% of the previous size.
+- Related sprite-sized mechanics that scale from `playerSize` now shrink consistently with the player again.
+- Why: the doubled hero size was too large for the current scene composition.
+
+### v0.1.119 - Jump animation extracted from GIF and wired to jump/fall states (2026-03-16)
+- Extracted `9` PNG frames from `character-jump.gif` into `assets/hero-jump-01.png` through `assets/hero-jump-09.png`.
+- Added a separate hero jump animation sequence that starts from frame 1 on every jump, double jump, and triple jump.
+- While the hero is airborne and falling, including when walking off the end of a platform or elevator, the render now holds the last jump frame.
+- Updated the web/Android copy workflow so the new hero jump frames are included in `www/assets`.
+- Why: jump states now have their own readable animation instead of reusing the running cycle in mid-air.
+
+### v0.1.120 - Jump frames remapped to rising/falling/landing phases (2026-03-16)
+- Remapped hero jump playback so `jump01` to `jump04` are used for jump takeoff and rising motion.
+- While the hero keeps rising, `jump04` stays visible; once the hero starts descending, the render switches to `jump05` and keeps it during the whole fall.
+- If the hero simply runs off a platform or elevator, the airborne state also uses `jump05` immediately.
+- On landing, the grounded recovery now plays `jump06` to `jump09` once and only then returns to the walking animation.
+- Why: this matches the intended semantics of the provided jump frame set.
+
+### v0.1.121 - Added global Retro / Modern visuals switch (2026-03-16)
+- Added a new global admin checkbox `Modern visuals` next to the mobile fullscreen setting.
+- `Modern` keeps the current sprite-based look from this branch.
+- `Retro` switches only the presentation layer back toward the old style: square player, black platforms/elevators, simple blocker/projectile/coin/money bag rendering, and outlined hearts.
+- All current mechanics remain available in both themes, including newer ones such as the `Live` pickup.
+- Why: allows testing both visual directions without splitting gameplay logic.
+
+### v0.1.122 - Fixed retro platform and elevator fallback rendering (2026-03-16)
+- Fixed the Retro theme so platforms and elevators correctly fall back to the old black-line rendering when Modern visuals are disabled.
+- Why: the first Retro switch version accidentally skipped drawing those surfaces entirely.
+
+### v0.1.123 - Retro square player render reduced to 75% visual size (2026-03-16)
+- Reduced only the Retro theme's square player rendering to 75% of its previous visual size.
+- The Modern hero sprite and gameplay hitbox size remain unchanged.
+- Why: the retro square looked too large relative to the rest of the retro scene.
+
+### v0.1.124 - Retro pickup/projectile sizes reduced and heart outline refined (2026-03-16)
+- Reduced Retro visual rendering of coin, money bag, and projectile to 75% of their previous retro display size while keeping gameplay hitboxes unchanged.
+- Replaced the Retro heart appearance with a clean black outlined heart in both the HUD lives display and the briefing legend.
+- Why: improves retro readability and better matches the requested simple outlined-heart style.
+
+### v0.1.125 - Retro square player reduced again to 75% of its current visual size (2026-03-16)
+- Reduced only the Retro theme's square player render from `75%` of hitbox size down to `56.25%` of hitbox size.
+- Modern hero visuals and gameplay hitboxes remain unchanged.
+- Why: the retro square still appeared too large compared to the rest of the retro presentation.
+
+### v0.1.126 - Retro square now sits on surfaces instead of floating (2026-03-16)
+- Adjusted the Retro square render so the smaller visual square is anchored to the bottom of the player hitbox rather than centered inside it.
+- Why: the reduced retro square should visually touch platforms and elevators instead of hovering above them.
+
+### v0.1.127 - Retro square ground contact now compensates for rotation (2026-03-16)
+- Updated the Retro square render so its visual ground contact is calculated from the current rotation angle instead of using a fixed vertical offset.
+- Why: prevents the smaller rotating square from appearing to bounce in waves while moving along flat surfaces.
+
+### v0.1.128 - Fixed retro square anchoring formula for rotated render (2026-03-16)
+- Corrected the Retro square render so the rotation-compensated value is used as the square center anchor, not as its top edge.
+- Why: the previous fix still caused visible vertical bobbing because the square was positioned one half-size too low.
+
+### v0.1.129 - Reverted retro square surface anchoring experiment (2026-03-16)
+- Removed the recent retro square surface-binding adjustments and returned the reduced retro square to simple centered rotation rendering.
+- Why: the ground-anchoring experiment introduced visible wave-like bobbing during movement.
+
+### v0.1.130 - Retro square now rotates around its own lowered center (2026-03-16)
+- Changed the Retro square render so the smaller square is translated to a lowered center point first and only then rotated around its own center.
+- The lowered center is computed from the current rotation angle so the square stays visually seated on surfaces without the previous wave-like motion.
+- Why: retro square needed to stop floating while also avoiding the bobbing caused by rotating around the wrong anchor.
+
+### v0.1.131 - Start Run moved under Back in the detailed briefing header (2026-03-16)
+- Moved the `Start Run` button from the bottom of the second briefing screen into the same left action column as `Back`, directly underneath it.
+- Why: keeps the primary run action visible at the top of the detailed briefing for all mode/difficulty combinations.
+
+### v0.1.116 - Player size doubled (2026-03-16)
+- Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
+- Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.
+- Why: makes the player more visually prominent on screen.
+
 ## Update Rule
 - For every mechanic change, append:
 - date

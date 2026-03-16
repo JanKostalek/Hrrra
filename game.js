@@ -28,6 +28,7 @@ Main tuning points:
 - Tripple jump movement: tripleJumpGravity, tripleJumpInitialVelocity, tripleJumpHoldAcceleration, tripleJumpHoldMaxTime
 - Slow icon: slowUnlockSpeedPercent, slowIconSizeRatio, slowRespawnMinSeconds, slowRespawnMaxSeconds
 - Score bag: scoreBagBonus, scoreBagIconSizeRatio, scoreBagRespawnMinSeconds, scoreBagRespawnMaxSeconds
+- Live: liveUnlockScore, liveRespawnMinSeconds, liveRespawnMaxSeconds
 - Blocker: blockerUnlockScore, blockerRespawnMinSeconds, blockerRespawnMaxSeconds
 - Coins: coinScoreBonus, coinIconSizeRatio, platformCoinInitialDelaySeconds, platformCoinRespawnMinSeconds, platformCoinRespawnMaxSeconds
 - Death lines: topDeathLineY, bottomDeathLineY
@@ -90,6 +91,71 @@ Main tuning points:
   var configDefaultsSnapshot = {};
   var modeTuning = window.HrrraModeTuning || {};
   var difficultyTuning = window.HrrraDifficultyTuning || {};
+  var sceneArt = {
+    platform: null,
+    elevator: null,
+    blocker: null,
+    coin: null,
+    moneybag: null,
+    heart: null,
+    heroFrames: [],
+    heroJumpFrames: [],
+    rocket1: null,
+    rocket2: null
+  };
+  var PLATFORM_ART_PATH = "assets/platform-tile-clean.png";
+  var ELEVATOR_ART_PATH = "assets/elevator-tile-clean.png";
+  var BLOCKER_ART_PATH = "assets/blocker01-clean.png";
+  var COIN_ART_PATH = "assets/coin01-clean.png";
+  var MONEYBAG_ART_PATH = "assets/moneybag-clean.png";
+  var HEART_ART_PATH = "assets/heart01.png";
+  var HERO_WALK_ART_PATHS = [
+    "assets/hero-walk-01.png",
+    "assets/hero-walk-02.png",
+    "assets/hero-walk-03.png",
+    "assets/hero-walk-04.png",
+    "assets/hero-walk-05.png",
+    "assets/hero-walk-06.png"
+  ];
+  var HERO_JUMP_ART_PATHS = [
+    "assets/hero-jump-01.png",
+    "assets/hero-jump-02.png",
+    "assets/hero-jump-03.png",
+    "assets/hero-jump-04.png",
+    "assets/hero-jump-05.png",
+    "assets/hero-jump-06.png",
+    "assets/hero-jump-07.png",
+    "assets/hero-jump-08.png",
+    "assets/hero-jump-09.png"
+  ];
+  var HERO_WALK_FRAME_SOURCE_RECTS = [
+    { x: 40, y: 40, w: 80, h: 80 },
+    { x: 40, y: 35, w: 80, h: 80 },
+    { x: 40, y: 40, w: 80, h: 80 },
+    { x: 40, y: 40, w: 85, h: 80 },
+    { x: 40, y: 35, w: 85, h: 80 },
+    { x: 40, y: 40, w: 80, h: 80 }
+  ];
+  var HERO_JUMP_FRAME_SOURCE_RECTS = [
+    { x: 45, y: 45, w: 80, h: 75 },
+    { x: 45, y: 55, w: 80, h: 65 },
+    { x: 45, y: 35, w: 70, h: 80 },
+    { x: 40, y: 30, w: 80, h: 80 },
+    { x: 40, y: 30, w: 80, h: 80 },
+    { x: 45, y: 45, w: 80, h: 75 },
+    { x: 45, y: 55, w: 80, h: 65 },
+    { x: 45, y: 45, w: 80, h: 75 },
+    { x: 40, y: 40, w: 80, h: 80 }
+  ];
+  var ROCKET1_ART_PATH = "assets/rocket01-clean.png";
+  var ROCKET2_ART_PATH = "assets/rocket02-clean.png";
+  var PLATFORM_ART_RENDER_HEIGHT = 24;
+  var ELEVATOR_ART_RENDER_HEIGHT = 18;
+  var PLATFORM_RIGHT_CAP_WIDTH = 16;
+  var ELEVATOR_CAP_WIDTH = 16;
+  var HERO_WALK_FRAME_SECONDS = 0.1;
+  var HERO_JUMP_FRAME_SECONDS = 0.07;
+  var ROCKET_ANIMATION_FRAME_SECONDS = 0.08;
 
   function getModeStorageKey(mode, difficulty) {
     return ADMIN_STORAGE_KEY_PREFIX + String(difficulty) + "_" + String(mode);
@@ -181,6 +247,18 @@ Main tuning points:
       // ignore broken localStorage data
     }
     return {};
+  }
+
+  function useModernVisuals() {
+    return Boolean(C.modernVisualsEnabled);
+  }
+
+  function applyVisualThemeToUi() {
+    if (!document.body) {
+      return;
+    }
+    document.body.classList.toggle("visual-theme-modern", useModernVisuals());
+    document.body.classList.toggle("visual-theme-retro", !useModernVisuals());
   }
 
   function loadAdminConfigFromStorage(mode, difficulty) {
@@ -388,6 +466,14 @@ Main tuning points:
       y: 0,
       size: C.playerSize * C.scoreBagIconSizeRatio
     },
+    liveUnlocked: false,
+    liveRespawnTimer: 0,
+    liveIcon: {
+      active: false,
+      x: 0,
+      y: 0,
+      size: C.playerSize * C.liveIconSizeRatio
+    },
     blockerUnlocked: false,
     blockerRespawnTimer: 0,
     blockerIcons: [],
@@ -435,6 +521,10 @@ Main tuning points:
     playerAirSpinRemainingRad: 0,
     wasPlayerGrounded: true,
     prevPlayerX: 0,
+    heroJumpAnimTime: 0,
+    heroJumpAnimStarted: false,
+    heroLandingAnimTime: 0,
+    heroLandingAnimActive: false,
     respawnPoint: null
   };
 
@@ -457,7 +547,8 @@ Main tuning points:
     {
       title: "Global",
       fields: [
-        { key: "fullscreenAutoEnabled", label: "Auto fullscreen on mobile", type: "checkbox" }
+        { key: "fullscreenAutoEnabled", label: "Auto fullscreen on mobile", type: "checkbox" },
+        { key: "modernVisualsEnabled", label: "Modern visuals", type: "checkbox" }
       ]
     }
   ];
@@ -546,6 +637,14 @@ Main tuning points:
       ]
     },
     {
+      title: "Live",
+      fields: [
+        { key: "liveUnlockScore", label: "Unlock score" },
+        { key: "liveRespawnMinSeconds", label: "Respawn min sec" },
+        { key: "liveRespawnMaxSeconds", label: "Respawn max sec" }
+      ]
+    },
+    {
       title: "Blocker",
       fields: [
         { key: "blockerUnlockScore", label: "Unlock score" },
@@ -581,6 +680,7 @@ Main tuning points:
   function init() {
     canvas.width = baseCanvasWidth;
     canvas.height = baseCanvasHeight;
+    primeSceneArt();
     applyResponsiveLayout();
     window.addEventListener("resize", applyResponsiveLayout);
     document.addEventListener("fullscreenchange", function () {
@@ -588,6 +688,7 @@ Main tuning points:
     });
     applyModeConfig(state.gameMode, state.gameDifficulty);
     loadGlobalAdminConfig();
+    applyVisualThemeToUi();
     sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
     openPreRunScreen();
     attachInput();
@@ -599,6 +700,153 @@ Main tuning points:
     renderAdminForm();
     updateOverlayUiVisibility();
     requestAnimationFrame(loop);
+  }
+
+  function primeSceneArt() {
+    loadSceneArtAsset(PLATFORM_ART_PATH, function (image) {
+      sceneArt.platform = image;
+    });
+    loadSceneArtAsset(ELEVATOR_ART_PATH, function (image) {
+      sceneArt.elevator = image;
+    });
+    loadSceneArtAsset(BLOCKER_ART_PATH, function (image) {
+      sceneArt.blocker = image;
+    });
+    loadSceneArtAsset(COIN_ART_PATH, function (image) {
+      sceneArt.coin = image;
+    });
+    loadSceneArtAsset(MONEYBAG_ART_PATH, function (image) {
+      sceneArt.moneybag = image;
+    });
+    loadSceneArtAsset(HEART_ART_PATH, function (image) {
+      sceneArt.heart = image;
+    });
+    for (var heroFrameIndex = 0; heroFrameIndex < HERO_WALK_ART_PATHS.length; heroFrameIndex += 1) {
+      (function (targetIndex) {
+        loadSceneArtAsset(HERO_WALK_ART_PATHS[targetIndex], function (image) {
+          sceneArt.heroFrames[targetIndex] = image;
+        });
+      })(heroFrameIndex);
+    }
+    for (var heroJumpFrameIndex = 0; heroJumpFrameIndex < HERO_JUMP_ART_PATHS.length; heroJumpFrameIndex += 1) {
+      (function (targetIndex) {
+        loadSceneArtAsset(HERO_JUMP_ART_PATHS[targetIndex], function (image) {
+          sceneArt.heroJumpFrames[targetIndex] = image;
+        });
+      })(heroJumpFrameIndex);
+    }
+    loadSceneArtAsset(ROCKET1_ART_PATH, function (image) {
+      sceneArt.rocket1 = image;
+    });
+    loadSceneArtAsset(ROCKET2_ART_PATH, function (image) {
+      sceneArt.rocket2 = image;
+    });
+  }
+
+  function loadSceneArtAsset(path, onReady) {
+    var image = new Image();
+    image.onload = function () {
+      onReady(image);
+    };
+    image.src = path;
+  }
+
+  function drawSceneArtStrip(asset, x, y, width, renderHeight, options) {
+    if (!asset || width <= 0 || renderHeight <= 0) {
+      return false;
+    }
+
+    var sourceHeight = asset.height;
+    var sourceWidth = asset.width;
+
+    if (width <= 24) {
+      ctx.drawImage(asset, x, y, width, renderHeight);
+      return true;
+    }
+
+    var leftCapSourceX = options.leftCapSourceX;
+    var leftCapSourceWidth = options.leftCapSourceWidth;
+    var rightCapSourceX = options.rightCapSourceX;
+    var rightCapSourceWidth = options.rightCapSourceWidth;
+    var centerSourceX = options.centerSourceX;
+    var centerSourceWidth = options.centerSourceWidth;
+
+    var capScale = renderHeight / sourceHeight;
+    var leftCapDestWidth = Math.max(1, Math.round(leftCapSourceWidth * capScale));
+    var rightCapDestWidth = Math.max(1, Math.round(rightCapSourceWidth * capScale));
+
+    if (leftCapDestWidth + rightCapDestWidth >= width - 2) {
+      ctx.drawImage(asset, x, y, width, renderHeight);
+      return true;
+    }
+
+    if (options.mirrorLeftCapFromRight) {
+      ctx.save();
+      ctx.translate(x + leftCapDestWidth, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(
+        asset,
+        rightCapSourceX,
+        0,
+        rightCapSourceWidth,
+        sourceHeight,
+        0,
+        y,
+        leftCapDestWidth,
+        renderHeight
+      );
+      ctx.restore();
+    } else {
+      ctx.drawImage(
+        asset,
+        leftCapSourceX,
+        0,
+        leftCapSourceWidth,
+        sourceHeight,
+        x,
+        y,
+        leftCapDestWidth,
+        renderHeight
+      );
+    }
+
+    ctx.drawImage(
+      asset,
+      rightCapSourceX,
+      0,
+      rightCapSourceWidth,
+      sourceHeight,
+      x + width - rightCapDestWidth,
+      y,
+      rightCapDestWidth,
+      renderHeight
+    );
+
+    var centerDestX = x + leftCapDestWidth;
+    var centerDestWidth = width - leftCapDestWidth - rightCapDestWidth;
+    var centerChunkDestWidth = Math.max(1, Math.round(centerSourceWidth * capScale));
+
+    for (var cursor = 0; cursor < centerDestWidth; cursor += centerChunkDestWidth) {
+      var segmentDestWidth = Math.min(centerChunkDestWidth, centerDestWidth - cursor);
+      var segmentSourceWidth = Math.max(
+        1,
+        Math.round(centerSourceWidth * (segmentDestWidth / centerChunkDestWidth))
+      );
+
+      ctx.drawImage(
+        asset,
+        centerSourceX,
+        0,
+        segmentSourceWidth,
+        sourceHeight,
+        centerDestX + cursor,
+        y,
+        segmentDestWidth,
+        renderHeight
+      );
+    }
+
+    return true;
   }
 
   function getDifficultyDisplayName() {
@@ -881,6 +1129,10 @@ Main tuning points:
           var nextValue = Boolean(target.checked);
           saveGlobalAdminField(key, nextValue);
           C[key] = nextValue;
+          if (key === "modernVisualsEnabled") {
+            applyVisualThemeToUi();
+            updateLivesUi();
+          }
         });
 
         globalRow.appendChild(globalLabel);
@@ -1129,7 +1381,11 @@ Main tuning points:
     var count = getDisplayedLivesCount();
     for (var i = 0; i < count; i += 1) {
       var square = document.createElement("span");
-      square.className = "life-square";
+      square.className = "life-square life-heart";
+      square.classList.add(useModernVisuals() ? "modern" : "retro");
+      if (!useModernVisuals()) {
+        square.textContent = "♡";
+      }
       if (i >= state.livesLeft) {
         square.classList.add("lost");
       }
@@ -1296,6 +1552,13 @@ Main tuning points:
     state.scoreBagIcon.active = false;
     state.scoreBagIcon.x = 0;
     state.scoreBagIcon.y = 0;
+    state.scoreBagIcon.size = C.playerSize * C.scoreBagIconSizeRatio;
+    state.liveUnlocked = false;
+    state.liveRespawnTimer = 0;
+    state.liveIcon.active = false;
+    state.liveIcon.x = 0;
+    state.liveIcon.y = 0;
+    state.liveIcon.size = C.playerSize * C.liveIconSizeRatio;
     state.blockerUnlocked = false;
     state.blockerRespawnTimer = 0;
     state.blockerIcons = [];
@@ -1334,6 +1597,10 @@ Main tuning points:
     state.playerAirSpinRemainingRad = 0;
     state.wasPlayerGrounded = true;
     state.prevPlayerX = spawnX;
+    state.heroJumpAnimTime = 0;
+    state.heroJumpAnimStarted = false;
+    state.heroLandingAnimTime = 0;
+    state.heroLandingAnimActive = false;
     state.respawnPoint = {
       x: spawnX,
       y: spawnY,
@@ -1709,8 +1976,11 @@ Main tuning points:
     var wasGroundedBeforePhysics = player.isGrounded;
     var jumpsUsedBeforePhysics = player.jumpsUsed;
     physics.updatePlayer(player, world, input, dt, state.scrollSpeed);
-    var jumpStartedInAir = player.jumpsUsed > jumpsUsedBeforePhysics && !wasGroundedBeforePhysics;
+    var jumpStarted = player.jumpsUsed > jumpsUsedBeforePhysics;
+    var jumpStartedInAir = jumpStarted && !wasGroundedBeforePhysics;
+    var landedThisFrame = !wasGroundedBeforePhysics && player.isGrounded;
     updatePlayerRotation(dt, jumpStartedInAir);
+    updateHeroJumpAnimation(dt, jumpStarted, landedThisFrame);
     updateRespawnPoint();
 
     state.cameraX = Math.max(0, player.x - C.canvasWidth * C.cameraAnchorRatio);
@@ -1730,6 +2000,8 @@ Main tuning points:
     checkSlowIconPickup();
     updateScoreBagSpawner(dt);
     checkScoreBagPickup();
+    updateLiveSpawner(dt);
+    checkLivePickup();
     updateBlockerSpawner(dt);
     if (checkBlockerCollision()) {
       if (consumeLife("blocker")) {
@@ -1836,6 +2108,7 @@ Main tuning points:
     drawDoubleJumpIcon();
     drawSlowIcon();
     drawScoreBagIcon();
+    drawLiveIcon();
     drawBlockerIcon();
     drawProjectile();
     drawProjectile2();
@@ -1998,6 +2271,13 @@ Main tuning points:
     state.scoreBagRespawnTimer = randomRange(
       C.scoreBagRespawnMinSeconds,
       C.scoreBagRespawnMaxSeconds
+    );
+  }
+
+  function scheduleNextLiveSpawn() {
+    state.liveRespawnTimer = randomRange(
+      C.liveRespawnMinSeconds,
+      C.liveRespawnMaxSeconds
     );
   }
 
@@ -2184,6 +2464,33 @@ Main tuning points:
     return true;
   }
 
+  function trySpawnLiveIcon() {
+    var icon = state.liveIcon;
+    if (icon.active || state.maxLives <= 1) {
+      return false;
+    }
+
+    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
+    var platform = findPlatformAtX(rightEdgeX);
+    if (!platform) {
+      return false;
+    }
+
+    var preferredX = rightEdgeX - icon.size - 8;
+    var minSpawnX = platform.x;
+    var maxSpawnX = platform.x + platform.width - icon.size;
+    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
+    var spawnY = platform.y - icon.size;
+    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+      return false;
+    }
+
+    icon.x = spawnX;
+    icon.y = spawnY;
+    icon.active = true;
+    return true;
+  }
+
   function updateScoreBagSpawner(dt) {
     var icon = state.scoreBagIcon;
     if (icon.active) {
@@ -2202,6 +2509,43 @@ Main tuning points:
 
     if (trySpawnScoreBag()) {
       scheduleNextScoreBagSpawn();
+    }
+  }
+
+  function updateLiveSpawner(dt) {
+    var icon = state.liveIcon;
+
+    if (state.maxLives <= 1) {
+      icon.active = false;
+      state.liveUnlocked = false;
+      state.liveRespawnTimer = 0;
+      return;
+    }
+
+    if (!state.liveUnlocked) {
+      if (state.score >= C.liveUnlockScore) {
+        state.liveUnlocked = true;
+        scheduleNextLiveSpawn();
+      }
+      return;
+    }
+
+    if (icon.active) {
+      var offscreenLeft = icon.x + icon.size < state.cameraX - 40;
+      if (offscreenLeft) {
+        icon.active = false;
+        scheduleNextLiveSpawn();
+      }
+      return;
+    }
+
+    if (state.liveRespawnTimer > 0) {
+      state.liveRespawnTimer = Math.max(0, state.liveRespawnTimer - dt);
+      return;
+    }
+
+    if (trySpawnLiveIcon()) {
+      scheduleNextLiveSpawn();
     }
   }
 
@@ -2316,6 +2660,7 @@ Main tuning points:
     pushIconRectIfActive(rects, state.doubleJumpIcon);
     pushIconRectIfActive(rects, state.slowIcon);
     pushIconRectIfActive(rects, state.scoreBagIcon);
+    pushIconRectIfActive(rects, state.liveIcon);
     pushIconRectIfActive(rects, state.platformCoinIcon);
     for (var blockerIndex = 0; blockerIndex < state.blockerIcons.length; blockerIndex += 1) {
       var blockerIcon = state.blockerIcons[blockerIndex];
@@ -2425,6 +2770,23 @@ Main tuning points:
     }
   }
 
+  function checkLivePickup() {
+    var icon = state.liveIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
+    var iconRect = { x: icon.x, y: icon.y, w: icon.size, h: icon.size };
+
+    if (isRectIntersect(playerRect, iconRect)) {
+      icon.active = false;
+      state.livesLeft = Math.min(state.maxLives, state.livesLeft + 1);
+      updateLivesUi();
+      scheduleNextLiveSpawn();
+    }
+  }
+
   function checkBlockerCollision() {
     var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
     for (var i = 0; i < state.blockerIcons.length; i += 1) {
@@ -2528,20 +2890,56 @@ Main tuning points:
   }
 
   function drawPlatforms() {
-    ctx.fillStyle = state.doubleJumpExpireFlashTimeLeft > 0 ? "#d70000" : "#111";
     for (var i = 0; i < world.platforms.length; i += 1) {
       var p = world.platforms[i];
       var x = worldToScreenX(p.x);
-      ctx.fillRect(x, p.y, p.width, p.height);
+      var drewModernPlatform = useModernVisuals() && drawSceneArtStrip(
+        sceneArt.platform,
+        x,
+        p.y,
+        p.width,
+        PLATFORM_ART_RENDER_HEIGHT,
+        {
+          leftCapSourceX: 0,
+          leftCapSourceWidth: PLATFORM_RIGHT_CAP_WIDTH,
+          rightCapSourceX: sceneArt.platform ? sceneArt.platform.width - PLATFORM_RIGHT_CAP_WIDTH : 0,
+          rightCapSourceWidth: PLATFORM_RIGHT_CAP_WIDTH,
+          centerSourceX: 0,
+          centerSourceWidth: sceneArt.platform ? sceneArt.platform.width - PLATFORM_RIGHT_CAP_WIDTH : 0,
+          mirrorLeftCapFromRight: true
+        }
+      );
+      if (!drewModernPlatform) {
+        ctx.fillStyle = state.doubleJumpExpireFlashTimeLeft > 0 ? "#d70000" : "#111";
+        ctx.fillRect(x, p.y, p.width, p.height);
+      }
     }
   }
 
   function drawElevators() {
-    ctx.fillStyle = state.doubleJumpExpireFlashTimeLeft > 0 ? "#d70000" : "#222";
     for (var i = 0; i < world.elevators.length; i += 1) {
       var e = world.elevators[i];
       var x = worldToScreenX(e.x);
-      ctx.fillRect(x, e.y, e.width, e.height);
+      var drewModernElevator = useModernVisuals() && drawSceneArtStrip(
+        sceneArt.elevator,
+        x,
+        e.y,
+        e.width,
+        ELEVATOR_ART_RENDER_HEIGHT,
+        {
+          leftCapSourceX: 0,
+          leftCapSourceWidth: ELEVATOR_CAP_WIDTH,
+          rightCapSourceX: sceneArt.elevator ? sceneArt.elevator.width - ELEVATOR_CAP_WIDTH : 0,
+          rightCapSourceWidth: ELEVATOR_CAP_WIDTH,
+          centerSourceX: ELEVATOR_CAP_WIDTH,
+          centerSourceWidth: sceneArt.elevator ? sceneArt.elevator.width - ELEVATOR_CAP_WIDTH * 2 : 0,
+          mirrorLeftCapFromRight: false
+        }
+      );
+      if (!drewModernElevator) {
+        ctx.fillStyle = state.doubleJumpExpireFlashTimeLeft > 0 ? "#d70000" : "#222";
+        ctx.fillRect(x, e.y, e.width, e.height);
+      }
     }
   }
 
@@ -2554,13 +2952,163 @@ Main tuning points:
     var y = player.y;
     var cx = x + player.width * 0.5;
     var cy = y + player.height * 0.5;
+    var heroFrame = useModernVisuals() ? getCurrentHeroFrame() : null;
 
     ctx.save();
     ctx.translate(cx, cy);
-    ctx.rotate(state.playerRotationRad);
-    ctx.fillStyle = "#0077ff";
-    ctx.fillRect(-player.width * 0.5, -player.height * 0.5, player.width, player.height);
+    if (heroFrame) {
+      var heroSourceRects = heroFrame.type === "jump" ? HERO_JUMP_FRAME_SOURCE_RECTS : HERO_WALK_FRAME_SOURCE_RECTS;
+      var heroSourceRect = heroSourceRects[heroFrame.index] || {
+        x: 0,
+        y: 0,
+        w: heroFrame.image.width,
+        h: heroFrame.image.height
+      };
+      ctx.drawImage(
+        heroFrame.image,
+        heroSourceRect.x,
+        heroSourceRect.y,
+        heroSourceRect.w,
+        heroSourceRect.h,
+        -player.width * 0.5,
+        -player.height * 0.5,
+        player.width,
+        player.height
+      );
+    } else {
+      ctx.fillStyle = "#0077ff";
+      var retroPlayerRenderSize = player.width * 0.5625;
+      var retroHalfSize = retroPlayerRenderSize * 0.5;
+      var rotationAbsSin = Math.abs(Math.sin(state.playerRotationRad));
+      var rotationAbsCos = Math.abs(Math.cos(state.playerRotationRad));
+      var retroBottomExtent = retroHalfSize * (rotationAbsSin + rotationAbsCos);
+      var retroCenterYOffset = player.height * 0.5 - retroBottomExtent;
+      ctx.translate(0, retroCenterYOffset);
+      ctx.rotate(state.playerRotationRad);
+      ctx.fillRect(
+        -retroHalfSize,
+        -retroHalfSize,
+        retroPlayerRenderSize,
+        retroPlayerRenderSize
+      );
+    }
     ctx.restore();
+  }
+
+  function getCurrentHeroFrame() {
+    if (player.isGrounded && state.heroLandingAnimActive) {
+      return getHeroLandingFrame();
+    }
+    if (!player.isGrounded) {
+      return getHeroJumpFrame();
+    }
+    return getHeroWalkFrame();
+  }
+
+  function getHeroWalkFrame() {
+    if (!sceneArt.heroFrames.length) {
+      return null;
+    }
+
+    var loadedFrames = sceneArt.heroFrames.filter(function (frame) {
+      return Boolean(frame);
+    });
+    if (!loadedFrames.length) {
+      return null;
+    }
+
+    var frameIndex = Math.floor(state.runTimeSeconds / HERO_WALK_FRAME_SECONDS) % loadedFrames.length;
+    return {
+      image: loadedFrames[frameIndex] || null,
+      index: frameIndex,
+      type: "walk"
+    };
+  }
+
+  function getHeroJumpFrame() {
+    if (!sceneArt.heroJumpFrames.length) {
+      return null;
+    }
+
+    var loadedFrames = sceneArt.heroJumpFrames.filter(function (frame) {
+      return Boolean(frame);
+    });
+    if (!loadedFrames.length) {
+      return null;
+    }
+
+    var frameIndex = 4;
+    if (state.heroJumpAnimStarted && player.velocityY < 0) {
+      frameIndex = Math.min(3, Math.floor(state.heroJumpAnimTime / HERO_JUMP_FRAME_SECONDS));
+    }
+
+    return {
+      image: loadedFrames[frameIndex] || null,
+      index: frameIndex,
+      type: "jump"
+    };
+  }
+
+  function getHeroLandingFrame() {
+    if (!sceneArt.heroJumpFrames.length) {
+      return null;
+    }
+
+    var loadedFrames = sceneArt.heroJumpFrames.filter(function (frame) {
+      return Boolean(frame);
+    });
+    if (!loadedFrames.length) {
+      return null;
+    }
+
+    var landingFrameIndex = 5 + Math.min(3, Math.floor(state.heroLandingAnimTime / HERO_JUMP_FRAME_SECONDS));
+    return {
+      image: loadedFrames[landingFrameIndex] || null,
+      index: landingFrameIndex,
+      type: "jump"
+    };
+  }
+
+  function updateHeroJumpAnimation(dt, jumpStarted, landedThisFrame) {
+    if (jumpStarted) {
+      state.heroJumpAnimStarted = true;
+      state.heroJumpAnimTime = 0;
+      state.heroLandingAnimTime = 0;
+      state.heroLandingAnimActive = false;
+      return;
+    }
+
+    if (landedThisFrame) {
+      state.heroJumpAnimStarted = false;
+      state.heroJumpAnimTime = 0;
+      state.heroLandingAnimTime = 0;
+      state.heroLandingAnimActive = true;
+      return;
+    }
+
+    if (player.isGrounded) {
+      if (state.heroLandingAnimActive) {
+        var landingMaxDuration = HERO_JUMP_FRAME_SECONDS * 4;
+        state.heroLandingAnimTime = Math.min(landingMaxDuration, state.heroLandingAnimTime + dt);
+        if (state.heroLandingAnimTime >= landingMaxDuration) {
+          state.heroLandingAnimActive = false;
+          state.heroLandingAnimTime = 0;
+        }
+        return;
+      }
+      state.heroJumpAnimStarted = false;
+      return;
+    }
+
+    state.heroLandingAnimActive = false;
+    state.heroLandingAnimTime = 0;
+
+    if (!state.heroJumpAnimStarted) {
+      return;
+    }
+
+    var maxDuration = HERO_JUMP_FRAME_SECONDS * 4;
+    state.heroJumpAnimTime = Math.min(maxDuration, state.heroJumpAnimTime + dt);
   }
 
   function drawProjectileDeathIcon(x, y, size) {
@@ -2676,6 +3224,17 @@ Main tuning points:
     var x = worldToScreenX(icon.x);
     var y = icon.y;
     var s = icon.size;
+    if (useModernVisuals() && sceneArt.moneybag) {
+      ctx.drawImage(sceneArt.moneybag, x, y, s, s);
+      return;
+    }
+
+    var retroScale = 0.75;
+    var retroSize = s * retroScale;
+    var offset = (s - retroSize) * 0.5;
+    x += offset;
+    y += offset;
+    s = retroSize;
     var cx = x + s * 0.5;
 
     ctx.fillStyle = "#95cf4a";
@@ -2698,15 +3257,47 @@ Main tuning points:
     ctx.textAlign = "left";
   }
 
+  function drawLiveIcon() {
+    var icon = state.liveIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var x = worldToScreenX(icon.x);
+    var y = icon.y;
+    var s = icon.size;
+    if (useModernVisuals() && sceneArt.heart) {
+      ctx.drawImage(sceneArt.heart, x, y, s, s);
+      return;
+    }
+
+    var cx = x + s * 0.5;
+    var cy = y + s * 0.56;
+    var radius = s * 0.22;
+    ctx.strokeStyle = "#111";
+    ctx.lineWidth = Math.max(2, s * 0.06);
+    ctx.beginPath();
+    ctx.moveTo(cx, y + s * 0.92);
+    ctx.bezierCurveTo(x + s * 0.18, y + s * 0.7, x + s * 0.08, y + s * 0.38, x + s * 0.26, y + s * 0.22);
+    ctx.bezierCurveTo(x + s * 0.4, y + s * 0.08, cx, y + s * 0.18, cx, y + s * 0.34);
+    ctx.bezierCurveTo(cx, y + s * 0.18, x + s * 0.6, y + s * 0.08, x + s * 0.74, y + s * 0.22);
+    ctx.bezierCurveTo(x + s * 0.92, y + s * 0.38, x + s * 0.82, y + s * 0.7, cx, y + s * 0.92);
+    ctx.stroke();
+  }
+
   function drawBlockerIcon() {
-    ctx.fillStyle = "#c81414";
     for (var i = 0; i < state.blockerIcons.length; i += 1) {
       var icon = state.blockerIcons[i];
       var x = worldToScreenX(icon.x);
       var y = icon.y;
       var s = icon.size;
-      var bar = Math.max(4, s * 0.12);
+      if (useModernVisuals() && sceneArt.blocker) {
+        ctx.drawImage(sceneArt.blocker, x, y, s, s);
+        continue;
+      }
 
+      var bar = Math.max(4, s * 0.12);
+      ctx.fillStyle = "#c81414";
       ctx.fillRect(x, y + s * 0.2, s, bar);
       ctx.fillRect(x, y + s * 0.65, s, bar);
       ctx.fillRect(x + s * 0.12, y + s * 0.1, bar, s * 0.8);
@@ -2731,6 +3322,20 @@ Main tuning points:
     var y = projectile.y;
     var w = projectile.width;
     var h = projectile.height;
+    var rocketFrame = useModernVisuals() ? getProjectileRocketFrame() : null;
+    if (rocketFrame) {
+      ctx.drawImage(rocketFrame, x, y, w, h);
+      return;
+    }
+
+    var retroScale = 0.75;
+    var scaledW = w * retroScale;
+    var scaledH = h * retroScale;
+    x += (w - scaledW) * 0.5;
+    y += (h - scaledH) * 0.5;
+    w = scaledW;
+    h = scaledH;
+
     var r = h * 0.5;
 
     ctx.fillStyle = "#c81414";
@@ -2757,6 +3362,23 @@ Main tuning points:
     }
   }
 
+  function getProjectileRocketFrame() {
+    if (!sceneArt.rocket1 && !sceneArt.rocket2) {
+      return null;
+    }
+
+    if (!sceneArt.rocket1) {
+      return sceneArt.rocket2;
+    }
+
+    if (!sceneArt.rocket2) {
+      return sceneArt.rocket1;
+    }
+
+    var animationStep = Math.floor(state.runTimeSeconds / ROCKET_ANIMATION_FRAME_SECONDS) % 5;
+    return animationStep < 3 ? sceneArt.rocket1 : sceneArt.rocket2;
+  }
+
   function drawProjectileDeathAnimation() {
     if (!state.projectileDeathAnimActive) {
       return;
@@ -2769,6 +3391,17 @@ Main tuning points:
   }
 
   function drawCoinSymbol(screenX, screenY, size) {
+    if (useModernVisuals() && sceneArt.coin) {
+      ctx.drawImage(sceneArt.coin, screenX, screenY, size, size);
+      return;
+    }
+
+    var retroScale = 0.75;
+    var drawSize = size * retroScale;
+    var offset = (size - drawSize) * 0.5;
+    screenX += offset;
+    screenY += offset;
+    size = drawSize;
     var cx = screenX + size * 0.5;
     var cy = screenY + size * 0.5;
 
