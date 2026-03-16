@@ -1,0 +1,22 @@
+{
+  "name": "hrrra",
+  "version": "1.0.0",
+  "description": "",
+  "main": "config.js",
+  "scripts": {
+    "copy:web": "node scripts/copy-web-assets.js",
+    "cap:sync": "npm run copy:web && npx cap sync",
+    "android": "npm run cap:sync && npx cap open android",
+    "android:run": "npm run cap:sync && npx cap run android",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/cli": "^8.2.0",
+    "@capacitor/core": "^8.2.0"
+  }
+}

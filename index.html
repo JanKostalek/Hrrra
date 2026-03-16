@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hrrra Prototype</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-shell">
+    <canvas id="game-canvas" width="1200" height="700"></canvas>
+    <div id="mode-switch" aria-label="Game mode switch">
+      <div id="mode-1-wrap" class="mode-slot">
+        <div id="mode-1-btn" class="mode-badge" aria-label="Full Mode active">Full Mode</div>
+        <div id="mode-1-lives" class="mode-lives" aria-label="Full Mode lives"></div>
+      </div>
+      <div id="mode-2-wrap" class="mode-slot">
+        <div id="mode-2-btn" class="mode-badge active" aria-label="Jump Mode active">Jump Mode</div>
+        <div id="mode-2-lives" class="mode-lives" aria-label="Jump Mode lives"></div>
+      </div>
+    </div>
+    <div id="touch-controls">
+      <button id="btn-jump" class="touch-btn touch-zone jump-zone" aria-label="Jump">JUMP</button>
+      <button id="btn-right" class="touch-btn touch-zone right-zone" aria-label="Move right">RIGHT</button>
+      <button id="btn-left" class="touch-btn touch-zone left-zone" aria-label="Move left">LEFT</button>
+    </div>
+    <button id="admin-toggle" aria-label="Open mechanics admin">Admin</button>
+    <div id="admin-panel" class="hidden" hidden aria-label="Mechanics admin panel">
+      <div class="admin-header">
+        <h2>Mechanics Admin</h2>
+        <button id="admin-close" aria-label="Close mechanics admin">X</button>
+      </div>
+      <div id="admin-form"></div>
+    </div>
+    <div id="pre-run-screen" class="hidden" aria-label="Run instructions">
+      <div class="pre-run-card">
+        <div id="pre-run-select-screen" class="pre-run-stage">
+          <div class="pre-run-brand">HRRRA</div>
+          <div class="pre-run-select-layout">
+            <button id="pre-run-jump-btn" class="pre-run-mode-card" aria-label="Choose Jump Mode">
+              <span class="pre-run-mode-title">Jump Mode</span>
+              <span class="pre-run-mode-copy"><strong>Mobile:</strong> Whole touch area = Jump</span>
+              <span class="pre-run-mode-copy"><strong>Desktop:</strong> Space = Jump</span>
+              <span class="pre-run-mode-copy"><strong>Double Jump</strong> is always enabled</span>
+            </button>
+            <div class="pre-run-difficulty-column" aria-label="Difficulty selection">
+              <button id="pre-run-easy-btn" class="pre-run-difficulty-btn active" aria-label="Choose Easy difficulty">Easy</button>
+              <button id="pre-run-hard-btn" class="pre-run-difficulty-btn" aria-label="Choose Hard difficulty">Hard</button>
+            </div>
+            <button id="pre-run-full-btn" class="pre-run-mode-card" aria-label="Choose Full Mode">
+              <span class="pre-run-mode-title">Full Mode</span>
+              <span class="pre-run-mode-copy"><strong>Mobile:</strong></span>
+              <span class="pre-run-fullmode-diagram" aria-hidden="true">
+                <span class="diag-jump">Jump</span>
+                <span class="diag-right">Right</span>
+                <span class="diag-left">Left</span>
+              </span>
+              <span class="pre-run-mode-copy"><strong>Desktop:</strong> Left/Right Arrows (or A/D)</span>
+              <span class="pre-run-mode-copy">Space to jump</span>
+            </button>
+          </div>
+        </div>
+        <div id="pre-run-detail-screen" class="pre-run-stage hidden">
+          <div class="pre-run-detail-header">
+            <button id="pre-run-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
+            <div class="pre-run-detail-heading">
+              <h2 id="pre-run-detail-title">Jump Mode</h2>
+              <p id="pre-run-detail-subtitle">Easy briefing</p>
+              <p id="pre-run-detail-life-rules" class="pre-run-detail-life-rules">
+                <span><strong>Top Death Zone:</strong> <span id="brief-top-death-zone-rule">Lose 1 Life</span></span>
+                <span><strong>Projectiles:</strong> <span id="brief-projectiles-rule">Lose 1 Life</span></span>
+                <span><strong>Blocker:</strong> <span id="brief-blocker-rule">Lose 1 Life</span></span>
+              </p>
+            </div>
+          </div>
+          <div class="pre-run-detail-panel">
+            <h3>Controls</h3>
+            <div id="pre-run-controls-copy"></div>
+          </div>
+          <div class="pre-run-detail-panel pre-run-brief-panel">
+            <h3>Hazards & Bonuses</h3>
+            <p class="brief-row"><span class="brief-icon brief-money" aria-hidden="true"></span><strong>Money Bag</strong>: <span>+<span id="brief-money-bag">2000</span> score.</span></p>
+            <p class="brief-row"><span class="brief-icon brief-coin" aria-hidden="true"></span><strong>Coin</strong>: <span>+<span id="brief-coin">200</span> score.</span></p>
+            <p class="brief-row"><span class="brief-icon brief-blocker" aria-hidden="true"></span><strong>Blocker</strong>: do not touch, always jump over it.</p>
+            <p class="brief-row"><span class="brief-icon brief-projectile" aria-hidden="true"></span><strong>Projectile</strong>: do not touch.</p>
+          </div>
+          <button id="pre-run-start-btn" aria-label="Start run">Start Run</button>
+        </div>
+      </div>
+    </div>
+    <div id="game-over" class="hidden">
+      <h1>Game Over</h1>
+      <p id="final-score">Score: 0</p>
+      <p id="final-runtime">Run Time: 0.0s</p>
+      <p id="final-coins">Coins collected: 0</p>
+      <p id="final-bags">Bags collected: 0</p>
+      <div id="final-highscores" aria-label="Stored highscores"></div>
+      <p>Press Enter or Space to restart</p>
+    </div>
+  </div>
+
+  <script src="tuning.js"></script>
+  <script src="config.js"></script>
+  <script src="platform.js"></script>
+  <script src="elevator.js"></script>
+  <script src="player.js"></script>
+  <script src="world.js"></script>
+  <script src="physics.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
