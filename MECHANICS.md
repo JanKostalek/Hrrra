@@ -856,6 +856,79 @@ Every gameplay-related change must be added here with date and short reason.
 - Moved the `Start Run` button from the bottom of the second briefing screen into the same left action column as `Back`, directly underneath it.
 - Why: keeps the primary run action visible at the top of the detailed briefing for all mode/difficulty combinations.
 
+### v0.1.132 - Modern elevator art switched to cleaned `vytah01` sprite (2026-03-17)
+- Added a cleaned transparent version of `assets/vytah01.png` as `assets/vytah01-clean.png`.
+- Updated the Modern theme elevator render to use the new cleaned `vytah01` sprite instead of the previous elevator tile artwork.
+- Updated the web/Android asset copy pipeline so `vytah01-clean.png` is included in `www/assets`.
+- Why: the new elevator art should match the current Modern visual set without the old blue background.
+
+### v0.1.133 - Elevators are taller and use more varied shaft placement (2026-03-17)
+- Increased default `elevatorHeight` by 50%, from `12` to `18`.
+- Changed shaft elevator generation from evenly spaced positions to stratified random placement, so elevator horizontal positions vary more across the shaft and vertical gaps between consecutive elevators are less uniform.
+- Why: elevators should feel chunkier and less mechanically grid-aligned.
+
+### v0.1.134 - Elevators are taller again and now keep side clearance from platforms (2026-03-17)
+- Increased default `elevatorHeight` by another 50%, from `18` to `27`.
+- Added a new `elevatorPlatformEdgeGap` clearance so shaft elevators keep a minimum horizontal gap from both shaft edges, preventing elevator edges from visually passing through adjacent platform edges.
+- Why: elevators should feel larger while still staying cleanly separated from platform boundaries.
+
+### v0.1.135 - Blocker collision is now more forgiving on the landing side (2026-03-17)
+- Reduced the blocker hit area to the left two thirds of the blocker sprite, leaving the right third non-colliding.
+- Why: avoids frustrating life loss when the player visually clears the blocker and lands just behind it.
+
+### v0.1.136 - Maximum allowed elevator spacing increased by 33% (2026-03-17)
+- Increased `elevatorMaxStepX` from `170` to `226`.
+- This allows larger gaps between shaft elevators before extra elevators are forced, which can reduce elevator count in some wider platform gaps.
+- Why: platform-to-platform shaft traversal should feel a bit roomier and less densely packed.
+
+### v0.1.137 - Prepared SNES-style forest parallax tiles A/B/C from `bck_forest_01` (2026-03-17)
+- Added a generator script at `scripts/generate-forest-parallax-tiles.ps1` that converts `assets/bck_forest_01.png` into stylized forest parallax tiles.
+- Generated `assets/bck_forest_tile_a.png`, `assets/bck_forest_tile_b.png`, and `assets/bck_forest_tile_c.png` with the sky removed, reduced pixel-art detail, and standardized seamless side edges for A/B/C chaining.
+- Why: prepares reusable foreground/midground parallax art variants before wiring them into the game runtime.
+
+### v0.1.138 - Added two-layer parallax background from `gamebackground.jpg` (2026-03-17)
+- Added `scripts/generate-gamebackground-parallax.ps1` to split `assets/gamebackground.jpg` into seamless tiled `gamebackground_sky_tile.png` and `gamebackground_foreground_tile.png`.
+- Wired both layers into runtime background rendering as horizontal parallax strips with slower sky scroll and faster foreground scroll.
+- Added both parallax assets to the web/Android asset copy pipeline.
+- Why: the simplified two-layer source was easier to split and tile into a clean scrolling backdrop.
+
+### v0.1.139 - Bottom death zone is thicker and final top/bottom death now uses RIP animation (2026-03-17)
+- Made the bottom death zone render as a 9px red strip starting at `bottomDeathLineY`, so it appears three times thicker and extends downward from the boundary.
+- Changed final-life top death and bottom death handling to trigger the same RIP death animation flow used by blocker/projectile kills instead of jumping straight to game over.
+- Verified by code path that final-life projectile hits already use the RIP animation flow.
+- Why: the lower boundary should read more clearly and final lethal hazards should feel visually consistent.
+
+### v0.1.140 - Bottom death zone strip doubled again for stronger visual warning (2026-03-17)
+- Increased the bottom death zone strip height from `9px` to `18px`, still extending downward from `bottomDeathLineY`.
+- Why: the lower lethal boundary should be even more obvious at a glance.
+
+### v0.1.141 - Elevator height doubled again (2026-03-17)
+- Increased `elevatorHeight` from `27` to `54`.
+- Why: elevators should read more clearly as chunky moving platforms.
+
+### v0.1.142 - Gameplay visuals are now clipped to the playable area between death zones (2026-03-17)
+- Wrapped normal gameplay rendering in a clip rect from `topDeathLineY` to `bottomDeathLineY`, then moved death line rendering above gameplay layers.
+- Why: pickups, elevators, player and other game elements should no longer appear visibly above the top death zone or beyond the lower playfield boundary.
+
+### v0.1.143 - Elevator render now matches the intended theme-specific height behavior (2026-03-17)
+- Modern elevator rendering now uses the actual configured elevator height instead of a hardcoded 18px sprite height, so taller elevators are visually reflected on screen.
+- Retro elevator fallback rendering now stays at `platformHeight`, matching the thin black platform line style regardless of the larger physics height used by modern visuals.
+- Why: retro and modern elevator visuals should each follow their intended style instead of inheriting the wrong height rule.
+
+### v0.1.144 - Modern elevator sprite now preserves both end thrusters across widths (2026-03-17)
+- Increased the elevator sprite cap slice width so the left and right end sections include the visible thrusters instead of only a tiny edge strip.
+- Updated strip rendering so very narrow widths still draw both end caps proportionally, instead of falling back to a cropped full-sprite draw from the left side.
+- Why: even the narrowest elevators should show both ends cleanly, with only the center section repeating as width increases.
+
+### v0.1.145 - Retro theme no longer renders the parallax background (2026-03-17)
+- Limited parallax background rendering to the `Modern` visual theme only.
+- `Retro` now falls back to the earlier flat background treatment instead of using the scrolling sky/foreground layers.
+- Why: the retro style should stay visually simple and closer to the original presentation.
+
+### v0.1.146 - Elevator height reduced by 33% after render fix (2026-03-17)
+- Reduced `elevatorHeight` from `54` to `36`.
+- Why: once modern elevator rendering started respecting actual height, the previously overcompensated value became visually too tall.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.

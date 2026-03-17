@@ -92,11 +92,12 @@
 
     elevatorWidth: 88,
     elevatorWidthMaxMultiplier: 1.5,
-    elevatorHeight: 12,
+    elevatorHeight: 36,
     elevatorSpeed: 95,
     elevatorMinCount: 2,
     elevatorMaxCount: 4,
-    elevatorMaxStepX: 170,
+    elevatorMaxStepX: 226,
+    elevatorPlatformEdgeGap: 24,
     elevatorBottomOffset: 18,
     elevatorTopOffset: 40,
 

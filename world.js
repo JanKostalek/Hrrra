@@ -11,6 +11,16 @@
     return Math.floor(randomRange(min, max + 1));
   }
 
+  function shuffleArray(items) {
+    for (var i = items.length - 1; i > 0; i -= 1) {
+      var swapIndex = randomInt(0, i);
+      var tmp = items[i];
+      items[i] = items[swapIndex];
+      items[swapIndex] = tmp;
+    }
+    return items;
+  }
+
   function World() {
     this.platforms = [];
     this.elevators = [];
@@ -148,6 +158,7 @@
       C.elevatorWidth,
       C.elevatorWidth * C.elevatorWidthMaxMultiplier
     );
+    var sideGap = Math.max(0, C.elevatorPlatformEdgeGap || 0);
     var requiredCount = Math.ceil(shaftWidth / C.elevatorMaxStepX);
     var minCount = Math.max(C.elevatorMinCount, requiredCount);
     var maxCount = Math.max(minCount, C.elevatorMaxCount);
@@ -164,13 +175,39 @@
     var minY = C.topDeathLineY + C.elevatorTopOffset;
     var maxY = C.bottomDeathLineY - C.elevatorBottomOffset;
     var spanY = maxY - minY;
-    var spacing = spanY / count;
+    var xSlots = [];
+    var bandWidth = shaftWidth / count;
+
+    for (var xIndex = 0; xIndex < count; xIndex += 1) {
+      var slotMinCenter =
+        shaftX + xIndex * bandWidth + sideGap + elevatorWidth * 0.5;
+      var slotMaxCenter =
+        shaftX + (xIndex + 1) * bandWidth - sideGap - elevatorWidth * 0.5;
+      var centerX;
+
+      if (slotMaxCenter <= slotMinCenter) {
+        centerX = Math.min(
+          shaftX + shaftWidth - sideGap - elevatorWidth * 0.5,
+          Math.max(
+            shaftX + sideGap + elevatorWidth * 0.5,
+            shaftX + (xIndex + 0.5) * bandWidth
+          )
+        );
+      } else {
+        centerX = randomRange(slotMinCenter, slotMaxCenter);
+      }
+
+      xSlots.push(centerX - elevatorWidth * 0.5);
+    }
+
+    shuffleArray(xSlots);
 
     for (var i = 0; i < count; i += 1) {
-      var centerT = (i + 1) / (count + 1);
-      var centerX = shaftX + centerT * shaftWidth;
-      var x = centerX - elevatorWidth / 2;
-      var y = maxY - i * spacing;
+      var bandStartT = i / count;
+      var bandEndT = (i + 1) / count;
+      var yT = randomRange(bandStartT + 0.12 / count, bandEndT - 0.12 / count);
+      var x = xSlots[i];
+      var y = maxY - yT * spanY;
 
       this.elevators.push(
         new Elevator(

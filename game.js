@@ -92,6 +92,8 @@ Main tuning points:
   var modeTuning = window.HrrraModeTuning || {};
   var difficultyTuning = window.HrrraDifficultyTuning || {};
   var sceneArt = {
+    backgroundSky: null,
+    backgroundForeground: null,
     platform: null,
     elevator: null,
     blocker: null,
@@ -103,8 +105,10 @@ Main tuning points:
     rocket1: null,
     rocket2: null
   };
+  var BACKGROUND_SKY_ART_PATH = "assets/gamebackground_sky_tile.png";
+  var BACKGROUND_FOREGROUND_ART_PATH = "assets/gamebackground_foreground_tile.png";
   var PLATFORM_ART_PATH = "assets/platform-tile-clean.png";
-  var ELEVATOR_ART_PATH = "assets/elevator-tile-clean.png";
+  var ELEVATOR_ART_PATH = "assets/vytah01-clean.png";
   var BLOCKER_ART_PATH = "assets/blocker01-clean.png";
   var COIN_ART_PATH = "assets/coin01-clean.png";
   var MONEYBAG_ART_PATH = "assets/moneybag-clean.png";
@@ -150,9 +154,8 @@ Main tuning points:
   var ROCKET1_ART_PATH = "assets/rocket01-clean.png";
   var ROCKET2_ART_PATH = "assets/rocket02-clean.png";
   var PLATFORM_ART_RENDER_HEIGHT = 24;
-  var ELEVATOR_ART_RENDER_HEIGHT = 18;
   var PLATFORM_RIGHT_CAP_WIDTH = 16;
-  var ELEVATOR_CAP_WIDTH = 16;
+  var ELEVATOR_CAP_WIDTH = 76;
   var HERO_WALK_FRAME_SECONDS = 0.1;
   var HERO_JUMP_FRAME_SECONDS = 0.07;
   var ROCKET_ANIMATION_FRAME_SECONDS = 0.08;
@@ -703,6 +706,12 @@ Main tuning points:
   }
 
   function primeSceneArt() {
+    loadSceneArtAsset(BACKGROUND_SKY_ART_PATH, function (image) {
+      sceneArt.backgroundSky = image;
+    });
+    loadSceneArtAsset(BACKGROUND_FOREGROUND_ART_PATH, function (image) {
+      sceneArt.backgroundForeground = image;
+    });
     loadSceneArtAsset(PLATFORM_ART_PATH, function (image) {
       sceneArt.platform = image;
     });
@@ -759,11 +768,6 @@ Main tuning points:
     var sourceHeight = asset.height;
     var sourceWidth = asset.width;
 
-    if (width <= 24) {
-      ctx.drawImage(asset, x, y, width, renderHeight);
-      return true;
-    }
-
     var leftCapSourceX = options.leftCapSourceX;
     var leftCapSourceWidth = options.leftCapSourceWidth;
     var rightCapSourceX = options.rightCapSourceX;
@@ -776,7 +780,54 @@ Main tuning points:
     var rightCapDestWidth = Math.max(1, Math.round(rightCapSourceWidth * capScale));
 
     if (leftCapDestWidth + rightCapDestWidth >= width - 2) {
-      ctx.drawImage(asset, x, y, width, renderHeight);
+      var totalCapWidth = Math.max(1, leftCapDestWidth + rightCapDestWidth);
+      var fittedLeftCapWidth = Math.max(
+        1,
+        Math.round(width * (leftCapDestWidth / totalCapWidth))
+      );
+      var fittedRightCapWidth = Math.max(1, width - fittedLeftCapWidth);
+
+      if (options.mirrorLeftCapFromRight) {
+        ctx.save();
+        ctx.translate(x + fittedLeftCapWidth, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(
+          asset,
+          rightCapSourceX,
+          0,
+          rightCapSourceWidth,
+          sourceHeight,
+          0,
+          y,
+          fittedLeftCapWidth,
+          renderHeight
+        );
+        ctx.restore();
+      } else {
+        ctx.drawImage(
+          asset,
+          leftCapSourceX,
+          0,
+          leftCapSourceWidth,
+          sourceHeight,
+          x,
+          y,
+          fittedLeftCapWidth,
+          renderHeight
+        );
+      }
+
+      ctx.drawImage(
+        asset,
+        rightCapSourceX,
+        0,
+        rightCapSourceWidth,
+        sourceHeight,
+        x + width - fittedRightCapWidth,
+        y,
+        fittedRightCapWidth,
+        renderHeight
+      );
       return true;
     }
 
@@ -2035,14 +2086,14 @@ Main tuning points:
     checkElevatorCoinPickup();
 
     if (physics.isPastBottomDeathLine(player)) {
-      finishRunAndShowGameOver();
+      startProjectileDeathAnimation();
       return;
     }
     if (physics.isPastTopDeathLine(player)) {
       if (consumeLife("topDeathZone")) {
         return;
       }
-      finishRunAndShowGameOver();
+      startProjectileDeathAnimation();
     }
   }
 
@@ -2102,7 +2153,10 @@ Main tuning points:
   function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
-    drawDeathLines();
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, C.topDeathLineY, canvas.width, C.bottomDeathLineY - C.topDeathLineY);
+    ctx.clip();
     drawPlatforms();
     drawElevators();
     drawDoubleJumpIcon();
@@ -2115,6 +2169,8 @@ Main tuning points:
     drawPlatformCoinIcon();
     drawElevatorCoins();
     drawPlayer();
+    ctx.restore();
+    drawDeathLines();
     drawProjectileDeathAnimation();
     drawHud();
   }
@@ -2791,7 +2847,12 @@ Main tuning points:
     var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
     for (var i = 0; i < state.blockerIcons.length; i += 1) {
       var icon = state.blockerIcons[i];
-      var blockerRect = { x: icon.x, y: icon.y, w: icon.size, h: icon.size };
+      var blockerRect = {
+        x: icon.x,
+        y: icon.y,
+        w: icon.size * (2 / 3),
+        h: icon.size
+      };
       if (isRectIntersect(playerRect, blockerRect)) {
         state.blockerIcons.splice(i, 1);
         return true;
@@ -2866,16 +2927,52 @@ Main tuning points:
     return x - state.cameraX;
   }
 
+  function drawParallaxStrip(image, speedFactor, y, height) {
+    if (!image || image.width <= 0 || image.height <= 0 || height <= 0) {
+      return false;
+    }
+
+    var scale = height / image.height;
+    var tileWidth = image.width * scale;
+    if (tileWidth <= 0) {
+      return false;
+    }
+
+    var offset = -((state.cameraX * speedFactor) % tileWidth);
+    if (offset > 0) {
+      offset -= tileWidth;
+    }
+
+    for (var drawX = offset; drawX < canvas.width; drawX += tileWidth) {
+      ctx.drawImage(image, drawX, y, tileWidth, height);
+    }
+    return true;
+  }
+
   function drawBackground() {
     ctx.fillStyle = state.lifeLossFlashTimeLeft > 0 ? "#ffb14a" : "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    var playableHeight = C.bottomDeathLineY - C.topDeathLineY;
     ctx.fillStyle = state.lifeLossFlashTimeLeft > 0 ? "#ffd08a" : "#e8f4ff";
-    ctx.fillRect(0, C.topDeathLineY, canvas.width, C.bottomDeathLineY - C.topDeathLineY);
+    ctx.fillRect(0, C.topDeathLineY, canvas.width, playableHeight);
+
+    if (state.lifeLossFlashTimeLeft > 0 || !useModernVisuals()) {
+      return;
+    }
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, C.topDeathLineY, canvas.width, playableHeight);
+    ctx.clip();
+    drawParallaxStrip(sceneArt.backgroundSky, 0.12, C.topDeathLineY, playableHeight);
+    drawParallaxStrip(sceneArt.backgroundForeground, 0.32, C.topDeathLineY, playableHeight);
+    ctx.restore();
   }
 
   function drawDeathLines() {
     ctx.strokeStyle = "#d70000";
+    ctx.fillStyle = "#d70000";
     ctx.lineWidth = 3;
 
     ctx.beginPath();
@@ -2883,10 +2980,7 @@ Main tuning points:
     ctx.lineTo(canvas.width, C.topDeathLineY);
     ctx.stroke();
 
-    ctx.beginPath();
-    ctx.moveTo(0, C.bottomDeathLineY);
-    ctx.lineTo(canvas.width, C.bottomDeathLineY);
-    ctx.stroke();
+    ctx.fillRect(0, C.bottomDeathLineY, canvas.width, 18);
   }
 
   function drawPlatforms() {
@@ -2920,12 +3014,14 @@ Main tuning points:
     for (var i = 0; i < world.elevators.length; i += 1) {
       var e = world.elevators[i];
       var x = worldToScreenX(e.x);
+      var modernElevatorHeight = e.height;
+      var retroElevatorHeight = C.platformHeight;
       var drewModernElevator = useModernVisuals() && drawSceneArtStrip(
         sceneArt.elevator,
         x,
         e.y,
         e.width,
-        ELEVATOR_ART_RENDER_HEIGHT,
+        modernElevatorHeight,
         {
           leftCapSourceX: 0,
           leftCapSourceWidth: ELEVATOR_CAP_WIDTH,
@@ -2938,7 +3034,7 @@ Main tuning points:
       );
       if (!drewModernElevator) {
         ctx.fillStyle = state.doubleJumpExpireFlashTimeLeft > 0 ? "#d70000" : "#222";
-        ctx.fillRect(x, e.y, e.width, e.height);
+        ctx.fillRect(x, e.y, e.width, retroElevatorHeight);
       }
     }
   }

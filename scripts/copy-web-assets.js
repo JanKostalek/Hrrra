@@ -17,7 +17,9 @@ const filesToCopy = [
   "elevator.js"
 ];
 const assetFilesToCopy = [
-  "assets/elevator-tile-clean.png",
+  "assets/gamebackground_foreground_tile.png",
+  "assets/gamebackground_sky_tile.png",
+  "assets/vytah01-clean.png",
   "assets/platform-tile-clean.png",
   "assets/blocker01-clean.png",
   "assets/coin01-clean.png",
