@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -39,6 +41,7 @@ public class MainActivity extends BridgeActivity {
         super.onCreate(savedInstanceState);
         adContainer = findViewById(R.id.ad_container);
         adDebugStatus = findViewById(R.id.ad_debug_status);
+        configureWebViewCache();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         hideSystemBars();
         requestConsentAndLoadAds();
@@ -195,6 +198,21 @@ public class MainActivity extends BridgeActivity {
         }
 
         bannerView.loadAd(new AdRequest.Builder().build());
+    }
+
+    private void configureWebViewCache() {
+        WebView webView = findViewById(R.id.webview);
+        if (webView == null) {
+            return;
+        }
+
+        webView.clearCache(true);
+        webView.clearHistory();
+
+        WebSettings settings = webView.getSettings();
+        if (settings != null) {
+            settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        }
     }
 
     private AdSize getAdaptiveBannerSize() {

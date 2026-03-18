@@ -10,6 +10,7 @@
     speedStepMultiplier: 1.1,
     speedStepScoreMultiplier: 2,
     distanceScoreMultiplier: 1,
+    finishScore: 50000,
     projectileUnlockScore: 5000,
     projectileRespawnMinSeconds: 2,
     projectileRespawnMaxSeconds: 10,

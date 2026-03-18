@@ -96,12 +96,12 @@ public class SplashActivity extends AppCompatActivity {
         rotate.setDuration(700);
         rotate.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        ObjectAnimator explodeScaleX = ObjectAnimator.ofFloat(titleView, "scaleX", 1.35f, 12f);
+        ObjectAnimator explodeScaleX = ObjectAnimator.ofFloat(titleView, "scaleX", 1.35f, 600f);
         explodeScaleX.setStartDelay(1700);
         explodeScaleX.setDuration(1000);
         explodeScaleX.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        ObjectAnimator explodeScaleY = ObjectAnimator.ofFloat(titleView, "scaleY", 1.35f, 12f);
+        ObjectAnimator explodeScaleY = ObjectAnimator.ofFloat(titleView, "scaleY", 1.35f, 600f);
         explodeScaleY.setStartDelay(1700);
         explodeScaleY.setDuration(1000);
         explodeScaleY.setInterpolator(new AccelerateDecelerateInterpolator());

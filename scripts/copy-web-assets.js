@@ -40,6 +40,9 @@ const assetFilesToCopy = [
   "assets/hero-walk-05.png",
   "assets/hero-walk-06.png",
   "assets/moneybag-clean.png",
+  "assets/teleport01.png",
+  "assets/teleport02.png",
+  "assets/teleport03.png",
   "assets/rocket01-clean.png",
   "assets/rocket02-clean.png"
 ];

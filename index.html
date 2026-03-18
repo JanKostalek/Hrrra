@@ -72,6 +72,7 @@
             <div class="pre-run-detail-heading">
               <h2 id="pre-run-detail-title">Jump Mode</h2>
               <p id="pre-run-detail-subtitle">Easy briefing</p>
+              <p id="pre-run-detail-level">Level 1</p>
               <p id="pre-run-detail-life-rules" class="pre-run-detail-life-rules">
                 <span><strong>Top Death Zone:</strong> <span id="brief-top-death-zone-rule">Lose 1 Life</span></span>
                 <span><strong>Projectiles:</strong> <span id="brief-projectiles-rule">Lose 1 Life</span></span>
@@ -79,9 +80,15 @@
               </p>
             </div>
           </div>
-          <div class="pre-run-detail-panel">
-            <h3>Controls</h3>
-            <div id="pre-run-controls-copy"></div>
+          <div class="pre-run-detail-grid">
+            <div class="pre-run-detail-panel">
+              <h3>Controls</h3>
+              <div id="pre-run-controls-copy"></div>
+            </div>
+            <div class="pre-run-detail-panel pre-run-level-panel">
+              <h3>Level Goal</h3>
+              <p id="pre-run-level-goal-copy">Finish Level with 50 000 score.</p>
+            </div>
           </div>
           <div class="pre-run-detail-panel pre-run-brief-panel">
             <h3>Hazards & Bonuses</h3>
@@ -102,6 +109,14 @@
       <p id="final-bags">Bags collected: 0</p>
       <div id="final-highscores" aria-label="Stored highscores"></div>
       <p>Press Enter or Space to restart</p>
+    </div>
+    <div id="level-finished" class="hidden">
+      <h1 id="level-finished-title">Level Finished</h1>
+      <p id="level-finished-score">Score: 0</p>
+      <p id="level-finished-runtime">Level Time: 0.0s</p>
+      <p id="level-finished-coins">Coins collected: 0</p>
+      <p id="level-finished-bags">Bags collected: 0</p>
+      <button id="level-finished-continue" type="button">Continue</button>
     </div>
   </div>
 

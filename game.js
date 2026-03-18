@@ -60,7 +60,9 @@ Main tuning points:
   var preRunStartBtn = document.getElementById("pre-run-start-btn");
   var preRunDetailTitleEl = document.getElementById("pre-run-detail-title");
   var preRunDetailSubtitleEl = document.getElementById("pre-run-detail-subtitle");
+  var preRunDetailLevelEl = document.getElementById("pre-run-detail-level");
   var preRunDetailLifeRulesEl = document.getElementById("pre-run-detail-life-rules");
+  var preRunLevelGoalCopyEl = document.getElementById("pre-run-level-goal-copy");
   var briefTopDeathZoneRuleEl = document.getElementById("brief-top-death-zone-rule");
   var briefProjectilesRuleEl = document.getElementById("brief-projectiles-rule");
   var briefBlockerRuleEl = document.getElementById("brief-blocker-rule");
@@ -86,9 +88,18 @@ Main tuning points:
   var mode2Wrap = document.getElementById("mode-2-wrap");
   var mode2Btn = document.getElementById("mode-2-btn");
   var mode2LivesEl = document.getElementById("mode-2-lives");
-  var ADMIN_STORAGE_KEY_PREFIX = "hrrra_admin_config_v2_";
+  var levelFinishedEl = document.getElementById("level-finished");
+  var levelFinishedTitleEl = document.getElementById("level-finished-title");
+  var levelFinishedScoreEl = document.getElementById("level-finished-score");
+  var levelFinishedRuntimeEl = document.getElementById("level-finished-runtime");
+  var levelFinishedCoinsEl = document.getElementById("level-finished-coins");
+  var levelFinishedBagsEl = document.getElementById("level-finished-bags");
+  var levelFinishedContinueBtn = document.getElementById("level-finished-continue");
+  var ADMIN_STORAGE_KEY_PREFIX = "hrrra_admin_config_v3_";
+  var LEGACY_ADMIN_STORAGE_KEY_PREFIX = "hrrra_admin_config_v2_";
   var GLOBAL_ADMIN_STORAGE_KEY = "hrrra_admin_global_v1";
   var MAX_SCORE_STORAGE_KEY_PREFIX = "hrrra_max_score_v2_";
+  var LEVEL_COUNT = 5;
   var configDefaultsSnapshot = {};
   var modeTuning = window.HrrraModeTuning || {};
   var difficultyTuning = window.HrrraDifficultyTuning || {};
@@ -104,7 +115,8 @@ Main tuning points:
     heroFrames: [],
     heroJumpFrames: [],
     rocket1: null,
-    rocket2: null
+    rocket2: null,
+    teleportFrames: []
   };
   var BACKGROUND_SKY_ART_PATH = "assets/gamebackground_sky_tile.png";
   var BACKGROUND_FOREGROUND_ART_PATH = "assets/gamebackground_foreground_tile.png";
@@ -114,6 +126,11 @@ Main tuning points:
   var COIN_ART_PATH = "assets/coin01-clean.png";
   var MONEYBAG_ART_PATH = "assets/moneybag-clean.png";
   var HEART_ART_PATH = "assets/heart01.png";
+  var TELEPORT_ART_PATHS = [
+    "assets/teleport01.png",
+    "assets/teleport02.png",
+    "assets/teleport03.png"
+  ];
   var HERO_WALK_ART_PATHS = [
     "assets/hero-walk-01.png",
     "assets/hero-walk-02.png",
@@ -160,9 +177,14 @@ Main tuning points:
   var HERO_WALK_FRAME_SECONDS = 0.1;
   var HERO_JUMP_FRAME_SECONDS = 0.07;
   var ROCKET_ANIMATION_FRAME_SECONDS = 0.08;
+  var TELEPORT_ANIMATION_FRAME_SECONDS = 0.09;
 
-  function getModeStorageKey(mode, difficulty) {
-    return ADMIN_STORAGE_KEY_PREFIX + String(difficulty) + "_" + String(mode);
+  function getModeStorageKey(level, mode, difficulty) {
+    return ADMIN_STORAGE_KEY_PREFIX + "level" + String(level) + "_" + String(difficulty) + "_" + String(mode);
+  }
+
+  function getLegacyModeStorageKey(mode, difficulty) {
+    return LEGACY_ADMIN_STORAGE_KEY_PREFIX + String(difficulty) + "_" + String(mode);
   }
 
   function readGlobalAdminStorageObject() {
@@ -193,6 +215,76 @@ Main tuning points:
     var stored = readGlobalAdminStorageObject();
     stored[key] = value;
     writeGlobalAdminStorageObject(stored);
+  }
+
+  function getAdminUiStorageObject() {
+    var stored = readGlobalAdminStorageObject();
+    if (!stored.adminUiState || typeof stored.adminUiState !== "object") {
+      stored.adminUiState = {};
+    }
+    if (!stored.adminUiState.globals || typeof stored.adminUiState.globals !== "object") {
+      stored.adminUiState.globals = {};
+    }
+    if (!stored.adminUiState.difficulties || typeof stored.adminUiState.difficulties !== "object") {
+      stored.adminUiState.difficulties = {};
+    }
+    if (!stored.adminUiState.levels || typeof stored.adminUiState.levels !== "object") {
+      stored.adminUiState.levels = {};
+    }
+    return stored.adminUiState;
+  }
+
+  function writeAdminUiStorageObject(uiState) {
+    var stored = readGlobalAdminStorageObject();
+    stored.adminUiState = uiState;
+    writeGlobalAdminStorageObject(stored);
+  }
+
+  function getDifficultyCollapseState(difficulty) {
+    var uiState = getAdminUiStorageObject();
+    if (Object.prototype.hasOwnProperty.call(uiState.difficulties, difficulty)) {
+      return Boolean(uiState.difficulties[difficulty]);
+    }
+    return true;
+  }
+
+  function getGlobalCollapseState(key) {
+    var uiState = getAdminUiStorageObject();
+    if (Object.prototype.hasOwnProperty.call(uiState.globals, key)) {
+      return Boolean(uiState.globals[key]);
+    }
+    return true;
+  }
+
+  function setGlobalCollapseState(key, isCollapsed) {
+    var uiState = getAdminUiStorageObject();
+    uiState.globals[key] = Boolean(isCollapsed);
+    writeAdminUiStorageObject(uiState);
+  }
+
+  function setDifficultyCollapseState(difficulty, isCollapsed) {
+    var uiState = getAdminUiStorageObject();
+    uiState.difficulties[difficulty] = Boolean(isCollapsed);
+    writeAdminUiStorageObject(uiState);
+  }
+
+  function getLevelCollapseStorageKey(difficulty, level) {
+    return String(difficulty) + "_level_" + String(level);
+  }
+
+  function getLevelCollapseState(difficulty, level) {
+    var uiState = getAdminUiStorageObject();
+    var key = getLevelCollapseStorageKey(difficulty, level);
+    if (Object.prototype.hasOwnProperty.call(uiState.levels, key)) {
+      return Boolean(uiState.levels[key]);
+    }
+    return true;
+  }
+
+  function setLevelCollapseState(difficulty, level, isCollapsed) {
+    var uiState = getAdminUiStorageObject();
+    uiState.levels[getLevelCollapseStorageKey(difficulty, level)] = Boolean(isCollapsed);
+    writeAdminUiStorageObject(uiState);
   }
 
   function loadGlobalAdminConfig() {
@@ -237,9 +329,12 @@ Main tuning points:
     }
   }
 
-  function readAdminStorageObject(mode, difficulty) {
+  function readAdminStorageObject(level, mode, difficulty) {
     try {
-      var raw = window.localStorage.getItem(getModeStorageKey(mode, difficulty));
+      var raw = window.localStorage.getItem(getModeStorageKey(level, mode, difficulty));
+      if (!raw && level === 1) {
+        raw = window.localStorage.getItem(getLegacyModeStorageKey(mode, difficulty));
+      }
       if (!raw) {
         return {};
       }
@@ -265,8 +360,8 @@ Main tuning points:
     document.body.classList.toggle("visual-theme-retro", !useModernVisuals());
   }
 
-  function loadAdminConfigFromStorage(mode, difficulty) {
-    var stored = readAdminStorageObject(mode, difficulty);
+  function loadAdminConfigFromStorage(level, mode, difficulty) {
+    var stored = readAdminStorageObject(level, mode, difficulty);
     for (var key in stored) {
       if (!Object.prototype.hasOwnProperty.call(stored, key)) {
         continue;
@@ -280,19 +375,19 @@ Main tuning points:
     }
   }
 
-  function saveAdminFieldToStorage(mode, difficulty, key, value) {
-    var stored = readAdminStorageObject(mode, difficulty);
+  function saveAdminFieldToStorage(level, mode, difficulty, key, value) {
+    var stored = readAdminStorageObject(level, mode, difficulty);
     stored[key] = value;
     try {
-      window.localStorage.setItem(getModeStorageKey(mode, difficulty), JSON.stringify(stored));
+      window.localStorage.setItem(getModeStorageKey(level, mode, difficulty), JSON.stringify(stored));
     } catch (error) {
       // ignore write failures
     }
   }
 
-  function writeAdminStorageObject(mode, difficulty, obj) {
+  function writeAdminStorageObject(level, mode, difficulty, obj) {
     try {
-      window.localStorage.setItem(getModeStorageKey(mode, difficulty), JSON.stringify(obj));
+      window.localStorage.setItem(getModeStorageKey(level, mode, difficulty), JSON.stringify(obj));
     } catch (error) {
       // ignore write failures
     }
@@ -330,10 +425,14 @@ Main tuning points:
       return Math.min(5, Math.max(1, Math.round(value)));
     }
 
+    if (key === "finishScore") {
+      return Math.max(0, Math.round(value));
+    }
+
     return value;
   }
 
-  function buildModeConfig(mode, difficulty) {
+  function buildModeConfig(level, mode, difficulty) {
     var cfg = {};
     var key;
     for (key in configDefaultsSnapshot) {
@@ -356,7 +455,7 @@ Main tuning points:
       }
     }
 
-    var storageOverrides = readAdminStorageObject(mode, difficulty);
+    var storageOverrides = readAdminStorageObject(level, mode, difficulty);
     for (key in storageOverrides) {
       if (Object.prototype.hasOwnProperty.call(storageOverrides, key)) {
         cfg[key] = storageOverrides[key];
@@ -368,6 +467,17 @@ Main tuning points:
 
   function getModeDisplayName(mode) {
     return mode === 1 ? "Full Mode" : "Jump Mode";
+  }
+
+  function getLevelDisplayName(level) {
+    return "Level " + String(level);
+  }
+
+  function getFinishScoreGoalText(finishScore) {
+    if (!Number.isFinite(finishScore) || finishScore <= 0) {
+      return "Final endless level. No finish teleport.";
+    }
+    return "Finish Level with " + finishScore.toLocaleString("en-US") + " score.";
   }
 
   function isFieldVisibleForMode(mode, key) {
@@ -414,11 +524,11 @@ Main tuning points:
     return modeEntry;
   }
 
-  function applyModeConfig(mode, difficulty) {
+  function applyModeConfig(level, mode, difficulty) {
     applyObjectConfig(configDefaultsSnapshot);
     applyObjectConfig(getModeFileOverrides(mode));
     applyObjectConfig(getDifficultyModeOverrides(difficulty, mode));
-    loadAdminConfigFromStorage(mode, difficulty);
+    loadAdminConfigFromStorage(level, mode, difficulty);
   }
 
   snapshotConfigDefaults();
@@ -428,13 +538,18 @@ Main tuning points:
     adminPaused: false,
     preRunActive: false,
     preRunStep: "select",
+    currentLevel: 1,
     gameMode: 2,
     gameDifficulty: "easy",
     score: 0,
+    scoreCarryOver: 0,
     bonusScore: 0,
     runTimeSeconds: 0,
+    levelRunTimeSeconds: 0,
     collectedCoins: 0,
     collectedBags: 0,
+    levelCollectedCoins: 0,
+    levelCollectedBags: 0,
     maxLives: 1,
     livesLeft: 1,
     lifeLossFlashTimeLeft: 0,
@@ -518,6 +633,12 @@ Main tuning points:
       size: C.playerSize * C.coinIconSizeRatio,
       platformId: -1
     },
+    levelGoalReached: false,
+    teleport: {
+      active: false,
+      x: 0,
+      width: 96
+    },
     playerRotationRad: 0,
     playerRotationLockRad: 0,
     playerRotationDirection: 1,
@@ -529,7 +650,8 @@ Main tuning points:
     heroJumpAnimStarted: false,
     heroLandingAnimTime: 0,
     heroLandingAnimActive: false,
-    respawnPoint: null
+    respawnPoint: null,
+    levelFinishedActive: false
   };
 
   var input = {
@@ -557,6 +679,12 @@ Main tuning points:
     }
   ];
   var adminSections = [
+    {
+      title: "Level Goal",
+      fields: [
+        { key: "finishScore", label: "Finish score (0 = endless)", min: 0, step: 1 }
+      ]
+    },
     {
       title: "Lives",
       fields: [
@@ -690,7 +818,7 @@ Main tuning points:
     document.addEventListener("fullscreenchange", function () {
       fullscreenRequested = Boolean(document.fullscreenElement);
     });
-    applyModeConfig(state.gameMode, state.gameDifficulty);
+    applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
     loadGlobalAdminConfig();
     applyVisualThemeToUi();
     sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
@@ -701,6 +829,7 @@ Main tuning points:
     applyGameModeToUi();
     attachAdminPanel();
     attachPreRunScreen();
+    attachLevelFinishedScreen();
     renderAdminForm();
     updateOverlayUiVisibility();
     requestAnimationFrame(loop);
@@ -751,6 +880,13 @@ Main tuning points:
     loadSceneArtAsset(ROCKET2_ART_PATH, function (image) {
       sceneArt.rocket2 = image;
     });
+    for (var teleportFrameIndex = 0; teleportFrameIndex < TELEPORT_ART_PATHS.length; teleportFrameIndex += 1) {
+      (function (targetIndex) {
+        loadSceneArtAsset(TELEPORT_ART_PATHS[targetIndex], function (image) {
+          sceneArt.teleportFrames[targetIndex] = image;
+        });
+      })(teleportFrameIndex);
+    }
   }
 
   function loadSceneArtAsset(path, onReady) {
@@ -978,6 +1114,15 @@ Main tuning points:
     if (preRunDetailSubtitleEl) {
       preRunDetailSubtitleEl.textContent = getDifficultyDisplayName() + " | Lives: " + getLivesSummaryText();
     }
+    if (preRunDetailLevelEl) {
+      preRunDetailLevelEl.textContent = getLevelDisplayName(state.currentLevel);
+    }
+    if (preRunLevelGoalCopyEl) {
+      preRunLevelGoalCopyEl.textContent = getFinishScoreGoalText(C.finishScore);
+    }
+    if (preRunStartBtn) {
+      preRunStartBtn.textContent = state.currentLevel > 1 ? "Continue" : "Start Run";
+    }
     if (preRunDetailLifeRulesEl) {
       preRunDetailLifeRulesEl.classList.toggle("hidden", false);
     }
@@ -1004,19 +1149,44 @@ Main tuning points:
     }
   }
 
+  function loadCurrentLevelConfig() {
+    applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
+    loadGlobalAdminConfig();
+    sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
+  }
+
   function prepareRunSetup(mode, difficulty) {
     state.gameMode = mode === 1 ? 1 : 2;
     state.gameDifficulty = difficulty === "hard" ? "hard" : "easy";
-    applyModeConfig(state.gameMode, state.gameDifficulty);
-    loadGlobalAdminConfig();
-    sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
-    restartGame();
+    state.currentLevel = 1;
+    state.scoreCarryOver = 0;
+    state.runTimeSeconds = 0;
+    state.collectedCoins = 0;
+    state.collectedBags = 0;
+    loadCurrentLevelConfig();
+    restartGame(true);
     state.preRunActive = true;
     applyResponsiveLayout();
     renderAdminForm();
     refreshPreRunBriefValues();
     applyGameModeToUi();
     renderPreRunScreen();
+  }
+
+  function prepareLevelContinuation(level) {
+    state.currentLevel = Math.max(1, Math.min(LEVEL_COUNT, level));
+    loadCurrentLevelConfig();
+    restartGame(false);
+    state.preRunStep = "details";
+    state.preRunActive = true;
+    if (preRunScreenEl) {
+      preRunScreenEl.classList.remove("hidden");
+    }
+    renderAdminForm();
+    refreshPreRunBriefValues();
+    applyGameModeToUi();
+    renderPreRunScreen();
+    updateOverlayUiVisibility();
   }
 
   function openPreRunScreen() {
@@ -1078,6 +1248,24 @@ Main tuning points:
     }
   }
 
+  function updateLevelFinishedSummary() {
+    if (levelFinishedTitleEl) {
+      levelFinishedTitleEl.textContent = getLevelDisplayName(state.currentLevel) + " Finished";
+    }
+    if (levelFinishedScoreEl) {
+      levelFinishedScoreEl.textContent = "Score: " + state.score;
+    }
+    if (levelFinishedRuntimeEl) {
+      levelFinishedRuntimeEl.textContent = "Level Time: " + state.levelRunTimeSeconds.toFixed(1) + "s";
+    }
+    if (levelFinishedCoinsEl) {
+      levelFinishedCoinsEl.textContent = "Coins collected: " + state.levelCollectedCoins;
+    }
+    if (levelFinishedBagsEl) {
+      levelFinishedBagsEl.textContent = "Bags collected: " + state.levelCollectedBags;
+    }
+  }
+
   function attachPreRunScreen() {
     if (preRunJumpBtn) {
       preRunJumpBtn.addEventListener("click", function () {
@@ -1110,6 +1298,24 @@ Main tuning points:
         closePreRunScreenAndStartRun();
       });
     }
+  }
+
+  function attachLevelFinishedScreen() {
+    if (!levelFinishedContinueBtn) {
+      return;
+    }
+    levelFinishedContinueBtn.addEventListener("click", function () {
+      if (!state.levelFinishedActive) {
+        return;
+      }
+      state.levelFinishedActive = false;
+      if (levelFinishedEl) {
+        levelFinishedEl.classList.add("hidden");
+      }
+      if (state.currentLevel < LEVEL_COUNT) {
+        prepareLevelContinuation(state.currentLevel + 1);
+      }
+    });
   }
 
   function setAdminOpen(isOpen) {
@@ -1151,9 +1357,9 @@ Main tuning points:
 
   function updateOverlayUiVisibility() {
     if (adminToggle) {
-      adminToggle.classList.toggle("hidden", state.preRunActive);
+      adminToggle.classList.toggle("hidden", state.preRunActive || state.levelFinishedActive);
     }
-    if (state.preRunActive) {
+    if (state.preRunActive || state.levelFinishedActive) {
       setAdminOpen(false);
     }
   }
@@ -1169,9 +1375,29 @@ Main tuning points:
       var globalSectionEl = document.createElement("section");
       globalSectionEl.className = "admin-section admin-global-section";
 
-      var globalSectionTitle = document.createElement("h3");
-      globalSectionTitle.textContent = globalSection.title;
+      var globalSectionCollapsed = getGlobalCollapseState("section_" + String(globalSectionIndex));
+      var globalSectionTitle = document.createElement("button");
+      globalSectionTitle.type = "button";
+      globalSectionTitle.className = "admin-collapsible-toggle admin-section-title-toggle";
+      globalSectionTitle.setAttribute("aria-expanded", globalSectionCollapsed ? "false" : "true");
+      globalSectionTitle.dataset.globalKey = "section_" + String(globalSectionIndex);
+      globalSectionTitle.addEventListener("click", function (event) {
+        var key = event.currentTarget.dataset.globalKey;
+        setGlobalCollapseState(key, !getGlobalCollapseState(key));
+        renderAdminForm();
+      });
+      var globalSectionTitleLabel = document.createElement("span");
+      globalSectionTitleLabel.textContent = globalSection.title;
+      var globalSectionArrow = document.createElement("span");
+      globalSectionArrow.className = "admin-toggle-arrow";
+      globalSectionArrow.textContent = globalSectionCollapsed ? ">" : "v";
+      globalSectionTitle.appendChild(globalSectionTitleLabel);
+      globalSectionTitle.appendChild(globalSectionArrow);
       globalSectionEl.appendChild(globalSectionTitle);
+
+      var globalSectionContent = document.createElement("div");
+      globalSectionContent.className = "admin-collapsible-content";
+      globalSectionContent.classList.toggle("hidden", globalSectionCollapsed);
 
       for (var globalFieldIndex = 0; globalFieldIndex < globalSection.fields.length; globalFieldIndex += 1) {
         var globalField = globalSection.fields[globalFieldIndex];
@@ -1205,11 +1431,67 @@ Main tuning points:
 
         globalRow.appendChild(globalLabel);
         globalRow.appendChild(globalInput);
-        globalSectionEl.appendChild(globalRow);
+        globalSectionContent.appendChild(globalRow);
       }
 
+      globalSectionEl.appendChild(globalSectionContent);
       adminForm.appendChild(globalSectionEl);
     }
+
+    var maxScoreSectionEl = document.createElement("section");
+    maxScoreSectionEl.className = "admin-section admin-global-section";
+    var maxScoreCollapsed = getGlobalCollapseState("reset_max_score");
+    var maxScoreSectionTitle = document.createElement("button");
+    maxScoreSectionTitle.type = "button";
+    maxScoreSectionTitle.className = "admin-collapsible-toggle admin-section-title-toggle";
+    maxScoreSectionTitle.setAttribute("aria-expanded", maxScoreCollapsed ? "false" : "true");
+    maxScoreSectionTitle.dataset.globalKey = "reset_max_score";
+    maxScoreSectionTitle.addEventListener("click", function (event) {
+      var key = event.currentTarget.dataset.globalKey;
+      setGlobalCollapseState(key, !getGlobalCollapseState(key));
+      renderAdminForm();
+    });
+    var maxScoreSectionTitleLabel = document.createElement("span");
+    maxScoreSectionTitleLabel.textContent = "Reset Max Score";
+    var maxScoreArrow = document.createElement("span");
+    maxScoreArrow.className = "admin-toggle-arrow";
+    maxScoreArrow.textContent = maxScoreCollapsed ? ">" : "v";
+    maxScoreSectionTitle.appendChild(maxScoreSectionTitleLabel);
+    maxScoreSectionTitle.appendChild(maxScoreArrow);
+    maxScoreSectionEl.appendChild(maxScoreSectionTitle);
+
+    var maxScoreActions = [
+      { mode: 2, difficulty: "easy", label: "Reset Easy Jump" },
+      { mode: 1, difficulty: "easy", label: "Reset Easy Full" },
+      { mode: 2, difficulty: "hard", label: "Reset Hard Jump" },
+      { mode: 1, difficulty: "hard", label: "Reset Hard Full" }
+    ];
+    var maxScoreSectionContent = document.createElement("div");
+    maxScoreSectionContent.className = "admin-collapsible-content";
+    maxScoreSectionContent.classList.toggle("hidden", maxScoreCollapsed);
+    var maxScoreActionGrid = document.createElement("div");
+    maxScoreActionGrid.className = "admin-global-button-grid";
+    for (var maxScoreActionIndex = 0; maxScoreActionIndex < maxScoreActions.length; maxScoreActionIndex += 1) {
+      var maxScoreAction = maxScoreActions[maxScoreActionIndex];
+      var maxScoreButton = document.createElement("button");
+      maxScoreButton.type = "button";
+      maxScoreButton.className = "mode-reset-max-score";
+      maxScoreButton.textContent = maxScoreAction.label;
+      maxScoreButton.dataset.mode = String(maxScoreAction.mode);
+      maxScoreButton.dataset.difficulty = maxScoreAction.difficulty;
+      maxScoreButton.addEventListener("click", function (event) {
+        var targetMode = parseInt(event.target.dataset.mode, 10);
+        var targetDifficulty = event.target.dataset.difficulty;
+        writeMaxScoreToStorage(targetMode, targetDifficulty, 0);
+        if (state.gameMode === targetMode && state.gameDifficulty === targetDifficulty) {
+          sessionMaxScore = 0;
+        }
+      });
+      maxScoreActionGrid.appendChild(maxScoreButton);
+    }
+    maxScoreSectionContent.appendChild(maxScoreActionGrid);
+    maxScoreSectionEl.appendChild(maxScoreSectionContent);
+    adminForm.appendChild(maxScoreSectionEl);
 
     var adminDifficultyGrid = document.createElement("div");
     adminDifficultyGrid.className = "admin-difficulty-grid";
@@ -1217,6 +1499,7 @@ Main tuning points:
       { key: "easy", label: "Mechanics Easy Admin" },
       { key: "hard", label: "Mechanics Hard Admin" }
     ];
+    var levels = [1, 2, 3, 4, 5];
     var modes = [2, 1];
 
     for (var difficultyIndex = 0; difficultyIndex < difficulties.length; difficultyIndex += 1) {
@@ -1224,183 +1507,242 @@ Main tuning points:
       var difficultyColumn = document.createElement("div");
       difficultyColumn.className = "admin-difficulty-column";
 
-      var difficultyTitle = document.createElement("h3");
-      difficultyTitle.className = "admin-difficulty-title";
-      difficultyTitle.textContent = difficultyEntry.label;
-      difficultyColumn.appendChild(difficultyTitle);
+      var difficultyCollapsed = getDifficultyCollapseState(difficultyEntry.key);
+      var difficultyToggle = document.createElement("button");
+      difficultyToggle.type = "button";
+      difficultyToggle.className = "admin-collapsible-toggle admin-difficulty-title";
+      difficultyToggle.setAttribute("aria-expanded", difficultyCollapsed ? "false" : "true");
+      difficultyToggle.dataset.difficulty = difficultyEntry.key;
+      difficultyToggle.addEventListener("click", function (event) {
+        var difficulty = event.currentTarget.dataset.difficulty;
+        setDifficultyCollapseState(difficulty, !getDifficultyCollapseState(difficulty));
+        renderAdminForm();
+      });
+      var difficultyArrow = document.createElement("span");
+      difficultyArrow.className = "admin-toggle-arrow";
+      difficultyArrow.textContent = difficultyCollapsed ? ">" : "v";
+      var difficultyLabel = document.createElement("span");
+      difficultyLabel.textContent = difficultyEntry.label;
+      difficultyToggle.appendChild(difficultyLabel);
+      difficultyToggle.appendChild(difficultyArrow);
+      difficultyColumn.appendChild(difficultyToggle);
 
-      for (var modeIndex = 0; modeIndex < modes.length; modeIndex += 1) {
-        var mode = modes[modeIndex];
-        var modeConfig = buildModeConfig(mode, difficultyEntry.key);
+      var difficultyContent = document.createElement("div");
+      difficultyContent.className = "admin-collapsible-content";
+      difficultyContent.classList.toggle("hidden", difficultyCollapsed);
 
-        var modeGroup = document.createElement("div");
-        modeGroup.className = "admin-mode-group";
+      for (var levelIndex = 0; levelIndex < levels.length; levelIndex += 1) {
+        var level = levels[levelIndex];
+        var levelCollapsed = getLevelCollapseState(difficultyEntry.key, level);
+        var levelGroup = document.createElement("section");
+        levelGroup.className = "admin-level-group";
+        levelGroup.classList.add("admin-level-group-" + String(level));
 
-        var modeHeader = document.createElement("div");
-        modeHeader.className = "admin-mode-header";
-        var modeTitle = document.createElement("h3");
-        modeTitle.textContent = getModeDisplayName(mode);
-        var modeDefaultBtn = document.createElement("button");
-        modeDefaultBtn.className = "mode-default";
-        modeDefaultBtn.textContent = "Default";
-        modeDefaultBtn.dataset.mode = String(mode);
-        modeDefaultBtn.dataset.difficulty = difficultyEntry.key;
-        modeDefaultBtn.addEventListener("click", function (event) {
-          var targetMode = parseInt(event.target.dataset.mode, 10);
-          var targetDifficulty = event.target.dataset.difficulty;
-          var modeFileOverrides = getModeFileOverrides(targetMode);
-          var difficultyOverrides = getDifficultyModeOverrides(targetDifficulty, targetMode);
-          var persisted = {};
+        var levelToggle = document.createElement("button");
+        levelToggle.type = "button";
+        levelToggle.className = "admin-collapsible-toggle admin-level-title";
+        levelToggle.setAttribute("aria-expanded", levelCollapsed ? "false" : "true");
+        levelToggle.dataset.level = String(level);
+        levelToggle.dataset.difficulty = difficultyEntry.key;
+        levelToggle.addEventListener("click", function (event) {
+          var target = event.currentTarget;
+          var targetLevel = parseInt(target.dataset.level, 10);
+          var targetDifficulty = target.dataset.difficulty;
+          setLevelCollapseState(targetDifficulty, targetLevel, !getLevelCollapseState(targetDifficulty, targetLevel));
+          renderAdminForm();
+        });
+        var levelLabel = document.createElement("span");
+        levelLabel.textContent = "Admin " + getLevelDisplayName(level);
+        var levelArrow = document.createElement("span");
+        levelArrow.className = "admin-toggle-arrow";
+        levelArrow.textContent = levelCollapsed ? ">" : "v";
+        levelToggle.appendChild(levelLabel);
+        levelToggle.appendChild(levelArrow);
+        levelGroup.appendChild(levelToggle);
+
+        var levelContent = document.createElement("div");
+        levelContent.className = "admin-collapsible-content";
+        levelContent.classList.toggle("hidden", levelCollapsed);
+
+        for (var modeIndex = 0; modeIndex < modes.length; modeIndex += 1) {
+          var mode = modes[modeIndex];
+          var modeConfig = buildModeConfig(level, mode, difficultyEntry.key);
+
+          var modeGroup = document.createElement("div");
+          modeGroup.className = "admin-mode-group";
+
+          var modeHeader = document.createElement("div");
+          modeHeader.className = "admin-mode-header";
+          var modeTitle = document.createElement("h3");
+          modeTitle.textContent = getModeDisplayName(mode);
+          var modeDefaultBtn = document.createElement("button");
+          modeDefaultBtn.className = "mode-default";
+          modeDefaultBtn.textContent = "Default";
+          modeDefaultBtn.dataset.level = String(level);
+          modeDefaultBtn.dataset.mode = String(mode);
+          modeDefaultBtn.dataset.difficulty = difficultyEntry.key;
+          modeDefaultBtn.addEventListener("click", function (event) {
+            var targetLevel = parseInt(event.target.dataset.level, 10);
+            var targetMode = parseInt(event.target.dataset.mode, 10);
+            var targetDifficulty = event.target.dataset.difficulty;
+            var modeFileOverrides = getModeFileOverrides(targetMode);
+            var difficultyOverrides = getDifficultyModeOverrides(targetDifficulty, targetMode);
+            var persisted = {};
+
+            for (var sectionIndex = 0; sectionIndex < adminSections.length; sectionIndex += 1) {
+              var section = adminSections[sectionIndex];
+              for (var fieldIndex = 0; fieldIndex < section.fields.length; fieldIndex += 1) {
+                var field = section.fields[fieldIndex];
+                var key = field.key;
+                var value = configDefaultsSnapshot[key];
+                if (Object.prototype.hasOwnProperty.call(modeFileOverrides, key)) {
+                  value = modeFileOverrides[key];
+                }
+                if (Object.prototype.hasOwnProperty.call(difficultyOverrides, key)) {
+                  value = difficultyOverrides[key];
+                }
+                if (typeof value === "number" && Number.isFinite(value)) {
+                  persisted[key] = sanitizeConfigValue(key, value);
+                } else if (typeof value === "boolean") {
+                  persisted[key] = value;
+                }
+              }
+            }
+
+            writeAdminStorageObject(targetLevel, targetMode, targetDifficulty, persisted);
+            if (
+              state.currentLevel === targetLevel &&
+              state.gameMode === targetMode &&
+              state.gameDifficulty === targetDifficulty
+            ) {
+              loadCurrentLevelConfig();
+              refreshPreRunBriefValues();
+            }
+            renderAdminForm();
+          });
+          var modeActions = document.createElement("div");
+          modeActions.className = "admin-mode-actions";
+          modeActions.appendChild(modeDefaultBtn);
+          modeHeader.appendChild(modeTitle);
+          modeHeader.appendChild(modeActions);
+          modeGroup.appendChild(modeHeader);
 
           for (var sectionIndex = 0; sectionIndex < adminSections.length; sectionIndex += 1) {
             var section = adminSections[sectionIndex];
+            var sectionEl = document.createElement("section");
+            sectionEl.className = "admin-section";
+            var visibleRows = 0;
+
+            var sectionTitle = document.createElement("h3");
+            sectionTitle.textContent = section.title;
+            sectionEl.appendChild(sectionTitle);
+
             for (var fieldIndex = 0; fieldIndex < section.fields.length; fieldIndex += 1) {
               var field = section.fields[fieldIndex];
-              var key = field.key;
-              var value = configDefaultsSnapshot[key];
-              if (Object.prototype.hasOwnProperty.call(modeFileOverrides, key)) {
-                value = modeFileOverrides[key];
+              if (!isFieldVisibleForMode(mode, field.key)) {
+                continue;
               }
-              if (Object.prototype.hasOwnProperty.call(difficultyOverrides, key)) {
-                value = difficultyOverrides[key];
-              }
-              if (typeof value === "number" && Number.isFinite(value)) {
-                persisted[key] = sanitizeConfigValue(key, value);
-              } else if (typeof value === "boolean") {
-                persisted[key] = value;
-              }
-            }
-          }
-
-          writeAdminStorageObject(targetMode, targetDifficulty, persisted);
-          if (state.gameMode === targetMode && state.gameDifficulty === targetDifficulty) {
-            applyModeConfig(targetMode, targetDifficulty);
-            refreshPreRunBriefValues();
-          }
-          renderAdminForm();
-        });
-        var modeResetMaxScoreBtn = document.createElement("button");
-        modeResetMaxScoreBtn.className = "mode-reset-max-score";
-        modeResetMaxScoreBtn.textContent = "Reset max Score";
-        modeResetMaxScoreBtn.dataset.mode = String(mode);
-        modeResetMaxScoreBtn.dataset.difficulty = difficultyEntry.key;
-        modeResetMaxScoreBtn.addEventListener("click", function (event) {
-          var targetMode = parseInt(event.target.dataset.mode, 10);
-          var targetDifficulty = event.target.dataset.difficulty;
-          writeMaxScoreToStorage(targetMode, targetDifficulty, 0);
-          if (state.gameMode === targetMode && state.gameDifficulty === targetDifficulty) {
-            sessionMaxScore = 0;
-          }
-        });
-        var modeActions = document.createElement("div");
-        modeActions.className = "admin-mode-actions";
-        modeActions.appendChild(modeDefaultBtn);
-        modeActions.appendChild(modeResetMaxScoreBtn);
-        modeHeader.appendChild(modeTitle);
-        modeHeader.appendChild(modeActions);
-        modeGroup.appendChild(modeHeader);
-
-        for (var sectionIndex = 0; sectionIndex < adminSections.length; sectionIndex += 1) {
-          var section = adminSections[sectionIndex];
-          var sectionEl = document.createElement("section");
-          sectionEl.className = "admin-section";
-          var visibleRows = 0;
-
-          var sectionTitle = document.createElement("h3");
-          sectionTitle.textContent = section.title;
-          sectionEl.appendChild(sectionTitle);
-
-          for (var fieldIndex = 0; fieldIndex < section.fields.length; fieldIndex += 1) {
-            var field = section.fields[fieldIndex];
-            if (!isFieldVisibleForMode(mode, field.key)) {
-              continue;
-            }
-            if (typeof modeConfig[field.key] !== "number" && typeof modeConfig[field.key] !== "boolean") {
-              continue;
-            }
-
-            var row = document.createElement("div");
-            row.className = "admin-field";
-            if (field.type === "checkbox") {
-              row.classList.add("checkbox-field");
-            }
-
-            var label = document.createElement("label");
-            label.setAttribute("for", "admin-" + difficultyEntry.key + "-" + mode + "-" + field.key);
-            label.textContent = field.label;
-
-            var input = document.createElement("input");
-            input.id = "admin-" + difficultyEntry.key + "-" + mode + "-" + field.key;
-            input.type = field.type === "checkbox" ? "checkbox" : "number";
-            if (field.type === "checkbox") {
-              input.checked = Boolean(modeConfig[field.key]);
-            } else {
-              input.step = field.step ? String(field.step) : "any";
-              if (typeof field.min === "number") {
-                input.min = String(field.min);
-              }
-              if (typeof field.max === "number") {
-                input.max = String(field.max);
-              }
-              input.value = String(modeConfig[field.key]);
-            }
-            input.dataset.key = field.key;
-            input.dataset.mode = String(mode);
-            input.dataset.difficulty = difficultyEntry.key;
-            input.addEventListener("change", function (event) {
-              var target = event.target;
-              var key = target.dataset.key;
-              var targetMode = parseInt(target.dataset.mode, 10);
-              var targetDifficulty = target.dataset.difficulty;
-              var nextValue;
-
-              if (target.type === "checkbox") {
-                nextValue = Boolean(target.checked);
-                saveAdminFieldToStorage(targetMode, targetDifficulty, key, nextValue);
-                if (state.gameMode === targetMode && state.gameDifficulty === targetDifficulty) {
-                  C[key] = nextValue;
-                }
-                updateLivesUi();
-                return;
+              if (typeof modeConfig[field.key] !== "number" && typeof modeConfig[field.key] !== "boolean") {
+                continue;
               }
 
-              nextValue = parseFloat(target.value);
-              if (Number.isFinite(nextValue)) {
-                nextValue = sanitizeConfigValue(key, nextValue);
-                target.value = String(nextValue);
-                saveAdminFieldToStorage(targetMode, targetDifficulty, key, nextValue);
-                if (state.gameMode === targetMode && state.gameDifficulty === targetDifficulty) {
-                  C[key] = nextValue;
-                  refreshPreRunBriefValues();
-                  if (key === "livesCount") {
-                    state.maxLives = nextValue;
-                    state.livesLeft = Math.min(state.livesLeft, nextValue);
-                    if (state.preRunActive) {
-                      state.livesLeft = nextValue;
-                    }
-                    updateLivesUi();
-                  }
-                }
+              var row = document.createElement("div");
+              row.className = "admin-field";
+              if (field.type === "checkbox") {
+                row.classList.add("checkbox-field");
+              }
+
+              var label = document.createElement("label");
+              label.setAttribute("for", "admin-" + difficultyEntry.key + "-" + level + "-" + mode + "-" + field.key);
+              label.textContent = field.label;
+
+              var input = document.createElement("input");
+              input.id = "admin-" + difficultyEntry.key + "-" + level + "-" + mode + "-" + field.key;
+              input.type = field.type === "checkbox" ? "checkbox" : "number";
+              if (field.type === "checkbox") {
+                input.checked = Boolean(modeConfig[field.key]);
               } else {
-                var fallback = buildModeConfig(targetMode, targetDifficulty)[key];
-                target.value = String(fallback);
+                input.step = field.step ? String(field.step) : "any";
+                if (typeof field.min === "number") {
+                  input.min = String(field.min);
+                }
+                if (typeof field.max === "number") {
+                  input.max = String(field.max);
+                }
+                input.value = String(modeConfig[field.key]);
               }
-            });
+              input.dataset.key = field.key;
+              input.dataset.level = String(level);
+              input.dataset.mode = String(mode);
+              input.dataset.difficulty = difficultyEntry.key;
+              input.addEventListener("change", function (event) {
+                var target = event.target;
+                var key = target.dataset.key;
+                var targetLevel = parseInt(target.dataset.level, 10);
+                var targetMode = parseInt(target.dataset.mode, 10);
+                var targetDifficulty = target.dataset.difficulty;
+                var nextValue;
 
-            row.appendChild(label);
-            row.appendChild(input);
-            sectionEl.appendChild(row);
-            visibleRows += 1;
+                if (target.type === "checkbox") {
+                  nextValue = Boolean(target.checked);
+                  saveAdminFieldToStorage(targetLevel, targetMode, targetDifficulty, key, nextValue);
+                  if (
+                    state.currentLevel === targetLevel &&
+                    state.gameMode === targetMode &&
+                    state.gameDifficulty === targetDifficulty
+                  ) {
+                    C[key] = nextValue;
+                  }
+                  updateLivesUi();
+                  return;
+                }
+
+                nextValue = parseFloat(target.value);
+                if (Number.isFinite(nextValue)) {
+                  nextValue = sanitizeConfigValue(key, nextValue);
+                  target.value = String(nextValue);
+                  saveAdminFieldToStorage(targetLevel, targetMode, targetDifficulty, key, nextValue);
+                  if (
+                    state.currentLevel === targetLevel &&
+                    state.gameMode === targetMode &&
+                    state.gameDifficulty === targetDifficulty
+                  ) {
+                    C[key] = nextValue;
+                    refreshPreRunBriefValues();
+                    if (key === "livesCount") {
+                      state.maxLives = nextValue;
+                      state.livesLeft = Math.min(state.livesLeft, nextValue);
+                      if (state.preRunActive) {
+                        state.livesLeft = nextValue;
+                      }
+                      updateLivesUi();
+                    }
+                  }
+                } else {
+                  var fallback = buildModeConfig(targetLevel, targetMode, targetDifficulty)[key];
+                  target.value = String(fallback);
+                }
+              });
+
+              row.appendChild(label);
+              row.appendChild(input);
+              sectionEl.appendChild(row);
+              visibleRows += 1;
+            }
+
+            if (visibleRows > 0) {
+              modeGroup.appendChild(sectionEl);
+            }
           }
 
-          if (visibleRows > 0) {
-            modeGroup.appendChild(sectionEl);
-          }
+          levelContent.appendChild(modeGroup);
         }
 
-        difficultyColumn.appendChild(modeGroup);
+        levelGroup.appendChild(levelContent);
+        difficultyContent.appendChild(levelGroup);
       }
 
+      difficultyColumn.appendChild(difficultyContent);
       adminDifficultyGrid.appendChild(difficultyColumn);
     }
 
@@ -1436,7 +1778,7 @@ Main tuning points:
 
   function setGameMode(mode) {
     state.gameMode = mode === 2 ? 2 : 1;
-    applyModeConfig(state.gameMode, state.gameDifficulty);
+    applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
     sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
     input.left = false;
     input.right = false;
@@ -1587,7 +1929,7 @@ Main tuning points:
     }
   }
 
-  function restartGame() {
+  function restartGame(resetLives) {
     setAdminOpen(false);
     world.reset();
     var spawnX = 80;
@@ -1597,13 +1939,18 @@ Main tuning points:
     state.running = true;
     state.adminPaused = false;
     state.preRunActive = false;
-    state.score = 0;
+    state.levelFinishedActive = false;
+    state.score = state.scoreCarryOver;
     state.bonusScore = 0;
-    state.runTimeSeconds = 0;
-    state.collectedCoins = 0;
-    state.collectedBags = 0;
+    state.levelRunTimeSeconds = 0;
+    state.levelCollectedCoins = 0;
+    state.levelCollectedBags = 0;
     state.maxLives = sanitizeConfigValue("livesCount", C.livesCount);
-    state.livesLeft = state.maxLives;
+    if (resetLives) {
+      state.livesLeft = state.maxLives;
+    } else {
+      state.livesLeft = Math.max(1, Math.min(state.livesLeft, state.maxLives));
+    }
     state.lifeLossFlashTimeLeft = 0;
     state.speedPercent = 0;
     state.scrollSpeed = C.worldAutoRunSpeed;
@@ -1669,6 +2016,10 @@ Main tuning points:
     state.platformCoinIcon.x = 0;
     state.platformCoinIcon.y = 0;
     state.platformCoinIcon.platformId = -1;
+    state.levelGoalReached = false;
+    state.teleport.active = false;
+    state.teleport.x = 0;
+    state.teleport.width = Math.max(84, Math.round(C.playerSize * 1.6));
     state.playerRotationRad = 0;
     state.playerRotationLockRad = 0;
     state.playerRotationDirection = 1;
@@ -1689,6 +2040,10 @@ Main tuning points:
     player.hasDoubleJump = state.gameMode === 2;
     player.maxJumps = state.gameMode === 2 ? 2 : 1;
     gameOverEl.classList.add("hidden");
+    if (levelFinishedEl) {
+      levelFinishedEl.classList.add("hidden");
+    }
+    updateOverlayUiVisibility();
     updateLivesUi();
   }
 
@@ -1922,6 +2277,13 @@ Main tuning points:
         return;
       }
 
+      if (state.levelFinishedActive && (event.key === " " || event.key === "Enter")) {
+        if (levelFinishedContinueBtn) {
+          levelFinishedContinueBtn.click();
+        }
+        return;
+      }
+
       if ((event.key === " " || event.key === "Enter") && !state.running && !state.projectileDeathAnimActive) {
         openPreRunScreen();
         return;
@@ -1968,6 +2330,12 @@ Main tuning points:
     canvas.addEventListener("pointerdown", function () {
       tryForceFullscreen();
     });
+
+    if (levelFinishedEl) {
+      levelFinishedEl.addEventListener("pointerdown", function () {
+        tryForceFullscreen();
+      });
+    }
   }
 
   function bindHoldButton(button, onPress, onRelease) {
@@ -2044,6 +2412,7 @@ Main tuning points:
 
   function update(dt) {
     state.runTimeSeconds += dt;
+    state.levelRunTimeSeconds += dt;
     if (state.lifeLossFlashTimeLeft > 0) {
       state.lifeLossFlashTimeLeft = Math.max(0, state.lifeLossFlashTimeLeft - dt);
     }
@@ -2063,16 +2432,43 @@ Main tuning points:
     updateRespawnPoint();
 
     state.cameraX = Math.max(0, player.x - C.canvasWidth * C.cameraAnchorRatio);
-    world.generateAhead(state.cameraX, C.canvasWidth);
+    if (!state.teleport.active) {
+      world.generateAhead(state.cameraX, C.canvasWidth);
+    }
     world.cleanupBehind(state.cameraX);
 
     var distanceScore = Math.max(0, Math.floor((player.x - state.startX) * C.distanceScoreMultiplier));
-    state.score = distanceScore + state.bonusScore;
+    state.score = state.scoreCarryOver + distanceScore + state.bonusScore;
     if (state.score > sessionMaxScore) {
       sessionMaxScore = state.score;
       writeMaxScoreToStorage(state.gameMode, state.gameDifficulty, sessionMaxScore);
     }
     state.speedPercent = Math.round((state.scrollSpeed / C.worldAutoRunSpeed - 1) * 100);
+    updateLevelGoalTeleport();
+    if (checkTeleportCollision()) {
+      finishCurrentLevel();
+      return;
+    }
+    if (state.teleport.active) {
+      checkDoubleJumpIconPickup();
+      checkSlowIconPickup();
+      checkScoreBagPickup();
+      checkLivePickup();
+      checkPlatformCoinPickup();
+      checkElevatorCoinPickup();
+
+      if (physics.isPastBottomDeathLine(player)) {
+        startProjectileDeathAnimation();
+        return;
+      }
+      if (physics.isPastTopDeathLine(player)) {
+        if (consumeLife("topDeathZone")) {
+          return;
+        }
+        startProjectileDeathAnimation();
+      }
+      return;
+    }
     updateDoubleJumpSpawner(dt);
     checkDoubleJumpIconPickup();
     updateSlowSpawner(dt);
@@ -2129,6 +2525,18 @@ Main tuning points:
     state.running = false;
     updateGameOverSummary();
     gameOverEl.classList.remove("hidden");
+  }
+
+  function finishCurrentLevel() {
+    state.running = false;
+    state.levelFinishedActive = true;
+    state.teleport.active = false;
+    state.scoreCarryOver = state.score;
+    updateLevelFinishedSummary();
+    if (levelFinishedEl) {
+      levelFinishedEl.classList.remove("hidden");
+    }
+    updateOverlayUiVisibility();
   }
 
   function startProjectileDeathAnimation() {
@@ -2198,6 +2606,7 @@ Main tuning points:
     drawElevatorCoins();
     drawPlayer();
     ctx.restore();
+    drawTeleport();
     drawDeathLines();
     drawProjectileDeathAnimation();
     drawHud();
@@ -2227,6 +2636,81 @@ Main tuning points:
       }
     }
     return nearest;
+  }
+
+  function updateLevelGoalTeleport() {
+    if (state.levelGoalReached) {
+      return;
+    }
+    if (!Number.isFinite(C.finishScore) || C.finishScore <= 0) {
+      return;
+    }
+    if (state.score < C.finishScore) {
+      return;
+    }
+
+    state.levelGoalReached = true;
+    state.teleport.active = true;
+    state.teleport.x = state.cameraX + C.canvasWidth + 120;
+    trimWorldAtTeleport();
+  }
+
+  function trimWorldAtTeleport() {
+    var teleportLeft = state.teleport.x;
+
+    world.platforms = world.platforms.filter(function (platform) {
+      if (platform.x >= teleportLeft) {
+        return false;
+      }
+      var right = platform.x + platform.width;
+      if (right > teleportLeft) {
+        platform.width = Math.max(0, teleportLeft - platform.x);
+      }
+      return platform.width > 0;
+    });
+
+    world.elevators = world.elevators.filter(function (elevator) {
+      return elevator.x + elevator.width <= teleportLeft;
+    });
+
+    world.cursorX = Math.min(world.cursorX, teleportLeft);
+
+    state.blockerIcons = state.blockerIcons.filter(function (icon) {
+      return icon.x + icon.size <= teleportLeft;
+    });
+
+    if (state.doubleJumpIcon.x >= teleportLeft) {
+      state.doubleJumpIcon.active = false;
+    }
+    if (state.slowIcon.x >= teleportLeft) {
+      state.slowIcon.active = false;
+    }
+    if (state.scoreBagIcon.x >= teleportLeft) {
+      state.scoreBagIcon.active = false;
+    }
+    if (state.liveIcon.x >= teleportLeft) {
+      state.liveIcon.active = false;
+    }
+    if (state.platformCoinIcon.x >= teleportLeft) {
+      state.platformCoinIcon.active = false;
+    }
+    if (state.projectile.x >= teleportLeft) {
+      state.projectile.active = false;
+    }
+    if (state.projectile2.x >= teleportLeft) {
+      state.projectile2.active = false;
+    }
+  }
+
+  function checkTeleportCollision() {
+    if (!state.teleport.active) {
+      return false;
+    }
+
+    var playerRight = player.x + player.width;
+    var teleportLeft = state.teleport.x;
+    var teleportRight = state.teleport.x + state.teleport.width;
+    return playerRight >= teleportLeft && player.x <= teleportRight;
   }
 
   function scheduleNextDoubleJumpSpawn() {
@@ -2850,6 +3334,7 @@ Main tuning points:
       icon.active = false;
       state.bonusScore += C.scoreBagBonus;
       state.collectedBags += 1;
+      state.levelCollectedBags += 1;
       scheduleNextScoreBagSpawn();
     }
   }
@@ -2902,6 +3387,7 @@ Main tuning points:
       coin.active = false;
       state.bonusScore += C.coinScoreBonus;
       state.collectedCoins += 1;
+      state.levelCollectedCoins += 1;
       scheduleNextPlatformCoinSpawn();
     }
   }
@@ -2947,6 +3433,7 @@ Main tuning points:
         e.consumeCoin();
         state.bonusScore += C.coinScoreBonus;
         state.collectedCoins += 1;
+        state.levelCollectedCoins += 1;
       }
     }
   }
@@ -3429,6 +3916,54 @@ Main tuning points:
     }
   }
 
+  function drawTeleport() {
+    if (!state.teleport.active) {
+      return;
+    }
+
+    var x = worldToScreenX(state.teleport.x);
+    var width = state.teleport.width;
+    var y = C.topDeathLineY;
+    var height = C.bottomDeathLineY - C.topDeathLineY;
+    var teleportFrame = getTeleportFrame();
+
+    if (useModernVisuals() && teleportFrame) {
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.globalAlpha = 0.92;
+      ctx.drawImage(teleportFrame, x, y, width, height);
+      ctx.restore();
+      return;
+    }
+
+    var gradient = ctx.createLinearGradient(x, y, x + width, y);
+    gradient.addColorStop(0, "rgba(72, 218, 255, 0.18)");
+    gradient.addColorStop(0.5, "rgba(72, 218, 255, 0.68)");
+    gradient.addColorStop(1, "rgba(72, 218, 255, 0.18)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x, y, width, height);
+
+    ctx.strokeStyle = "#72daff";
+    ctx.lineWidth = 4;
+    ctx.strokeRect(x + 2, y + 2, Math.max(0, width - 4), Math.max(0, height - 4));
+  }
+
+  function getTeleportFrame() {
+    if (!sceneArt.teleportFrames.length) {
+      return null;
+    }
+
+    var loadedFrames = sceneArt.teleportFrames.filter(function (frame) {
+      return !!frame;
+    });
+    if (!loadedFrames.length) {
+      return null;
+    }
+
+    var frameIndex = Math.floor(state.runTimeSeconds / TELEPORT_ANIMATION_FRAME_SECONDS) % loadedFrames.length;
+    return loadedFrames[frameIndex];
+  }
+
   function drawProjectile() {
     drawProjectileShape(state.projectile);
   }
@@ -3574,6 +4109,7 @@ Main tuning points:
     ctx.fillText("Score: " + state.score, 18, 36);
     ctx.font = "20px Arial";
     ctx.fillText("Max Score: " + sessionMaxScore, 18, 64);
+    ctx.fillText(getLevelDisplayName(state.currentLevel), 18, 90);
     ctx.font = "24px Arial";
     ctx.textAlign = "center";
     if (state.gameMode === 2) {

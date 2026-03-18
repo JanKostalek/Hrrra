@@ -21,6 +21,24 @@ Every gameplay-related change must be added here with date and short reason.
 - Score is based on traveled distance to the right.
 - Distance-based score is multiplied by configurable `distanceScoreMultiplier`.
 - Every 1000 score increases world scroll speed by 10% (stacking per threshold).
+- The run is now split into level progression from `Level 1` to `Level 5`.
+- `finishScore` defines the total run score required to finish the current level.
+- `finishScore = 0` means the level is endless and does not spawn a finish teleport.
+
+### Level Progression
+- Fresh game starts at `Level 1`.
+- There are 5 prepared levels.
+- Score carries between finished levels.
+- Lives carry between finished levels.
+- Each level has independent full mechanic admin tuning for every mode+difficulty combination.
+- When current total score reaches the current level `finishScore`, a full-height teleport appears ahead.
+- After the finish teleport appears, no new world content is generated behind it anymore.
+- Existing platforms, elevators and hazards beyond the teleport are removed so the teleport is a true hard end of the level.
+- Touching the teleport finishes the current level.
+- Level finish opens a `Level Finished` status screen with level runtime, level coins and level bags.
+- `Continue` opens the next level briefing screen.
+- Briefing screen now shows current level and that level's finish target.
+- `Level 5` is intended as the final endless level with `finishScore = 0`.
 
 ### Controls
 - `Left Arrow` / `A`: move left
@@ -1000,6 +1018,18 @@ Every gameplay-related change must be added here with date and short reason.
 ### v0.1.163 - Added a Play Store feature graphic export in `assets/ikon` (2026-03-17)
 - Added `assets/ikon/hrrra-feature-graphic.png` as a 1024x500, 24-bit PNG promo banner using Hrrra gameplay art, the real hero sprite, and `rocket02-clean.png`.
 - Why: provides a Play-compliant feature graphic ready for the store listing.
+
+## 2026-03-18
+
+### v0.1.164 - Added 5-level progression with finish teleport and per-level admin (2026-03-18)
+- Added `Level 1` to `Level 5` progression on top of the previous endless-run flow.
+- Added configurable `finishScore` to each `level + mode + difficulty` admin copy.
+- `finishScore` now uses total accumulated run score, not score earned only inside the current level.
+- When finish score is reached and is above `0`, a full-height teleport appears and finishing it opens a `Level Finished` recap screen.
+- Score and lives now carry between finished levels.
+- Level recap now tracks current-level runtime, coins and bags separately from whole-run totals.
+- `Level 5` can be endless by setting `finishScore` to `0`.
+- Why: prepares the game for multi-level progression while keeping later per-level mechanic and art changes isolated.
 
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
