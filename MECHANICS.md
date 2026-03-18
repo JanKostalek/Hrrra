@@ -929,6 +929,78 @@ Every gameplay-related change must be added here with date and short reason.
 - Reduced `elevatorHeight` from `54` to `36`.
 - Why: once modern elevator rendering started respecting actual height, the previously overcompensated value became visually too tall.
 
+### v0.1.147 - Android monetization baseline added with AdMob test banner and consent flow (2026-03-17)
+- Added Google Mobile Ads SDK and UMP consent SDK to the Android app module.
+- Added AdMob application ID manifest metadata, test banner ad unit string resources, a native banner container, and a privacy options entry point in the Android activity layout.
+- Updated `MainActivity` to request consent, initialize Mobile Ads, load an anchored adaptive test banner after consent, and expose the privacy options form when required.
+- Why: prepares the Android build for monetization without changing web gameplay and keeps the branch safe for later replacement with real AdMob IDs.
+
+### v0.1.148 - Replaced Android AdMob test IDs with Hrrra production IDs (2026-03-17)
+- Updated Android string resources to use the real Hrrra AdMob application ID and banner ad unit ID instead of Google test IDs.
+- Why: the monetization branch now targets the actual AdMob property for Hrrra Android.
+
+### v0.1.149 - Banner temporarily switched back to Google test ad unit for display verification (2026-03-17)
+- Kept the Hrrra production AdMob app ID but changed the Android banner ad unit back to Google's official test banner unit.
+- Why: confirms that banner rendering works independently of AdMob review/fill limitations on the production unit.
+
+### v0.1.150 - Android ad debug mode now uses full Google test IDs and visible status text (2026-03-17)
+- Switched the Android AdMob app ID back to Google's official test app ID for pure SDK verification.
+- Added a visible ad debug status label in the Android ad container so consent/loading/failure state can be seen directly on screen.
+- Why: removes remaining uncertainty about review-state behavior and makes banner loading failures visible without logcat.
+
+### v0.1.151 - Android ad debug bar made visually obvious for on-device verification (2026-03-17)
+- Increased the Android ad container visibility with a stronger background, minimum height, and bolder debug label styling.
+- Why: makes it immediately obvious on phone/emulator whether the ad area is present even when no banner is returned.
+
+### v0.1.152 - Android ad container moved into Capacitor's real bridge layout (2026-03-17)
+- Added an app-level `capacitor_bridge_layout_main.xml` override so the WebView, privacy button, and ad/debug container render inside the actual layout used by `BridgeActivity`.
+- Why: `activity_main.xml` was not used by Capacitor, so the consent flow ran but the banner/debug UI never appeared on screen.
+
+### v0.1.153 - Android AdMob production IDs restored after test-banner verification (2026-03-17)
+- Switched the Android AdMob app ID and banner ad unit ID back from Google's test values to Hrrra's real AdMob IDs.
+- Why: test rendering was confirmed, so the monetization build can target the real property again.
+
+### v0.1.154 - Android splash screen now animates the Hrrra title over the artwork (2026-03-17)
+- Added a centered `Hrrra` title overlay on the Android splash screen with a short fade/scale/rotation animation during the existing splash duration.
+- Why: gives the splash screen a clearer branded reveal instead of showing only the static jumping artwork.
+
+### v0.1.155 - Android splash title now pauses, then explodes beyond screen size (2026-03-17)
+- Extended the Android splash timing and changed the `Hrrra` title animation so it appears, holds briefly, then scales up massively during the last second until a white letter fills the screen.
+- Why: creates a more dramatic branded transition into the game than a single short entrance animation.
+
+### v0.1.156 - First briefing screen keeps difficulty selector centered in mobile landscape (2026-03-17)
+- Reset the mobile landscape breakpoint so the `Easy/Hard` difficulty buttons stay in the middle column instead of jumping to the left side.
+- Why: keeps the first briefing screen layout consistent between emulator and real phone landscape.
+
+### v0.1.157 - Android privacy options moved from top-right overlay into the admin header (2026-03-17)
+- Removed the always-visible native `Privacy` overlay button and added a Capacitor `PrivacyOptions` bridge so the same UMP form can be opened from a `Privacy` button in the web admin header next to the close button.
+- Why: keeps the required privacy options accessible without covering gameplay or briefing UI.
+
+### v0.1.158 - Added a standalone privacy policy page for Play Console and AdMob setup (2026-03-17)
+- Added `privacy-policy.html` as a public static page describing Hrrra's local storage, AdMob usage, and contact details.
+- Why: provides the required public privacy policy URL for Google Play and AdMob onboarding.
+
+### v0.1.159 - Added three SVG app icon concepts for store branding review (2026-03-17)
+- Added `assets/ikon/` with three local app icon concepts: hero-plus-rocket, hero-plus-platform, and a stylized H mark.
+- Why: provides fast reviewable branding options before preparing the final Play Store launcher icon.
+
+### v0.1.160 - Updated the preferred hero-plus-rocket app icon to use a Hrrra-like character (2026-03-17)
+- Reworked `assets/ikon/hrrra-icon-hero-rocket.svg` so the central figure better matches Hrrra's actual hero style with hair, red band, blue shirt, and brown legs.
+- Why: makes the strongest icon concept feel more consistent with the real in-game character.
+
+### v0.1.161 - Swapped the icon concept character for the actual `hero-walk-01.png` sprite (2026-03-17)
+- Updated `assets/ikon/hrrra-icon-hero-rocket.svg` to place the real `hero-walk-01.png` asset into the icon composition instead of the previously redrawn placeholder figure.
+- Why: lets store icon review happen against the real in-game hero art instead of an approximation.
+
+### v0.1.162 - Finalized the preferred Play icon concept with `rocket02-clean` and a 512x512 PNG export (2026-03-17)
+- Updated `assets/ikon/hrrra-icon-hero-rocket.svg` so the incoming rocket now uses the real `rocket02-clean.png` asset.
+- Added `assets/ikon/hrrra-icon-hero-rocket-final.png` as a Play Store-ready 512x512 PNG export of the preferred icon concept.
+- Why: gives Hrrra a compliant raster app icon asset ready for Play Console upload.
+
+### v0.1.163 - Added a Play Store feature graphic export in `assets/ikon` (2026-03-17)
+- Added `assets/ikon/hrrra-feature-graphic.png` as a 1024x500, 24-bit PNG promo banner using Hrrra gameplay art, the real hero sprite, and `rocket02-clean.png`.
+- Why: provides a Play-compliant feature graphic ready for the store listing.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.

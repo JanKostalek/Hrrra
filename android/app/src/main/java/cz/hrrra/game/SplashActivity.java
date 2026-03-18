@@ -1,9 +1,14 @@
 package cz.hrrra.game;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
@@ -11,8 +16,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 public class SplashActivity extends AppCompatActivity {
-    private static final long SPLASH_DURATION_MS = 2000L;
+    private static final long SPLASH_DURATION_MS = 2600L;
     private final Handler handler = new Handler(Looper.getMainLooper());
+    private AnimatorSet titleAnimator;
     private final Runnable launchGameRunnable = new Runnable() {
         @Override
         public void run() {
@@ -29,6 +35,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         hideSystemBars();
+        animateTitle();
         handler.postDelayed(launchGameRunnable, SPLASH_DURATION_MS);
     }
 
@@ -41,6 +48,9 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         handler.removeCallbacks(launchGameRunnable);
+        if (titleAnimator != null) {
+            titleAnimator.cancel();
+        }
         super.onDestroy();
     }
 
@@ -63,5 +73,41 @@ public class SplashActivity extends AppCompatActivity {
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         );
         controller.hide(WindowInsetsCompat.Type.systemBars());
+    }
+
+    private void animateTitle() {
+        TextView titleView = findViewById(R.id.splash_title);
+        if (titleView == null) {
+            return;
+        }
+
+        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(titleView, "alpha", 0f, 1f);
+        fadeIn.setDuration(320);
+
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(titleView, "scaleX", 0.18f, 1.7f, 1.35f);
+        scaleX.setDuration(700);
+        scaleX.setInterpolator(new OvershootInterpolator(1.05f));
+
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(titleView, "scaleY", 0.18f, 1.7f, 1.35f);
+        scaleY.setDuration(700);
+        scaleY.setInterpolator(new OvershootInterpolator(1.05f));
+
+        ObjectAnimator rotate = ObjectAnimator.ofFloat(titleView, "rotation", -10f, 2f, 0f);
+        rotate.setDuration(700);
+        rotate.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        ObjectAnimator explodeScaleX = ObjectAnimator.ofFloat(titleView, "scaleX", 1.35f, 12f);
+        explodeScaleX.setStartDelay(1700);
+        explodeScaleX.setDuration(1000);
+        explodeScaleX.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        ObjectAnimator explodeScaleY = ObjectAnimator.ofFloat(titleView, "scaleY", 1.35f, 12f);
+        explodeScaleY.setStartDelay(1700);
+        explodeScaleY.setDuration(1000);
+        explodeScaleY.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        titleAnimator = new AnimatorSet();
+        titleAnimator.playTogether(fadeIn, scaleX, scaleY, rotate, explodeScaleX, explodeScaleY);
+        titleAnimator.start();
     }
 }

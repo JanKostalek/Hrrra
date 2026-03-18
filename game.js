@@ -78,6 +78,7 @@ Main tuning points:
   var adminToggle = document.getElementById("admin-toggle");
   var adminPanel = document.getElementById("admin-panel");
   var adminClose = document.getElementById("admin-close");
+  var adminPrivacy = document.getElementById("admin-privacy");
   var adminForm = document.getElementById("admin-form");
   var mode1Wrap = document.getElementById("mode-1-wrap");
   var mode1Btn = document.getElementById("mode-1-btn");
@@ -1132,6 +1133,22 @@ Main tuning points:
     input.jumpPressed = false;
   }
 
+  function isNativePrivacyOptionsAvailable() {
+    return !!(
+      window.Capacitor &&
+      window.Capacitor.Plugins &&
+      window.Capacitor.Plugins.PrivacyOptions &&
+      typeof window.Capacitor.Plugins.PrivacyOptions.show === "function"
+    );
+  }
+
+  function updateAdminPrivacyVisibility() {
+    if (!adminPrivacy) {
+      return;
+    }
+    adminPrivacy.classList.toggle("hidden", !isNativePrivacyOptionsAvailable());
+  }
+
   function updateOverlayUiVisibility() {
     if (adminToggle) {
       adminToggle.classList.toggle("hidden", state.preRunActive);
@@ -1403,6 +1420,17 @@ Main tuning points:
     adminClose.addEventListener("click", function () {
       setAdminOpen(false);
     });
+
+    if (adminPrivacy) {
+      adminPrivacy.addEventListener("click", function () {
+        if (!isNativePrivacyOptionsAvailable()) {
+          return;
+        }
+        window.Capacitor.Plugins.PrivacyOptions.show().catch(function () {});
+      });
+    }
+
+    updateAdminPrivacyVisibility();
 
   }
 

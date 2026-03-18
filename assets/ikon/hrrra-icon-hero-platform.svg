@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e9f7ff"/>
+      <stop offset="100%" stop-color="#9fd7ff"/>
+    </linearGradient>
+    <filter id="shadow2" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="12" flood-color="#08293a" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg2)"/>
+  <g opacity="0.15">
+    <path d="M0 388 C90 352 140 360 220 402 C286 436 358 438 512 378 L512 512 L0 512 Z" fill="#5bb832"/>
+    <path d="M0 422 C118 390 172 402 256 442 C336 480 416 480 512 430 L512 512 L0 512 Z" fill="#3a8e20"/>
+  </g>
+  <g filter="url(#shadow2)">
+    <rect x="82" y="326" width="348" height="42" rx="10" fill="#14202c"/>
+    <rect x="82" y="308" width="348" height="20" rx="9" fill="#72cf28"/>
+  </g>
+  <g transform="translate(176 130)" filter="url(#shadow2)">
+    <rect x="38" y="26" width="52" height="52" rx="10" fill="#2f73ec" stroke="#ffffff" stroke-width="10"/>
+    <rect x="18" y="76" width="42" height="18" rx="6" fill="#2f73ec"/>
+    <rect x="76" y="76" width="42" height="18" rx="6" fill="#2f73ec"/>
+    <rect x="26" y="92" width="24" height="52" rx="8" fill="#2f73ec"/>
+    <rect x="72" y="92" width="24" height="52" rx="8" fill="#2f73ec"/>
+    <rect x="44" y="0" width="40" height="34" rx="12" fill="#ffd6b0"/>
+    <path d="M48 10 Q66 -2 86 10 L86 20 L48 20 Z" fill="#8a4215"/>
+  </g>
+  <g filter="url(#shadow2)">
+    <rect x="332" y="204" width="92" height="18" rx="9" fill="#14202c"/>
+    <rect x="332" y="192" width="92" height="14" rx="8" fill="#72cf28"/>
+    <circle cx="378" cy="172" r="24" fill="#ffd74c" stroke="#e9b100" stroke-width="8"/>
+    <text x="378" y="181" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="900" fill="#fff6bf">$</text>
+  </g>
+  <text x="256" y="446" text-anchor="middle" font-family="Arial, sans-serif" font-size="58" font-weight="900" fill="#d41212">HRRRA</text>
+</svg>
