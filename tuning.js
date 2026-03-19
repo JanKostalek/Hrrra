@@ -19,7 +19,7 @@
     projectile2RespawnMinSeconds: 3,
     projectile2RespawnMaxSeconds: 8,
     projectile2SpeedMultiplier: 2,
-    fullscreenAutoEnabled: true,
+    fullscreenAutoEnabled: false,
     modernVisualsEnabled: true,
     livesCount: 3,
     livesApplyTopDeathZone: true,
@@ -138,6 +138,94 @@
         coinScoreBonus: 100,
         platformCoinRespawnMinSeconds: 1,
         platformCoinRespawnMaxSeconds: 3
+      }
+    }
+  };
+
+  // Optional per-level overrides applied after mode and difficulty defaults,
+  // before local admin storage.
+  window.HrrraLevelTuning = {
+    1: {
+      easy: {
+        2: {
+          finishScore: 10000,
+          projectile2UnlockScore: 10000,
+          scoreBagBonus: 2000,
+          blockerUnlockScore: 5000,
+          liveUnlockScore: 10000,
+          scoreBagUnlockScore: 10000,
+          platformCoinUnlockScore: 2000,
+          platformCoinRespawnMaxSeconds: 10,
+          platformCoinRespawnMinSeconds: 4,
+          tripleJumpUnlockScore: 2500,
+          doubleJumpUnlockScore: 0
+        }
+      }
+    },
+    2: {
+      easy: {
+        2: {
+          finishScore: 20000,
+          projectileUnlockScore: 20000,
+          projectile2UnlockScore: 20000,
+          scoreBagBonus: 2000,
+          liveUnlockScore: 15000,
+          blockerUnlockScore: 12000,
+          platformCoinUnlockScore: 0,
+          scoreBagUnlockScore: 20000,
+          platformCoinRespawnMinSeconds: 4,
+          platformCoinRespawnMaxSeconds: 8
+        }
+      }
+    },
+    3: {
+      easy: {
+        2: {
+          finishScore: 30000,
+          projectileUnlockScore: 0,
+          projectile2UnlockScore: 30000,
+          scoreBagUnlockScore: 0,
+          blockerUnlockScore: 0,
+          platformCoinUnlockScore: 0,
+          scoreBagBonus: 2000,
+          platformCoinRespawnMinSeconds: 4,
+          platformCoinRespawnMaxSeconds: 8,
+          liveUnlockScore: 0,
+          scoreBagRespawnMaxSeconds: 15,
+          scoreBagRespawnMinSeconds: 7
+        }
+      }
+    },
+    4: {
+      easy: {
+        2: {
+          finishScore: 40000,
+          projectileUnlockScore: 0,
+          projectile2UnlockScore: 35000,
+          blockerUnlockScore: 0,
+          scoreBagBonus: 2000,
+          platformCoinRespawnMinSeconds: 4,
+          platformCoinRespawnMaxSeconds: 8,
+          liveRespawnMinSeconds: 15,
+          liveRespawnMaxSeconds: 30
+        }
+      }
+    },
+    5: {
+      easy: {
+        2: {
+          finishScore: 0,
+          platformCoinRespawnMinSeconds: 5,
+          platformCoinRespawnMaxSeconds: 10,
+          blockerUnlockScore: 0,
+          projectileUnlockScore: 0,
+          projectileRespawnMinSeconds: 4,
+          projectile2UnlockScore: 0,
+          projectile2RespawnMinSeconds: 5,
+          projectile2RespawnMaxSeconds: 12,
+          doubleJumpUnlockScore: 0,
+          liveUnlockScore: 0
+        }
       }
     }
   };

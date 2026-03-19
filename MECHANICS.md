@@ -1031,6 +1031,36 @@ Every gameplay-related change must be added here with date and short reason.
 - `Level 5` can be endless by setting `finishScore` to `0`.
 - Why: prepares the game for multi-level progression while keeping later per-level mechanic and art changes isolated.
 
+### v0.1.165 - Tightened teleport finish collision to require real contact (2026-03-19)
+- Narrowed the active collision zone of the finish teleport so the player must enter its inner beam before the level completes.
+- Why: the previous hitbox ended the level too early, while the player sprite still looked visibly outside the portal.
+
+### v0.1.166 - Added 2-second teleport finish dissolve animation (2026-03-19)
+- When the player touches the finish teleport, the run now freezes, the hero shrinks for 1 second, then transforms into an expanding spark for 1 second before the level recap screen appears.
+- Why: gives level completion a clearer visual payoff and makes the teleport finish feel intentional instead of abrupt.
+
+### v0.1.167 - Shortened teleport finish and centered its trigger (2026-03-19)
+- Shortened the full teleport finish animation from 2 seconds to 1 second, reduced the final spark size by 50%, and changed completion detection to trigger around the aligned centers of the player and teleport.
+- Why: makes the finish feel snappier and visually more exact.
+
+### v0.1.168 - Kept the hero hidden after teleport finish (2026-03-19)
+- After the teleport completion animation, the hero now stays hidden under the `Level Finished` overlay instead of reappearing in the frozen world behind it.
+- Why: the intended finish is shrink -> spark -> fade out -> recap, without the character popping back in.
+
+### v0.1.169 - Made the teleport spark fade in before fading out (2026-03-19)
+- During the spark phase of the teleport finish, the spark now fades in as it grows and then fades out to nothing within the same total timing.
+- Why: the spark reads more naturally when it appears, peaks, and then disappears instead of only fading away while growing.
+
+### v0.1.170 - Added unlock scores for Money Bag and Coin (2026-03-19)
+- Added configurable `unlock score` thresholds for both `Money Bag` and `Coin`, so each level/mode/difficulty admin copy can decide from what score these pickups start appearing.
+- Why: pickup progression should be controllable the same way as the other mechanics.
+
+### v0.1.171 - Added unlock scores for Double Jump and Tripple Jump (2026-03-19)
+- Added configurable `unlock score` thresholds for both `Double Jump` and `Tripple Jump` in the per-level admin.
+- In `Full Mode`, the jump pickup unlock now follows `doubleJumpUnlockScore`; in `Jump Mode`, where base double jump is always on, the pickup unlock now follows `tripleJumpUnlockScore`.
+- Coin unlock now also applies to elevator coins, not only to platform coin spawns.
+- Why: unlock timing should behave consistently across jump upgrades and all coin placements.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.

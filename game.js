@@ -24,13 +24,13 @@ Main tuning points:
 - Speed scaling: worldAutoRunSpeed, speedStepScore, speedStepMultiplier, speedStepScoreMultiplier, distanceScoreMultiplier
 - Projectile: projectileUnlockScore, projectileRespawnMinSeconds, projectileRespawnMaxSeconds, projectileSpeedMultiplier
 - Double jump: doubleJumpUnlockScore, doubleJumpGravity, doubleJumpInitialVelocity, doubleJumpHoldAcceleration, doubleJumpHoldMaxTime, doubleJumpIconSizeRatio, doubleJumpEffectSeconds, doubleJumpRespawnMinSeconds, doubleJumpRespawnMaxSeconds
-- Tripple jump: tripleJumpEffectSeconds
+- Tripple jump: tripleJumpUnlockScore, tripleJumpEffectSeconds
 - Tripple jump movement: tripleJumpGravity, tripleJumpInitialVelocity, tripleJumpHoldAcceleration, tripleJumpHoldMaxTime
 - Slow icon: slowUnlockSpeedPercent, slowIconSizeRatio, slowRespawnMinSeconds, slowRespawnMaxSeconds
-- Score bag: scoreBagBonus, scoreBagIconSizeRatio, scoreBagRespawnMinSeconds, scoreBagRespawnMaxSeconds
+- Money bag: scoreBagUnlockScore, scoreBagBonus, scoreBagIconSizeRatio, scoreBagRespawnMinSeconds, scoreBagRespawnMaxSeconds
 - Live: liveUnlockScore, liveRespawnMinSeconds, liveRespawnMaxSeconds
 - Blocker: blockerUnlockScore, blockerRespawnMinSeconds, blockerRespawnMaxSeconds
-- Coins: coinScoreBonus, coinIconSizeRatio, platformCoinInitialDelaySeconds, platformCoinRespawnMinSeconds, platformCoinRespawnMaxSeconds
+- Coins: platformCoinUnlockScore, coinScoreBonus, coinIconSizeRatio, platformCoinInitialDelaySeconds, platformCoinRespawnMinSeconds, platformCoinRespawnMaxSeconds
 - Death lines: topDeathLineY, bottomDeathLineY
 */
 (function () {
@@ -103,9 +103,17 @@ Main tuning points:
   var configDefaultsSnapshot = {};
   var modeTuning = window.HrrraModeTuning || {};
   var difficultyTuning = window.HrrraDifficultyTuning || {};
+  var levelTuning = window.HrrraLevelTuning || {};
   var sceneArt = {
     backgroundSky: null,
     backgroundForeground: null,
+    level2CaveBack: null,
+    level2CaveFront: null,
+    level3VolcanoBack: null,
+    level3VolcanoFront: null,
+    level4ForestBack: null,
+    level4ForestMid: null,
+    level4ForestFront: null,
     platform: null,
     elevator: null,
     blocker: null,
@@ -120,6 +128,13 @@ Main tuning points:
   };
   var BACKGROUND_SKY_ART_PATH = "assets/gamebackground_sky_tile.png";
   var BACKGROUND_FOREGROUND_ART_PATH = "assets/gamebackground_foreground_tile.png";
+  var LEVEL2_CAVE_BACK_ART_PATH = "assets/level2_cave_back_tile.png";
+  var LEVEL2_CAVE_FRONT_ART_PATH = "assets/level2_cave_front_tile.png";
+  var LEVEL3_VOLCANO_BACK_ART_PATH = "assets/level3_volcano_back_tile.png";
+  var LEVEL3_VOLCANO_FRONT_ART_PATH = "assets/level3_volcano_front_tile.png";
+  var LEVEL4_FOREST_BACK_ART_PATH = "assets/forest/level4_forest_back_tile.png";
+  var LEVEL4_FOREST_MID_ART_PATH = "assets/forest/level4_forest_mid_tile.png";
+  var LEVEL4_FOREST_FRONT_ART_PATH = "assets/forest/level4_forest_front_tile.png";
   var PLATFORM_ART_PATH = "assets/platform-tile-clean.png";
   var ELEVATOR_ART_PATH = "assets/vytah01-clean.png";
   var BLOCKER_ART_PATH = "assets/blocker01-clean.png";
@@ -178,6 +193,8 @@ Main tuning points:
   var HERO_JUMP_FRAME_SECONDS = 0.07;
   var ROCKET_ANIMATION_FRAME_SECONDS = 0.08;
   var TELEPORT_ANIMATION_FRAME_SECONDS = 0.09;
+  var TELEPORT_FINISH_HERO_SHRINK_SECONDS = 0.5;
+  var TELEPORT_FINISH_SPARK_GROW_SECONDS = 0.5;
 
   function getModeStorageKey(level, mode, difficulty) {
     return ADMIN_STORAGE_KEY_PREFIX + "level" + String(level) + "_" + String(difficulty) + "_" + String(mode);
@@ -455,6 +472,13 @@ Main tuning points:
       }
     }
 
+    var levelOverrides = getLevelDifficultyModeOverrides(level, difficulty, mode);
+    for (key in levelOverrides) {
+      if (Object.prototype.hasOwnProperty.call(levelOverrides, key)) {
+        cfg[key] = levelOverrides[key];
+      }
+    }
+
     var storageOverrides = readAdminStorageObject(level, mode, difficulty);
     for (key in storageOverrides) {
       if (Object.prototype.hasOwnProperty.call(storageOverrides, key)) {
@@ -524,10 +548,30 @@ Main tuning points:
     return modeEntry;
   }
 
+  function getLevelDifficultyModeOverrides(level, difficulty, mode) {
+    if (!levelTuning || typeof levelTuning !== "object") {
+      return {};
+    }
+    var levelEntry = levelTuning[String(level)] || levelTuning[level];
+    if (!levelEntry || typeof levelEntry !== "object") {
+      return {};
+    }
+    var difficultyEntry = levelEntry[difficulty];
+    if (!difficultyEntry || typeof difficultyEntry !== "object") {
+      return {};
+    }
+    var modeEntry = difficultyEntry[String(mode)] || difficultyEntry[mode];
+    if (!modeEntry || typeof modeEntry !== "object") {
+      return {};
+    }
+    return modeEntry;
+  }
+
   function applyModeConfig(level, mode, difficulty) {
     applyObjectConfig(configDefaultsSnapshot);
     applyObjectConfig(getModeFileOverrides(mode));
     applyObjectConfig(getDifficultyModeOverrides(difficulty, mode));
+    applyObjectConfig(getLevelDifficultyModeOverrides(level, difficulty, mode));
     loadAdminConfigFromStorage(level, mode, difficulty);
   }
 
@@ -624,6 +668,11 @@ Main tuning points:
     projectileDeathCurrentX: 0,
     projectileDeathCurrentY: 0,
     projectileDeathCurrentSize: C.playerSize,
+    teleportFinishAnimActive: false,
+    teleportFinishAnimElapsed: 0,
+    teleportFinishAnimHeroStartSize: C.playerSize,
+    teleportFinishAnimHeroCenterX: 0,
+    teleportFinishAnimHeroCenterY: 0,
     platformCoinTimer: C.platformCoinInitialDelaySeconds,
     lastPlatformCoinPlatformId: -1,
     platformCoinIcon: {
@@ -686,6 +735,14 @@ Main tuning points:
       ]
     },
     {
+      title: "Movement",
+      fields: [
+        { key: "moveSpeedGroundPercentL", label: "Move speed ground L (% of speed)" },
+        { key: "moveSpeedGroundPercentR", label: "Move speed ground R (% of speed)" },
+        { key: "moveSpeedAir", label: "Move speed air" }
+      ]
+    },
+    {
       title: "Lives",
       fields: [
         { key: "livesCount", label: "Lives count", type: "number", min: 1, max: 5, step: 1 },
@@ -704,7 +761,34 @@ Main tuning points:
       ]
     },
     {
-      title: "Projectile",
+      title: "Coin",
+      fields: [
+        { key: "platformCoinUnlockScore", label: "Unlock score" },
+        { key: "coinScoreBonus", label: "Coin bonus" },
+        { key: "platformCoinInitialDelaySeconds", label: "Initial delay sec" },
+        { key: "platformCoinRespawnMinSeconds", label: "Respawn min sec" },
+        { key: "platformCoinRespawnMaxSeconds", label: "Respawn max sec" }
+      ]
+    },
+    {
+      title: "Money Bag",
+      fields: [
+        { key: "scoreBagUnlockScore", label: "Unlock score" },
+        { key: "scoreBagBonus", label: "Bonus score" },
+        { key: "scoreBagRespawnMinSeconds", label: "Respawn min sec" },
+        { key: "scoreBagRespawnMaxSeconds", label: "Respawn max sec" }
+      ]
+    },
+    {
+      title: "Blocker",
+      fields: [
+        { key: "blockerUnlockScore", label: "Unlock score" },
+        { key: "blockerRespawnMinSeconds", label: "Respawn min sec" },
+        { key: "blockerRespawnMaxSeconds", label: "Respawn max sec" }
+      ]
+    },
+    {
+      title: "Projectile 1",
       fields: [
         { key: "projectileUnlockScore", label: "Unlock score" },
         { key: "projectileRespawnMinSeconds", label: "Respawn min sec" },
@@ -733,6 +817,7 @@ Main tuning points:
     {
       title: "Double Jump",
       fields: [
+        { key: "doubleJumpUnlockScore", label: "Unlock score" },
         { key: "doubleJumpGravity", label: "Gravity" },
         { key: "doubleJumpInitialVelocity", label: "Jump initial velocity" },
         { key: "doubleJumpHoldAcceleration", label: "Jump hold acceleration" },
@@ -745,27 +830,12 @@ Main tuning points:
     {
       title: "Tripple Jump",
       fields: [
+        { key: "tripleJumpUnlockScore", label: "Unlock score" },
         { key: "tripleJumpGravity", label: "Gravity" },
         { key: "tripleJumpInitialVelocity", label: "Jump initial velocity" },
         { key: "tripleJumpHoldAcceleration", label: "Jump hold acceleration" },
         { key: "tripleJumpHoldMaxTime", label: "Jump hold max time" },
         { key: "tripleJumpEffectSeconds", label: "Effect seconds" }
-      ]
-    },
-    {
-      title: "Slow",
-      fields: [
-        { key: "slowUnlockSpeedPercent", label: "Unlock speed %" },
-        { key: "slowRespawnMinSeconds", label: "Respawn min sec" },
-        { key: "slowRespawnMaxSeconds", label: "Respawn max sec" }
-      ]
-    },
-    {
-      title: "Score Bag",
-      fields: [
-        { key: "scoreBagBonus", label: "Bonus score" },
-        { key: "scoreBagRespawnMinSeconds", label: "Respawn min sec" },
-        { key: "scoreBagRespawnMaxSeconds", label: "Respawn max sec" }
       ]
     },
     {
@@ -777,32 +847,15 @@ Main tuning points:
       ]
     },
     {
-      title: "Blocker",
+      title: "Slow",
       fields: [
-        { key: "blockerUnlockScore", label: "Unlock score" },
-        { key: "blockerRespawnMinSeconds", label: "Respawn min sec" },
-        { key: "blockerRespawnMaxSeconds", label: "Respawn max sec" }
+        { key: "slowUnlockSpeedPercent", label: "Unlock speed %" },
+        { key: "slowRespawnMinSeconds", label: "Respawn min sec" },
+        { key: "slowRespawnMaxSeconds", label: "Respawn max sec" }
       ]
     },
     {
-      title: "Coin",
-      fields: [
-        { key: "coinScoreBonus", label: "Coin bonus" },
-        { key: "platformCoinInitialDelaySeconds", label: "Initial delay sec" },
-        { key: "platformCoinRespawnMinSeconds", label: "Respawn min sec" },
-        { key: "platformCoinRespawnMaxSeconds", label: "Respawn max sec" }
-      ]
-    },
-    {
-      title: "Movement",
-      fields: [
-        { key: "moveSpeedGroundPercentL", label: "Move speed ground L (% of speed)" },
-        { key: "moveSpeedGroundPercentR", label: "Move speed ground R (% of speed)" },
-        { key: "moveSpeedAir", label: "Move speed air" }
-      ]
-    },
-    {
-      title: "Elevators",
+      title: "Elevator",
       fields: [
         { key: "elevatorSpeed", label: "Elevator speed" }
       ]
@@ -841,6 +894,27 @@ Main tuning points:
     });
     loadSceneArtAsset(BACKGROUND_FOREGROUND_ART_PATH, function (image) {
       sceneArt.backgroundForeground = image;
+    });
+    loadSceneArtAsset(LEVEL2_CAVE_BACK_ART_PATH, function (image) {
+      sceneArt.level2CaveBack = image;
+    });
+    loadSceneArtAsset(LEVEL2_CAVE_FRONT_ART_PATH, function (image) {
+      sceneArt.level2CaveFront = image;
+    });
+    loadSceneArtAsset(LEVEL3_VOLCANO_BACK_ART_PATH, function (image) {
+      sceneArt.level3VolcanoBack = image;
+    });
+    loadSceneArtAsset(LEVEL3_VOLCANO_FRONT_ART_PATH, function (image) {
+      sceneArt.level3VolcanoFront = image;
+    });
+    loadSceneArtAsset(LEVEL4_FOREST_BACK_ART_PATH, function (image) {
+      sceneArt.level4ForestBack = image;
+    });
+    loadSceneArtAsset(LEVEL4_FOREST_MID_ART_PATH, function (image) {
+      sceneArt.level4ForestMid = image;
+    });
+    loadSceneArtAsset(LEVEL4_FOREST_FRONT_ART_PATH, function (image) {
+      sceneArt.level4ForestFront = image;
     });
     loadSceneArtAsset(PLATFORM_ART_PATH, function (image) {
       sceneArt.platform = image;
@@ -1587,6 +1661,7 @@ Main tuning points:
             var targetDifficulty = event.target.dataset.difficulty;
             var modeFileOverrides = getModeFileOverrides(targetMode);
             var difficultyOverrides = getDifficultyModeOverrides(targetDifficulty, targetMode);
+            var levelOverrides = getLevelDifficultyModeOverrides(targetLevel, targetDifficulty, targetMode);
             var persisted = {};
 
             for (var sectionIndex = 0; sectionIndex < adminSections.length; sectionIndex += 1) {
@@ -1600,6 +1675,9 @@ Main tuning points:
                 }
                 if (Object.prototype.hasOwnProperty.call(difficultyOverrides, key)) {
                   value = difficultyOverrides[key];
+                }
+                if (Object.prototype.hasOwnProperty.call(levelOverrides, key)) {
+                  value = levelOverrides[key];
                 }
                 if (typeof value === "number" && Number.isFinite(value)) {
                   persisted[key] = sanitizeConfigValue(key, value);
@@ -2010,6 +2088,11 @@ Main tuning points:
     state.projectileDeathCurrentX = 0;
     state.projectileDeathCurrentY = 0;
     state.projectileDeathCurrentSize = C.playerSize;
+    state.teleportFinishAnimActive = false;
+    state.teleportFinishAnimElapsed = 0;
+    state.teleportFinishAnimHeroStartSize = C.playerSize;
+    state.teleportFinishAnimHeroCenterX = 0;
+    state.teleportFinishAnimHeroCenterY = 0;
     state.platformCoinTimer = C.platformCoinInitialDelaySeconds;
     state.lastPlatformCoinPlatformId = -1;
     state.platformCoinIcon.active = false;
@@ -2284,7 +2367,12 @@ Main tuning points:
         return;
       }
 
-      if ((event.key === " " || event.key === "Enter") && !state.running && !state.projectileDeathAnimActive) {
+      if (
+        (event.key === " " || event.key === "Enter") &&
+        !state.running &&
+        !state.projectileDeathAnimActive &&
+        !state.teleportFinishAnimActive
+      ) {
         openPreRunScreen();
         return;
       }
@@ -2322,7 +2410,7 @@ Main tuning points:
 
     gameOverEl.addEventListener("click", function () {
       tryForceFullscreen();
-      if (!state.running && !state.projectileDeathAnimActive) {
+      if (!state.running && !state.projectileDeathAnimActive && !state.teleportFinishAnimActive) {
         openPreRunScreen();
       }
     });
@@ -2401,6 +2489,8 @@ Main tuning points:
 
     if (state.running && !state.adminPaused && !state.preRunActive) {
       update(dt);
+    } else if (state.teleportFinishAnimActive && !state.adminPaused && !state.preRunActive) {
+      updateTeleportFinishAnimation(dt);
     } else if (state.projectileDeathAnimActive && !state.adminPaused && !state.preRunActive) {
       updateProjectileDeathAnimation(dt);
     }
@@ -2446,7 +2536,7 @@ Main tuning points:
     state.speedPercent = Math.round((state.scrollSpeed / C.worldAutoRunSpeed - 1) * 100);
     updateLevelGoalTeleport();
     if (checkTeleportCollision()) {
-      finishCurrentLevel();
+      startTeleportFinishAnimation();
       return;
     }
     if (state.teleport.active) {
@@ -2539,6 +2629,32 @@ Main tuning points:
     updateOverlayUiVisibility();
   }
 
+  function startTeleportFinishAnimation() {
+    if (state.teleportFinishAnimActive) {
+      return;
+    }
+
+    state.running = false;
+    state.teleportFinishAnimActive = true;
+    state.teleportFinishAnimElapsed = 0;
+    state.teleportFinishAnimHeroStartSize = player.width;
+    state.teleportFinishAnimHeroCenterX = player.x + player.width * 0.5;
+    state.teleportFinishAnimHeroCenterY = player.y + player.height * 0.5;
+    state.projectile.active = false;
+    state.projectile2.active = false;
+    player.velocityX = 0;
+    player.velocityY = 0;
+    player.isGrounded = false;
+    player.supportType = null;
+    player.supportRef = null;
+    player.isJumpHolding = false;
+    player.jumpHoldTime = 0;
+    input.left = false;
+    input.right = false;
+    input.jumpDown = false;
+    input.jumpPressed = false;
+  }
+
   function startProjectileDeathAnimation() {
     state.running = false;
     state.projectile.active = false;
@@ -2586,6 +2702,15 @@ Main tuning points:
     }
   }
 
+  function updateTeleportFinishAnimation(dt) {
+    state.teleportFinishAnimElapsed += dt;
+    var totalDuration = TELEPORT_FINISH_HERO_SHRINK_SECONDS + TELEPORT_FINISH_SPARK_GROW_SECONDS;
+    if (state.teleportFinishAnimElapsed >= totalDuration) {
+      state.teleportFinishAnimActive = false;
+      finishCurrentLevel();
+    }
+  }
+
   function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
@@ -2605,6 +2730,7 @@ Main tuning points:
     drawPlatformCoinIcon();
     drawElevatorCoins();
     drawPlayer();
+    drawTeleportFinishAnimation();
     ctx.restore();
     drawTeleport();
     drawDeathLines();
@@ -2707,10 +2833,10 @@ Main tuning points:
       return false;
     }
 
-    var playerRight = player.x + player.width;
-    var teleportLeft = state.teleport.x;
-    var teleportRight = state.teleport.x + state.teleport.width;
-    return playerRight >= teleportLeft && player.x <= teleportRight;
+    var playerCenter = player.x + player.width * 0.5;
+    var teleportCenter = state.teleport.x + state.teleport.width * 0.5;
+    var centerTolerance = Math.max(6, Math.round(Math.min(player.width, state.teleport.width) * 0.08));
+    return Math.abs(playerCenter - teleportCenter) <= centerTolerance;
   }
 
   function scheduleNextDoubleJumpSpawn() {
@@ -2747,8 +2873,12 @@ Main tuning points:
     player.maxJumps = hasTripleJump ? 3 : (hasDoubleJump ? 2 : 1);
   }
 
+  function getDoubleJumpPickupUnlockScore() {
+    return state.gameMode === 2 ? C.tripleJumpUnlockScore : C.doubleJumpUnlockScore;
+  }
+
   function updateDoubleJumpSpawner(dt) {
-    if (state.score < C.doubleJumpUnlockScore) {
+    if (state.score < getDoubleJumpPickupUnlockScore()) {
       return;
     }
 
@@ -3061,6 +3191,12 @@ Main tuning points:
 
   function updateScoreBagSpawner(dt) {
     var icon = state.scoreBagIcon;
+    if (state.score < C.scoreBagUnlockScore) {
+      icon.active = false;
+      state.scoreBagRespawnTimer = 0;
+      return;
+    }
+
     if (icon.active) {
       var offscreenLeft = icon.x + icon.size < state.cameraX - 40;
       if (offscreenLeft) {
@@ -3158,6 +3294,13 @@ Main tuning points:
 
   function updatePlatformCoinSpawner(dt) {
     var coin = state.platformCoinIcon;
+    if (state.score < C.platformCoinUnlockScore) {
+      coin.active = false;
+      state.platformCoinTimer = 0;
+      state.lastPlatformCoinPlatformId = -1;
+      return;
+    }
+
     if (coin.active) {
       var offscreenLeft = coin.x + coin.size < state.cameraX - 40;
       if (offscreenLeft) {
@@ -3179,7 +3322,7 @@ Main tuning points:
 
   function trySpawnDoubleJumpIcon() {
     var icon = state.doubleJumpIcon;
-    if (icon.active || state.score < C.doubleJumpUnlockScore) {
+    if (icon.active || state.score < getDoubleJumpPickupUnlockScore()) {
       return false;
     }
 
@@ -3240,18 +3383,20 @@ Main tuning points:
       });
     }
 
-    var elevatorCoinSize = C.playerSize * C.coinIconSizeRatio;
-    for (var i = 0; i < world.elevators.length; i += 1) {
-      var elevator = world.elevators[i];
-      if (!elevator.coinActive) {
-        continue;
+    if (state.score >= C.platformCoinUnlockScore) {
+      var elevatorCoinSize = C.playerSize * C.coinIconSizeRatio;
+      for (var i = 0; i < world.elevators.length; i += 1) {
+        var elevator = world.elevators[i];
+        if (!elevator.coinActive) {
+          continue;
+        }
+        rects.push({
+          x: elevator.x + elevator.width * 0.5 - elevatorCoinSize * 0.5,
+          y: elevator.y - elevatorCoinSize,
+          w: elevatorCoinSize,
+          h: elevatorCoinSize
+        });
       }
-      rects.push({
-        x: elevator.x + elevator.width * 0.5 - elevatorCoinSize * 0.5,
-        y: elevator.y - elevatorCoinSize,
-        w: elevatorCoinSize,
-        h: elevatorCoinSize
-      });
     }
 
     return rects;
@@ -3416,6 +3561,10 @@ Main tuning points:
   }
 
   function checkElevatorCoinPickup() {
+    if (state.score < C.platformCoinUnlockScore) {
+      return;
+    }
+
     var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
 
     for (var i = 0; i < world.elevators.length; i += 1) {
@@ -3465,11 +3614,14 @@ Main tuning points:
   }
 
   function drawBackground() {
-    ctx.fillStyle = state.lifeLossFlashTimeLeft > 0 ? "#ffb14a" : "#ffffff";
+    var isLevel2Cave = state.currentLevel === 2 && useModernVisuals();
+    var isLevel3Volcano = state.currentLevel === 3 && useModernVisuals();
+    var isLevel4Forest = state.currentLevel === 4 && useModernVisuals();
+    ctx.fillStyle = state.lifeLossFlashTimeLeft > 0 ? "#ffb14a" : (isLevel2Cave ? "#050813" : (isLevel3Volcano ? "#2c0614" : (isLevel4Forest ? "#050c09" : "#ffffff")));
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     var playableHeight = C.bottomDeathLineY - C.topDeathLineY;
-    ctx.fillStyle = state.lifeLossFlashTimeLeft > 0 ? "#ffd08a" : "#e8f4ff";
+    ctx.fillStyle = state.lifeLossFlashTimeLeft > 0 ? "#ffd08a" : (isLevel2Cave ? "#0b1223" : (isLevel3Volcano ? "#551123" : (isLevel4Forest ? "#11211a" : "#e8f4ff")));
     ctx.fillRect(0, C.topDeathLineY, canvas.width, playableHeight);
 
     if (state.lifeLossFlashTimeLeft > 0 || !useModernVisuals()) {
@@ -3480,8 +3632,20 @@ Main tuning points:
     ctx.beginPath();
     ctx.rect(0, C.topDeathLineY, canvas.width, playableHeight);
     ctx.clip();
-    drawParallaxStrip(sceneArt.backgroundSky, 0.12, C.topDeathLineY, playableHeight);
-    drawParallaxStrip(sceneArt.backgroundForeground, 0.32, C.topDeathLineY, playableHeight);
+    if (state.currentLevel === 2) {
+      drawParallaxStrip(sceneArt.level2CaveBack, 0.08, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level2CaveFront, 0.2, C.topDeathLineY, playableHeight);
+    } else if (state.currentLevel === 3) {
+      drawParallaxStrip(sceneArt.level3VolcanoBack, 0.07, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level3VolcanoFront, 0.18, C.topDeathLineY, playableHeight);
+    } else if (state.currentLevel === 4) {
+      drawParallaxStrip(sceneArt.level4ForestBack, 0.06, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level4ForestMid, 0.14, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level4ForestFront, 0.24, C.topDeathLineY, playableHeight);
+    } else {
+      drawParallaxStrip(sceneArt.backgroundSky, 0.12, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.backgroundForeground, 0.32, C.topDeathLineY, playableHeight);
+    }
     ctx.restore();
   }
 
@@ -3555,7 +3719,7 @@ Main tuning points:
   }
 
   function drawPlayer() {
-    if (state.projectileDeathAnimActive) {
+    if (state.projectileDeathAnimActive || state.teleportFinishAnimActive || state.levelFinishedActive) {
       return;
     }
 
@@ -3604,6 +3768,98 @@ Main tuning points:
       );
     }
     ctx.restore();
+  }
+
+  function drawTeleportFinishAnimation() {
+    if (!state.teleportFinishAnimActive) {
+      return;
+    }
+
+    var elapsed = state.teleportFinishAnimElapsed;
+    var centerX = worldToScreenX(state.teleportFinishAnimHeroCenterX);
+    var centerY = state.teleportFinishAnimHeroCenterY;
+    var heroStartSize = state.teleportFinishAnimHeroStartSize;
+
+    if (elapsed < TELEPORT_FINISH_HERO_SHRINK_SECONDS) {
+      var shrinkT = smoothStep01(elapsed / TELEPORT_FINISH_HERO_SHRINK_SECONDS);
+      var currentSize = heroStartSize * (1 - shrinkT * 0.88);
+      var alpha = 1 - shrinkT * 0.5;
+      var heroFrame = useModernVisuals() ? getCurrentHeroFrame() : null;
+
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.globalAlpha = alpha;
+      if (heroFrame) {
+        var heroSourceRects = heroFrame.type === "jump" ? HERO_JUMP_FRAME_SOURCE_RECTS : HERO_WALK_FRAME_SOURCE_RECTS;
+        var heroSourceRect = heroSourceRects[heroFrame.index] || {
+          x: 0,
+          y: 0,
+          w: heroFrame.image.width,
+          h: heroFrame.image.height
+        };
+        ctx.drawImage(
+          heroFrame.image,
+          heroSourceRect.x,
+          heroSourceRect.y,
+          heroSourceRect.w,
+          heroSourceRect.h,
+          -currentSize * 0.5,
+          -currentSize * 0.5,
+          currentSize,
+          currentSize
+        );
+      } else {
+        ctx.fillStyle = "#0077ff";
+        ctx.fillRect(-currentSize * 0.28, -currentSize * 0.28, currentSize * 0.56, currentSize * 0.56);
+      }
+      ctx.restore();
+      return;
+    }
+
+    var sparkElapsed = elapsed - TELEPORT_FINISH_HERO_SHRINK_SECONDS;
+    var sparkT = smoothStep01(Math.min(1, sparkElapsed / TELEPORT_FINISH_SPARK_GROW_SECONDS));
+    var sparkSize = heroStartSize * (0.18 + sparkT * 2.32);
+    var rotation = sparkElapsed * 8;
+    var sparkFadeInOutT = sparkT <= 0.5 ? (sparkT / 0.5) : ((1 - sparkT) / 0.5);
+    var sparkAlphaEnvelope = smoothStep01(Math.max(0, sparkFadeInOutT));
+
+    ctx.save();
+    ctx.translate(centerX, centerY);
+    ctx.rotate(rotation);
+    ctx.globalAlpha = 0.95 * sparkAlphaEnvelope;
+
+    var glowRadius = sparkSize * 0.6;
+    var glow = ctx.createRadialGradient(0, 0, sparkSize * 0.06, 0, 0, glowRadius);
+    glow.addColorStop(0, "rgba(255,255,255,0.98)");
+    glow.addColorStop(0.24, "rgba(255,240,130,0.95)");
+    glow.addColorStop(0.55, "rgba(255,130,40,0.72)");
+    glow.addColorStop(1, "rgba(255,80,20,0)");
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(0, 0, glowRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "rgba(255,250,220,0.98)";
+    drawSparkShape(sparkSize);
+    ctx.rotate(-rotation * 1.7);
+    ctx.globalAlpha = 0.72 * sparkAlphaEnvelope;
+    ctx.fillStyle = "rgba(255,180,70,0.95)";
+    drawSparkShape(sparkSize * 0.58);
+    ctx.restore();
+  }
+
+  function drawSparkShape(size) {
+    ctx.beginPath();
+    ctx.moveTo(0, -size * 0.5);
+    ctx.lineTo(size * 0.12, -size * 0.12);
+    ctx.lineTo(size * 0.5, 0);
+    ctx.lineTo(size * 0.12, size * 0.12);
+    ctx.lineTo(0, size * 0.5);
+    ctx.lineTo(-size * 0.12, size * 0.12);
+    ctx.lineTo(-size * 0.5, 0);
+    ctx.lineTo(-size * 0.12, -size * 0.12);
+    ctx.closePath();
+    ctx.fill();
   }
 
   function getCurrentHeroFrame() {
@@ -4090,6 +4346,10 @@ Main tuning points:
   }
 
   function drawElevatorCoins() {
+    if (state.score < C.platformCoinUnlockScore) {
+      return;
+    }
+
     var coinSize = C.playerSize * C.coinIconSizeRatio;
     for (var i = 0; i < world.elevators.length; i += 1) {
       var e = world.elevators[i];

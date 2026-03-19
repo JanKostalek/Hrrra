@@ -19,6 +19,13 @@ const filesToCopy = [
 const assetFilesToCopy = [
   "assets/gamebackground_foreground_tile.png",
   "assets/gamebackground_sky_tile.png",
+  "assets/level2_cave_back_tile.png",
+  "assets/level2_cave_front_tile.png",
+  "assets/level3_volcano_back_tile.png",
+  "assets/level3_volcano_front_tile.png",
+  "assets/forest/level4_forest_back_tile.png",
+  "assets/forest/level4_forest_mid_tile.png",
+  "assets/forest/level4_forest_front_tile.png",
   "assets/vytah01-clean.png",
   "assets/platform-tile-clean.png",
   "assets/blocker01-clean.png",
@@ -60,6 +67,7 @@ for (const fileName of filesToCopy) {
 for (const fileName of assetFilesToCopy) {
   const sourcePath = path.join(projectRoot, fileName);
   const targetPath = path.join(outputDir, fileName);
+  fs.mkdirSync(path.dirname(targetPath), { recursive: true });
   fs.copyFileSync(sourcePath, targetPath);
   console.log(`copied ${fileName}`);
 }
