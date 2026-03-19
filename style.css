@@ -987,6 +987,10 @@ body.visual-theme-retro .brief-live::before {
   font-size: 18px;
 }
 
+#admin-export,
+#admin-copy-json,
+#admin-import-file-btn,
+#admin-import-text,
 #admin-privacy,
 #admin-close {
   border: 1px solid #222;
@@ -995,6 +999,13 @@ body.visual-theme-retro .brief-live::before {
   padding: 4px 8px;
   font-weight: bold;
   cursor: pointer;
+}
+
+#admin-export,
+#admin-copy-json,
+#admin-import-file-btn,
+#admin-import-text {
+  background: #eef7ff;
 }
 
 .admin-header-actions {

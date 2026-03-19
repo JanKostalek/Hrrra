@@ -29,11 +29,16 @@
       <div class="admin-header">
         <h2>Mechanics Admin</h2>
         <div class="admin-header-actions">
+          <button id="admin-export" aria-label="Export settings">Export</button>
+          <button id="admin-copy-json" aria-label="Copy settings JSON">Copy JSON</button>
+          <button id="admin-import-file-btn" aria-label="Import settings from file">Import File</button>
+          <button id="admin-import-text" aria-label="Paste settings JSON">Paste JSON</button>
           <button id="admin-privacy" class="hidden" aria-label="Open privacy options">Privacy</button>
           <button id="admin-close" aria-label="Close mechanics admin">X</button>
         </div>
       </div>
       <div id="admin-form"></div>
+      <input id="admin-import-file" type="file" accept=".json,application/json" class="hidden" aria-hidden="true">
     </div>
     <div id="pre-run-screen" class="hidden" aria-label="Run instructions">
       <div class="pre-run-card">

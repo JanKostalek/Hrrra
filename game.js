@@ -80,6 +80,11 @@ Main tuning points:
   var adminToggle = document.getElementById("admin-toggle");
   var adminPanel = document.getElementById("admin-panel");
   var adminClose = document.getElementById("admin-close");
+  var adminExportBtn = document.getElementById("admin-export");
+  var adminCopyJsonBtn = document.getElementById("admin-copy-json");
+  var adminImportFileBtn = document.getElementById("admin-import-file-btn");
+  var adminImportTextBtn = document.getElementById("admin-import-text");
+  var adminImportFileInput = document.getElementById("admin-import-file");
   var adminPrivacy = document.getElementById("admin-privacy");
   var adminForm = document.getElementById("admin-form");
   var mode1Wrap = document.getElementById("mode-1-wrap");
@@ -193,6 +198,7 @@ Main tuning points:
   var HERO_JUMP_FRAME_SECONDS = 0.07;
   var ROCKET_ANIMATION_FRAME_SECONDS = 0.08;
   var TELEPORT_ANIMATION_FRAME_SECONDS = 0.09;
+  var ADMIN_EXPORT_VERSION = 1;
   var TELEPORT_FINISH_HERO_SHRINK_SECONDS = 0.5;
   var TELEPORT_FINISH_SPARK_GROW_SECONDS = 0.5;
 
@@ -232,6 +238,28 @@ Main tuning points:
     var stored = readGlobalAdminStorageObject();
     stored[key] = value;
     writeGlobalAdminStorageObject(stored);
+  }
+
+  function getAllAdminFieldKeys() {
+    var keys = {};
+    for (var sectionIndex = 0; sectionIndex < adminSections.length; sectionIndex += 1) {
+      var section = adminSections[sectionIndex];
+      for (var fieldIndex = 0; fieldIndex < section.fields.length; fieldIndex += 1) {
+        keys[section.fields[fieldIndex].key] = true;
+      }
+    }
+    return Object.keys(keys);
+  }
+
+  function getAllGlobalAdminFieldKeys() {
+    var keys = {};
+    for (var sectionIndex = 0; sectionIndex < globalAdminSections.length; sectionIndex += 1) {
+      var section = globalAdminSections[sectionIndex];
+      for (var fieldIndex = 0; fieldIndex < section.fields.length; fieldIndex += 1) {
+        keys[section.fields[fieldIndex].key] = true;
+      }
+    }
+    return Object.keys(keys);
   }
 
   function getAdminUiStorageObject() {
@@ -408,6 +436,188 @@ Main tuning points:
     } catch (error) {
       // ignore write failures
     }
+  }
+
+  function buildAdminSettingsExportObject() {
+    var exportData = {
+      format: "hrrra-admin-settings",
+      version: ADMIN_EXPORT_VERSION,
+      exportedAt: new Date().toISOString(),
+      global: {},
+      levels: {}
+    };
+    var globalKeys = getAllGlobalAdminFieldKeys();
+    var adminKeys = getAllAdminFieldKeys();
+    var levels = [1, 2, 3, 4, 5];
+    var difficulties = ["easy", "hard"];
+    var modes = [2, 1];
+    var globalState = readGlobalAdminStorageObject();
+
+    for (var globalKeyIndex = 0; globalKeyIndex < globalKeys.length; globalKeyIndex += 1) {
+      var globalKey = globalKeys[globalKeyIndex];
+      if (typeof C[globalKey] === "boolean") {
+        exportData.global[globalKey] = Boolean(C[globalKey]);
+      }
+    }
+    if (globalState.adminUiState && typeof globalState.adminUiState === "object") {
+      exportData.adminUiState = globalState.adminUiState;
+    }
+
+    for (var levelIndex = 0; levelIndex < levels.length; levelIndex += 1) {
+      var level = levels[levelIndex];
+      exportData.levels[String(level)] = {};
+      for (var difficultyIndex = 0; difficultyIndex < difficulties.length; difficultyIndex += 1) {
+        var difficulty = difficulties[difficultyIndex];
+        exportData.levels[String(level)][difficulty] = {};
+        for (var modeIndex = 0; modeIndex < modes.length; modeIndex += 1) {
+          var mode = modes[modeIndex];
+          var built = buildModeConfig(level, mode, difficulty);
+          var snapshot = {};
+          for (var keyIndex = 0; keyIndex < adminKeys.length; keyIndex += 1) {
+            var key = adminKeys[keyIndex];
+            if (typeof built[key] === "number" && Number.isFinite(built[key])) {
+              snapshot[key] = sanitizeConfigValue(key, built[key]);
+            } else if (typeof built[key] === "boolean") {
+              snapshot[key] = built[key];
+            }
+          }
+          exportData.levels[String(level)][difficulty][String(mode)] = snapshot;
+        }
+      }
+    }
+
+    return exportData;
+  }
+
+  function triggerSettingsExportDownload() {
+    var exportData = buildAdminSettingsExportObject();
+    var json = JSON.stringify(exportData, null, 2);
+    var blob = new Blob([json], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement("a");
+    var timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    link.href = url;
+    link.download = "hrrra-settings-" + timestamp + ".json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  function copySettingsJsonToClipboard() {
+    var json = JSON.stringify(buildAdminSettingsExportObject(), null, 2);
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+      navigator.clipboard.writeText(json).then(function () {
+        window.alert("Settings JSON copied to clipboard.");
+      }).catch(function () {
+        window.prompt("Copy settings JSON:", json);
+      });
+      return;
+    }
+    window.prompt("Copy settings JSON:", json);
+  }
+
+  function importSettingsJsonText(jsonText) {
+    var parsed;
+    try {
+      parsed = JSON.parse(jsonText);
+    } catch (error) {
+      window.alert("Settings import failed: invalid JSON.");
+      return false;
+    }
+
+    if (!parsed || parsed.format !== "hrrra-admin-settings" || !parsed.levels || !parsed.global) {
+      window.alert("Settings import failed: unsupported file format.");
+      return false;
+    }
+
+    var globalKeys = getAllGlobalAdminFieldKeys();
+    for (var globalKeyIndex = 0; globalKeyIndex < globalKeys.length; globalKeyIndex += 1) {
+      var globalKey = globalKeys[globalKeyIndex];
+      if (typeof parsed.global[globalKey] === "boolean") {
+        saveGlobalAdminField(globalKey, parsed.global[globalKey]);
+      }
+    }
+
+    if (parsed.adminUiState && typeof parsed.adminUiState === "object") {
+      writeAdminUiStorageObject(parsed.adminUiState);
+    }
+
+    var adminKeys = getAllAdminFieldKeys();
+    var levels = [1, 2, 3, 4, 5];
+    var difficulties = ["easy", "hard"];
+    var modes = [2, 1];
+
+    for (var levelIndex = 0; levelIndex < levels.length; levelIndex += 1) {
+      var level = levels[levelIndex];
+      var levelEntry = parsed.levels[String(level)];
+      if (!levelEntry || typeof levelEntry !== "object") {
+        continue;
+      }
+      for (var difficultyIndex = 0; difficultyIndex < difficulties.length; difficultyIndex += 1) {
+        var difficulty = difficulties[difficultyIndex];
+        var difficultyEntry = levelEntry[difficulty];
+        if (!difficultyEntry || typeof difficultyEntry !== "object") {
+          continue;
+        }
+        for (var modeIndex = 0; modeIndex < modes.length; modeIndex += 1) {
+          var mode = modes[modeIndex];
+          var importedConfig = difficultyEntry[String(mode)] || difficultyEntry[mode];
+          if (!importedConfig || typeof importedConfig !== "object") {
+            continue;
+          }
+
+          var persisted = {};
+          for (var keyIndex = 0; keyIndex < adminKeys.length; keyIndex += 1) {
+            var key = adminKeys[keyIndex];
+            var value = importedConfig[key];
+            if (typeof value === "number" && Number.isFinite(value)) {
+              persisted[key] = sanitizeConfigValue(key, value);
+            } else if (typeof value === "boolean") {
+              persisted[key] = value;
+            }
+          }
+          writeAdminStorageObject(level, mode, difficulty, persisted);
+        }
+      }
+    }
+
+    loadCurrentLevelConfig();
+    applyVisualThemeToUi();
+    renderAdminForm();
+    refreshPreRunBriefValues();
+    updateLivesUi();
+    return true;
+  }
+
+  function promptAndImportSettingsJson() {
+    var pasted = window.prompt("Paste exported Hrrra settings JSON:");
+    if (!pasted) {
+      return;
+    }
+    if (importSettingsJsonText(pasted)) {
+      window.alert("Settings imported.");
+    }
+  }
+
+  function importSettingsFile(file) {
+    if (!file) {
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function () {
+      if (typeof reader.result !== "string") {
+        window.alert("Settings import failed: file could not be read.");
+        return;
+      }
+      if (importSettingsJsonText(reader.result)) {
+        window.alert("Settings imported from file.");
+      }
+    };
+    reader.onerror = function () {
+      window.alert("Settings import failed: file could not be read.");
+    };
+    reader.readAsText(file);
   }
 
   function snapshotConfigDefaults() {
@@ -1847,6 +2057,35 @@ Main tuning points:
           return;
         }
         window.Capacitor.Plugins.PrivacyOptions.show().catch(function () {});
+      });
+    }
+
+    if (adminExportBtn) {
+      adminExportBtn.addEventListener("click", function () {
+        triggerSettingsExportDownload();
+      });
+    }
+
+    if (adminCopyJsonBtn) {
+      adminCopyJsonBtn.addEventListener("click", function () {
+        copySettingsJsonToClipboard();
+      });
+    }
+
+    if (adminImportFileBtn && adminImportFileInput) {
+      adminImportFileBtn.addEventListener("click", function () {
+        adminImportFileInput.click();
+      });
+      adminImportFileInput.addEventListener("change", function (event) {
+        var file = event.target.files && event.target.files[0];
+        importSettingsFile(file);
+        event.target.value = "";
+      });
+    }
+
+    if (adminImportTextBtn) {
+      adminImportTextBtn.addEventListener("click", function () {
+        promptAndImportSettingsJson();
       });
     }
 

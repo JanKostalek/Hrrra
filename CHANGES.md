@@ -162,6 +162,13 @@ Rules:
 - Also aligned the source global default `fullscreenAutoEnabled` with the current Firefox admin setting.
 - Why: `Default` should now return to the currently approved admin values even after clearing browser storage.
 
+### 2026-03-19 - Added admin settings export/import
+- Added `Export`, `Copy JSON`, `Import File`, and `Paste JSON` actions to the admin header in `index.html`.
+- Added export/import logic in `game.js` for one JSON format containing global settings plus all levels, difficulties, and modes.
+- Export now captures the effective current admin state, and import writes it back into localStorage before refreshing the live admin/game config.
+- Also included optional export/import of the stored admin collapse UI state.
+- Why: this makes it easy to back up settings, transfer them between browsers/devices, and restore them later.
+
 ## Recent Non-Mechanic Milestones
 
 ### 2026-03-17 - Android ads and store preparation baseline
