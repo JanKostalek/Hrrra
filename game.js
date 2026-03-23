@@ -28,7 +28,11 @@ Main tuning points:
 - Tripple jump movement: tripleJumpGravity, tripleJumpInitialVelocity, tripleJumpHoldAcceleration, tripleJumpHoldMaxTime
 - Slow icon: slowUnlockSpeedPercent, slowIconSizeRatio, slowRespawnMinSeconds, slowRespawnMaxSeconds
 - Money bag: scoreBagUnlockScore, scoreBagBonus, scoreBagIconSizeRatio, scoreBagRespawnMinSeconds, scoreBagRespawnMaxSeconds
+- Cracked coin: crackedCoinUnlockScore, crackedCoinPenaltyPercent, crackedCoinRespawnMinSeconds, crackedCoinRespawnMaxSeconds
+- Question coin: questionCoinUnlockScore, questionCoinRespawnMinSeconds, questionCoinRespawnMaxSeconds
 - Live: liveUnlockScore, liveRespawnMinSeconds, liveRespawnMaxSeconds
+- Shield: shieldUnlockScore, shieldRespawnMinSeconds, shieldRespawnMaxSeconds
+- Magnet: magnetUnlockScore, magnetEffectSeconds, magnetRespawnMinSeconds, magnetRespawnMaxSeconds
 - Blocker: blockerUnlockScore, blockerRespawnMinSeconds, blockerRespawnMaxSeconds
 - Coins: platformCoinUnlockScore, coinScoreBonus, coinIconSizeRatio, platformCoinInitialDelaySeconds, platformCoinRespawnMinSeconds, platformCoinRespawnMaxSeconds
 - Death lines: topDeathLineY, bottomDeathLineY
@@ -119,58 +123,148 @@ Main tuning points:
     level4ForestBack: null,
     level4ForestMid: null,
     level4ForestFront: null,
+    level5Sky: null,
+    level5Foreground: null,
     platform: null,
     elevator: null,
     blocker: null,
     coin: null,
     moneybag: null,
     heart: null,
-    heroFrames: [],
-    heroJumpFrames: [],
+    heroSkins: {},
     rocket1: null,
     rocket2: null,
-    teleportFrames: []
+    teleportFrames: [],
+    levelVariants: {}
   };
-  var BACKGROUND_SKY_ART_PATH = "assets/gamebackground_sky_tile.png";
-  var BACKGROUND_FOREGROUND_ART_PATH = "assets/gamebackground_foreground_tile.png";
-  var LEVEL2_CAVE_BACK_ART_PATH = "assets/level2_cave_back_tile.png";
-  var LEVEL2_CAVE_FRONT_ART_PATH = "assets/level2_cave_front_tile.png";
-  var LEVEL3_VOLCANO_BACK_ART_PATH = "assets/level3_volcano_back_tile.png";
-  var LEVEL3_VOLCANO_FRONT_ART_PATH = "assets/level3_volcano_front_tile.png";
-  var LEVEL4_FOREST_BACK_ART_PATH = "assets/forest/level4_forest_back_tile.png";
-  var LEVEL4_FOREST_MID_ART_PATH = "assets/forest/level4_forest_mid_tile.png";
-  var LEVEL4_FOREST_FRONT_ART_PATH = "assets/forest/level4_forest_front_tile.png";
+  var HERO_WALK_FRAME_FILENAMES = [
+    "hero-walk-01.png",
+    "hero-walk-02.png",
+    "hero-walk-03.png",
+    "hero-walk-04.png",
+    "hero-walk-05.png",
+    "hero-walk-06.png"
+  ];
+  var HERO_JUMP_FRAME_FILENAMES = [
+    "hero-jump-01.png",
+    "hero-jump-02.png",
+    "hero-jump-03.png",
+    "hero-jump-04.png",
+    "hero-jump-05.png",
+    "hero-jump-06.png",
+    "hero-jump-07.png",
+    "hero-jump-08.png",
+    "hero-jump-09.png"
+  ];
+  var HERO_WALK_FRAME_FILENAMES_SKIN03 = [
+    "hero-walk-01.png",
+    "hero-walk-02.png",
+    "hero-walk-03.png",
+    "hero-walk-04.png",
+    "hero-walk-05.png",
+    "hero-walk-06.png",
+    "hero-walk-07.png",
+    "hero-walk-08.png",
+    "hero-walk-09.png",
+    "hero-walk-10.png"
+  ];
+  var HERO_WALK_FRAME_FILENAMES_SKIN04 = [
+    "hero-walk-01.png",
+    "hero-walk-02.png",
+    "hero-walk-03.png",
+    "hero-walk-04.png",
+    "hero-walk-05.png",
+    "hero-walk-06.png",
+    "hero-walk-07.png",
+    "hero-walk-08.png"
+  ];
+  var HERO_JUMP_FRAME_FILENAMES_SKIN04 = [
+    "hero-jump-01.png",
+    "hero-jump-02.png",
+    "hero-jump-03.png",
+    "hero-jump-04.png",
+    "hero-jump-05.png",
+    "hero-jump-06.png",
+    "hero-jump-07.png"
+  ];
+  var SKIN_OPTIONS = [
+    { value: "Skin01", label: "Skin01" },
+    { value: "Skin02", label: "Skin02" },
+    { value: "Skin03", label: "Skin03" },
+    { value: "Skin04", label: "Skin04" }
+  ];
+  for (var skinOptionIndex = 0; skinOptionIndex < SKIN_OPTIONS.length; skinOptionIndex += 1) {
+    sceneArt.heroSkins[SKIN_OPTIONS[skinOptionIndex].value] = {
+      heroFrames: [],
+      heroJumpFrames: []
+    };
+  }
+  var SKIN_FRAME_CONFIGS = {
+    Skin01: {
+      walkFilenames: HERO_WALK_FRAME_FILENAMES,
+      jumpFilenames: HERO_JUMP_FRAME_FILENAMES
+    },
+    Skin02: {
+      walkFilenames: HERO_WALK_FRAME_FILENAMES,
+      jumpFilenames: HERO_JUMP_FRAME_FILENAMES,
+      usesFullFrameSourceRects: true
+    },
+    Skin03: {
+      walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN03,
+      jumpFilenames: HERO_JUMP_FRAME_FILENAMES,
+      usesFullFrameSourceRects: true
+    },
+    Skin04: {
+      walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN04,
+      jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN04,
+      usesFullFrameSourceRects: true
+    }
+  };
+  for (var sceneArtLevel = 1; sceneArtLevel <= LEVEL_COUNT; sceneArtLevel += 1) {
+    sceneArt.levelVariants[sceneArtLevel] = {
+      platform: null,
+      elevator: null,
+      blocker: null,
+      coin: null,
+      moneybag: null,
+      heart: null,
+      rocket1: null,
+      rocket2: null
+    };
+  }
+  var BACKGROUND_SKY_ART_PATH = "assets/level1/background_sky_tile.png";
+  var BACKGROUND_FOREGROUND_ART_PATH = "assets/level1/background_foreground_tile.png";
+  var LEVEL2_CAVE_BACK_ART_PATH = "assets/level2/background_back_tile.png";
+  var LEVEL2_CAVE_FRONT_ART_PATH = "assets/level2/background_front_tile.png";
+  var LEVEL3_VOLCANO_BACK_ART_PATH = "assets/level3/background_back_tile.png";
+  var LEVEL3_VOLCANO_FRONT_ART_PATH = "assets/level3/background_front_tile.png";
+  var LEVEL4_FOREST_BACK_ART_PATH = "assets/level4/background_back_tile.png";
+  var LEVEL4_FOREST_MID_ART_PATH = "assets/level4/background_mid_tile.png";
+  var LEVEL4_FOREST_FRONT_ART_PATH = "assets/level4/background_front_tile.png";
+  var LEVEL5_SKY_ART_PATH = "assets/level5/background_sky_tile.png";
+  var LEVEL5_FOREGROUND_ART_PATH = "assets/level5/background_foreground_tile.png";
   var PLATFORM_ART_PATH = "assets/platform-tile-clean.png";
   var ELEVATOR_ART_PATH = "assets/vytah01-clean.png";
   var BLOCKER_ART_PATH = "assets/blocker01-clean.png";
   var COIN_ART_PATH = "assets/coin01-clean.png";
   var MONEYBAG_ART_PATH = "assets/moneybag-clean.png";
   var HEART_ART_PATH = "assets/heart01.png";
+  var LEVEL_SCENE_ART_FILENAMES = {
+    platform: "platform.png",
+    elevator: "elevator.png",
+    blocker: "blocker.png",
+    coin: "coin.png",
+    moneybag: "moneybag.png",
+    heart: "heart.png",
+    rocket1: "projectile1.png",
+    rocket2: "projectile2.png"
+  };
   var TELEPORT_ART_PATHS = [
     "assets/teleport01.png",
     "assets/teleport02.png",
     "assets/teleport03.png"
   ];
-  var HERO_WALK_ART_PATHS = [
-    "assets/hero-walk-01.png",
-    "assets/hero-walk-02.png",
-    "assets/hero-walk-03.png",
-    "assets/hero-walk-04.png",
-    "assets/hero-walk-05.png",
-    "assets/hero-walk-06.png"
-  ];
-  var HERO_JUMP_ART_PATHS = [
-    "assets/hero-jump-01.png",
-    "assets/hero-jump-02.png",
-    "assets/hero-jump-03.png",
-    "assets/hero-jump-04.png",
-    "assets/hero-jump-05.png",
-    "assets/hero-jump-06.png",
-    "assets/hero-jump-07.png",
-    "assets/hero-jump-08.png",
-    "assets/hero-jump-09.png"
-  ];
-  var HERO_WALK_FRAME_SOURCE_RECTS = [
+  var HERO_WALK_FRAME_SOURCE_RECTS_SKIN01 = [
     { x: 40, y: 40, w: 80, h: 80 },
     { x: 40, y: 35, w: 80, h: 80 },
     { x: 40, y: 40, w: 80, h: 80 },
@@ -178,7 +272,7 @@ Main tuning points:
     { x: 40, y: 35, w: 85, h: 80 },
     { x: 40, y: 40, w: 80, h: 80 }
   ];
-  var HERO_JUMP_FRAME_SOURCE_RECTS = [
+  var HERO_JUMP_FRAME_SOURCE_RECTS_SKIN01 = [
     { x: 45, y: 45, w: 80, h: 75 },
     { x: 45, y: 55, w: 80, h: 65 },
     { x: 45, y: 35, w: 70, h: 80 },
@@ -188,6 +282,17 @@ Main tuning points:
     { x: 45, y: 55, w: 80, h: 65 },
     { x: 45, y: 45, w: 80, h: 75 },
     { x: 40, y: 40, w: 80, h: 80 }
+  ];
+  var HERO_FRAME_SOURCE_RECTS_SKIN02 = [
+    { x: 0, y: 0, w: 160, h: 160 },
+    { x: 0, y: 0, w: 160, h: 160 },
+    { x: 0, y: 0, w: 160, h: 160 },
+    { x: 0, y: 0, w: 160, h: 160 },
+    { x: 0, y: 0, w: 160, h: 160 },
+    { x: 0, y: 0, w: 160, h: 160 },
+    { x: 0, y: 0, w: 160, h: 160 },
+    { x: 0, y: 0, w: 160, h: 160 },
+    { x: 0, y: 0, w: 160, h: 160 }
   ];
   var ROCKET1_ART_PATH = "assets/rocket01-clean.png";
   var ROCKET2_ART_PATH = "assets/rocket02-clean.png";
@@ -201,6 +306,72 @@ Main tuning points:
   var ADMIN_EXPORT_VERSION = 1;
   var TELEPORT_FINISH_HERO_SHRINK_SECONDS = 0.5;
   var TELEPORT_FINISH_SPARK_GROW_SECONDS = 0.5;
+
+  function getLevelAssetPath(level, fileName) {
+    return "assets/level" + String(level) + "/" + fileName;
+  }
+
+  function normalizeSkinName(value) {
+    for (var i = 0; i < SKIN_OPTIONS.length; i += 1) {
+      if (SKIN_OPTIONS[i].value === value) {
+        return value;
+      }
+    }
+    return "Skin01";
+  }
+
+  function getHeroSkinAssetPath(skinName, fileName) {
+    return "assets/skins/" + normalizeSkinName(skinName) + "/" + fileName;
+  }
+
+  function getHeroSkinFrameConfig(skinName) {
+    return SKIN_FRAME_CONFIGS[normalizeSkinName(skinName)] || SKIN_FRAME_CONFIGS.Skin01;
+  }
+
+  function getSelectedHeroSkinName() {
+    return normalizeSkinName(C.selectedSkin);
+  }
+
+  function getSelectedHeroSkinSceneArt() {
+    var skinName = getSelectedHeroSkinName();
+    if (sceneArt.heroSkins[skinName]) {
+      return sceneArt.heroSkins[skinName];
+    }
+    return sceneArt.heroSkins.Skin01 || { heroFrames: [], heroJumpFrames: [] };
+  }
+
+  function getHeroWalkFrameSourceRects() {
+    var skinName = getSelectedHeroSkinName();
+    return getHeroSkinFrameConfig(skinName).usesFullFrameSourceRects ? HERO_FRAME_SOURCE_RECTS_SKIN02 : HERO_WALK_FRAME_SOURCE_RECTS_SKIN01;
+  }
+
+  function getHeroJumpFrameSourceRects() {
+    var skinName = getSelectedHeroSkinName();
+    return getHeroSkinFrameConfig(skinName).usesFullFrameSourceRects ? HERO_FRAME_SOURCE_RECTS_SKIN02 : HERO_JUMP_FRAME_SOURCE_RECTS_SKIN01;
+  }
+
+  function getHeroFrameSourceRect(heroFrame) {
+    var skinName = getSelectedHeroSkinName();
+    var skinConfig = getHeroSkinFrameConfig(skinName);
+    if (!heroFrame || !heroFrame.image) {
+      return { x: 0, y: 0, w: 0, h: 0 };
+    }
+    if (skinConfig.usesFullFrameSourceRects) {
+      return {
+        x: 0,
+        y: 0,
+        w: heroFrame.image.width,
+        h: heroFrame.image.height
+      };
+    }
+    var heroSourceRects = heroFrame.type === "jump" ? HERO_JUMP_FRAME_SOURCE_RECTS_SKIN01 : HERO_WALK_FRAME_SOURCE_RECTS_SKIN01;
+    return heroSourceRects[heroFrame.index] || {
+      x: 0,
+      y: 0,
+      w: heroFrame.image.width,
+      h: heroFrame.image.height
+    };
+  }
 
   function getModeStorageKey(level, mode, difficulty) {
     return ADMIN_STORAGE_KEY_PREFIX + "level" + String(level) + "_" + String(difficulty) + "_" + String(mode);
@@ -341,6 +512,8 @@ Main tuning points:
       var value = stored[key];
       if (typeof C[key] === "boolean" && typeof value === "boolean") {
         C[key] = value;
+      } else if (typeof C[key] === "string" && typeof value === "string") {
+        C[key] = key === "selectedSkin" ? normalizeSkinName(value) : value;
       }
     }
   }
@@ -656,6 +829,10 @@ Main tuning points:
       return Math.max(0, Math.round(value));
     }
 
+    if (key === "crackedCoinPenaltyPercent") {
+      return Math.min(100, Math.max(0, Math.round(value)));
+    }
+
     return value;
   }
 
@@ -839,6 +1016,21 @@ Main tuning points:
       y: 0,
       size: C.playerSize * C.scoreBagIconSizeRatio
     },
+    crackedCoinRespawnTimer: 0,
+    crackedCoinIcon: {
+      active: false,
+      x: 0,
+      y: 0,
+      size: C.playerSize * C.crackedCoinIconSizeRatio
+    },
+    questionCoinRespawnTimer: 0,
+    questionCoinIcon: {
+      active: false,
+      x: 0,
+      y: 0,
+      size: C.playerSize * C.questionCoinIconSizeRatio,
+      stakeScore: 0
+    },
     liveUnlocked: false,
     liveRespawnTimer: 0,
     liveIcon: {
@@ -846,6 +1038,32 @@ Main tuning points:
       x: 0,
       y: 0,
       size: C.playerSize * C.liveIconSizeRatio
+    },
+    shieldRespawnTimer: 0,
+    shieldCharges: 0,
+    shieldIcon: {
+      active: false,
+      x: 0,
+      y: 0,
+      size: C.playerSize * C.shieldIconSizeRatio
+    },
+    magnetRespawnTimer: 0,
+    magnetTimeLeft: 0,
+    magnetIcon: {
+      active: false,
+      x: 0,
+      y: 0,
+      size: C.playerSize * C.magnetIconSizeRatio
+    },
+    curseRespawnTimer: 0,
+    curseTimeLeft: 0,
+    blockedDistanceScore: 0,
+    lastRawDistanceScore: 0,
+    curseIcon: {
+      active: false,
+      x: 0,
+      y: 0,
+      size: C.playerSize * C.curseIconSizeRatio
     },
     blockerUnlocked: false,
     blockerRespawnTimer: 0,
@@ -883,6 +1101,13 @@ Main tuning points:
     teleportFinishAnimHeroStartSize: C.playerSize,
     teleportFinishAnimHeroCenterX: 0,
     teleportFinishAnimHeroCenterY: 0,
+    questionCoinAnimActive: false,
+    questionCoinAnimElapsed: 0,
+    questionCoinAnimDuration: 3,
+    questionCoinAnimStakeScore: 0,
+    questionCoinAnimResult: "",
+    questionCoinAnimDelta: 0,
+    questionCoinAnimApplied: false,
     platformCoinTimer: C.platformCoinInitialDelaySeconds,
     lastPlatformCoinPlatformId: -1,
     platformCoinIcon: {
@@ -933,7 +1158,8 @@ Main tuning points:
       title: "Global",
       fields: [
         { key: "fullscreenAutoEnabled", label: "Auto fullscreen on mobile", type: "checkbox" },
-        { key: "modernVisualsEnabled", label: "Modern visuals", type: "checkbox" }
+        { key: "modernVisualsEnabled", label: "Modern visuals", type: "checkbox" },
+        { key: "selectedSkin", label: "Skin", type: "select", options: SKIN_OPTIONS }
       ]
     }
   ];
@@ -987,6 +1213,32 @@ Main tuning points:
         { key: "scoreBagBonus", label: "Bonus score" },
         { key: "scoreBagRespawnMinSeconds", label: "Respawn min sec" },
         { key: "scoreBagRespawnMaxSeconds", label: "Respawn max sec" }
+      ]
+    },
+    {
+      title: "Cracked Coin",
+      fields: [
+        { key: "crackedCoinUnlockScore", label: "Unlock score" },
+        { key: "crackedCoinPenaltyPercent", label: "Penalty percent" },
+        { key: "crackedCoinRespawnMinSeconds", label: "Respawn min sec" },
+        { key: "crackedCoinRespawnMaxSeconds", label: "Respawn max sec" }
+      ]
+    },
+    {
+      title: "Question Coin",
+      fields: [
+        { key: "questionCoinUnlockScore", label: "Unlock score" },
+        { key: "questionCoinRespawnMinSeconds", label: "Respawn min sec" },
+        { key: "questionCoinRespawnMaxSeconds", label: "Respawn max sec" }
+      ]
+    },
+    {
+      title: "Curse",
+      fields: [
+        { key: "curseUnlockScore", label: "Unlock score" },
+        { key: "curseEffectSeconds", label: "Duration sec" },
+        { key: "curseRespawnMinSeconds", label: "Respawn min sec" },
+        { key: "curseRespawnMaxSeconds", label: "Respawn max sec" }
       ]
     },
     {
@@ -1054,6 +1306,23 @@ Main tuning points:
         { key: "liveUnlockScore", label: "Unlock score" },
         { key: "liveRespawnMinSeconds", label: "Respawn min sec" },
         { key: "liveRespawnMaxSeconds", label: "Respawn max sec" }
+      ]
+    },
+    {
+      title: "Shield",
+      fields: [
+        { key: "shieldUnlockScore", label: "Unlock score" },
+        { key: "shieldRespawnMinSeconds", label: "Respawn min sec" },
+        { key: "shieldRespawnMaxSeconds", label: "Respawn max sec" }
+      ]
+    },
+    {
+      title: "Magnet",
+      fields: [
+        { key: "magnetUnlockScore", label: "Unlock score" },
+        { key: "magnetEffectSeconds", label: "Duration sec" },
+        { key: "magnetRespawnMinSeconds", label: "Respawn min sec" },
+        { key: "magnetRespawnMaxSeconds", label: "Respawn max sec" }
       ]
     },
     {
@@ -1126,6 +1395,12 @@ Main tuning points:
     loadSceneArtAsset(LEVEL4_FOREST_FRONT_ART_PATH, function (image) {
       sceneArt.level4ForestFront = image;
     });
+    loadSceneArtAsset(LEVEL5_SKY_ART_PATH, function (image) {
+      sceneArt.level5Sky = image;
+    });
+    loadSceneArtAsset(LEVEL5_FOREGROUND_ART_PATH, function (image) {
+      sceneArt.level5Foreground = image;
+    });
     loadSceneArtAsset(PLATFORM_ART_PATH, function (image) {
       sceneArt.platform = image;
     });
@@ -1144,26 +1419,14 @@ Main tuning points:
     loadSceneArtAsset(HEART_ART_PATH, function (image) {
       sceneArt.heart = image;
     });
-    for (var heroFrameIndex = 0; heroFrameIndex < HERO_WALK_ART_PATHS.length; heroFrameIndex += 1) {
-      (function (targetIndex) {
-        loadSceneArtAsset(HERO_WALK_ART_PATHS[targetIndex], function (image) {
-          sceneArt.heroFrames[targetIndex] = image;
-        });
-      })(heroFrameIndex);
-    }
-    for (var heroJumpFrameIndex = 0; heroJumpFrameIndex < HERO_JUMP_ART_PATHS.length; heroJumpFrameIndex += 1) {
-      (function (targetIndex) {
-        loadSceneArtAsset(HERO_JUMP_ART_PATHS[targetIndex], function (image) {
-          sceneArt.heroJumpFrames[targetIndex] = image;
-        });
-      })(heroJumpFrameIndex);
-    }
+    primeHeroSkins();
     loadSceneArtAsset(ROCKET1_ART_PATH, function (image) {
       sceneArt.rocket1 = image;
     });
     loadSceneArtAsset(ROCKET2_ART_PATH, function (image) {
       sceneArt.rocket2 = image;
     });
+    primeLevelVariantSceneArt();
     for (var teleportFrameIndex = 0; teleportFrameIndex < TELEPORT_ART_PATHS.length; teleportFrameIndex += 1) {
       (function (targetIndex) {
         loadSceneArtAsset(TELEPORT_ART_PATHS[targetIndex], function (image) {
@@ -1173,12 +1436,88 @@ Main tuning points:
     }
   }
 
-  function loadSceneArtAsset(path, onReady) {
+  function primeLevelVariantSceneArt() {
+    for (var level = 1; level <= LEVEL_COUNT; level += 1) {
+      primeLevelVariantSceneArtForLevel(level);
+    }
+  }
+
+  function primeHeroSkins() {
+    for (var i = 0; i < SKIN_OPTIONS.length; i += 1) {
+      primeHeroSkin(SKIN_OPTIONS[i].value);
+    }
+  }
+
+  function primeHeroSkin(skinName) {
+    var skinConfig = getHeroSkinFrameConfig(skinName);
+    for (var heroFrameIndex = 0; heroFrameIndex < skinConfig.walkFilenames.length; heroFrameIndex += 1) {
+      (function (targetSkinName, targetIndex) {
+        loadSceneArtAsset(
+          getHeroSkinAssetPath(targetSkinName, skinConfig.walkFilenames[targetIndex]),
+          function (image) {
+            if (sceneArt.heroSkins[targetSkinName]) {
+              sceneArt.heroSkins[targetSkinName].heroFrames[targetIndex] = image;
+            }
+          },
+          function () {}
+        );
+      })(skinName, heroFrameIndex);
+    }
+
+    for (var heroJumpFrameIndex = 0; heroJumpFrameIndex < skinConfig.jumpFilenames.length; heroJumpFrameIndex += 1) {
+      (function (targetSkinName, targetIndex) {
+        loadSceneArtAsset(
+          getHeroSkinAssetPath(targetSkinName, skinConfig.jumpFilenames[targetIndex]),
+          function (image) {
+            if (sceneArt.heroSkins[targetSkinName]) {
+              sceneArt.heroSkins[targetSkinName].heroJumpFrames[targetIndex] = image;
+            }
+          },
+          function () {}
+        );
+      })(skinName, heroJumpFrameIndex);
+    }
+  }
+
+  function primeLevelVariantSceneArtForLevel(level) {
+    for (var key in LEVEL_SCENE_ART_FILENAMES) {
+      if (!Object.prototype.hasOwnProperty.call(LEVEL_SCENE_ART_FILENAMES, key)) {
+        continue;
+      }
+
+      (function (targetLevel, targetKey) {
+        loadSceneArtAsset(
+          getLevelAssetPath(targetLevel, LEVEL_SCENE_ART_FILENAMES[targetKey]),
+          function (image) {
+            if (sceneArt.levelVariants[targetLevel]) {
+              sceneArt.levelVariants[targetLevel][targetKey] = image;
+            }
+          },
+          function () {}
+        );
+      })(level, key);
+    }
+  }
+
+  function loadSceneArtAsset(path, onReady, onError) {
     var image = new Image();
     image.onload = function () {
       onReady(image);
     };
+    image.onerror = function () {
+      if (typeof onError === "function") {
+        onError();
+      }
+    };
     image.src = path;
+  }
+
+  function getCurrentLevelSceneArt(key) {
+    var levelEntry = sceneArt.levelVariants[state.currentLevel];
+    if (levelEntry && levelEntry[key]) {
+      return levelEntry[key];
+    }
+    return sceneArt[key] || null;
   }
 
   function drawSceneArtStrip(asset, x, y, width, renderHeight, options) {
@@ -1685,31 +2024,64 @@ Main tuning points:
 
       for (var globalFieldIndex = 0; globalFieldIndex < globalSection.fields.length; globalFieldIndex += 1) {
         var globalField = globalSection.fields[globalFieldIndex];
-        if (typeof C[globalField.key] !== "boolean") {
-          continue;
-        }
 
         var globalRow = document.createElement("div");
-        globalRow.className = "admin-field checkbox-field";
+        globalRow.className = "admin-field";
 
         var globalLabel = document.createElement("label");
         globalLabel.setAttribute("for", "admin-global-" + globalField.key);
         globalLabel.textContent = globalField.label;
 
-        var globalInput = document.createElement("input");
+        var globalInput;
+        if (globalField.type === "checkbox") {
+          if (typeof C[globalField.key] !== "boolean") {
+            continue;
+          }
+          globalRow.classList.add("checkbox-field");
+          globalInput = document.createElement("input");
+          globalInput.type = "checkbox";
+          globalInput.checked = Boolean(C[globalField.key]);
+        } else if (globalField.type === "select") {
+          if (typeof C[globalField.key] !== "string") {
+            continue;
+          }
+          globalInput = document.createElement("select");
+          var selectOptions = globalField.options || [];
+          for (var optionIndex = 0; optionIndex < selectOptions.length; optionIndex += 1) {
+            var option = document.createElement("option");
+            option.value = selectOptions[optionIndex].value;
+            option.textContent = selectOptions[optionIndex].label;
+            globalInput.appendChild(option);
+          }
+          globalInput.value = globalField.key === "selectedSkin"
+            ? normalizeSkinName(C[globalField.key])
+            : String(C[globalField.key]);
+        } else {
+          continue;
+        }
+
         globalInput.id = "admin-global-" + globalField.key;
-        globalInput.type = "checkbox";
-        globalInput.checked = Boolean(C[globalField.key]);
         globalInput.dataset.key = globalField.key;
         globalInput.addEventListener("change", function (event) {
           var target = event.target;
           var key = target.dataset.key;
-          var nextValue = Boolean(target.checked);
+          var nextValue;
+          if (target.type === "checkbox") {
+            nextValue = Boolean(target.checked);
+          } else {
+            nextValue = String(target.value);
+            if (key === "selectedSkin") {
+              nextValue = normalizeSkinName(nextValue);
+              target.value = nextValue;
+            }
+          }
           saveGlobalAdminField(key, nextValue);
           C[key] = nextValue;
           if (key === "modernVisualsEnabled") {
             applyVisualThemeToUi();
             updateLivesUi();
+          } else if (key === "selectedSkin") {
+            C.selectedSkin = normalizeSkinName(nextValue);
           }
         });
 
@@ -2248,6 +2620,7 @@ Main tuning points:
 
   function restartGame(resetLives) {
     setAdminOpen(false);
+    var carriedShieldCharges = resetLives ? 0 : state.shieldCharges;
     world.reset();
     var spawnX = 80;
     var spawnY = world.currentPlatformY - C.playerSize;
@@ -2296,12 +2669,58 @@ Main tuning points:
     state.scoreBagIcon.x = 0;
     state.scoreBagIcon.y = 0;
     state.scoreBagIcon.size = C.playerSize * C.scoreBagIconSizeRatio;
+    state.crackedCoinRespawnTimer = randomRange(
+      C.crackedCoinRespawnMinSeconds,
+      C.crackedCoinRespawnMaxSeconds
+    );
+    state.crackedCoinIcon.active = false;
+    state.crackedCoinIcon.x = 0;
+    state.crackedCoinIcon.y = 0;
+    state.crackedCoinIcon.size = C.playerSize * C.crackedCoinIconSizeRatio;
+    state.questionCoinRespawnTimer = randomRange(
+      C.questionCoinRespawnMinSeconds,
+      C.questionCoinRespawnMaxSeconds
+    );
+    state.questionCoinIcon.active = false;
+    state.questionCoinIcon.x = 0;
+    state.questionCoinIcon.y = 0;
+    state.questionCoinIcon.size = C.playerSize * C.questionCoinIconSizeRatio;
+    state.questionCoinIcon.stakeScore = 0;
     state.liveUnlocked = false;
     state.liveRespawnTimer = 0;
     state.liveIcon.active = false;
     state.liveIcon.x = 0;
     state.liveIcon.y = 0;
     state.liveIcon.size = C.playerSize * C.liveIconSizeRatio;
+    state.shieldRespawnTimer = randomRange(
+      C.shieldRespawnMinSeconds,
+      C.shieldRespawnMaxSeconds
+    );
+    state.shieldCharges = carriedShieldCharges;
+    state.shieldIcon.active = false;
+    state.shieldIcon.x = 0;
+    state.shieldIcon.y = 0;
+    state.shieldIcon.size = C.playerSize * C.shieldIconSizeRatio;
+    state.magnetRespawnTimer = randomRange(
+      C.magnetRespawnMinSeconds,
+      C.magnetRespawnMaxSeconds
+    );
+    state.magnetTimeLeft = 0;
+    state.magnetIcon.active = false;
+    state.magnetIcon.x = 0;
+    state.magnetIcon.y = 0;
+    state.magnetIcon.size = C.playerSize * C.magnetIconSizeRatio;
+    state.curseRespawnTimer = randomRange(
+      C.curseRespawnMinSeconds,
+      C.curseRespawnMaxSeconds
+    );
+    state.curseTimeLeft = 0;
+    state.blockedDistanceScore = 0;
+    state.lastRawDistanceScore = 0;
+    state.curseIcon.active = false;
+    state.curseIcon.x = 0;
+    state.curseIcon.y = 0;
+    state.curseIcon.size = C.playerSize * C.curseIconSizeRatio;
     state.blockerUnlocked = false;
     state.blockerRespawnTimer = 0;
     state.blockerIcons = [];
@@ -2332,6 +2751,12 @@ Main tuning points:
     state.teleportFinishAnimHeroStartSize = C.playerSize;
     state.teleportFinishAnimHeroCenterX = 0;
     state.teleportFinishAnimHeroCenterY = 0;
+    state.questionCoinAnimActive = false;
+    state.questionCoinAnimElapsed = 0;
+    state.questionCoinAnimStakeScore = 0;
+    state.questionCoinAnimResult = "";
+    state.questionCoinAnimDelta = 0;
+    state.questionCoinAnimApplied = false;
     state.platformCoinTimer = C.platformCoinInitialDelaySeconds;
     state.lastPlatformCoinPlatformId = -1;
     state.platformCoinIcon.active = false;
@@ -2384,6 +2809,30 @@ Main tuning points:
     }
 
     return Math.pow(C.speedStepMultiplier, steps);
+  }
+
+  function getLevelEarnedScore() {
+    return Math.max(0, state.score - state.scoreCarryOver);
+  }
+
+  function isCurseActive() {
+    return state.curseTimeLeft > 0;
+  }
+
+  function applyLevelScoreDelta(delta) {
+    if (!Number.isFinite(delta) || delta === 0) {
+      return 0;
+    }
+
+    var levelEarned = getLevelEarnedScore();
+    var applied = delta;
+    if (delta < 0) {
+      applied = -Math.min(levelEarned, Math.abs(delta));
+    }
+
+    state.bonusScore += applied;
+    state.score = Math.max(state.scoreCarryOver, state.score + applied);
+    return applied;
   }
 
   function shouldUseLivesForCause(cause) {
@@ -2467,7 +2916,163 @@ Main tuning points:
     };
   }
 
+  function isShieldProtectableCause(cause) {
+    return (
+      cause === "topDeathZone" ||
+      cause === "bottomDeathZone" ||
+      cause === "projectile" ||
+      cause === "blocker"
+    );
+  }
+
+  function buildSupportCandidate(ref, type) {
+    return {
+      ref: ref,
+      type: type,
+      x: ref.x,
+      y: ref.y,
+      width: ref.width
+    };
+  }
+
+  function findNearestSafeSupport(preferredX) {
+    var best = null;
+    var bestScore = Number.POSITIVE_INFINITY;
+    var i;
+
+    function consider(support) {
+      if (!support || !Number.isFinite(support.width) || support.width < player.width * 0.9) {
+        return;
+      }
+      var respawnY = support.y - player.height;
+      if (respawnY < C.topDeathLineY || respawnY > C.bottomDeathLineY - player.height) {
+        return;
+      }
+
+      var supportCenter = support.x + support.width * 0.5;
+      var distance = Math.abs(supportCenter - preferredX);
+      var offscreenPenalty = 0;
+      if (support.x + support.width < state.cameraX - 40 || support.x > state.cameraX + C.canvasWidth + 160) {
+        offscreenPenalty = 2000;
+      }
+      var behindPenalty = supportCenter < preferredX ? 150 : 0;
+      var score = distance + offscreenPenalty + behindPenalty;
+      if (score < bestScore) {
+        best = support;
+        bestScore = score;
+      }
+    }
+
+    for (i = 0; i < world.platforms.length; i += 1) {
+      consider(buildSupportCandidate(world.platforms[i], "platform"));
+    }
+    for (i = 0; i < world.elevators.length; i += 1) {
+      consider(buildSupportCandidate(world.elevators[i], "elevator"));
+    }
+
+    return best;
+  }
+
+  function placePlayerOnSupport(support, preferredX) {
+    if (!support) {
+      return false;
+    }
+
+    var targetX = preferredX - player.width * 0.5;
+    if (!Number.isFinite(targetX)) {
+      targetX = support.x;
+    }
+    if (support.width > player.width) {
+      targetX = Math.min(Math.max(targetX, support.x), support.x + support.width - player.width);
+    } else {
+      targetX = support.x;
+    }
+
+    player.x = targetX;
+    player.y = support.y - player.height;
+    player.velocityX = 0;
+    player.velocityY = 0;
+    player.isGrounded = true;
+    player.supportType = support.type;
+    player.supportRef = support.ref;
+    player.isJumpHolding = false;
+    player.jumpHoldTime = 0;
+    player.jumpsUsed = 0;
+    input.jumpDown = false;
+    input.jumpPressed = false;
+    state.cameraX = Math.max(0, player.x - C.canvasWidth * C.cameraAnchorRatio);
+    state.playerRotationLockedInAir = false;
+    state.playerAirSpinRemainingRad = 0;
+    updateRespawnPoint();
+    return true;
+  }
+
+  function rescuePlayerFromBottomDeathZone() {
+    var referenceX = player.x + player.width * 0.5;
+    var support = findNearestSafeSupport(referenceX);
+    if (placePlayerOnSupport(support, referenceX)) {
+      return true;
+    }
+
+    var fallback = resolveRespawnPoint();
+    player.x = fallback.x;
+    player.y = fallback.y;
+    player.velocityX = 0;
+    player.velocityY = 0;
+    player.isGrounded = false;
+    player.supportType = null;
+    player.supportRef = null;
+    player.isJumpHolding = false;
+    player.jumpHoldTime = 0;
+    player.jumpsUsed = 0;
+    input.jumpDown = false;
+    input.jumpPressed = false;
+    state.cameraX = Math.max(0, player.x - C.canvasWidth * C.cameraAnchorRatio);
+    state.playerRotationLockedInAir = false;
+    state.playerAirSpinRemainingRad = 0;
+    return true;
+  }
+
+  function consumeShield(cause) {
+    if (state.shieldCharges <= 0 || !isShieldProtectableCause(cause)) {
+      return false;
+    }
+
+    state.shieldCharges = Math.max(0, state.shieldCharges - 1);
+    state.lifeLossFlashTimeLeft = 0.25;
+
+    if (cause === "bottomDeathZone") {
+      return rescuePlayerFromBottomDeathZone();
+    }
+
+    if (cause === "topDeathZone") {
+      player.y = C.topDeathLineY;
+      player.velocityX = 0;
+      player.velocityY = 0;
+      player.isGrounded = false;
+      player.supportType = null;
+      player.supportRef = null;
+      player.isJumpHolding = false;
+      player.jumpHoldTime = 0;
+      if (player.jumpsUsed < 1) {
+        player.jumpsUsed = 1;
+      }
+      input.jumpDown = false;
+      input.jumpPressed = false;
+      state.playerRotationLockedInAir = false;
+      state.playerAirSpinRemainingRad = 0;
+      return true;
+    }
+
+    return true;
+  }
+
   function consumeLife(cause) {
+    if (consumeShield(cause)) {
+      updateLivesUi();
+      return true;
+    }
+
     if (!shouldUseLivesForCause(cause)) {
       return false;
     }
@@ -2610,7 +3215,8 @@ Main tuning points:
         (event.key === " " || event.key === "Enter") &&
         !state.running &&
         !state.projectileDeathAnimActive &&
-        !state.teleportFinishAnimActive
+        !state.teleportFinishAnimActive &&
+        !state.questionCoinAnimActive
       ) {
         openPreRunScreen();
         return;
@@ -2649,7 +3255,7 @@ Main tuning points:
 
     gameOverEl.addEventListener("click", function () {
       tryForceFullscreen();
-      if (!state.running && !state.projectileDeathAnimActive && !state.teleportFinishAnimActive) {
+      if (!state.running && !state.projectileDeathAnimActive && !state.teleportFinishAnimActive && !state.questionCoinAnimActive) {
         openPreRunScreen();
       }
     });
@@ -2728,6 +3334,8 @@ Main tuning points:
 
     if (state.running && !state.adminPaused && !state.preRunActive) {
       update(dt);
+    } else if (state.questionCoinAnimActive && !state.adminPaused && !state.preRunActive) {
+      updateQuestionCoinAnimation(dt);
     } else if (state.teleportFinishAnimActive && !state.adminPaused && !state.preRunActive) {
       updateTeleportFinishAnimation(dt);
     } else if (state.projectileDeathAnimActive && !state.adminPaused && !state.preRunActive) {
@@ -2746,6 +3354,8 @@ Main tuning points:
       state.lifeLossFlashTimeLeft = Math.max(0, state.lifeLossFlashTimeLeft - dt);
     }
     updateDoubleJumpEffect(dt);
+    updateMagnetEffect(dt);
+    updateCurseEffect(dt);
 
     world.updateElevators(dt);
     var scoreMultiplier = getSpeedMultiplierFromScore(state.score);
@@ -2766,7 +3376,12 @@ Main tuning points:
     }
     world.cleanupBehind(state.cameraX);
 
-    var distanceScore = Math.max(0, Math.floor((player.x - state.startX) * C.distanceScoreMultiplier));
+    var rawDistanceScore = Math.max(0, Math.floor((player.x - state.startX) * C.distanceScoreMultiplier));
+    if (isCurseActive()) {
+      state.blockedDistanceScore += Math.max(0, rawDistanceScore - state.lastRawDistanceScore);
+    }
+    state.lastRawDistanceScore = rawDistanceScore;
+    var distanceScore = Math.max(0, rawDistanceScore - state.blockedDistanceScore);
     state.score = state.scoreCarryOver + distanceScore + state.bonusScore;
     if (state.score > sessionMaxScore) {
       sessionMaxScore = state.score;
@@ -2782,11 +3397,19 @@ Main tuning points:
       checkDoubleJumpIconPickup();
       checkSlowIconPickup();
       checkScoreBagPickup();
+      checkCrackedCoinPickup();
+      checkQuestionCoinPickup();
+      checkCursePickup();
       checkLivePickup();
+      checkShieldPickup();
+      checkMagnetPickup();
       checkPlatformCoinPickup();
       checkElevatorCoinPickup();
 
       if (physics.isPastBottomDeathLine(player)) {
+        if (consumeShield("bottomDeathZone")) {
+          return;
+        }
         startProjectileDeathAnimation();
         return;
       }
@@ -2804,8 +3427,18 @@ Main tuning points:
     checkSlowIconPickup();
     updateScoreBagSpawner(dt);
     checkScoreBagPickup();
+    updateCrackedCoinSpawner(dt);
+    checkCrackedCoinPickup();
+    updateQuestionCoinSpawner(dt);
+    checkQuestionCoinPickup();
+    updateCurseSpawner(dt);
+    checkCursePickup();
     updateLiveSpawner(dt);
     checkLivePickup();
+    updateShieldSpawner(dt);
+    checkShieldPickup();
+    updateMagnetSpawner(dt);
+    checkMagnetPickup();
     updateBlockerSpawner(dt);
     if (checkBlockerCollision()) {
       if (consumeLife("blocker")) {
@@ -2839,6 +3472,9 @@ Main tuning points:
     checkElevatorCoinPickup();
 
     if (physics.isPastBottomDeathLine(player)) {
+      if (consumeShield("bottomDeathZone")) {
+        return;
+      }
       startProjectileDeathAnimation();
       return;
     }
@@ -2950,6 +3586,25 @@ Main tuning points:
     }
   }
 
+  function updateQuestionCoinAnimation(dt) {
+    var randomizerDuration = 2;
+    state.questionCoinAnimElapsed += dt;
+    if (!state.questionCoinAnimApplied && state.questionCoinAnimElapsed >= randomizerDuration) {
+      var stake = state.questionCoinAnimStakeScore;
+      if (state.questionCoinAnimResult === "+") {
+        state.questionCoinAnimDelta = applyLevelScoreDelta(stake * 2);
+      } else {
+        state.questionCoinAnimDelta = applyLevelScoreDelta(-Math.floor(stake * 0.5));
+      }
+      state.questionCoinAnimApplied = true;
+    }
+
+    if (state.questionCoinAnimElapsed >= state.questionCoinAnimDuration) {
+      state.questionCoinAnimActive = false;
+      state.running = true;
+    }
+  }
+
   function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground();
@@ -2962,18 +3617,25 @@ Main tuning points:
     drawDoubleJumpIcon();
     drawSlowIcon();
     drawScoreBagIcon();
+    drawCrackedCoinIcon();
+    drawQuestionCoinIcon();
+    drawCurseIcon();
     drawLiveIcon();
+    drawShieldIcon();
+    drawMagnetIcon();
     drawBlockerIcon();
     drawProjectile();
     drawProjectile2();
     drawPlatformCoinIcon();
     drawElevatorCoins();
+    drawPlayerStatusEffects();
     drawPlayer();
     drawTeleportFinishAnimation();
     ctx.restore();
     drawTeleport();
     drawDeathLines();
     drawProjectileDeathAnimation();
+    drawQuestionCoinAnimation();
     drawHud();
   }
 
@@ -3053,8 +3715,24 @@ Main tuning points:
     if (state.scoreBagIcon.x >= teleportLeft) {
       state.scoreBagIcon.active = false;
     }
+    if (state.crackedCoinIcon.x >= teleportLeft) {
+      state.crackedCoinIcon.active = false;
+    }
+    if (state.questionCoinIcon.x >= teleportLeft) {
+      state.questionCoinIcon.active = false;
+      state.questionCoinIcon.stakeScore = 0;
+    }
+    if (state.curseIcon.x >= teleportLeft) {
+      state.curseIcon.active = false;
+    }
     if (state.liveIcon.x >= teleportLeft) {
       state.liveIcon.active = false;
+    }
+    if (state.shieldIcon.x >= teleportLeft) {
+      state.shieldIcon.active = false;
+    }
+    if (state.magnetIcon.x >= teleportLeft) {
+      state.magnetIcon.active = false;
     }
     if (state.platformCoinIcon.x >= teleportLeft) {
       state.platformCoinIcon.active = false;
@@ -3211,10 +3889,67 @@ Main tuning points:
     );
   }
 
+  function scheduleNextCrackedCoinSpawn() {
+    state.crackedCoinRespawnTimer = randomRange(
+      C.crackedCoinRespawnMinSeconds,
+      C.crackedCoinRespawnMaxSeconds
+    );
+  }
+
+  function startQuestionCoinAnimation(stakeScore) {
+    if (state.questionCoinAnimActive) {
+      return;
+    }
+
+    state.running = false;
+    state.questionCoinAnimActive = true;
+    state.questionCoinAnimElapsed = 0;
+    state.questionCoinAnimStakeScore = Math.max(0, Math.floor(stakeScore));
+    state.questionCoinAnimResult = Math.random() < 0.5 ? "-" : "+";
+    state.questionCoinAnimDelta = 0;
+    state.questionCoinAnimApplied = false;
+    player.velocityX = 0;
+    player.velocityY = 0;
+    player.isJumpHolding = false;
+    player.jumpHoldTime = 0;
+    input.left = false;
+    input.right = false;
+    input.jumpDown = false;
+    input.jumpPressed = false;
+  }
+
+  function scheduleNextQuestionCoinSpawn() {
+    state.questionCoinRespawnTimer = randomRange(
+      C.questionCoinRespawnMinSeconds,
+      C.questionCoinRespawnMaxSeconds
+    );
+  }
+
+  function scheduleNextCurseSpawn() {
+    state.curseRespawnTimer = randomRange(
+      C.curseRespawnMinSeconds,
+      C.curseRespawnMaxSeconds
+    );
+  }
+
   function scheduleNextLiveSpawn() {
     state.liveRespawnTimer = randomRange(
       C.liveRespawnMinSeconds,
       C.liveRespawnMaxSeconds
+    );
+  }
+
+  function scheduleNextShieldSpawn() {
+    state.shieldRespawnTimer = randomRange(
+      C.shieldRespawnMinSeconds,
+      C.shieldRespawnMaxSeconds
+    );
+  }
+
+  function scheduleNextMagnetSpawn() {
+    state.magnetRespawnTimer = randomRange(
+      C.magnetRespawnMinSeconds,
+      C.magnetRespawnMaxSeconds
     );
   }
 
@@ -3401,9 +4136,146 @@ Main tuning points:
     return true;
   }
 
+  function trySpawnCrackedCoin() {
+    var icon = state.crackedCoinIcon;
+    if (icon.active) {
+      return false;
+    }
+
+    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
+    var platform = findPlatformAtX(rightEdgeX);
+    if (!platform) {
+      return false;
+    }
+
+    var preferredX = rightEdgeX - icon.size - 8;
+    var minSpawnX = platform.x;
+    var maxSpawnX = platform.x + platform.width - icon.size;
+    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
+    var spawnY = platform.y - icon.size;
+    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+      return false;
+    }
+
+    icon.x = spawnX;
+    icon.y = spawnY;
+    icon.active = true;
+    return true;
+  }
+
+  function trySpawnQuestionCoin() {
+    var icon = state.questionCoinIcon;
+    var stakeScore = getLevelEarnedScore();
+    if (icon.active || stakeScore <= 0) {
+      return false;
+    }
+
+    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
+    var platform = findPlatformAtX(rightEdgeX);
+    if (!platform) {
+      return false;
+    }
+
+    var preferredX = rightEdgeX - icon.size - 8;
+    var minSpawnX = platform.x;
+    var maxSpawnX = platform.x + platform.width - icon.size;
+    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
+    var spawnY = platform.y - icon.size;
+    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+      return false;
+    }
+
+    icon.x = spawnX;
+    icon.y = spawnY;
+    icon.active = true;
+    icon.stakeScore = Math.floor(stakeScore);
+    return true;
+  }
+
   function trySpawnLiveIcon() {
     var icon = state.liveIcon;
     if (icon.active || state.maxLives <= 1) {
+      return false;
+    }
+
+    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
+    var platform = findPlatformAtX(rightEdgeX);
+    if (!platform) {
+      return false;
+    }
+
+    var preferredX = rightEdgeX - icon.size - 8;
+    var minSpawnX = platform.x;
+    var maxSpawnX = platform.x + platform.width - icon.size;
+    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
+    var spawnY = platform.y - icon.size;
+    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+      return false;
+    }
+
+    icon.x = spawnX;
+    icon.y = spawnY;
+    icon.active = true;
+    return true;
+  }
+
+  function trySpawnShieldIcon() {
+    var icon = state.shieldIcon;
+    if (icon.active || state.shieldCharges > 0) {
+      return false;
+    }
+
+    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
+    var platform = findPlatformAtX(rightEdgeX);
+    if (!platform) {
+      return false;
+    }
+
+    var preferredX = rightEdgeX - icon.size - 8;
+    var minSpawnX = platform.x;
+    var maxSpawnX = platform.x + platform.width - icon.size;
+    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
+    var spawnY = platform.y - icon.size;
+    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+      return false;
+    }
+
+    icon.x = spawnX;
+    icon.y = spawnY;
+    icon.active = true;
+    return true;
+  }
+
+  function trySpawnMagnetIcon() {
+    var icon = state.magnetIcon;
+    if (icon.active || state.magnetTimeLeft > 0) {
+      return false;
+    }
+
+    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
+    var platform = findPlatformAtX(rightEdgeX);
+    if (!platform) {
+      return false;
+    }
+
+    var preferredX = rightEdgeX - icon.size - 8;
+    var minSpawnX = platform.x;
+    var maxSpawnX = platform.x + platform.width - icon.size;
+    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
+    var spawnY = platform.y - icon.size;
+    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+      return false;
+    }
+
+    icon.x = spawnX;
+    icon.y = spawnY;
+    icon.active = true;
+    return true;
+  }
+
+  function trySpawnCurseIcon() {
+    var icon = state.curseIcon;
+    if (icon.active || state.curseTimeLeft > 0) {
       return false;
     }
 
@@ -3455,6 +4327,60 @@ Main tuning points:
     }
   }
 
+  function updateCrackedCoinSpawner(dt) {
+    var icon = state.crackedCoinIcon;
+    if (state.score < C.crackedCoinUnlockScore) {
+      icon.active = false;
+      state.crackedCoinRespawnTimer = 0;
+      return;
+    }
+
+    if (icon.active) {
+      if (icon.x + icon.size < state.cameraX - 40) {
+        icon.active = false;
+        scheduleNextCrackedCoinSpawn();
+      }
+      return;
+    }
+
+    if (state.crackedCoinRespawnTimer > 0) {
+      state.crackedCoinRespawnTimer = Math.max(0, state.crackedCoinRespawnTimer - dt);
+      return;
+    }
+
+    if (trySpawnCrackedCoin()) {
+      scheduleNextCrackedCoinSpawn();
+    }
+  }
+
+  function updateQuestionCoinSpawner(dt) {
+    var icon = state.questionCoinIcon;
+    if (state.score < C.questionCoinUnlockScore) {
+      icon.active = false;
+      icon.stakeScore = 0;
+      state.questionCoinRespawnTimer = 0;
+      return;
+    }
+
+    if (icon.active) {
+      if (icon.x + icon.size < state.cameraX - 40) {
+        icon.active = false;
+        icon.stakeScore = 0;
+        scheduleNextQuestionCoinSpawn();
+      }
+      return;
+    }
+
+    if (state.questionCoinRespawnTimer > 0) {
+      state.questionCoinRespawnTimer = Math.max(0, state.questionCoinRespawnTimer - dt);
+      return;
+    }
+
+    if (trySpawnQuestionCoin()) {
+      scheduleNextQuestionCoinSpawn();
+    }
+  }
+
   function updateLiveSpawner(dt) {
     var icon = state.liveIcon;
 
@@ -3489,6 +4415,99 @@ Main tuning points:
 
     if (trySpawnLiveIcon()) {
       scheduleNextLiveSpawn();
+    }
+  }
+
+  function updateShieldSpawner(dt) {
+    var icon = state.shieldIcon;
+    if (state.score < C.shieldUnlockScore) {
+      icon.active = false;
+      state.shieldRespawnTimer = 0;
+      return;
+    }
+
+    if (state.shieldCharges > 0) {
+      icon.active = false;
+      return;
+    }
+
+    if (icon.active) {
+      if (icon.x + icon.size < state.cameraX - 40) {
+        icon.active = false;
+        scheduleNextShieldSpawn();
+      }
+      return;
+    }
+
+    if (state.shieldRespawnTimer > 0) {
+      state.shieldRespawnTimer = Math.max(0, state.shieldRespawnTimer - dt);
+      return;
+    }
+
+    if (trySpawnShieldIcon()) {
+      scheduleNextShieldSpawn();
+    }
+  }
+
+  function updateMagnetSpawner(dt) {
+    var icon = state.magnetIcon;
+    if (state.score < C.magnetUnlockScore) {
+      icon.active = false;
+      state.magnetRespawnTimer = 0;
+      return;
+    }
+
+    if (state.magnetTimeLeft > 0) {
+      icon.active = false;
+      return;
+    }
+
+    if (icon.active) {
+      if (icon.x + icon.size < state.cameraX - 40) {
+        icon.active = false;
+        scheduleNextMagnetSpawn();
+      }
+      return;
+    }
+
+    if (state.magnetRespawnTimer > 0) {
+      state.magnetRespawnTimer = Math.max(0, state.magnetRespawnTimer - dt);
+      return;
+    }
+
+    if (trySpawnMagnetIcon()) {
+      scheduleNextMagnetSpawn();
+    }
+  }
+
+  function updateCurseSpawner(dt) {
+    var icon = state.curseIcon;
+    if (state.score < C.curseUnlockScore) {
+      icon.active = false;
+      state.curseRespawnTimer = 0;
+      return;
+    }
+
+    if (state.curseTimeLeft > 0) {
+      icon.active = false;
+      return;
+    }
+
+    if (icon.active) {
+      if (icon.x + icon.size < state.cameraX - 40) {
+        icon.active = false;
+        scheduleNextCurseSpawn();
+      }
+      return;
+    }
+
+    if (state.curseRespawnTimer > 0) {
+      state.curseRespawnTimer = Math.max(0, state.curseRespawnTimer - dt);
+      return;
+    }
+
+    if (trySpawnCurseIcon()) {
+      scheduleNextCurseSpawn();
     }
   }
 
@@ -3610,7 +4629,12 @@ Main tuning points:
     pushIconRectIfActive(rects, state.doubleJumpIcon);
     pushIconRectIfActive(rects, state.slowIcon);
     pushIconRectIfActive(rects, state.scoreBagIcon);
+    pushIconRectIfActive(rects, state.crackedCoinIcon);
+    pushIconRectIfActive(rects, state.questionCoinIcon);
+    pushIconRectIfActive(rects, state.curseIcon);
     pushIconRectIfActive(rects, state.liveIcon);
+    pushIconRectIfActive(rects, state.shieldIcon);
+    pushIconRectIfActive(rects, state.magnetIcon);
     pushIconRectIfActive(rects, state.platformCoinIcon);
     for (var blockerIndex = 0; blockerIndex < state.blockerIcons.length; blockerIndex += 1) {
       var blockerIcon = state.blockerIcons[blockerIndex];
@@ -3716,10 +4740,62 @@ Main tuning points:
 
     if (isRectIntersect(playerRect, iconRect)) {
       icon.active = false;
-      state.bonusScore += C.scoreBagBonus;
+      if (!isCurseActive()) {
+        state.bonusScore += C.scoreBagBonus;
+      }
       state.collectedBags += 1;
       state.levelCollectedBags += 1;
       scheduleNextScoreBagSpawn();
+    }
+  }
+
+  function checkCrackedCoinPickup() {
+    var icon = state.crackedCoinIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
+    var iconRect = { x: icon.x, y: icon.y, w: icon.size, h: icon.size };
+
+    if (isRectIntersect(playerRect, iconRect)) {
+      icon.active = false;
+      applyLevelScoreDelta(-Math.floor(getLevelEarnedScore() * (C.crackedCoinPenaltyPercent / 100)));
+      scheduleNextCrackedCoinSpawn();
+    }
+  }
+
+  function checkQuestionCoinPickup() {
+    var icon = state.questionCoinIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
+    var iconRect = { x: icon.x, y: icon.y, w: icon.size, h: icon.size };
+
+    if (isRectIntersect(playerRect, iconRect)) {
+      var stakeScore = icon.stakeScore;
+      icon.active = false;
+      icon.stakeScore = 0;
+      scheduleNextQuestionCoinSpawn();
+      startQuestionCoinAnimation(stakeScore);
+    }
+  }
+
+  function checkCursePickup() {
+    var icon = state.curseIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
+    var iconRect = { x: icon.x, y: icon.y, w: icon.size, h: icon.size };
+
+    if (isRectIntersect(playerRect, iconRect)) {
+      icon.active = false;
+      state.curseTimeLeft += C.curseEffectSeconds;
+      scheduleNextCurseSpawn();
     }
   }
 
@@ -3738,6 +4814,134 @@ Main tuning points:
       updateLivesUi();
       scheduleNextLiveSpawn();
     }
+  }
+
+  function checkShieldPickup() {
+    var icon = state.shieldIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
+    var iconRect = { x: icon.x, y: icon.y, w: icon.size, h: icon.size };
+
+    if (isRectIntersect(playerRect, iconRect)) {
+      icon.active = false;
+      state.shieldCharges = 1;
+      scheduleNextShieldSpawn();
+    }
+  }
+
+  function checkMagnetPickup() {
+    var icon = state.magnetIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
+    var iconRect = { x: icon.x, y: icon.y, w: icon.size, h: icon.size };
+
+    if (isRectIntersect(playerRect, iconRect)) {
+      icon.active = false;
+      state.magnetTimeLeft += C.magnetEffectSeconds;
+      scheduleNextMagnetSpawn();
+      collectMagnetPickupsOnScreen();
+    }
+  }
+
+  function isRectVisibleOnScreen(rect, padding) {
+    var extra = Number.isFinite(padding) ? padding : 0;
+    return (
+      rect.x + rect.w >= state.cameraX - extra &&
+      rect.x <= state.cameraX + C.canvasWidth + extra &&
+      rect.y + rect.h >= C.topDeathLineY - extra &&
+      rect.y <= C.bottomDeathLineY + extra
+    );
+  }
+
+  function collectMagnetPickupsOnScreen() {
+    if (state.magnetTimeLeft <= 0) {
+      return;
+    }
+
+    if (state.platformCoinIcon.active) {
+      var platformCoinRect = {
+        x: state.platformCoinIcon.x,
+        y: state.platformCoinIcon.y,
+        w: state.platformCoinIcon.size,
+        h: state.platformCoinIcon.size
+      };
+      if (isRectVisibleOnScreen(platformCoinRect, 0)) {
+        state.platformCoinIcon.active = false;
+        if (!isCurseActive()) {
+          state.bonusScore += C.coinScoreBonus;
+        }
+        state.collectedCoins += 1;
+        state.levelCollectedCoins += 1;
+        scheduleNextPlatformCoinSpawn();
+      }
+    }
+
+    if (state.liveIcon.active) {
+      var liveRect = {
+        x: state.liveIcon.x,
+        y: state.liveIcon.y,
+        w: state.liveIcon.size,
+        h: state.liveIcon.size
+      };
+      if (isRectVisibleOnScreen(liveRect, 0)) {
+        state.liveIcon.active = false;
+        state.livesLeft = Math.min(state.maxLives, state.livesLeft + 1);
+        updateLivesUi();
+        scheduleNextLiveSpawn();
+      }
+    }
+
+    if (state.score >= C.platformCoinUnlockScore) {
+      for (var i = 0; i < world.elevators.length; i += 1) {
+        var elevator = world.elevators[i];
+        if (!elevator.coinActive) {
+          continue;
+        }
+
+        var coinSize = C.playerSize * C.coinIconSizeRatio;
+        var elevatorCoinRect = {
+          x: elevator.x + elevator.width * 0.5 - coinSize * 0.5,
+          y: elevator.y - coinSize,
+          w: coinSize,
+          h: coinSize
+        };
+        if (!isRectVisibleOnScreen(elevatorCoinRect, 0)) {
+          continue;
+        }
+
+        elevator.consumeCoin();
+        if (!isCurseActive()) {
+          state.bonusScore += C.coinScoreBonus;
+        }
+        state.collectedCoins += 1;
+        state.levelCollectedCoins += 1;
+      }
+    }
+  }
+
+  function updateMagnetEffect(dt) {
+    if (state.magnetTimeLeft <= 0) {
+      state.magnetTimeLeft = 0;
+      return;
+    }
+
+    state.magnetTimeLeft = Math.max(0, state.magnetTimeLeft - dt);
+    collectMagnetPickupsOnScreen();
+  }
+
+  function updateCurseEffect(dt) {
+    if (state.curseTimeLeft <= 0) {
+      state.curseTimeLeft = 0;
+      return;
+    }
+
+    state.curseTimeLeft = Math.max(0, state.curseTimeLeft - dt);
   }
 
   function checkBlockerCollision() {
@@ -3769,7 +4973,9 @@ Main tuning points:
 
     if (isRectIntersect(playerRect, coinRect)) {
       coin.active = false;
-      state.bonusScore += C.coinScoreBonus;
+      if (!isCurseActive()) {
+        state.bonusScore += C.coinScoreBonus;
+      }
       state.collectedCoins += 1;
       state.levelCollectedCoins += 1;
       scheduleNextPlatformCoinSpawn();
@@ -3819,7 +5025,9 @@ Main tuning points:
 
       if (isRectIntersect(playerRect, coinRect)) {
         e.consumeCoin();
-        state.bonusScore += C.coinScoreBonus;
+        if (!isCurseActive()) {
+          state.bonusScore += C.coinScoreBonus;
+        }
         state.collectedCoins += 1;
         state.levelCollectedCoins += 1;
       }
@@ -3881,6 +5089,9 @@ Main tuning points:
       drawParallaxStrip(sceneArt.level4ForestBack, 0.06, C.topDeathLineY, playableHeight);
       drawParallaxStrip(sceneArt.level4ForestMid, 0.14, C.topDeathLineY, playableHeight);
       drawParallaxStrip(sceneArt.level4ForestFront, 0.24, C.topDeathLineY, playableHeight);
+    } else if (state.currentLevel === 5) {
+      drawParallaxStrip(sceneArt.level5Sky, 0.12, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level5Foreground, 0.32, C.topDeathLineY, playableHeight);
     } else {
       drawParallaxStrip(sceneArt.backgroundSky, 0.12, C.topDeathLineY, playableHeight);
       drawParallaxStrip(sceneArt.backgroundForeground, 0.32, C.topDeathLineY, playableHeight);
@@ -3902,11 +5113,12 @@ Main tuning points:
   }
 
   function drawPlatforms() {
+    var platformArt = getCurrentLevelSceneArt("platform");
     for (var i = 0; i < world.platforms.length; i += 1) {
       var p = world.platforms[i];
       var x = worldToScreenX(p.x);
       var drewModernPlatform = useModernVisuals() && drawSceneArtStrip(
-        sceneArt.platform,
+        platformArt,
         x,
         p.y,
         p.width,
@@ -3914,10 +5126,10 @@ Main tuning points:
         {
           leftCapSourceX: 0,
           leftCapSourceWidth: PLATFORM_RIGHT_CAP_WIDTH,
-          rightCapSourceX: sceneArt.platform ? sceneArt.platform.width - PLATFORM_RIGHT_CAP_WIDTH : 0,
+          rightCapSourceX: platformArt ? platformArt.width - PLATFORM_RIGHT_CAP_WIDTH : 0,
           rightCapSourceWidth: PLATFORM_RIGHT_CAP_WIDTH,
           centerSourceX: 0,
-          centerSourceWidth: sceneArt.platform ? sceneArt.platform.width - PLATFORM_RIGHT_CAP_WIDTH : 0,
+          centerSourceWidth: platformArt ? platformArt.width - PLATFORM_RIGHT_CAP_WIDTH : 0,
           mirrorLeftCapFromRight: true
         }
       );
@@ -3929,13 +5141,14 @@ Main tuning points:
   }
 
   function drawElevators() {
+    var elevatorArt = getCurrentLevelSceneArt("elevator");
     for (var i = 0; i < world.elevators.length; i += 1) {
       var e = world.elevators[i];
       var x = worldToScreenX(e.x);
       var modernElevatorHeight = e.height;
       var retroElevatorHeight = C.platformHeight;
       var drewModernElevator = useModernVisuals() && drawSceneArtStrip(
-        sceneArt.elevator,
+        elevatorArt,
         x,
         e.y,
         e.width,
@@ -3943,10 +5156,10 @@ Main tuning points:
         {
           leftCapSourceX: 0,
           leftCapSourceWidth: ELEVATOR_CAP_WIDTH,
-          rightCapSourceX: sceneArt.elevator ? sceneArt.elevator.width - ELEVATOR_CAP_WIDTH : 0,
+          rightCapSourceX: elevatorArt ? elevatorArt.width - ELEVATOR_CAP_WIDTH : 0,
           rightCapSourceWidth: ELEVATOR_CAP_WIDTH,
           centerSourceX: ELEVATOR_CAP_WIDTH,
-          centerSourceWidth: sceneArt.elevator ? sceneArt.elevator.width - ELEVATOR_CAP_WIDTH * 2 : 0,
+          centerSourceWidth: elevatorArt ? elevatorArt.width - ELEVATOR_CAP_WIDTH * 2 : 0,
           mirrorLeftCapFromRight: false
         }
       );
@@ -3971,13 +5184,7 @@ Main tuning points:
     ctx.save();
     ctx.translate(cx, cy);
     if (heroFrame) {
-      var heroSourceRects = heroFrame.type === "jump" ? HERO_JUMP_FRAME_SOURCE_RECTS : HERO_WALK_FRAME_SOURCE_RECTS;
-      var heroSourceRect = heroSourceRects[heroFrame.index] || {
-        x: 0,
-        y: 0,
-        w: heroFrame.image.width,
-        h: heroFrame.image.height
-      };
+      var heroSourceRect = getHeroFrameSourceRect(heroFrame);
       ctx.drawImage(
         heroFrame.image,
         heroSourceRect.x,
@@ -4029,13 +5236,7 @@ Main tuning points:
       ctx.translate(centerX, centerY);
       ctx.globalAlpha = alpha;
       if (heroFrame) {
-        var heroSourceRects = heroFrame.type === "jump" ? HERO_JUMP_FRAME_SOURCE_RECTS : HERO_WALK_FRAME_SOURCE_RECTS;
-        var heroSourceRect = heroSourceRects[heroFrame.index] || {
-          x: 0,
-          y: 0,
-          w: heroFrame.image.width,
-          h: heroFrame.image.height
-        };
+        var heroSourceRect = getHeroFrameSourceRect(heroFrame);
         ctx.drawImage(
           heroFrame.image,
           heroSourceRect.x,
@@ -4112,11 +5313,12 @@ Main tuning points:
   }
 
   function getHeroWalkFrame() {
-    if (!sceneArt.heroFrames.length) {
+    var heroSkin = getSelectedHeroSkinSceneArt();
+    if (!heroSkin.heroFrames.length) {
       return null;
     }
 
-    var loadedFrames = sceneArt.heroFrames.filter(function (frame) {
+    var loadedFrames = heroSkin.heroFrames.filter(function (frame) {
       return Boolean(frame);
     });
     if (!loadedFrames.length) {
@@ -4132,20 +5334,23 @@ Main tuning points:
   }
 
   function getHeroJumpFrame() {
-    if (!sceneArt.heroJumpFrames.length) {
+    var heroSkin = getSelectedHeroSkinSceneArt();
+    if (!heroSkin.heroJumpFrames.length) {
       return null;
     }
 
-    var loadedFrames = sceneArt.heroJumpFrames.filter(function (frame) {
+    var loadedFrames = heroSkin.heroJumpFrames.filter(function (frame) {
       return Boolean(frame);
     });
     if (!loadedFrames.length) {
       return null;
     }
 
-    var frameIndex = 4;
+    var apexFrameIndex = loadedFrames.length >= 9 ? 4 : Math.min(loadedFrames.length - 1, Math.max(0, Math.floor((loadedFrames.length - 1) * 0.5)));
+    var ascentFrameCount = Math.max(1, Math.min(apexFrameIndex, 4));
+    var frameIndex = apexFrameIndex;
     if (state.heroJumpAnimStarted && player.velocityY < 0) {
-      frameIndex = Math.min(3, Math.floor(state.heroJumpAnimTime / HERO_JUMP_FRAME_SECONDS));
+      frameIndex = Math.min(apexFrameIndex, Math.floor(state.heroJumpAnimTime / HERO_JUMP_FRAME_SECONDS), ascentFrameCount);
     }
 
     return {
@@ -4156,23 +5361,43 @@ Main tuning points:
   }
 
   function getHeroLandingFrame() {
-    if (!sceneArt.heroJumpFrames.length) {
+    var heroSkin = getSelectedHeroSkinSceneArt();
+    if (!heroSkin.heroJumpFrames.length) {
       return null;
     }
 
-    var loadedFrames = sceneArt.heroJumpFrames.filter(function (frame) {
+    var loadedFrames = heroSkin.heroJumpFrames.filter(function (frame) {
       return Boolean(frame);
     });
     if (!loadedFrames.length) {
       return null;
     }
 
-    var landingFrameIndex = 5 + Math.min(3, Math.floor(state.heroLandingAnimTime / HERO_JUMP_FRAME_SECONDS));
+    var landingStartIndex = loadedFrames.length >= 9 ? 5 : Math.max(0, loadedFrames.length - 3);
+    var landingFrameCount = Math.max(1, loadedFrames.length - landingStartIndex);
+    var landingFrameIndex = landingStartIndex + Math.min(landingFrameCount - 1, Math.floor(state.heroLandingAnimTime / HERO_JUMP_FRAME_SECONDS));
     return {
       image: loadedFrames[landingFrameIndex] || null,
       index: landingFrameIndex,
       type: "jump"
     };
+  }
+
+  function getHeroLandingFrameCount() {
+    var heroSkin = getSelectedHeroSkinSceneArt();
+    if (!heroSkin.heroJumpFrames.length) {
+      return 1;
+    }
+
+    var loadedFrames = heroSkin.heroJumpFrames.filter(function (frame) {
+      return Boolean(frame);
+    });
+    if (!loadedFrames.length) {
+      return 1;
+    }
+
+    var landingStartIndex = loadedFrames.length >= 9 ? 5 : Math.max(0, loadedFrames.length - 3);
+    return Math.max(1, loadedFrames.length - landingStartIndex);
   }
 
   function updateHeroJumpAnimation(dt, jumpStarted, landedThisFrame) {
@@ -4194,7 +5419,8 @@ Main tuning points:
 
     if (player.isGrounded) {
       if (state.heroLandingAnimActive) {
-        var landingMaxDuration = HERO_JUMP_FRAME_SECONDS * 4;
+        var landingFrameCount = getHeroLandingFrameCount();
+        var landingMaxDuration = HERO_JUMP_FRAME_SECONDS * landingFrameCount;
         state.heroLandingAnimTime = Math.min(landingMaxDuration, state.heroLandingAnimTime + dt);
         if (state.heroLandingAnimTime >= landingMaxDuration) {
           state.heroLandingAnimActive = false;
@@ -4330,8 +5556,9 @@ Main tuning points:
     var x = worldToScreenX(icon.x);
     var y = icon.y;
     var s = icon.size;
-    if (useModernVisuals() && sceneArt.moneybag) {
-      ctx.drawImage(sceneArt.moneybag, x, y, s, s);
+    var moneybagArt = getCurrentLevelSceneArt("moneybag");
+    if (useModernVisuals() && moneybagArt) {
+      ctx.drawImage(moneybagArt, x, y, s, s);
       return;
     }
 
@@ -4363,6 +5590,107 @@ Main tuning points:
     ctx.textAlign = "left";
   }
 
+  function drawCrackedCoinIcon() {
+    var icon = state.crackedCoinIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var x = worldToScreenX(icon.x);
+    var y = icon.y;
+    var s = icon.size;
+    var cx = x + s * 0.5;
+    var cy = y + s * 0.5;
+
+    ctx.save();
+    ctx.fillStyle = "#d3a63a";
+    ctx.beginPath();
+    ctx.arc(cx, cy, s * 0.46, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#f6d66f";
+    ctx.beginPath();
+    ctx.arc(cx, cy, s * 0.33, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "#6f4e17";
+    ctx.lineWidth = Math.max(3, s * 0.08);
+    ctx.beginPath();
+    ctx.moveTo(x + s * 0.32, y + s * 0.1);
+    ctx.lineTo(x + s * 0.54, y + s * 0.34);
+    ctx.lineTo(x + s * 0.43, y + s * 0.45);
+    ctx.lineTo(x + s * 0.64, y + s * 0.67);
+    ctx.lineTo(x + s * 0.48, y + s * 0.88);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawQuestionCoinIcon() {
+    var icon = state.questionCoinIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var x = worldToScreenX(icon.x);
+    var y = icon.y;
+    var s = icon.size;
+    var cx = x + s * 0.5;
+    var cy = y + s * 0.5;
+    var stakeText = icon.stakeScore.toLocaleString("en-US");
+
+    ctx.save();
+    ctx.fillStyle = "#f0c94a";
+    ctx.beginPath();
+    ctx.arc(cx, cy, s * 0.46, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#ffe282";
+    ctx.beginPath();
+    ctx.arc(cx, cy, s * 0.34, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#5d3fd3";
+    ctx.textAlign = "center";
+    ctx.font = "bold " + Math.max(18, Math.floor(s * 0.54)) + "px Arial";
+    ctx.fillText("?", cx, y + s * 0.68);
+    ctx.font = "bold " + Math.max(12, Math.floor(s * 0.22)) + "px Arial";
+    ctx.fillStyle = "#111";
+    ctx.fillText(stakeText, cx, y - Math.max(8, s * 0.14));
+    ctx.restore();
+  }
+
+  function drawCurseIcon() {
+    var icon = state.curseIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var x = worldToScreenX(icon.x);
+    var y = icon.y;
+    var s = icon.size;
+    var cx = x + s * 0.5;
+    var cy = y + s * 0.5;
+
+    ctx.save();
+    ctx.fillStyle = "#2b2345";
+    ctx.beginPath();
+    ctx.arc(cx, cy, s * 0.46, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#171125";
+    ctx.beginPath();
+    ctx.arc(cx, cy, s * 0.33, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "#a56bff";
+    ctx.lineWidth = Math.max(3, s * 0.06);
+    ctx.beginPath();
+    ctx.moveTo(cx, y + s * 0.18);
+    ctx.bezierCurveTo(x + s * 0.72, y + s * 0.22, x + s * 0.72, y + s * 0.42, cx, y + s * 0.48);
+    ctx.bezierCurveTo(x + s * 0.34, y + s * 0.5, x + s * 0.36, y + s * 0.66, cx, y + s * 0.72);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx, y + s * 0.84, Math.max(2, s * 0.045), 0, Math.PI * 2);
+    ctx.fillStyle = "#a56bff";
+    ctx.fill();
+    ctx.restore();
+  }
+
   function drawLiveIcon() {
     var icon = state.liveIcon;
     if (!icon.active) {
@@ -4372,8 +5700,9 @@ Main tuning points:
     var x = worldToScreenX(icon.x);
     var y = icon.y;
     var s = icon.size;
-    if (useModernVisuals() && sceneArt.heart) {
-      ctx.drawImage(sceneArt.heart, x, y, s, s);
+    var heartArt = getCurrentLevelSceneArt("heart");
+    if (useModernVisuals() && heartArt) {
+      ctx.drawImage(heartArt, x, y, s, s);
       return;
     }
 
@@ -4391,14 +5720,138 @@ Main tuning points:
     ctx.stroke();
   }
 
+  function drawShieldIcon() {
+    var icon = state.shieldIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var x = worldToScreenX(icon.x);
+    var y = icon.y;
+    var s = icon.size;
+    var cx = x + s * 0.5;
+    var cy = y + s * 0.5;
+    var radius = s * 0.34;
+    var pulse = 1 + Math.sin(state.runTimeSeconds * 5) * 0.04;
+
+    ctx.save();
+    ctx.globalAlpha = 0.95;
+    ctx.fillStyle = "rgba(96, 227, 255, 0.22)";
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius * pulse, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "#7ae7ff";
+    ctx.lineWidth = Math.max(3, s * 0.075);
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius * pulse, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.78)";
+    ctx.lineWidth = Math.max(2, s * 0.04);
+    ctx.beginPath();
+    ctx.arc(cx - s * 0.07, cy - s * 0.08, radius * 0.4, Math.PI * 1.15, Math.PI * 1.8);
+    ctx.stroke();
+
+    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+    ctx.beginPath();
+    ctx.arc(cx - s * 0.12, cy - s * 0.14, s * 0.055, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawMagnetIcon() {
+    var icon = state.magnetIcon;
+    if (!icon.active) {
+      return;
+    }
+
+    var x = worldToScreenX(icon.x);
+    var y = icon.y;
+    var s = icon.size;
+    var poleWidth = s * 0.22;
+    var topY = y + s * 0.16;
+    var bottomY = y + s * 0.72;
+    var leftX = x + s * 0.24;
+    var rightX = x + s * 0.76;
+    var innerRadius = s * 0.26;
+    var arcCenterY = y + s * 0.47;
+
+    ctx.save();
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = Math.max(5, s * 0.12);
+    ctx.strokeStyle = "#1f2a44";
+    ctx.beginPath();
+    ctx.moveTo(leftX, topY);
+    ctx.lineTo(leftX, bottomY);
+    ctx.arc(x + s * 0.5, arcCenterY, innerRadius, Math.PI, 0, false);
+    ctx.lineTo(rightX, topY);
+    ctx.stroke();
+
+    ctx.fillStyle = "#e63946";
+    ctx.fillRect(leftX - poleWidth * 0.5, topY - s * 0.03, poleWidth, s * 0.18);
+    ctx.fillRect(rightX - poleWidth * 0.5, topY - s * 0.03, poleWidth, s * 0.18);
+    ctx.fillStyle = "#8ecae6";
+    ctx.fillRect(leftX - poleWidth * 0.5, topY + s * 0.15, poleWidth, s * 0.14);
+    ctx.fillRect(rightX - poleWidth * 0.5, topY + s * 0.15, poleWidth, s * 0.14);
+
+    ctx.strokeStyle = "rgba(255, 224, 122, 0.9)";
+    ctx.lineWidth = Math.max(2, s * 0.045);
+    ctx.beginPath();
+    ctx.arc(x + s * 0.5, y + s * 0.36, s * 0.1, Math.PI * 1.1, Math.PI * 1.9);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(x + s * 0.5, y + s * 0.36, s * 0.18, Math.PI * 1.15, Math.PI * 1.85);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawPlayerStatusEffects() {
+    if (state.projectileDeathAnimActive || state.teleportFinishAnimActive || state.levelFinishedActive) {
+      return;
+    }
+
+    var centerX = worldToScreenX(player.x + player.width * 0.5);
+    var centerY = player.y + player.height * 0.5;
+    var radius = player.width * 0.62;
+    var time = state.runTimeSeconds;
+
+    if (state.shieldCharges > 0) {
+      ctx.save();
+      ctx.strokeStyle = "rgba(79, 215, 255, 0.92)";
+      ctx.lineWidth = Math.max(3, player.width * 0.06);
+      ctx.shadowColor = "rgba(79, 215, 255, 0.35)";
+      ctx.shadowBlur = player.width * 0.18;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    if (state.magnetTimeLeft > 0) {
+      ctx.save();
+      ctx.strokeStyle = "rgba(255, 212, 89, 0.9)";
+      ctx.lineWidth = Math.max(2, player.width * 0.045);
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius + 8, time * 3, time * 3 + Math.PI * 0.9);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius + 16, -time * 3.5, -time * 3.5 + Math.PI * 0.9);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
   function drawBlockerIcon() {
+    var blockerArt = getCurrentLevelSceneArt("blocker");
     for (var i = 0; i < state.blockerIcons.length; i += 1) {
       var icon = state.blockerIcons[i];
       var x = worldToScreenX(icon.x);
       var y = icon.y;
       var s = icon.size;
-      if (useModernVisuals() && sceneArt.blocker) {
-        ctx.drawImage(sceneArt.blocker, x, y, s, s);
+      if (useModernVisuals() && blockerArt) {
+        ctx.drawImage(blockerArt, x, y, s, s);
         continue;
       }
 
@@ -4517,20 +5970,22 @@ Main tuning points:
   }
 
   function getProjectileRocketFrame() {
-    if (!sceneArt.rocket1 && !sceneArt.rocket2) {
+    var rocket1 = getCurrentLevelSceneArt("rocket1");
+    var rocket2 = getCurrentLevelSceneArt("rocket2");
+    if (!rocket1 && !rocket2) {
       return null;
     }
 
-    if (!sceneArt.rocket1) {
-      return sceneArt.rocket2;
+    if (!rocket1) {
+      return rocket2;
     }
 
-    if (!sceneArt.rocket2) {
-      return sceneArt.rocket1;
+    if (!rocket2) {
+      return rocket1;
     }
 
     var animationStep = Math.floor(state.runTimeSeconds / ROCKET_ANIMATION_FRAME_SECONDS) % 5;
-    return animationStep < 3 ? sceneArt.rocket1 : sceneArt.rocket2;
+    return animationStep < 3 ? rocket1 : rocket2;
   }
 
   function drawProjectileDeathAnimation() {
@@ -4544,9 +5999,56 @@ Main tuning points:
     );
   }
 
+  function drawQuestionCoinAnimation() {
+    if (!state.questionCoinAnimActive) {
+      return;
+    }
+
+    var randomizerDuration = 2;
+    var w = Math.min(canvas.width * 0.46, 420);
+    var h = Math.min(canvas.height * 0.28, 220);
+    var x = canvas.width * 0.5 - w * 0.5;
+    var y = canvas.height * 0.5 - h * 0.5;
+    var stakeText = state.questionCoinAnimStakeScore.toLocaleString("en-US");
+    var resultText = Math.abs(state.questionCoinAnimDelta).toLocaleString("en-US");
+    var revealPhase = state.questionCoinAnimElapsed >= randomizerDuration;
+    var displaySymbol = revealPhase
+      ? state.questionCoinAnimResult
+      : (Math.floor(state.questionCoinAnimElapsed * 14) % 2 === 0 ? "+" : "-");
+
+    ctx.save();
+    ctx.fillStyle = "rgba(4, 10, 24, 0.72)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "rgba(255, 247, 219, 0.96)";
+    ctx.strokeStyle = "#111";
+    ctx.lineWidth = 3;
+    ctx.fillRect(x, y, w, h);
+    ctx.strokeRect(x, y, w, h);
+
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#111";
+    ctx.font = "bold 26px Arial";
+    ctx.fillText("Question Coin", canvas.width * 0.5, y + 42);
+    ctx.font = "20px Arial";
+    if (revealPhase) {
+      if (state.questionCoinAnimResult === "+") {
+        ctx.fillText("You won " + resultText, canvas.width * 0.5, y + 76);
+      } else {
+        ctx.fillText("You lost " + resultText, canvas.width * 0.5, y + 76);
+      }
+    } else {
+      ctx.fillText("Playing for " + stakeText + " score", canvas.width * 0.5, y + 76);
+    }
+    ctx.font = "bold 92px Arial";
+    ctx.fillStyle = displaySymbol === "+" ? "#1f9d55" : "#d64545";
+    ctx.fillText(displaySymbol, canvas.width * 0.5, y + h * 0.72);
+    ctx.restore();
+  }
+
   function drawCoinSymbol(screenX, screenY, size) {
-    if (useModernVisuals() && sceneArt.coin) {
-      ctx.drawImage(sceneArt.coin, screenX, screenY, size, size);
+    var coinArt = getCurrentLevelSceneArt("coin");
+    if (useModernVisuals() && coinArt) {
+      ctx.drawImage(coinArt, screenX, screenY, size, size);
       return;
     }
 
@@ -4622,9 +6124,19 @@ Main tuning points:
     if (state.tripleJumpTimeLeft > 0) {
       ctx.fillText("Tripple Jump: " + state.tripleJumpTimeLeft.toFixed(1) + "s", canvas.width * 0.5, 64);
     }
+    if (state.curseTimeLeft > 0) {
+      ctx.fillText("Curse: " + state.curseTimeLeft.toFixed(1) + "s", canvas.width * 0.5, 92);
+    }
     ctx.textAlign = "right";
     ctx.font = "24px Arial";
     ctx.fillText("Speed +" + state.speedPercent + "%", canvas.width - 18, 36);
+    ctx.font = "20px Arial";
+    if (state.shieldCharges > 0) {
+      ctx.fillText("Shield: ON", canvas.width - 18, 64);
+    }
+    if (state.magnetTimeLeft > 0) {
+      ctx.fillText("Magnet: " + state.magnetTimeLeft.toFixed(1) + "s", canvas.width - 18, 90);
+    }
     ctx.textAlign = "left";
   }
 

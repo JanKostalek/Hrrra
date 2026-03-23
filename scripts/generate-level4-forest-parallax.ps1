@@ -90,7 +90,7 @@ public static class Level4ParallaxGenerator {
 $repoRoot = Split-Path -Parent $PSScriptRoot
 [Level4ParallaxGenerator]::Generate(
   (Join-Path $repoRoot 'assets/forest/futuristic forest.png'),
-  (Join-Path $repoRoot 'assets/forest/level4_forest_back_tile.png'),
-  (Join-Path $repoRoot 'assets/forest/level4_forest_mid_tile.png'),
-  (Join-Path $repoRoot 'assets/forest/level4_forest_front_tile.png')
+  (Join-Path $repoRoot 'assets/level4/background_back_tile.png'),
+  (Join-Path $repoRoot 'assets/level4/background_mid_tile.png'),
+  (Join-Path $repoRoot 'assets/level4/background_front_tile.png')
 )

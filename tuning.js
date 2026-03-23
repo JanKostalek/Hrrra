@@ -46,7 +46,7 @@
     doubleJumpRespawnMaxSeconds: 15,
 
     // Slow icon
-    slowUnlockSpeedPercent: 200,
+    slowUnlockSpeedPercent: 150,
     slowRespawnMinSeconds: 10,
     slowRespawnMaxSeconds: 20,
 

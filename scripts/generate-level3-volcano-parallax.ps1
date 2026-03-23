@@ -1,7 +1,7 @@
 Add-Type -AssemblyName System.Drawing
 
-$backPath = Join-Path $PSScriptRoot "..\assets\level3_volcano_back_tile.png"
-$frontPath = Join-Path $PSScriptRoot "..\assets\level3_volcano_front_tile.png"
+$backPath = Join-Path $PSScriptRoot "..\assets\level3\background_back_tile.png"
+$frontPath = Join-Path $PSScriptRoot "..\assets\level3\background_front_tile.png"
 $width = 1536
 $height = 560
 $rng = [System.Random]::new(20260319)

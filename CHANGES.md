@@ -169,6 +169,77 @@ Rules:
 - Also included optional export/import of the stored admin collapse UI state.
 - Why: this makes it easy to back up settings, transfer them between browsers/devices, and restore them later.
 
+### 2026-03-19 - Added Shield and Magnet mechanics with full admin support
+- Added new `Shield` and `Magnet` admin sections in `game.js`, so every level, mode, and difficulty copy now has its own unlock/respawn tuning, plus duration for Magnet.
+- Added the corresponding defaults to `config.js`.
+- `Shield` is implemented as a held one-charge protection that absorbs the next fatal blocker/projectile/top-death/bottom-death event; bottom death now rescues the player onto the nearest safe support when shielded.
+- `Magnet` is implemented as a timed effect that automatically collects all on-screen platform coins, elevator coins, and life pickups.
+- Added simple in-game pickup icons plus player/HUD feedback for active shield and magnet states.
+- Why: these two mechanics expand progression and recovery options while staying compatible with the existing per-level admin system.
+
+### 2026-03-19 - Made Shield and Magnet pickups visually explicit
+- Updated the canvas-drawn pickup art in `game.js` so `Shield` now reads as a glowing bubble and `Magnet` as a clear horseshoe magnet.
+- Kept them as direct canvas-rendered icons, so no extra PNG assets were needed for web or Android sync.
+- Why: the previous placeholders were too abstract and could be mistaken for missing graphics.
+
+### 2026-03-20 - Lowered the default Slow unlock threshold
+- Changed the source default `slowUnlockSpeedPercent` from `200` to `150` in both `config.js` and `tuning.js`.
+- Why: `Slow` was still present in the game, but the higher threshold made it appear so late that it could look removed.
+
+### 2026-03-20 - Prepared per-level art folders with automatic fallback loading
+- Added `assets/level1/` through `assets/level5/` plus [`LEVEL_ASSETS.md`](c:/-_WeB_-/Hrrra/assets/LEVEL_ASSETS.md) describing the supported filenames for level-specific art.
+- Updated `game.js` so `platform`, `elevator`, `blocker`, `coin`, `moneybag`, `heart`, `projectile1`, and `projectile2` can now load from a level folder first and fall back to the current shared asset if no level override exists.
+- Updated `scripts/copy-web-assets.js` so files placed into `assets/level1-5/` are copied automatically during `cap:sync` without manually extending the asset list.
+- Why: this gives each level a clean place for future visual variants while keeping the current game stable until new graphics are delivered.
+
+### 2026-03-20 - Added Cracked Coin and Question Coin score mechanics
+- Added `Cracked Coin` and `Question Coin` as new admin-tuned pickups in `game.js` and `config.js`.
+- `Cracked Coin` now removes a percentage of the current level-earned score on pickup, using a per-config `Penalty percent` field.
+- `Question Coin` now stores the level-earned score when it spawns, shows that value above the coin, and on pickup freezes the run for a short plus/minus randomizer overlay before applying the result.
+- The randomizer currently resolves to either `+ 2x stake` or `- 50% of stake`, applied only against score earned in the current level.
+- Added simple canvas-rendered graphics for both coins and blocked restart input during the question-coin freeze.
+- Why: this introduces two new score-focused mechanics, one purely punishing and one deliberate risk/reward gamble.
+
+### 2026-03-20 - Lengthened Question Coin result presentation
+- Updated the Question Coin freeze in `game.js` so the plus/minus randomizer now runs for `2` seconds and the final result remains visible for another `1` second.
+- The result phase now shows `You won XXXX` or `You lost XXXX` using the actual applied score delta.
+- Why: the previous reveal ended too quickly and did not clearly spell out the final score swing.
+
+### 2026-03-20 - Preserved Shield across level transitions
+- Updated `restartGame(false)` in `game.js` so an active Shield charge now carries into the next level after a teleport finish.
+- A fresh new run still clears Shield normally.
+- Why: this keeps Shield consistent with the existing carry-over behavior for lives and score.
+
+### 2026-03-21 - Prepared `skin02` as a full frame set
+- Added [`scripts/prepare-skin02.ps1`](c:/-_WeB_-/Hrrra/scripts/prepare-skin02.ps1) to slice the provided `skin02` sprite sheets into runtime-ready 160x160 frame files.
+- Generated `assets/skins/Skin02/` with `6` walk frames and `9` jump frames:
+- Walk: `hero-walk-01.png` to `hero-walk-06.png`
+- Jump: `hero-jump-01.png` to `hero-jump-09.png`
+- The jump set is expanded from the original 4 source poses using a staged timing/offset plan so it can match the current 9-frame hero pipeline.
+- Updated `scripts/copy-web-assets.js` so `assets/skins/` is now copied into `www` and Android sync output too.
+- Why: this gives us a prepared alternate skin pack that can later be swapped into the game without first solving frame-count mismatches.
+
+### 2026-03-21 - Added global skin selector and moved hero frames into skin folders
+- Added a new global admin dropdown `Skin` in `game.js` with current options `Skin01` and `Skin02`.
+- Moved the original hero walk/jump frame set out of `assets/` into `assets/skins/Skin01/`.
+- Standardized the prepared alternate set in `assets/skins/Skin02/` to the same `hero-walk-*.png` / `hero-jump-*.png` naming scheme.
+- Updated hero loading/rendering in `game.js` so the active skin is selected globally and uses per-skin source rect handling with fallback to `Skin01`.
+- Why: this establishes a clean skin system so future characters can be added without rewiring the core hero animation pipeline each time.
+
+### 2026-03-21 - Moved active level backgrounds into `level1-5` folders
+- Moved the currently used background assets so each level now stores its active background files inside its own `assets/levelX/` folder.
+- Updated `game.js` to load Level 1, Level 2, Level 3, Level 4, and Level 5 backgrounds from those level folders.
+- Added explicit Level 5 background loading so it no longer piggybacks on Level 1 paths in code.
+- Updated background generator scripts and [`LEVEL_ASSETS.md`](c:/-_WeB_-/Hrrra/assets/LEVEL_ASSETS.md) to match the new level-based background filenames.
+- Why: this keeps the asset structure consistent as levels continue getting their own art direction and later asset swaps.
+
+### 2026-03-21 - Added Curse pickup with score-freeze effect
+- Added `Curse` admin fields in `game.js` and defaults in `config.js` for `unlock score`, `duration`, and respawn min/max.
+- Implemented a dark cursed-coin pickup with its own spawn, collision, and HUD countdown.
+- While Curse is active, normal score gain from distance, platform/elevator coins, and money bags is blocked, but special score mechanics still continue to work.
+- Implemented distance-freeze bookkeeping in `game.js` so score does not silently catch up after Curse ends.
+- Why: this adds a clean score-denial debuff that fits the game's growing score-economy mechanics.
+
 ## Recent Non-Mechanic Milestones
 
 ### 2026-03-17 - Android ads and store preparation baseline
@@ -180,6 +251,90 @@ Rules:
 - Why: prepared the Android build for monetization and Google Play open testing requirements.
 
 ## Working Notes
+
+### 2026-03-21 - Skin02 jump frame landing prep tweak
+- Adjusted `assets/skins/Skin02/hero-jump-07.png` so the legs read a bit straighter and more ready for the landing pose in the next frame.
+- Why: smooth the visual transition between the late-air jump frame and the follow-up landing frame for `Skin02`.
+
+### 2026-03-21 - Skin02 jump takeoff tween tweak
+- Adjusted `assets/skins/Skin02/hero-jump-02.png` so it reads more like a takeoff transition between `jump-01` and `jump-03`, with a slightly less crouched and more upward-moving pose.
+- Why: make the early jump animation progression feel more natural and less like two nearly identical frames.
+
+### 2026-03-21 - Skin02 asset cleanup and transparent export fix
+- Normalized the active alternate skin folder to `assets/skins/Skin02`.
+- Removed temporary preview/candidate files from the active skin folder.
+- Updated `scripts/prepare-skin02.ps1` so exported frames keep transparent background and stay clamped to the intended sprite cell instead of carrying over sheet background.
+- Why: keep the alternate skin folder clean and prevent black-background or sheet-cutting artifacts from leaking into exported gameplay frames.
+
+### 2026-03-22 - Skin02 regenerated from hero_full sheet
+- Added support in `scripts/prepare-skin02.ps1` to export `Skin02` directly from `assets/skins/Skin02/hero_full.png` when that sheet is present.
+- Replaced the active `Skin02` walk and jump frame PNGs with a fresh export from `hero_full.png`.
+- Normalized the new frames to transparent background and a gameplay size that swaps naturally against `Skin01`.
+- Why: make it easy to drop in a full replacement sheet for `Skin02` and regenerate a clean in-game frame set without manual slicing.
+
+### 2026-03-22 - Skin03 run sheet import and generated jump set
+- Added `Skin03` to the in-game skin selector and updated skin loading so each skin can define its own walk/jump frame counts.
+- Added `scripts/prepare-skin03.ps1` to slice `assets/skins/Skin03/skin03.png` into a 10-frame run loop with transparent background.
+- Generated a matching 9-frame jump set for `Skin03` by transforming selected run poses into takeoff, rise, apex, fall, landing, and recovery frames.
+- Why: prepare a usable third skin from a run-only sprite sheet without forcing the project to have the same frame count for every skin.
+
+### 2026-03-22 - Skin03 size increase
+- Increased the exported `Skin03` walk and jump frames by roughly 50% in the `prepare-skin03.ps1` generator.
+- Why: the first pass of `Skin03` looked too small in-game compared with the gameplay scale of the other skins.
+
+### 2026-03-22 - Skin04 GIF frame extraction
+- Added `scripts/extract-skin04-gifs.ps1` to split `assets/skins/Skin04/skin04_run.gif` and `assets/skins/Skin04/skin04_jump.gif` into individual PNG frames.
+- Exported the GIFs into `assets/skins/Skin04/run_frames` and `assets/skins/Skin04/jump_frames` for manual frame review and later selection.
+- Why: prepare the raw animation frames for `Skin04` without changing the game logic or integrating the skin yet.
+
+### 2026-03-22 - Skin04 integrated from selected 8+8 frame set
+- Added `Skin04` to the in-game skin selector.
+- Added `scripts/prepare-skin04.ps1` to build a gameplay-ready `Skin04` from the selected `run-01..08.png` and `jump-02/03/05/06/07/08/19/20.png` frames placed in `assets/skins/Skin04`.
+- Exported `hero-walk-01..08.png` and `hero-jump-01..08.png` with transparent background and gameplay-sized framing.
+- Updated the hero animation loading so `Skin04` can use its own 8-frame run and 8-frame jump set cleanly.
+- Adjusted jump animation logic to support skins with shorter jump sets than the original 9-frame baseline.
+- Why: turn the user-selected `Skin04` frame set into a usable in-game skin without changing the rest of the game structure.
+
+### 2026-03-23 - Cleaned selected Skin04 source frames
+- Added `scripts/cleanup-skin04-selected-frames.ps1` to clean the currently selected `run-*` and `jump-*` PNG source frames in `assets/skins/Skin04`.
+- Removed the flat gray background from those selected source frames and cleaned the leftover edge background bands so the chosen PNGs are ready for later gameplay use.
+- Did not change the in-game skin wiring as part of this step; this was only a cleanup of the selected source images.
+- Why: make the manually selected `Skin04` source frames usable as transparent sprite inputs before any further in-game adjustments.
+
+### 2026-03-23 - Normalized selected Skin04 source frames to Skin01-style layout
+- Added `scripts/normalize-skin04-selected-frames.ps1` to normalize the currently selected `Skin04` source frames into a shared `360x360` canvas.
+- Scaled and aligned the selected `run-*` and `jump-*` PNGs so the character occupancy and baseline are much closer to the way `Skin01` is framed.
+- Jump frames were also repositioned so the jump motion comes from the pose progression rather than random canvas drift.
+- Did not change gameplay code as part of this step; this was only an image/layout normalization of the selected source PNGs.
+- Why: make the chosen `Skin04` source frames easier to swap against `Skin01` later without needing a different framing logic.
+- Follow-up fix: cleaned a leftover turquoise line from `assets/skins/Skin04/run-04.png` and re-normalized that one frame so it matches the other run frames.
+
+### 2026-03-23 - Switched in-game Skin04 to the selected normalized source frames
+- Updated `scripts/prepare-skin04.ps1` so `Skin04` now prepares its in-game `hero-walk-*` and `hero-jump-*` files directly from the cleaned root `run-*` and `jump-*` PNGs in `assets/skins/Skin04`.
+- Updated `game.js` so `Skin04` now uses the currently approved 8 run frames and 7 jump frames instead of expecting an 8th jump frame that is not in the selected set.
+- Why: use the exact curated `Skin04` artwork that was cleaned and normalized, without introducing another export/recrop step.
+- Follow-up fix: corrected hero rendering for full-frame skins so `Skin04` now uses the real PNG dimensions at draw time instead of being cropped as if it were a `160x160` sheet frame.
+- Follow-up adjustment: changed the generated in-game `Skin04` `hero-*` files back to `160x160` so they match `Skin01` canvas size while keeping the curated `360x360` root `run-*` and `jump-*` source images untouched.
+- Follow-up adjustment: regenerated only the `Skin04` `hero-walk-*` frames from the opaque sprite bounds so the character stands much lower in the canvas and no longer looks like it is running above the platform.
+- Follow-up adjustment: regenerated the `Skin04` `hero-jump-*` frames from the opaque sprite bounds with per-phase jump heights and bottoms so the jump animation now matches the corrected run baseline much more closely.
+
+### 2026-03-23 - Expanded briefing screen with a second mechanics info column
+- Updated `index.html` so the pre-run briefing panel now has a second column called `Special Mechanics`.
+- Added player-facing explanations there for `Cracked Coin`, `Question Coin`, `Curse`, and `Shield`.
+- Updated `style.css` so the panel renders in two columns on larger screens and stacks back to one column on smaller/mobile layouts.
+- Added simple briefing icons for the new mechanics so the new column remains visually scannable.
+- Why: the game now includes several newer mechanics that were not explained in the briefing screen, which made the run prep less clear.
+
+### 2026-03-23 - Equalized Skin04 jump size against Skin04 run size
+- Verified that `Skin04` jump frames were visibly smaller than the run frames: run frames were around `146 px` tall while jump frames were only about `120-132 px`.
+- Re-exported the in-game `Skin04` `hero-jump-*` frames so the visible character height now matches the corrected run height much more closely.
+- Kept the PNG canvas size unchanged and only increased the character inside the existing `160x160` frame.
+- Why: prevent the character from appearing to shrink during jump animation.
+
+### 2026-03-23 - Enlarged Skin04 frames to the practical maximum inside the fixed PNG canvas
+- Increased the visible `Skin04` character inside the existing `160x160` run and jump PNGs so it fills the frame more strongly without changing the PNG dimensions themselves.
+- Updated `scripts/prepare-skin04.ps1` so future Skin04 regenerations keep this enlarged final pass instead of falling back to the smaller framing.
+- Why: the requested `+33%` visual increase cannot fit literally inside a fixed `160x160` canvas without clipping, so the frames were enlarged to the practical maximum that still preserves a usable in-game silhouette.
 
 ### Usage going forward
 - When we change gameplay, rules, hazards, tuning behavior, scoring, controls, or difficulty behavior, also update `MECHANICS.md`.

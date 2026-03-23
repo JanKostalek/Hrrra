@@ -401,6 +401,20 @@ body {
   flex-wrap: wrap;
 }
 
+.pre-run-brief-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px 26px;
+}
+
+.pre-run-brief-column {
+  min-width: 0;
+}
+
+.pre-run-brief-column h3 {
+  margin-bottom: 10px;
+}
+
 .brief-money {
   width: 22px;
   height: 22px;
@@ -437,6 +451,60 @@ body {
   height: 16px;
   background: center / contain no-repeat url("assets/rocket01-clean.png");
   margin-right: 6px;
+}
+
+.brief-cracked-coin,
+.brief-question-coin,
+.brief-curse,
+.brief-shield {
+  width: 22px;
+  height: 22px;
+  margin-right: 6px;
+}
+
+.brief-cracked-coin {
+  border-radius: 50%;
+  background:
+    linear-gradient(135deg, transparent 38%, #6f4e17 39% 47%, transparent 48%),
+    radial-gradient(circle, #f6d66f 0 43%, #d3a63a 44% 68%, transparent 69%);
+}
+
+.brief-question-coin {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #ffe282 0 44%, #f0c94a 45% 68%, transparent 69%);
+  position: relative;
+}
+
+.brief-question-coin::after {
+  content: "?";
+  position: absolute;
+  inset: 0;
+  font: 700 15px/22px Arial, sans-serif;
+  color: #5d3fd3;
+  text-align: center;
+}
+
+.brief-curse {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, #171125 0 38%, #2b2345 39% 68%, transparent 69%);
+  position: relative;
+}
+
+.brief-curse::after {
+  content: "!";
+  position: absolute;
+  inset: 0;
+  font: 700 14px/22px Arial, sans-serif;
+  color: #b78cff;
+  text-align: center;
+}
+
+.brief-shield {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.88) 0 10%, rgba(122,231,255,0.28) 11% 58%, rgba(122,231,255,0.9) 59% 66%, transparent 67%);
 }
 
 body.visual-theme-retro .brief-money {
@@ -545,6 +613,11 @@ body.visual-theme-retro .brief-live::before {
 
   .pre-run-detail-grid {
     grid-template-columns: 1fr;
+  }
+
+  .pre-run-brief-columns {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
 }
 
@@ -687,6 +760,10 @@ body.visual-theme-retro .brief-live::before {
 
   .brief-icon {
     margin-right: 6px;
+  }
+
+  .pre-run-brief-columns {
+    gap: 10px;
   }
 
   #pre-run-start-btn,
@@ -872,6 +949,20 @@ body.visual-theme-retro .brief-live::before {
     width: 14px;
     height: 14px;
     margin-right: 5px;
+  }
+
+  .brief-cracked-coin,
+  .brief-question-coin,
+  .brief-curse,
+  .brief-shield {
+    width: 16px;
+    height: 16px;
+  }
+
+  .brief-question-coin::after,
+  .brief-curse::after {
+    font-size: 11px;
+    line-height: 16px;
   }
 
   .brief-projectile {

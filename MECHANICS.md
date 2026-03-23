@@ -1061,6 +1061,49 @@ Every gameplay-related change must be added here with date and short reason.
 - Coin unlock now also applies to elevator coins, not only to platform coin spawns.
 - Why: unlock timing should behave consistently across jump upgrades and all coin placements.
 
+### v0.1.172 - Added Shield and Magnet pickups with per-level admin tuning (2026-03-19)
+- Added `Shield` as a new pickup with per-level/mode/difficulty `unlock score` and respawn min/max tuning.
+- Shield now absorbs one otherwise fatal hit from `Projectile`, `Blocker`, `Top Death Zone`, or `Bottom Death Zone` instead of ending the run or consuming a life.
+- When Shield saves the player from the bottom death zone, the hero is moved onto the nearest safe support and continues the run.
+- Added `Magnet` as a new pickup with per-level/mode/difficulty `unlock score`, `duration`, and respawn min/max tuning.
+- While Magnet is active, all on-screen coins and life pickups are collected automatically for the configured duration.
+- Why: adds two more expressive progression tools, one defensive and one reward-focused, without changing the core controls.
+
+### v0.1.173 - Lowered Slow unlock threshold from 200% to 150% (2026-03-20)
+- Changed the source `Slow` unlock threshold from `200%` speed to `150%`.
+- Why: the original threshold made the pickup appear too late and could make it feel missing during normal runs.
+
+### v0.1.174 - Added Cracked Coin as a level-score penalty pickup (2026-03-20)
+- Added `Cracked Coin` with per-level/mode/difficulty admin controls for `unlock score`, `penalty percent`, and respawn min/max.
+- When collected, Cracked Coin now removes a percentage of the score earned in the current level only, never dropping below the score carried from previous levels.
+- Default penalty is `33%` of the current level-earned score.
+- Why: adds a non-lethal economic hazard that pressures score management instead of only lives and death.
+
+### v0.1.175 - Added Question Coin with frozen plus/minus randomizer (2026-03-20)
+- Added `Question Coin` with per-level/mode/difficulty admin controls for `unlock score` and respawn min/max.
+- The coin now stores the current level-earned score when it spawns and displays that stake above the pickup.
+- If collected, the run pauses briefly and a random `+ / -` roll is shown before resolving:
+- `+` adds `2x` the stored stake to the current level score.
+- `-` removes `50%` of the stored stake from the current level score, without touching carried score from previous levels.
+- Why: adds a clear risk/reward pickup that lets players gamble with level score instead of only avoiding hazards.
+
+### v0.1.176 - Extended Question Coin reveal timing and result copy (2026-03-20)
+- Question Coin randomizer now spins for `2` seconds and then shows the winning `+` or `-` result for `1` extra second.
+- The result phase now also displays `You won XXXX` or `You lost XXXX` with the resolved score amount.
+- Why: the gamble reads better when the roll and the final payout/loss are both visible long enough to register clearly.
+
+### v0.1.177 - Shield now carries over to the next level (2026-03-20)
+- If the player finishes a level while holding Shield, that Shield charge now remains active at the start of the next level.
+- Starting a completely new run still clears Shield as before.
+- Why: level transitions should preserve active progression resources the same way lives and score already carry forward.
+
+### v0.1.178 - Added Curse pickup that freezes normal score gain (2026-03-21)
+- Added `Curse` as a new negative pickup with per-level/mode/difficulty admin controls for `unlock score`, `duration`, and respawn min/max.
+- While Curse is active, normal score gain is frozen: no points are earned from distance, coins, or money bags.
+- Special score mechanics such as `Cracked Coin` and `Question Coin` still work during Curse.
+- Added a HUD timer for active Curse similar to the jump timers.
+- Why: this creates a readable score-pressure debuff without adding control confusion or stopping the run itself.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.

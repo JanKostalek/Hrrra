@@ -1,8 +1,8 @@
 Add-Type -AssemblyName System.Drawing
 
 $sourcePath = Join-Path $PSScriptRoot "..\\assets\\gamebackground.jpg"
-$skyPath = Join-Path $PSScriptRoot "..\\assets\\gamebackground_sky_tile.png"
-$foregroundPath = Join-Path $PSScriptRoot "..\\assets\\gamebackground_foreground_tile.png"
+$skyPath = Join-Path $PSScriptRoot "..\\assets\\level1\\background_sky_tile.png"
+$foregroundPath = Join-Path $PSScriptRoot "..\\assets\\level1\\background_foreground_tile.png"
 $outputScale = 0.5
 $seamWidth = 16
 
