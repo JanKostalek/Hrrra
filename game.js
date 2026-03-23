@@ -217,7 +217,8 @@ Main tuning points:
     Skin04: {
       walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN04,
       jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN04,
-      usesFullFrameSourceRects: true
+      usesFullFrameSourceRects: true,
+      renderScale: 1.5
     }
   };
   for (var sceneArtLevel = 1; sceneArtLevel <= LEVEL_COUNT; sceneArtLevel += 1) {
@@ -338,6 +339,22 @@ Main tuning points:
       return sceneArt.heroSkins[skinName];
     }
     return sceneArt.heroSkins.Skin01 || { heroFrames: [], heroJumpFrames: [] };
+  }
+
+  function getHeroRenderMetrics(scaleMultiplier) {
+    var skinConfig = getHeroSkinFrameConfig(getSelectedHeroSkinName());
+    var renderScale = skinConfig && skinConfig.renderScale ? skinConfig.renderScale : 1;
+    if (typeof scaleMultiplier === "number") {
+      renderScale *= scaleMultiplier;
+    }
+    var drawWidth = player.width * renderScale;
+    var drawHeight = player.height * renderScale;
+    return {
+      drawWidth: drawWidth,
+      drawHeight: drawHeight,
+      drawX: -drawWidth * 0.5,
+      drawY: player.height * 0.5 - drawHeight
+    };
   }
 
   function getHeroWalkFrameSourceRects() {
@@ -3509,10 +3526,11 @@ Main tuning points:
       return;
     }
 
+    var heroRenderMetrics = getHeroRenderMetrics();
     state.running = false;
     state.teleportFinishAnimActive = true;
     state.teleportFinishAnimElapsed = 0;
-    state.teleportFinishAnimHeroStartSize = player.width;
+    state.teleportFinishAnimHeroStartSize = heroRenderMetrics.drawHeight;
     state.teleportFinishAnimHeroCenterX = player.x + player.width * 0.5;
     state.teleportFinishAnimHeroCenterY = player.y + player.height * 0.5;
     state.projectile.active = false;
@@ -5184,6 +5202,7 @@ Main tuning points:
     ctx.save();
     ctx.translate(cx, cy);
     if (heroFrame) {
+      var heroRenderMetrics = getHeroRenderMetrics();
       var heroSourceRect = getHeroFrameSourceRect(heroFrame);
       ctx.drawImage(
         heroFrame.image,
@@ -5191,10 +5210,10 @@ Main tuning points:
         heroSourceRect.y,
         heroSourceRect.w,
         heroSourceRect.h,
-        -player.width * 0.5,
-        -player.height * 0.5,
-        player.width,
-        player.height
+        heroRenderMetrics.drawX,
+        heroRenderMetrics.drawY,
+        heroRenderMetrics.drawWidth,
+        heroRenderMetrics.drawHeight
       );
     } else {
       ctx.fillStyle = "#0077ff";
@@ -5236,6 +5255,7 @@ Main tuning points:
       ctx.translate(centerX, centerY);
       ctx.globalAlpha = alpha;
       if (heroFrame) {
+        var teleportRenderMetrics = getHeroRenderMetrics(currentSize / Math.max(1, player.height));
         var heroSourceRect = getHeroFrameSourceRect(heroFrame);
         ctx.drawImage(
           heroFrame.image,
@@ -5243,10 +5263,10 @@ Main tuning points:
           heroSourceRect.y,
           heroSourceRect.w,
           heroSourceRect.h,
-          -currentSize * 0.5,
-          -currentSize * 0.5,
-          currentSize,
-          currentSize
+          teleportRenderMetrics.drawX,
+          teleportRenderMetrics.drawY,
+          teleportRenderMetrics.drawWidth,
+          teleportRenderMetrics.drawHeight
         );
       } else {
         ctx.fillStyle = "#0077ff";

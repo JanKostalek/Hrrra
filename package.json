@@ -8,6 +8,7 @@
     "cap:sync": "npm run copy:web && npx cap sync",
     "android": "npm run cap:sync && npx cap open android",
     "android:run": "npm run cap:sync && npx cap run android",
+    "bscript": "powershell -ExecutionPolicy Bypass -File scripts/bscript.ps1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

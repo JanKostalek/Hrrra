@@ -336,6 +336,12 @@ Rules:
 - Updated `scripts/prepare-skin04.ps1` so future Skin04 regenerations keep this enlarged final pass instead of falling back to the smaller framing.
 - Why: the requested `+33%` visual increase cannot fit literally inside a fixed `160x160` canvas without clipping, so the frames were enlarged to the practical maximum that still preserves a usable in-game silhouette.
 
+### 2026-03-23 - Increased Skin04 in-game render scale by 50 percent without changing PNG size
+- Updated `game.js` so `Skin04` now renders at `1.5x` the normal in-game hero size while still using the same `160x160` PNG files.
+- Kept `Skin01`, `Skin02`, and `Skin03` unchanged.
+- Bottom alignment stays anchored to the platform baseline so the larger `Skin04` still stands correctly on platforms instead of floating upward.
+- The teleport shrink effect was also updated to start from the larger rendered `Skin04` size.
+
 ### Usage going forward
 - When we change gameplay, rules, hazards, tuning behavior, scoring, controls, or difficulty behavior, also update `MECHANICS.md`.
 - When we change Android packaging, ads, privacy, store assets, workflow, branching, UI structure, visuals, or project organization, update `CHANGES.md`.
@@ -343,3 +349,5 @@ Rules:
 - When the user sends a shell command such as `npm.cmd run cap:sync`, execute it directly in the terminal instead of echoing it back as assistant text.
 - The shorthand `proved askript` means: run the agreed Android sync/testing shell step directly in terminal, typically `npm.cmd run cap:sync`, unless the current context clearly points to a different Android-related script.
 - Default workflow from now on: after project changes, automatically run `askript` (`npm.cmd run cap:sync`) unless the user explicitly says not to.
+- Added `bscript` as a dedicated GitHub publishing helper: `npm run bscript` runs `scripts/bscript.ps1` and force-pushes the current checked out branch HEAD to `origin/main` with `--force-with-lease`.
+- Safety rule for `bscript`: do not run it automatically after edits; only run it when the user explicitly says `run bscript`.
