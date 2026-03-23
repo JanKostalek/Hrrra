@@ -67,6 +67,39 @@
     return overlap >= player.width * 0.1;
   };
 
+  Physics.prototype.findContinuousSupport = function (player, world) {
+    var epsilonY = 2;
+    var playerBottom = player.bottom();
+
+    for (var i = 0; i < world.platforms.length; i += 1) {
+      var platform = world.platforms[i];
+      if (!this.hasLandingOverlap(player, platform)) {
+        continue;
+      }
+      if (Math.abs(platform.y - playerBottom) <= epsilonY) {
+        return {
+          type: "platform",
+          ref: platform
+        };
+      }
+    }
+
+    for (var j = 0; j < world.elevators.length; j += 1) {
+      var elevator = world.elevators[j];
+      if (!this.hasLandingOverlap(player, elevator)) {
+        continue;
+      }
+      if (Math.abs(elevator.y - playerBottom) <= epsilonY) {
+        return {
+          type: "elevator",
+          ref: elevator
+        };
+      }
+    }
+
+    return null;
+  };
+
   Physics.prototype.updatePlayer = function (player, world, input, dt, scrollSpeed) {
     var previousBottom = player.bottom();
     var previousTop = player.y;
@@ -80,7 +113,7 @@
 
     this.resolveCeilingCollisions(player, world, previousTop);
     this.resolveLanding(player, world, previousBottom);
-    this.enforceSupportRule(player);
+    this.enforceSupportRule(player, world);
   };
 
   Physics.prototype.resolveCeilingCollisions = function (player, world, previousTop) {
@@ -229,7 +262,7 @@
     }
   };
 
-  Physics.prototype.enforceSupportRule = function (player) {
+  Physics.prototype.enforceSupportRule = function (player, world) {
     if (!player.isGrounded || !player.supportRef) {
       return;
     }
@@ -238,6 +271,16 @@
     var supported = this.hasRequiredOverlap(player, support);
 
     if (!supported) {
+      var continuousSupport = this.findContinuousSupport(player, world);
+      if (continuousSupport) {
+        player.isGrounded = true;
+        player.supportType = continuousSupport.type;
+        player.supportRef = continuousSupport.ref;
+        player.y = continuousSupport.ref.y - player.height;
+        player.velocityY = 0;
+        return;
+      }
+
       player.isGrounded = false;
       player.supportType = null;
       player.supportRef = null;

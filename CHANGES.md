@@ -342,6 +342,18 @@ Rules:
 - Bottom alignment stays anchored to the platform baseline so the larger `Skin04` still stands correctly on platforms instead of floating upward.
 - The teleport shrink effect was also updated to start from the larger rendered `Skin04` size.
 
+### 2026-03-23 - Prepared Skin05 from the new run sheet
+- Added `Skin05` to the selectable skin list in `game.js`.
+- Created `scripts/prepare-skin05.ps1` to build `Skin05` from the available run source frames in `assets/skins/Skin05`.
+- The script also derives a first usable jump set from those run poses so `Skin05` can already be used in-game before dedicated jump art is delivered.
+- Generated files in `assets/skins/Skin05` now include:
+  - `run-01..06.png`
+  - `hero-walk-01..06.png`
+  - `jump-01..06.png`
+  - `hero-jump-01..06.png`
+- Follow-up fix: reduced the derived jump frame height and lowered the clipped poses so `Skin05` jump frames no longer cut off the top of the head.
+- Follow-up adjustment: rebuilt `Skin05` after one extra run frame was removed from the source sequence, so the skin now uses the corrected 6-frame run loop and matching 6-frame derived jump set.
+
 ### Usage going forward
 - When we change gameplay, rules, hazards, tuning behavior, scoring, controls, or difficulty behavior, also update `MECHANICS.md`.
 - When we change Android packaging, ads, privacy, store assets, workflow, branching, UI structure, visuals, or project organization, update `CHANGES.md`.
