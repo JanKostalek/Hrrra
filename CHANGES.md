@@ -402,3 +402,23 @@ Rules:
 - Renamed the active skin folder from `assets/skins/Skin04` to `assets/skins/Skin03` and updated the in-game dropdown/configuration to use `Skin03`.
 - Renamed the related helper scripts from `skin04` to `skin03` so future extraction, cleanup, normalization, and prepare steps follow the new slot naming consistently.
 - Added a compatibility mapping in `game.js` so any older saved `selectedSkin = Skin04` automatically loads as `Skin03`.
+
+### 2026-03-25 - Cleaned unused root source files from Skin02
+- Removed the unused root-level `run-*`, `jump-*`, and original GIF files from `assets/skins/Skin02`.
+- Kept the actively used in-game `hero-*` PNGs and the helper subfolders `Walk`, `Jump`, and `all_frames`.
+
+### 2026-03-25 - Added unlockable skin discovery flow
+- Moved live skin selection out of admin and onto the pre-run briefing screen with clickable skin cards for `Skin01`, `Skin02`, and `Skin03`.
+- Added separate player-progress localStorage for unlocked skins and chosen skin so cosmetic progression is no longer mixed into admin config/export data.
+- Added a once-per-run skin discovery plan: before each new run the game now picks one still-locked skin and one target level (`Level 3` or `Level 4`), then spawns that skin as a collectible coin-style pickup on the next lowest elevator after a random score threshold inside that level.
+- Locked skins now render as silhouette-style cards in the briefing UI, unlocked skins render full color, and newly unlocked skins persist between runs.
+
+### 2026-03-25 - Restored admin skin selection as a test override
+- Returned the global admin `Skin` dropdown so skins can still be force-selected for testing exactly like before.
+- The admin-selected skin now acts only as the active render override; it does not unlock skins and does not change the collectible skin progression logic.
+- Unlockable skin discovery in Levels 3 and 4 remains based only on the separate player-progress storage, even if the same skin is temporarily forced from admin.
+
+### 2026-03-25 - Preserved timed jump pickups across level transitions
+- Timed `Double Jump` / `Tripple Jump` effects now carry into the next level with `2x` the remaining time.
+- The carried timer stays paused on the new level's starting platform and only begins ticking after the first jump made in that level.
+- Tripple Jump carry-over also preserves its stored fallback Double Jump time so the full upgrade chain continues correctly after the transition.

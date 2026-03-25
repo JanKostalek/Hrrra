@@ -67,6 +67,8 @@ Main tuning points:
   var preRunDetailLevelEl = document.getElementById("pre-run-detail-level");
   var preRunDetailLifeRulesEl = document.getElementById("pre-run-detail-life-rules");
   var preRunLevelGoalCopyEl = document.getElementById("pre-run-level-goal-copy");
+  var preRunSkinGridEl = document.getElementById("pre-run-skin-grid");
+  var preRunSkinCopyEl = document.getElementById("pre-run-skin-copy");
   var briefTopDeathZoneRuleEl = document.getElementById("brief-top-death-zone-rule");
   var briefProjectilesRuleEl = document.getElementById("brief-projectiles-rule");
   var briefBlockerRuleEl = document.getElementById("brief-blocker-rule");
@@ -108,6 +110,7 @@ Main tuning points:
   var LEGACY_ADMIN_STORAGE_KEY_PREFIX = "hrrra_admin_config_v2_";
   var GLOBAL_ADMIN_STORAGE_KEY = "hrrra_admin_global_v1";
   var MAX_SCORE_STORAGE_KEY_PREFIX = "hrrra_max_score_v2_";
+  var PLAYER_SKIN_PROGRESS_STORAGE_KEY = "hrrra_player_skin_progress_v1";
   var LEVEL_COUNT = 5;
   var configDefaultsSnapshot = {};
   var modeTuning = window.HrrraModeTuning || {};
@@ -132,6 +135,7 @@ Main tuning points:
     moneybag: null,
     heart: null,
     heroSkins: {},
+    heroSkinIcons: {},
     rocket1: null,
     rocket2: null,
     teleportFrames: [],
@@ -198,8 +202,26 @@ Main tuning points:
   var SKIN_OPTIONS = [
     { value: "Skin01", label: "Skin01" },
     { value: "Skin02", label: "Skin02" },
-    { value: "Skin03", label: "Skin03" },
+    { value: "Skin03", label: "Skin03" }
   ];
+  var DISCOVERABLE_SKIN_OPTIONS = ["Skin02", "Skin03"];
+  var SKIN_UI_CONFIGS = {
+    Skin01: {
+      label: "Skin01",
+      previewAssetPath: "assets/skins/Skin01/hero-walk-01.png",
+      pickupAssetPath: "assets/skins/Skin01/hero-walk-01.png"
+    },
+    Skin02: {
+      label: "Skin02",
+      previewAssetPath: "assets/skins/Skin02/hero-icon.png",
+      pickupAssetPath: "assets/skins/Skin02/hero-icon.png"
+    },
+    Skin03: {
+      label: "Skin03",
+      previewAssetPath: "assets/skins/Skin03/hero-icon.png",
+      pickupAssetPath: "assets/skins/Skin03/hero-icon.png"
+    }
+  };
   for (var skinOptionIndex = 0; skinOptionIndex < SKIN_OPTIONS.length; skinOptionIndex += 1) {
     sceneArt.heroSkins[SKIN_OPTIONS[skinOptionIndex].value] = {
       heroFrames: [],
@@ -328,6 +350,219 @@ Main tuning points:
       }
     }
     return "Skin01";
+  }
+
+  function createDefaultSkinProgress() {
+    return {
+      unlockedSkins: {
+        Skin01: true,
+        Skin02: false,
+        Skin03: false
+      },
+      selectedSkin: "Skin01"
+    };
+  }
+
+  function cloneSkinUnlocks(source) {
+    var defaults = createDefaultSkinProgress().unlockedSkins;
+    var clone = {};
+    for (var i = 0; i < SKIN_OPTIONS.length; i += 1) {
+      var skinName = SKIN_OPTIONS[i].value;
+      clone[skinName] = skinName === "Skin01";
+      if (source && Object.prototype.hasOwnProperty.call(source, skinName)) {
+        clone[skinName] = Boolean(source[skinName]);
+      } else if (Object.prototype.hasOwnProperty.call(defaults, skinName)) {
+        clone[skinName] = Boolean(defaults[skinName]);
+      }
+    }
+    clone.Skin01 = true;
+    return clone;
+  }
+
+  function readPlayerSkinProgress() {
+    var fallback = createDefaultSkinProgress();
+    try {
+      var raw = window.localStorage.getItem(PLAYER_SKIN_PROGRESS_STORAGE_KEY);
+      if (!raw) {
+        return fallback;
+      }
+      var parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object") {
+        return fallback;
+      }
+      return {
+        unlockedSkins: cloneSkinUnlocks(parsed.unlockedSkins),
+        selectedSkin: normalizeSkinName(parsed.selectedSkin)
+      };
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function writePlayerSkinProgress() {
+    try {
+      window.localStorage.setItem(
+        PLAYER_SKIN_PROGRESS_STORAGE_KEY,
+        JSON.stringify({
+          unlockedSkins: cloneSkinUnlocks(state.unlockedSkins),
+          selectedSkin: normalizeOwnedSkinName(C.selectedSkin)
+        })
+      );
+    } catch (error) {
+      // ignore broken localStorage data
+    }
+  }
+
+  function isSkinUnlocked(skinName) {
+    var normalized = normalizeSkinName(skinName);
+    if (normalized === "Skin01") {
+      return true;
+    }
+    return Boolean(state.unlockedSkins[normalized]);
+  }
+
+  function normalizeOwnedSkinName(value) {
+    var normalized = normalizeSkinName(value);
+    return isSkinUnlocked(normalized) ? normalized : "Skin01";
+  }
+
+  function loadPlayerSkinProgress() {
+    var progress = readPlayerSkinProgress();
+    state.unlockedSkins = cloneSkinUnlocks(progress.unlockedSkins);
+    C.selectedSkin = normalizeOwnedSkinName(progress.selectedSkin);
+    writePlayerSkinProgress();
+  }
+
+  function unlockSkin(skinName) {
+    var normalized = normalizeSkinName(skinName);
+    if (normalized === "Skin01" || isSkinUnlocked(normalized)) {
+      return false;
+    }
+    state.unlockedSkins[normalized] = true;
+    state.skinUnlockToastText = normalized + " unlocked";
+    state.skinUnlockToastTimeLeft = 3;
+    writePlayerSkinProgress();
+    refreshPreRunBriefValues();
+    return true;
+  }
+
+  function setSelectedSkinFromUi(skinName) {
+    var nextSkin = normalizeOwnedSkinName(skinName);
+    if (C.selectedSkin === nextSkin) {
+      return;
+    }
+    C.selectedSkin = nextSkin;
+    writePlayerSkinProgress();
+    refreshPreRunSkinSelection();
+  }
+
+  function getSkinUiConfig(skinName) {
+    return SKIN_UI_CONFIGS[normalizeSkinName(skinName)] || SKIN_UI_CONFIGS.Skin01;
+  }
+
+  function getSkinPreviewAssetPath(skinName) {
+    return getSkinUiConfig(skinName).previewAssetPath;
+  }
+
+  function getSkinPickupIconAssetPath(skinName) {
+    return getSkinUiConfig(skinName).pickupAssetPath;
+  }
+
+  function getUnopenedDiscoverableSkins() {
+    var skins = [];
+    for (var i = 0; i < DISCOVERABLE_SKIN_OPTIONS.length; i += 1) {
+      var skinName = DISCOVERABLE_SKIN_OPTIONS[i];
+      if (!isSkinUnlocked(skinName)) {
+        skins.push(skinName);
+      }
+    }
+    return skins;
+  }
+
+  function getSkinDiscoveryScoreRange(level, mode, difficulty) {
+    var currentConfig = buildModeConfig(level, mode, difficulty);
+    var upperBound = Math.max(0, Math.floor(currentConfig.finishScore || 0));
+    var lowerBound = 0;
+    if (level > 1) {
+      var previousConfig = buildModeConfig(level - 1, mode, difficulty);
+      lowerBound = Math.max(0, Math.floor(previousConfig.finishScore || 0));
+    }
+    if (upperBound <= lowerBound + 1) {
+      return null;
+    }
+    return {
+      min: lowerBound,
+      max: upperBound
+    };
+  }
+
+  function pickSkinDiscoveryTriggerScore(range) {
+    if (!range) {
+      return 0;
+    }
+    var width = Math.max(1, range.max - range.min);
+    var minMargin = Math.min(Math.floor(width * 0.2), Math.max(1, width - 1));
+    var maxMargin = Math.min(Math.floor(width * 0.15), Math.max(1, width - 1));
+    var minScore = range.min + minMargin;
+    var maxScore = range.max - maxMargin;
+    if (maxScore <= minScore) {
+      minScore = range.min + 1;
+      maxScore = range.max - 1;
+    }
+    if (maxScore <= minScore) {
+      return Math.max(range.min + 1, Math.min(range.max - 1, range.min + Math.floor(width * 0.5)));
+    }
+    return Math.floor(randomRange(minScore, maxScore));
+  }
+
+  function buildSkinDiscoveryPlan(mode, difficulty) {
+    var unopenedSkins = getUnopenedDiscoverableSkins();
+    if (!unopenedSkins.length) {
+      return {
+        active: false,
+        skinName: "",
+        level: 0,
+        triggerScore: 0,
+        assigned: false
+      };
+    }
+
+    var targetSkin = unopenedSkins.length === 1
+      ? unopenedSkins[0]
+      : unopenedSkins[Math.floor(Math.random() * unopenedSkins.length)];
+    var candidateLevels = [3, 4];
+    var validCandidates = [];
+
+    for (var i = 0; i < candidateLevels.length; i += 1) {
+      var targetLevel = candidateLevels[i];
+      var scoreRange = getSkinDiscoveryScoreRange(targetLevel, mode, difficulty);
+      if (!scoreRange) {
+        continue;
+      }
+      validCandidates.push({
+        level: targetLevel,
+        triggerScore: pickSkinDiscoveryTriggerScore(scoreRange)
+      });
+    }
+
+    if (!validCandidates.length) {
+      return {
+        active: false,
+        skinName: "",
+        level: 0,
+        triggerScore: 0,
+        assigned: false
+      };
+    }
+
+    var chosenCandidate = validCandidates[Math.floor(Math.random() * validCandidates.length)];
+    return {
+      active: true,
+      skinName: targetSkin,
+      level: chosenCandidate.level,
+      triggerScore: chosenCandidate.triggerScore,
+      assigned: false
+    };
   }
 
   function getHeroSkinAssetPath(skinName, fileName) {
@@ -998,6 +1233,20 @@ Main tuning points:
     currentLevel: 1,
     gameMode: 2,
     gameDifficulty: "easy",
+    unlockedSkins: {
+      Skin01: true,
+      Skin02: false,
+      Skin03: false
+    },
+    skinDiscoveryPlan: {
+      active: false,
+      skinName: "",
+      level: 0,
+      triggerScore: 0,
+      assigned: false
+    },
+    skinUnlockToastTimeLeft: 0,
+    skinUnlockToastText: "",
     score: 0,
     scoreCarryOver: 0,
     bonusScore: 0,
@@ -1018,6 +1267,10 @@ Main tuning points:
     doubleJumpTimeLeft: 0,
     tripleJumpTimeLeft: 0,
     storedDoubleJumpTimeLeft: 0,
+    pendingDoubleJumpTimeLeft: 0,
+    pendingTripleJumpTimeLeft: 0,
+    pendingStoredDoubleJumpTimeLeft: 0,
+    pendingJumpTimerStart: false,
     doubleJumpExpireFlashTimeLeft: 0,
     doubleJumpRespawnTimer: 0,
     firstDoubleJumpSpawned: false,
@@ -1148,6 +1401,11 @@ Main tuning points:
       active: false,
       x: 0,
       width: 96
+    },
+    skinPickupIcon: {
+      active: false,
+      size: C.playerSize * 0.82,
+      skinName: ""
     },
     playerRotationRad: 0,
     playerRotationLockRad: 0,
@@ -1378,6 +1636,7 @@ Main tuning points:
     });
     applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
     loadGlobalAdminConfig();
+    loadPlayerSkinProgress();
     applyVisualThemeToUi();
     sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
     openPreRunScreen();
@@ -1446,6 +1705,7 @@ Main tuning points:
       sceneArt.heart = image;
     });
     primeHeroSkins();
+    primeHeroSkinIcons();
     loadSceneArtAsset(ROCKET1_ART_PATH, function (image) {
       sceneArt.rocket1 = image;
     });
@@ -1471,6 +1731,20 @@ Main tuning points:
   function primeHeroSkins() {
     for (var i = 0; i < SKIN_OPTIONS.length; i += 1) {
       primeHeroSkin(SKIN_OPTIONS[i].value);
+    }
+  }
+
+  function primeHeroSkinIcons() {
+    for (var i = 0; i < SKIN_OPTIONS.length; i += 1) {
+      (function (skinName) {
+        loadSceneArtAsset(
+          getSkinPickupIconAssetPath(skinName),
+          function (image) {
+            sceneArt.heroSkinIcons[skinName] = image;
+          },
+          function () {}
+        );
+      })(SKIN_OPTIONS[i].value);
     }
   }
 
@@ -1735,6 +2009,70 @@ Main tuning points:
     ].join("");
   }
 
+  function getSkinSelectionHintText() {
+    var unopenedSkins = getUnopenedDiscoverableSkins();
+    if (!unopenedSkins.length) {
+      return "All available skins are unlocked for this build.";
+    }
+
+    if (state.skinDiscoveryPlan.active && !state.skinDiscoveryPlan.assigned) {
+      return "This run can reveal " + state.skinDiscoveryPlan.skinName + " in Level " + state.skinDiscoveryPlan.level + ".";
+    }
+
+    return "A hidden skin can appear once per run in Level 3 or 4.";
+  }
+
+  function refreshPreRunSkinSelection() {
+    if (!preRunSkinGridEl) {
+      return;
+    }
+
+    preRunSkinGridEl.innerHTML = "";
+    for (var i = 0; i < SKIN_OPTIONS.length; i += 1) {
+      var skinName = SKIN_OPTIONS[i].value;
+      var isUnlocked = isSkinUnlocked(skinName);
+      var skinBtn = document.createElement("button");
+      skinBtn.type = "button";
+      skinBtn.className = "pre-run-skin-btn";
+      skinBtn.dataset.skin = skinName;
+      if (!isUnlocked) {
+        skinBtn.classList.add("locked");
+        skinBtn.disabled = true;
+      }
+      if (C.selectedSkin === skinName && isUnlocked) {
+        skinBtn.classList.add("selected");
+      }
+
+      var preview = document.createElement("span");
+      preview.className = "pre-run-skin-preview";
+      var previewImg = document.createElement("img");
+      previewImg.src = getSkinPreviewAssetPath(skinName);
+      previewImg.alt = skinName;
+      preview.appendChild(previewImg);
+
+      var nameEl = document.createElement("span");
+      nameEl.className = "pre-run-skin-name";
+      nameEl.textContent = skinName;
+
+      var statusEl = document.createElement("span");
+      statusEl.className = "pre-run-skin-status";
+      if (isUnlocked) {
+        statusEl.textContent = C.selectedSkin === skinName ? "Selected" : "Unlocked";
+      } else {
+        statusEl.textContent = "Locked";
+      }
+
+      skinBtn.appendChild(preview);
+      skinBtn.appendChild(nameEl);
+      skinBtn.appendChild(statusEl);
+      preRunSkinGridEl.appendChild(skinBtn);
+    }
+
+    if (preRunSkinCopyEl) {
+      preRunSkinCopyEl.textContent = getSkinSelectionHintText();
+    }
+  }
+
   function refreshPreRunBriefValues() {
     if (briefMoneyBagEl) {
       briefMoneyBagEl.textContent = String(C.scoreBagBonus);
@@ -1781,6 +2119,7 @@ Main tuning points:
     if (preRunControlsCopyEl) {
       preRunControlsCopyEl.innerHTML = getModeControlsHtml();
     }
+    refreshPreRunSkinSelection();
   }
 
   function renderPreRunScreen() {
@@ -1801,6 +2140,7 @@ Main tuning points:
   function loadCurrentLevelConfig() {
     applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
     loadGlobalAdminConfig();
+    C.selectedSkin = normalizeOwnedSkinName(C.selectedSkin);
     sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
   }
 
@@ -1808,6 +2148,7 @@ Main tuning points:
     state.gameMode = mode === 1 ? 1 : 2;
     state.gameDifficulty = difficulty === "hard" ? "hard" : "easy";
     state.currentLevel = 1;
+    state.skinDiscoveryPlan = buildSkinDiscoveryPlan(state.gameMode, state.gameDifficulty);
     state.scoreCarryOver = 0;
     state.runTimeSeconds = 0;
     state.collectedCoins = 0;
@@ -1823,9 +2164,28 @@ Main tuning points:
   }
 
   function prepareLevelContinuation(level) {
+    var carryDoubleJumpTime = 0;
+    var carryTripleJumpTime = 0;
+    var carryStoredDoubleJumpTime = 0;
+
+    if (state.tripleJumpTimeLeft > 0) {
+      carryTripleJumpTime = state.tripleJumpTimeLeft * 2;
+      carryStoredDoubleJumpTime = state.storedDoubleJumpTimeLeft * 2;
+    } else if (state.doubleJumpTimeLeft > 0) {
+      carryDoubleJumpTime = state.doubleJumpTimeLeft * 2;
+    }
+
     state.currentLevel = Math.max(1, Math.min(LEVEL_COUNT, level));
     loadCurrentLevelConfig();
     restartGame(false);
+    state.pendingDoubleJumpTimeLeft = carryDoubleJumpTime;
+    state.pendingTripleJumpTimeLeft = carryTripleJumpTime;
+    state.pendingStoredDoubleJumpTimeLeft = carryStoredDoubleJumpTime;
+    state.pendingJumpTimerStart =
+      carryDoubleJumpTime > 0 || carryTripleJumpTime > 0 || carryStoredDoubleJumpTime > 0;
+    state.doubleJumpTimeLeft = carryDoubleJumpTime;
+    state.tripleJumpTimeLeft = carryTripleJumpTime;
+    state.storedDoubleJumpTimeLeft = carryStoredDoubleJumpTime;
     state.preRunStep = "details";
     state.preRunActive = true;
     if (preRunScreenEl) {
@@ -1945,6 +2305,15 @@ Main tuning points:
     if (preRunStartBtn) {
       preRunStartBtn.addEventListener("click", function () {
         closePreRunScreenAndStartRun();
+      });
+    }
+    if (preRunSkinGridEl) {
+      preRunSkinGridEl.addEventListener("click", function (event) {
+        var skinBtn = event.target && event.target.closest ? event.target.closest(".pre-run-skin-btn") : null;
+        if (!skinBtn || !skinBtn.dataset.skin || skinBtn.disabled) {
+          return;
+        }
+        setSelectedSkinFromUi(skinBtn.dataset.skin);
       });
     }
   }
@@ -2108,6 +2477,7 @@ Main tuning points:
             updateLivesUi();
           } else if (key === "selectedSkin") {
             C.selectedSkin = normalizeSkinName(nextValue);
+            refreshPreRunSkinSelection();
           }
         });
 
@@ -2668,6 +3038,8 @@ Main tuning points:
       state.livesLeft = Math.max(1, Math.min(state.livesLeft, state.maxLives));
     }
     state.lifeLossFlashTimeLeft = 0;
+    state.skinUnlockToastTimeLeft = 0;
+    state.skinUnlockToastText = "";
     state.speedPercent = 0;
     state.scrollSpeed = C.worldAutoRunSpeed;
     state.speedSlowMultiplier = 1;
@@ -2676,6 +3048,10 @@ Main tuning points:
     state.doubleJumpTimeLeft = 0;
     state.tripleJumpTimeLeft = 0;
     state.storedDoubleJumpTimeLeft = 0;
+    state.pendingDoubleJumpTimeLeft = 0;
+    state.pendingTripleJumpTimeLeft = 0;
+    state.pendingStoredDoubleJumpTimeLeft = 0;
+    state.pendingJumpTimerStart = false;
     state.doubleJumpExpireFlashTimeLeft = 0;
     state.doubleJumpRespawnTimer = 0;
     state.firstDoubleJumpSpawned = false;
@@ -2789,6 +3165,9 @@ Main tuning points:
     state.platformCoinIcon.x = 0;
     state.platformCoinIcon.y = 0;
     state.platformCoinIcon.platformId = -1;
+    state.skinPickupIcon.active = false;
+    state.skinPickupIcon.size = C.playerSize * C.coinIconSizeRatio;
+    state.skinPickupIcon.skinName = "";
     state.levelGoalReached = false;
     state.teleport.active = false;
     state.teleport.x = 0;
@@ -3379,11 +3758,15 @@ Main tuning points:
     if (state.lifeLossFlashTimeLeft > 0) {
       state.lifeLossFlashTimeLeft = Math.max(0, state.lifeLossFlashTimeLeft - dt);
     }
+    if (state.skinUnlockToastTimeLeft > 0) {
+      state.skinUnlockToastTimeLeft = Math.max(0, state.skinUnlockToastTimeLeft - dt);
+    }
     updateDoubleJumpEffect(dt);
     updateMagnetEffect(dt);
     updateCurseEffect(dt);
 
     world.updateElevators(dt);
+    updateSkinPickupLifetime();
     var scoreMultiplier = getSpeedMultiplierFromScore(state.score);
     state.scrollSpeed = C.worldAutoRunSpeed * scoreMultiplier * state.speedSlowMultiplier;
     var wasGroundedBeforePhysics = player.isGrounded;
@@ -3392,6 +3775,12 @@ Main tuning points:
     var jumpStarted = player.jumpsUsed > jumpsUsedBeforePhysics;
     var jumpStartedInAir = jumpStarted && !wasGroundedBeforePhysics;
     var landedThisFrame = !wasGroundedBeforePhysics && player.isGrounded;
+    if (jumpStarted && state.pendingJumpTimerStart) {
+      state.pendingJumpTimerStart = false;
+      state.pendingDoubleJumpTimeLeft = 0;
+      state.pendingTripleJumpTimeLeft = 0;
+      state.pendingStoredDoubleJumpTimeLeft = 0;
+    }
     updatePlayerRotation(dt, jumpStartedInAir);
     updateHeroJumpAnimation(dt, jumpStarted, landedThisFrame);
     updateRespawnPoint();
@@ -3401,6 +3790,7 @@ Main tuning points:
       world.generateAhead(state.cameraX, C.canvasWidth);
     }
     world.cleanupBehind(state.cameraX);
+    syncSkinPickupStateFromWorld();
 
     var rawDistanceScore = Math.max(0, Math.floor((player.x - state.startX) * C.distanceScoreMultiplier));
     if (isCurseActive()) {
@@ -3414,6 +3804,7 @@ Main tuning points:
       writeMaxScoreToStorage(state.gameMode, state.gameDifficulty, sessionMaxScore);
     }
     state.speedPercent = Math.round((state.scrollSpeed / C.worldAutoRunSpeed - 1) * 100);
+    updateSkinDiscoverySpawner();
     updateLevelGoalTeleport();
     if (checkTeleportCollision()) {
       startTeleportFinishAnimation();
@@ -3429,6 +3820,7 @@ Main tuning points:
       checkLivePickup();
       checkShieldPickup();
       checkMagnetPickup();
+      checkSkinPickup();
       checkPlatformCoinPickup();
       checkElevatorCoinPickup();
 
@@ -3465,6 +3857,7 @@ Main tuning points:
     checkShieldPickup();
     updateMagnetSpawner(dt);
     checkMagnetPickup();
+    checkSkinPickup();
     updateBlockerSpawner(dt);
     if (checkBlockerCollision()) {
       if (consumeLife("blocker")) {
@@ -3653,6 +4046,7 @@ Main tuning points:
     drawBlockerIcon();
     drawProjectile();
     drawProjectile2();
+    drawSkinPickupIcon();
     drawPlatformCoinIcon();
     drawElevatorCoins();
     drawPlayerStatusEffects();
@@ -3726,6 +4120,7 @@ Main tuning points:
     world.elevators = world.elevators.filter(function (elevator) {
       return elevator.x + elevator.width <= teleportLeft;
     });
+    syncSkinPickupStateFromWorld();
 
     world.cursorX = Math.min(world.cursorX, teleportLeft);
 
@@ -3792,6 +4187,16 @@ Main tuning points:
 
   function updateDoubleJumpEffect(dt) {
     var isBaseDoubleActive = state.gameMode === 2;
+    var jumpTimersPaused = state.pendingJumpTimerStart;
+
+    if (jumpTimersPaused) {
+      var hasPendingTripleJump = state.tripleJumpTimeLeft > 0;
+      var hasPendingDoubleJump =
+        isBaseDoubleActive || state.doubleJumpTimeLeft > 0 || hasPendingTripleJump;
+      player.hasDoubleJump = hasPendingDoubleJump;
+      player.maxJumps = hasPendingTripleJump ? 3 : (hasPendingDoubleJump ? 2 : 1);
+      return;
+    }
 
     if (state.tripleJumpTimeLeft > 0) {
       state.tripleJumpTimeLeft = Math.max(0, state.tripleJumpTimeLeft - dt);
@@ -4711,6 +5116,133 @@ Main tuning points:
     }
 
     return true;
+  }
+
+  function findNearestBottomElevatorAhead() {
+    var best = null;
+    var bestDistance = Infinity;
+    for (var i = 0; i < world.elevators.length; i += 1) {
+      var elevator = world.elevators[i];
+      if (elevator.skinPickupActive) {
+        continue;
+      }
+      if (elevator.x + elevator.width < player.x + 12) {
+        continue;
+      }
+      var isAtBottom = elevator.wrappedThisFrame || elevator.y >= elevator.maxY - 8;
+      if (!isAtBottom) {
+        continue;
+      }
+      var distance = elevator.x - player.x;
+      if (distance < bestDistance) {
+        best = elevator;
+        bestDistance = distance;
+      }
+    }
+    return best;
+  }
+
+  function tryAssignSkinDiscoveryPickup() {
+    if (!state.skinDiscoveryPlan.active || state.skinDiscoveryPlan.assigned) {
+      return false;
+    }
+    if (state.currentLevel !== state.skinDiscoveryPlan.level) {
+      return false;
+    }
+    if (state.score < state.skinDiscoveryPlan.triggerScore) {
+      return false;
+    }
+
+    var elevator = findNearestBottomElevatorAhead();
+    if (!elevator) {
+      return false;
+    }
+
+    elevator.skinPickupActive = true;
+    elevator.skinPickupSkinName = state.skinDiscoveryPlan.skinName;
+    if (typeof elevator.consumeCoin === "function") {
+      elevator.consumeCoin();
+    } else {
+      elevator.coinActive = false;
+    }
+    state.skinPickupIcon.active = true;
+    state.skinPickupIcon.skinName = state.skinDiscoveryPlan.skinName;
+    state.skinDiscoveryPlan.assigned = true;
+    return true;
+  }
+
+  function updateSkinDiscoverySpawner() {
+    if (!state.skinDiscoveryPlan.active || state.skinDiscoveryPlan.assigned) {
+      return;
+    }
+    if (state.currentLevel > state.skinDiscoveryPlan.level) {
+      state.skinDiscoveryPlan.assigned = true;
+      return;
+    }
+    tryAssignSkinDiscoveryPickup();
+  }
+
+  function checkSkinPickup() {
+    if (!state.skinPickupIcon.active) {
+      return;
+    }
+
+    var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
+    var size = state.skinPickupIcon.size;
+    for (var i = 0; i < world.elevators.length; i += 1) {
+      var elevator = world.elevators[i];
+      if (!elevator.skinPickupActive) {
+        continue;
+      }
+      var iconX = elevator.x + elevator.width * 0.5 - size * 0.5;
+      var iconY = elevator.y - size;
+      var iconRect = { x: iconX, y: iconY, w: size, h: size };
+      if (!isRectIntersect(playerRect, iconRect)) {
+        continue;
+      }
+
+      unlockSkin(elevator.skinPickupSkinName);
+      elevator.skinPickupActive = false;
+      elevator.skinPickupSkinName = "";
+      state.skinPickupIcon.active = false;
+      state.skinPickupIcon.skinName = "";
+      return;
+    }
+  }
+
+  function syncSkinPickupStateFromWorld() {
+    if (!state.skinPickupIcon.active) {
+      return;
+    }
+
+    for (var i = 0; i < world.elevators.length; i += 1) {
+      if (world.elevators[i].skinPickupActive) {
+        return;
+      }
+    }
+
+    state.skinPickupIcon.active = false;
+    state.skinPickupIcon.skinName = "";
+  }
+
+  function updateSkinPickupLifetime() {
+    if (!state.skinPickupIcon.active) {
+      return;
+    }
+
+    for (var i = 0; i < world.elevators.length; i += 1) {
+      var elevator = world.elevators[i];
+      if (!elevator.skinPickupActive) {
+        continue;
+      }
+      if (!elevator.wrappedThisFrame) {
+        continue;
+      }
+      elevator.skinPickupActive = false;
+      elevator.skinPickupSkinName = "";
+    }
+
+    syncSkinPickupStateFromWorld();
   }
 
   function checkDoubleJumpIconPickup() {
@@ -6107,6 +6639,38 @@ Main tuning points:
     ctx.textAlign = "left";
   }
 
+  function drawSkinCoinSymbol(screenX, screenY, size, skinName) {
+    var iconImage = sceneArt.heroSkinIcons[normalizeSkinName(skinName)] || null;
+    drawCoinSymbol(screenX, screenY, size);
+
+    if (!iconImage) {
+      return;
+    }
+
+    var iconSize = size * 0.68;
+    var iconX = screenX + (size - iconSize) * 0.5;
+    var iconY = screenY + (size - iconSize) * 0.5;
+    ctx.drawImage(iconImage, iconX, iconY, iconSize, iconSize);
+  }
+
+  function drawSkinPickupIcon() {
+    if (!state.skinPickupIcon.active) {
+      return;
+    }
+
+    var size = state.skinPickupIcon.size;
+    for (var i = 0; i < world.elevators.length; i += 1) {
+      var elevator = world.elevators[i];
+      if (!elevator.skinPickupActive) {
+        continue;
+      }
+
+      var x = worldToScreenX(elevator.x + elevator.width * 0.5 - size * 0.5);
+      var y = elevator.y - size;
+      drawSkinCoinSymbol(x, y, size, elevator.skinPickupSkinName);
+    }
+  }
+
   function drawPlatformCoinIcon() {
     var coin = state.platformCoinIcon;
     if (!coin.active) {
@@ -6167,6 +6731,15 @@ Main tuning points:
       ctx.fillText("Magnet: " + state.magnetTimeLeft.toFixed(1) + "s", canvas.width - 18, 90);
     }
     ctx.textAlign = "left";
+
+    if (state.skinUnlockToastTimeLeft > 0 && state.skinUnlockToastText) {
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.font = "bold 22px Arial";
+      ctx.fillStyle = "#08293a";
+      ctx.fillText(state.skinUnlockToastText, canvas.width * 0.5, C.topDeathLineY + 34);
+      ctx.restore();
+    }
   }
 
   init();

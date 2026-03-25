@@ -1104,6 +1104,19 @@ Every gameplay-related change must be added here with date and short reason.
 - Added a HUD timer for active Curse similar to the jump timers.
 - Why: this creates a readable score-pressure debuff without adding control confusion or stopping the run itself.
 
+### v0.1.179 - Added skin discovery and unlock progression (2026-03-25)
+- Players now start with only `Skin01` unlocked and can choose unlocked skins directly on the pre-run briefing screen instead of in admin.
+- Each new run randomly schedules one still-locked skin (`Skin02` or `Skin03`) to appear once in either `Level 3` or `Level 4` at a random score threshold inside that level's score range.
+- The skin pickup appears only on the lowest elevator, rides upward with it, and disappears for the rest of the run whether the player collects it or misses it.
+- Unlocking a skin makes it permanently selectable in later runs; locked skins are shown as silhouette/outline cards until found.
+- Why: turns extra skins into collectible progression rewards instead of pure out-of-game settings.
+
+### v0.1.180 - Carried double/triple jump time now continues into the next level (2026-03-25)
+- If a level ends while timed `Double Jump` or `Tripple Jump` is still active, the remaining time now carries into the next level doubled.
+- When `Tripple Jump` carries over, its stored fallback `Double Jump` time also carries over doubled.
+- The carried timer stays frozen on the long starting platform of the new level and only starts counting down after the player's first real jump in that level.
+- Why: level transitions should preserve jump powerups more generously without wasting them during the briefing/start runway.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.
