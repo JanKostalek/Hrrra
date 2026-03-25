@@ -377,6 +377,12 @@ Rules:
 - Follow-up update: after removing the last selected jump source frame, `Skin07` was rebuilt to use 7 jump frames instead of 8, and the in-game skin configuration was reduced to the same 7-frame jump sequence.
 - Follow-up update: rewired `prepare-skin07` through Pillow so each selected `Skin07` frame is cropped by real alpha bounds, scaled up inside the same `160x160` canvas, and bottom-aligned; this makes the sprite visibly larger and removes the floating-above-platform look.
 
+### 2026-03-25 - Reduced the active skin roster to Skin01, Skin04, and Skin07
+- Removed `Skin02`, `Skin03`, `Skin05`, `skin06`, and the unused loose skin source files from `assets/skins`, leaving only the three approved active skins.
+- Removed the old `prepare-skin02.ps1`, `prepare-skin03.ps1`, and `prepare-skin05.ps1` helper scripts so no dead skin-generation tooling remains in the repo.
+- Simplified `game.js` skin selection/configuration to expose only `Skin01`, `Skin04`, and `Skin07`, and renamed the shared full-frame source-rect constant so it no longer references a deleted skin slot.
+- Follow-up tweak: increased the in-game render scale of `Skin07` by 25% so that skin reads larger against the gameplay world without changing the PNG files themselves.
+
 ### Usage going forward
 - When we change gameplay, rules, hazards, tuning behavior, scoring, controls, or difficulty behavior, also update `MECHANICS.md`.
 - When we change Android packaging, ads, privacy, store assets, workflow, branching, UI structure, visuals, or project organization, update `CHANGES.md`.
