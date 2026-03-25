@@ -156,7 +156,7 @@ Main tuning points:
     "hero-jump-08.png",
     "hero-jump-09.png"
   ];
-  var HERO_WALK_FRAME_FILENAMES_SKIN04 = [
+  var HERO_WALK_FRAME_FILENAMES_SKIN03 = [
     "hero-walk-01.png",
     "hero-walk-02.png",
     "hero-walk-03.png",
@@ -166,7 +166,7 @@ Main tuning points:
     "hero-walk-07.png",
     "hero-walk-08.png"
   ];
-  var HERO_JUMP_FRAME_FILENAMES_SKIN04 = [
+  var HERO_JUMP_FRAME_FILENAMES_SKIN03 = [
     "hero-jump-01.png",
     "hero-jump-02.png",
     "hero-jump-03.png",
@@ -175,7 +175,7 @@ Main tuning points:
     "hero-jump-06.png",
     "hero-jump-07.png"
   ];
-  var HERO_WALK_FRAME_FILENAMES_SKIN07 = [
+  var HERO_WALK_FRAME_FILENAMES_SKIN02 = [
     "hero-walk-01.png",
     "hero-walk-02.png",
     "hero-walk-03.png",
@@ -186,7 +186,7 @@ Main tuning points:
     "hero-walk-08.png",
     "hero-walk-09.png"
   ];
-  var HERO_JUMP_FRAME_FILENAMES_SKIN07 = [
+  var HERO_JUMP_FRAME_FILENAMES_SKIN02 = [
     "hero-jump-01.png",
     "hero-jump-02.png",
     "hero-jump-03.png",
@@ -197,8 +197,8 @@ Main tuning points:
   ];
   var SKIN_OPTIONS = [
     { value: "Skin01", label: "Skin01" },
-    { value: "Skin04", label: "Skin04" },
-    { value: "Skin07", label: "Skin07" }
+    { value: "Skin02", label: "Skin02" },
+    { value: "Skin03", label: "Skin03" },
   ];
   for (var skinOptionIndex = 0; skinOptionIndex < SKIN_OPTIONS.length; skinOptionIndex += 1) {
     sceneArt.heroSkins[SKIN_OPTIONS[skinOptionIndex].value] = {
@@ -211,15 +211,15 @@ Main tuning points:
       walkFilenames: HERO_WALK_FRAME_FILENAMES,
       jumpFilenames: HERO_JUMP_FRAME_FILENAMES
     },
-    Skin04: {
-      walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN04,
-      jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN04,
+    Skin03: {
+      walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN03,
+      jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN03,
       usesFullFrameSourceRects: true,
       renderScale: 1.5
     },
-    Skin07: {
-      walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN07,
-      jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN07,
+    Skin02: {
+      walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN02,
+      jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN02,
       usesFullFrameSourceRects: true,
       renderScale: 1.25
     }
@@ -316,6 +316,12 @@ Main tuning points:
   }
 
   function normalizeSkinName(value) {
+    if (value === "Skin07") {
+      return "Skin02";
+    }
+    if (value === "Skin04") {
+      return "Skin03";
+    }
     for (var i = 0; i < SKIN_OPTIONS.length; i += 1) {
       if (SKIN_OPTIONS[i].value === value) {
         return value;

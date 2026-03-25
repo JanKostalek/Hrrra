@@ -5,8 +5,8 @@ from PIL import Image
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SKIN07_DIR = PROJECT_ROOT / "assets" / "skins" / "Skin07"
-TARGET_DIRS = [SKIN07_DIR / "walk", SKIN07_DIR / "jump"]
+SKIN02_DIR = PROJECT_ROOT / "assets" / "skins" / "Skin02"
+TARGET_DIRS = [SKIN02_DIR / "walk", SKIN02_DIR / "jump"]
 NEIGHBORS = [(-1, -1), (0, -1), (1, -1), (-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]
 
 
@@ -80,7 +80,7 @@ def collect_best_marker_component(pixels, width, height):
                 best_component = (component, (min_x, min_y, max_x, max_y))
 
     if best_component is None:
-        raise RuntimeError("No marker component detected for Skin07 frame.")
+        raise RuntimeError("No marker component detected for Skin02 frame.")
     return best_component
 
 
@@ -186,7 +186,7 @@ def build_main_character_mask(image, include_dust):
             queue.append((nx, ny))
 
     if max_x < 0:
-        raise RuntimeError("Failed to isolate Skin07 main character component.")
+        raise RuntimeError("Failed to isolate Skin02 main character component.")
 
     if include_dust:
         dust_left = max(0, min_x - 16)
@@ -269,7 +269,7 @@ def main():
             if file_path.name.endswith(".tmp.png"):
                 continue
             clean_and_normalize(file_path)
-    print("Cleaned Skin07 selected walk/jump frames to transparent 160x160 PNGs.")
+    print("Cleaned Skin02 selected walk/jump frames to transparent 160x160 PNGs.")
 
 
 if __name__ == "__main__":

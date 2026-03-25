@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Drawing
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$skinDir = Join-Path $projectRoot "assets/skins/Skin04"
+$skinDir = Join-Path $projectRoot "assets/skins/Skin03"
 
 function Export-GifFrames {
   param(
@@ -48,7 +48,7 @@ function Export-GifFrames {
   }
 }
 
-Export-GifFrames -GifPath (Join-Path $skinDir "skin04_run.gif") -OutputDir (Join-Path $skinDir "run_frames") -Prefix "run"
-Export-GifFrames -GifPath (Join-Path $skinDir "skin04_jump.gif") -OutputDir (Join-Path $skinDir "jump_frames") -Prefix "jump"
+Export-GifFrames -GifPath (Join-Path $skinDir "skin03_run.gif") -OutputDir (Join-Path $skinDir "run_frames") -Prefix "run"
+Export-GifFrames -GifPath (Join-Path $skinDir "skin03_jump.gif") -OutputDir (Join-Path $skinDir "jump_frames") -Prefix "jump"
 
-Write-Output "Skin04 GIF frames exported."
+Write-Output "Skin03 GIF frames exported."

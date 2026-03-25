@@ -392,3 +392,13 @@ Rules:
 - Default workflow from now on: after project changes, automatically run `askript` (`npm.cmd run cap:sync`) unless the user explicitly says not to.
 - Added `bscript` as a dedicated GitHub publishing helper: `npm run bscript` runs `scripts/bscript.ps1` and force-pushes the current checked out branch HEAD to `origin/main` with `--force-with-lease`.
 - Safety rule for `bscript`: do not run it automatically after edits; only run it when the user explicitly says `run bscript`.
+
+### 2026-03-25 - Renamed active Skin07 slot to Skin02
+- Renamed the active skin folder from `assets/skins/Skin07` to `assets/skins/Skin02` and updated the in-game dropdown/configuration to use `Skin02`.
+- Renamed the related helper scripts from `skin07` to `skin02` so future extraction, cleanup, and prepare steps follow the new slot naming consistently.
+- Added a compatibility mapping in `game.js` so any older saved `selectedSkin = Skin07` automatically loads as `Skin02`.
+
+### 2026-03-25 - Renamed active Skin04 slot to Skin03
+- Renamed the active skin folder from `assets/skins/Skin04` to `assets/skins/Skin03` and updated the in-game dropdown/configuration to use `Skin03`.
+- Renamed the related helper scripts from `skin04` to `skin03` so future extraction, cleanup, normalization, and prepare steps follow the new slot naming consistently.
+- Added a compatibility mapping in `game.js` so any older saved `selectedSkin = Skin04` automatically loads as `Skin03`.

@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Drawing
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$skinDir = Join-Path $projectRoot "assets/skins/Skin04"
+$skinDir = Join-Path $projectRoot "assets/skins/Skin03"
 
 $typeDefinition = @"
 using System;
@@ -12,7 +12,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 
-public static class Skin04FrameNormalizer
+public static class Skin03FrameNormalizer
 {
     private static Bitmap LoadUnlocked(string path)
     {
@@ -130,11 +130,11 @@ $jumpPlans = @(
 )
 
 foreach ($name in $walkFiles) {
-  [Skin04FrameNormalizer]::NormalizeFrame((Join-Path $skinDir $name), 360, 180, 269, 180)
+  [Skin03FrameNormalizer]::NormalizeFrame((Join-Path $skinDir $name), 360, 180, 269, 180)
 }
 
 foreach ($plan in $jumpPlans) {
-  [Skin04FrameNormalizer]::NormalizeFrame((Join-Path $skinDir $plan.Name), 360, $plan.Height, $plan.Bottom, $plan.CenterX)
+  [Skin03FrameNormalizer]::NormalizeFrame((Join-Path $skinDir $plan.Name), 360, $plan.Height, $plan.Bottom, $plan.CenterX)
 }
 
-Write-Output "Skin04 selected frames normalized to a shared 360x360 layout."
+Write-Output "Skin03 selected frames normalized to a shared 360x360 layout."

@@ -4,7 +4,7 @@ from PIL import Image, ImageSequence
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SKIN_DIR = PROJECT_ROOT / "assets" / "skins" / "Skin07"
+SKIN_DIR = PROJECT_ROOT / "assets" / "skins" / "Skin02"
 GIF_PATH = SKIN_DIR / "RunInstagram-original.gif"
 ALL_FRAMES_DIR = SKIN_DIR / "all_frames"
 CUTOUT_DIR = SKIN_DIR / "cutout_frames"
@@ -167,7 +167,7 @@ def build_character_component(rgba: Image.Image, marker_bbox, previous_bbox):
 
 def main():
     if not GIF_PATH.exists():
-        raise FileNotFoundError(f"Missing Skin07 GIF: {GIF_PATH}")
+        raise FileNotFoundError(f"Missing Skin02 GIF: {GIF_PATH}")
 
     ensure_clean_dir(ALL_FRAMES_DIR)
     ensure_clean_dir(CUTOUT_DIR)
@@ -187,7 +187,7 @@ def main():
         normalized.save(NORMALIZED_DIR / f"frame-{frame_index:02d}.png")
         frame_count += 1
 
-    print(f"Extracted {frame_count} Skin07 GIF frames into all_frames, cutout_frames, and normalized_160.")
+    print(f"Extracted {frame_count} Skin02 GIF frames into all_frames, cutout_frames, and normalized_160.")
 
 
 if __name__ == "__main__":

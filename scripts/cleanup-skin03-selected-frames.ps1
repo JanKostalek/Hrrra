@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Drawing
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$skinDir = Join-Path $projectRoot "assets/skins/Skin04"
+$skinDir = Join-Path $projectRoot "assets/skins/Skin03"
 
 function Test-SimilarColor {
   param(
@@ -86,4 +86,4 @@ Get-ChildItem $skinDir -File | Where-Object { $_.Name -match '^(run|jump)-.*\.pn
   Clean-SelectedFrame -Path $_.FullName
 }
 
-Write-Output "Skin04 selected frames cleaned."
+Write-Output "Skin03 selected frames cleaned."

@@ -3,14 +3,14 @@ $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Drawing
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$skinDir = Join-Path $projectRoot "assets/skins/Skin07"
+$skinDir = Join-Path $projectRoot "assets/skins/Skin02"
 $gifPath = Join-Path $skinDir "RunInstagram-original.gif"
 $allFramesDir = Join-Path $skinDir "all_frames"
 $cutoutDir = Join-Path $skinDir "cutout_frames"
 $normalizedDir = Join-Path $skinDir "normalized_160"
 
 if (-not (Test-Path $gifPath)) {
-  throw "Missing Skin07 GIF: $gifPath"
+  throw "Missing Skin02 GIF: $gifPath"
 }
 
 foreach ($dir in @($allFramesDir, $cutoutDir, $normalizedDir)) {
@@ -141,7 +141,7 @@ try {
           $maxX = $previousRegion.MaxX
           $maxY = $previousRegion.MaxY
         } else {
-          throw "Failed to detect Skin07 character markers in frame $($frameIndex + 1)."
+          throw "Failed to detect Skin02 character markers in frame $($frameIndex + 1)."
         }
       }
 
@@ -212,7 +212,7 @@ try {
       }
 
       if ($componentMaxX -lt 0 -or $componentMaxY -lt 0) {
-        throw "Failed to isolate Skin07 character component in frame $($frameIndex + 1)."
+        throw "Failed to isolate Skin02 character component in frame $($frameIndex + 1)."
       }
 
       $cropPaddingLeft = 10
@@ -260,7 +260,7 @@ try {
     }
   }
 
-  Write-Output "Extracted $frameCount Skin07 GIF frames into all_frames, cutout_frames, and normalized_160."
+  Write-Output "Extracted $frameCount Skin02 GIF frames into all_frames, cutout_frames, and normalized_160."
 } finally {
   $image.Dispose()
 }

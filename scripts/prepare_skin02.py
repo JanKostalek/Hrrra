@@ -3,7 +3,7 @@ from PIL import Image
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-SKIN_DIR = PROJECT_ROOT / "assets" / "skins" / "Skin07"
+SKIN_DIR = PROJECT_ROOT / "assets" / "skins" / "Skin02"
 WALK_DIR = SKIN_DIR / "Walk"
 JUMP_DIR = SKIN_DIR / "Jump"
 TARGET_SIZE = (160, 160)
@@ -61,7 +61,7 @@ def build_set(source_dir: Path, hero_prefix: str, legacy_prefix: str) -> int:
 def main() -> None:
     walk_count = build_set(WALK_DIR, "hero-walk", "run")
     jump_count = build_set(JUMP_DIR, "hero-jump", "jump")
-    print(f"Prepared Skin07 with {walk_count} walk frames and {jump_count} jump frames in {SKIN_DIR}")
+    print(f"Prepared Skin02 with {walk_count} walk frames and {jump_count} jump frames in {SKIN_DIR}")
 
 
 if __name__ == "__main__":

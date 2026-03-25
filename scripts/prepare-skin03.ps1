@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 Add-Type -AssemblyName System.Drawing
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$skinDir = Join-Path $projectRoot "assets/skins/Skin04"
+$skinDir = Join-Path $projectRoot "assets/skins/Skin03"
 
 $walkSourceNames = @(
   "run-01.png",
@@ -289,4 +289,4 @@ Get-ChildItem $skinDir -Filter 'hero-*.png' | ForEach-Object {
   Maximize-HeroFrameInPlace -Path $_.FullName
 }
 
-Write-Output "Skin04 hero frames prepared as 160x160 exports from selected root run/jump PNG files in $skinDir"
+Write-Output "Skin03 hero frames prepared as 160x160 exports from selected root run/jump PNG files in $skinDir"
