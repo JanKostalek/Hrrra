@@ -203,12 +203,33 @@ Main tuning points:
     "hero-jump-05.png",
     "hero-jump-06.png"
   ];
+  var HERO_WALK_FRAME_FILENAMES_SKIN07 = [
+    "hero-walk-01.png",
+    "hero-walk-02.png",
+    "hero-walk-03.png",
+    "hero-walk-04.png",
+    "hero-walk-05.png",
+    "hero-walk-06.png",
+    "hero-walk-07.png",
+    "hero-walk-08.png",
+    "hero-walk-09.png"
+  ];
+  var HERO_JUMP_FRAME_FILENAMES_SKIN07 = [
+    "hero-jump-01.png",
+    "hero-jump-02.png",
+    "hero-jump-03.png",
+    "hero-jump-04.png",
+    "hero-jump-05.png",
+    "hero-jump-06.png",
+    "hero-jump-07.png"
+  ];
   var SKIN_OPTIONS = [
     { value: "Skin01", label: "Skin01" },
     { value: "Skin02", label: "Skin02" },
     { value: "Skin03", label: "Skin03" },
     { value: "Skin04", label: "Skin04" },
-    { value: "Skin05", label: "Skin05" }
+    { value: "Skin05", label: "Skin05" },
+    { value: "Skin07", label: "Skin07" }
   ];
   for (var skinOptionIndex = 0; skinOptionIndex < SKIN_OPTIONS.length; skinOptionIndex += 1) {
     sceneArt.heroSkins[SKIN_OPTIONS[skinOptionIndex].value] = {
@@ -240,6 +261,11 @@ Main tuning points:
     Skin05: {
       walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN05,
       jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN05,
+      usesFullFrameSourceRects: true
+    },
+    Skin07: {
+      walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN07,
+      jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN07,
       usesFullFrameSourceRects: true
     }
   };

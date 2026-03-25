@@ -354,6 +354,29 @@ Rules:
 - Follow-up fix: reduced the derived jump frame height and lowered the clipped poses so `Skin05` jump frames no longer cut off the top of the head.
 - Follow-up adjustment: rebuilt `Skin05` after one extra run frame was removed from the source sequence, so the skin now uses the corrected 6-frame run loop and matching 6-frame derived jump set.
 
+### 2026-03-24 - Extracted Skin07 character frames from GIF with motion-aware cropping
+- Added a faster Python extractor in `scripts/extract_skin07_gif.py` and installed Pillow locally for image processing.
+- Processed `assets/skins/Skin07/RunInstagram-original.gif` into three output sets:
+  - `assets/skins/Skin07/all_frames`
+  - `assets/skins/Skin07/cutout_frames`
+  - `assets/skins/Skin07/normalized_160`
+- The extractor does not use a fixed crop rectangle. It tracks the playable character by color markers and then isolates the connected character component, so jump frames still keep the whole body even when the sprite moves upward inside the GIF.
+- Generated `54` frames in each output set, with the normalized export already prepared as `160x160` transparent PNGs for later run/jump selection.
+- Follow-up rework: rebuilt the Skin07 extraction so the crop actively follows the main player character instead of using a loose scene component search.
+- The updated extractor now locks onto the main red-shirt character in the center-right play area, keeps the full body visible during jump ascent/descent, and avoids pulling in the nearby zombie character.
+
+### 2026-03-25 - Cleaned selected Skin07 walk/jump frames for later in-game assembly
+- Added `scripts/clean-skin07-selected-frames.py` to process the manually chosen `assets/skins/Skin07/walk` and `assets/skins/Skin07/jump` PNGs in place.
+- The cleaner preserves transparent background, normalizes every selected frame to exactly `160x160`, and centers the kept silhouette around the actual player character instead of relying on one static crop area.
+- `jump` frames keep only the landing dust effect near the feet; stray scene remnants such as floor/box fragments are filtered out of the final alpha bounds so the frames are ready for later use as `Skin07`.
+
+### 2026-03-25 - Wired Skin07 into the game skin system
+- Added `scripts/prepare-skin07.ps1` to assemble the curated `Skin07/Walk` and `Skin07/Jump` source folders into final root-level `hero-walk-*`, `hero-jump-*`, `run-*`, and `jump-*` assets.
+- `Skin07` is now available in the global skin dropdown and uses 9 walk frames plus 8 jump frames with the same full-frame sprite loading path as the newer skin sets.
+- The selected `Skin07` in-game assets were kept at `160x160` and prepared without changing the source `Walk` / `Jump` subfolders, so we can still tweak the source picks later if needed.
+- Follow-up update: after removing the last selected jump source frame, `Skin07` was rebuilt to use 7 jump frames instead of 8, and the in-game skin configuration was reduced to the same 7-frame jump sequence.
+- Follow-up update: rewired `prepare-skin07` through Pillow so each selected `Skin07` frame is cropped by real alpha bounds, scaled up inside the same `160x160` canvas, and bottom-aligned; this makes the sprite visibly larger and removes the floating-above-platform look.
+
 ### Usage going forward
 - When we change gameplay, rules, hazards, tuning behavior, scoring, controls, or difficulty behavior, also update `MECHANICS.md`.
 - When we change Android packaging, ads, privacy, store assets, workflow, branching, UI structure, visuals, or project organization, update `CHANGES.md`.
