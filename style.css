@@ -387,6 +387,11 @@ body {
   image-rendering: pixelated;
 }
 
+.pre-run-skin-preview img.pre-run-skin-preview-skin01 {
+  width: 101px;
+  height: 101px;
+}
+
 .pre-run-skin-btn.locked .pre-run-skin-preview img {
   filter:
     grayscale(1)

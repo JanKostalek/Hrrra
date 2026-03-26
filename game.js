@@ -2128,6 +2128,7 @@ Main tuning points:
       var preview = document.createElement("span");
       preview.className = "pre-run-skin-preview";
       var previewImg = document.createElement("img");
+      previewImg.className = "pre-run-skin-preview-img pre-run-skin-preview-" + skinName.toLowerCase();
       previewImg.src = getSkinPreviewAssetPath(skinName);
       previewImg.alt = skinName;
       preview.appendChild(previewImg);

@@ -442,3 +442,9 @@ Rules:
 - The button now clears all Hrrra gameplay/admin local storage, including per-level tuning, global admin settings, highscores, admin UI collapse state, and unlocked skins.
 - After reset, the game returns to the same state as first launch, starting again from the default pre-run screen with default settings.
 - Follow-up update: replaced the browser confirm with a custom English confirmation screen that warns about resetting settings, scores, and unlocked skins, and suggests exporting settings first.
+
+### 2026-03-26 - Enlarged Skin01 only in the pre-run skin selection preview
+- Increased the visible preview size of `Skin01` in the skin selection panel so it better matches `Skin02` and `Skin03`.
+- This change affects only that selection screen preview and does not change in-game skin rendering.
+- Follow-up fix: corrected the CSS selector specificity so the larger `Skin01` preview size actually overrides the generic preview image rule.
+- Follow-up tweak: enlarged the `Skin01` preview by roughly another `33%` so it visually matches the newer skins more closely.
