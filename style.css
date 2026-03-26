@@ -331,38 +331,38 @@ body {
 }
 
 .pre-run-skin-panel {
-  width: min(540px, 100%);
+  width: min(360px, 100%);
   min-width: 280px;
   border: 2px solid #d7e0e6;
   border-radius: 18px;
   background: #fbfdff;
-  padding: 16px 18px;
+  padding: 12px 14px;
   margin-bottom: 18px;
 }
 
 .pre-run-skin-panel h3 {
-  margin: 0 0 10px 0;
-  font-size: 18px;
+  margin: 0 0 8px 0;
+  font-size: 17px;
 }
 
 .pre-run-skin-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
 }
 
 .pre-run-skin-btn {
   border: 2px solid #b8c8d4;
   border-radius: 16px;
   background: #fff;
-  padding: 10px 8px;
+  padding: 8px 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   cursor: pointer;
   color: #08293a;
-  min-height: 150px;
+  min-height: 108px;
 }
 
 .pre-run-skin-btn.selected {
@@ -378,9 +378,9 @@ body {
 }
 
 .pre-run-skin-preview {
-  width: 72px;
-  height: 72px;
-  border-radius: 14px;
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
   background: linear-gradient(180deg, #f7fbff 0%, #e7f0f6 100%);
   display: flex;
   align-items: center;
@@ -390,15 +390,15 @@ body {
 }
 
 .pre-run-skin-preview img {
-  width: 64px;
-  height: 64px;
+  width: 46px;
+  height: 46px;
   object-fit: contain;
   image-rendering: pixelated;
 }
 
 .pre-run-skin-preview img.pre-run-skin-preview-skin01 {
-  width: 101px;
-  height: 101px;
+  width: 72px;
+  height: 72px;
 }
 
 .pre-run-skin-btn.locked .pre-run-skin-preview img {
@@ -413,13 +413,13 @@ body {
 }
 
 .pre-run-skin-name {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1.1;
 }
 
 .pre-run-skin-status {
-  font-size: 13px;
+  font-size: 11px;
   line-height: 1.2;
   text-align: center;
   color: #516976;
@@ -431,8 +431,8 @@ body {
 }
 
 .pre-run-skin-copy {
-  margin: 12px 0 0 0;
-  font-size: 14px;
+  margin: 8px 0 0 0;
+  font-size: 13px;
   line-height: 1.35;
   color: #5a6f7c;
 }
@@ -452,6 +452,13 @@ body {
 
 .pre-run-detail-life-rules span {
   white-space: nowrap;
+}
+
+.pre-run-detail-rule-note {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.78em;
+  font-weight: 600;
 }
 
 .pre-run-detail-life-rules-linebreak {

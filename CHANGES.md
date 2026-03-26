@@ -462,3 +462,5 @@ Rules:
 - Follow-up tweak: increased the text size inside the left briefing buttons so their labels better fill the button height.
 - Follow-up responsive polish: moved the desktop briefing rules even closer to the middle mode column and lowered the breakpoint where `Controls` and `Level Goal` stack vertically, so both panels stay side by side until a much smaller window width.
 - Follow-up spacing polish: tightened the desktop header columns once more so the rules block sits almost flush with the `Jump Mode` column and has a little more room before overflowing on medium-width windows.
+- Follow-up UI polish: changed the `Bottom Death Zone` note so the main rule stays on one line and the reassurance `Shield can ALWAYS save you` appears underneath in smaller text.
+- Follow-up UI polish: reduced the whole skin selection panel footprint by about one third by shrinking the panel padding, skin cards, preview boxes, and text sizing.
