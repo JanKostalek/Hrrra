@@ -1117,6 +1117,12 @@ Every gameplay-related change must be added here with date and short reason.
 - The carried timer stays frozen on the long starting platform of the new level and only starts counting down after the player's first real jump in that level.
 - Why: level transitions should preserve jump powerups more generously without wasting them during the briefing/start runway.
 
+### v0.1.181 - Skin pickup levels are now configurable per skin (2026-03-26)
+- Skin unlock pickups are no longer hardwired only to Levels `3` and `4`.
+- Each skin can now have its own allowed pickup levels configured from admin, and the per-run skin discovery plan only chooses from the levels enabled for that target skin.
+- Default setup keeps `Skin02` and `Skin03` allowed in Levels `3` and `4`, matching the previous behavior.
+- Why: makes skin progression easier to tune for testing and future content pacing.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.

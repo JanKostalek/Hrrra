@@ -431,3 +431,14 @@ Rules:
 - Added `TESTER_INFO.md` in the project root as a structured summary of the game's purpose, controls, pickups, hazards, score systems, and progression.
 - The text is written so it can be reused later for tester onboarding, a form, a web page, or store-facing explanatory copy.
 - Follow-up update: added a tester note that admin is intentionally available during testing and supports full tuning plus settings export/import.
+
+### 2026-03-26 - Added per-skin admin control for allowed skin pickup levels
+- Added a new global admin row `Skin Pickup Level` under the skin selector.
+- The currently selected skin in admin now shows Level `1-5` checkboxes that decide in which levels that skin's unlock pickup is allowed to appear.
+- The skin discovery planner now uses those per-skin level checkboxes instead of always assuming only Levels `3` and `4`.
+
+### 2026-03-26 - Added a global factory-reset button to admin
+- Added `Default / Reset all` to the admin header.
+- The button now clears all Hrrra gameplay/admin local storage, including per-level tuning, global admin settings, highscores, admin UI collapse state, and unlocked skins.
+- After reset, the game returns to the same state as first launch, starting again from the default pre-run screen with default settings.
+- Follow-up update: replaced the browser confirm with a custom English confirmation screen that warns about resetting settings, scores, and unlocked skins, and suggests exporting settings first.

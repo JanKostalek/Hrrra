@@ -29,6 +29,7 @@
       <div class="admin-header">
         <h2>Mechanics Admin</h2>
         <div class="admin-header-actions">
+          <button id="admin-reset-all" aria-label="Reset all settings and progress to defaults">Default / Reset all</button>
           <button id="admin-export" aria-label="Export settings">Export</button>
           <button id="admin-copy-json" aria-label="Copy settings JSON">Copy JSON</button>
           <button id="admin-import-file-btn" aria-label="Import settings from file">Import File</button>
@@ -39,6 +40,23 @@
       </div>
       <div id="admin-form"></div>
       <input id="admin-import-file" type="file" accept=".json,application/json" class="hidden" aria-hidden="true">
+      <div id="admin-reset-confirm" class="admin-reset-confirm hidden" aria-label="Reset confirmation">
+        <div class="admin-reset-confirm-card">
+          <h3>Reset all settings to default?</h3>
+          <p>
+            This will reset all settings back to first-launch defaults, including stored score values
+            and unlocked skins.
+          </p>
+          <p>
+            If you want to keep your setup, you may want to export it first so you can import it again later
+            or send it to the developer.
+          </p>
+          <div class="admin-reset-confirm-actions">
+            <button id="admin-reset-confirm-cancel" type="button">Back</button>
+            <button id="admin-reset-confirm-apply" type="button">Yes, Reset all</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div id="pre-run-screen" class="hidden" aria-label="Run instructions">
       <div class="pre-run-card">

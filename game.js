@@ -86,6 +86,10 @@ Main tuning points:
   var adminToggle = document.getElementById("admin-toggle");
   var adminPanel = document.getElementById("admin-panel");
   var adminClose = document.getElementById("admin-close");
+  var adminResetAllBtn = document.getElementById("admin-reset-all");
+  var adminResetConfirmEl = document.getElementById("admin-reset-confirm");
+  var adminResetConfirmCancelBtn = document.getElementById("admin-reset-confirm-cancel");
+  var adminResetConfirmApplyBtn = document.getElementById("admin-reset-confirm-apply");
   var adminExportBtn = document.getElementById("admin-export");
   var adminCopyJsonBtn = document.getElementById("admin-copy-json");
   var adminImportFileBtn = document.getElementById("admin-import-file-btn");
@@ -468,6 +472,24 @@ Main tuning points:
     return getSkinUiConfig(skinName).pickupAssetPath;
   }
 
+  function getSkinPickupLevelSettingKey(skinName, level) {
+    return "skinPickup" + normalizeSkinName(skinName) + "Level" + String(level) + "Enabled";
+  }
+
+  function isSkinPickupLevelEnabled(skinName, level) {
+    return Boolean(C[getSkinPickupLevelSettingKey(skinName, level)]);
+  }
+
+  function getAllowedSkinPickupLevels(skinName) {
+    var levels = [];
+    for (var level = 1; level <= LEVEL_COUNT; level += 1) {
+      if (isSkinPickupLevelEnabled(skinName, level)) {
+        levels.push(level);
+      }
+    }
+    return levels;
+  }
+
   function getUnopenedDiscoverableSkins() {
     var skins = [];
     for (var i = 0; i < DISCOVERABLE_SKIN_OPTIONS.length; i += 1) {
@@ -530,7 +552,7 @@ Main tuning points:
     var targetSkin = unopenedSkins.length === 1
       ? unopenedSkins[0]
       : unopenedSkins[Math.floor(Math.random() * unopenedSkins.length)];
-    var candidateLevels = [3, 4];
+    var candidateLevels = getAllowedSkinPickupLevels(targetSkin);
     var validCandidates = [];
 
     for (var i = 0; i < candidateLevels.length; i += 1) {
@@ -672,6 +694,56 @@ Main tuning points:
     writeGlobalAdminStorageObject(stored);
   }
 
+  function clearAllHrrraStorageData() {
+    try {
+      var keysToRemove = [];
+      for (var i = 0; i < window.localStorage.length; i += 1) {
+        var key = window.localStorage.key(i);
+        if (!key) {
+          continue;
+        }
+        if (
+          key === GLOBAL_ADMIN_STORAGE_KEY ||
+          key === PLAYER_SKIN_PROGRESS_STORAGE_KEY ||
+          key.indexOf(ADMIN_STORAGE_KEY_PREFIX) === 0 ||
+          key.indexOf(LEGACY_ADMIN_STORAGE_KEY_PREFIX) === 0 ||
+          key.indexOf(MAX_SCORE_STORAGE_KEY_PREFIX) === 0
+        ) {
+          keysToRemove.push(key);
+        }
+      }
+
+      for (var keyIndex = 0; keyIndex < keysToRemove.length; keyIndex += 1) {
+        window.localStorage.removeItem(keysToRemove[keyIndex]);
+      }
+    } catch (error) {
+      // ignore storage failures
+    }
+  }
+
+  function resetAllSettingsToDefaults() {
+    setAdminOpen(false);
+    clearAllHrrraStorageData();
+    state.gameMode = 2;
+    state.gameDifficulty = "easy";
+    state.currentLevel = 1;
+    applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
+    loadGlobalAdminConfig();
+    loadPlayerSkinProgress();
+    sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
+    openPreRunScreen();
+    renderAdminForm();
+    refreshPreRunBriefValues();
+    updateLivesUi();
+  }
+
+  function setAdminResetConfirmOpen(isOpen) {
+    if (!adminResetConfirmEl) {
+      return;
+    }
+    adminResetConfirmEl.classList.toggle("hidden", !isOpen);
+  }
+
   function getAllAdminFieldKeys() {
     var keys = {};
     for (var sectionIndex = 0; sectionIndex < adminSections.length; sectionIndex += 1) {
@@ -688,7 +760,16 @@ Main tuning points:
     for (var sectionIndex = 0; sectionIndex < globalAdminSections.length; sectionIndex += 1) {
       var section = globalAdminSections[sectionIndex];
       for (var fieldIndex = 0; fieldIndex < section.fields.length; fieldIndex += 1) {
-        keys[section.fields[fieldIndex].key] = true;
+        var field = section.fields[fieldIndex];
+        if (field.type === "skin-pickup-levels") {
+          for (var skinOptionIndex = 0; skinOptionIndex < SKIN_OPTIONS.length; skinOptionIndex += 1) {
+            for (var level = 1; level <= LEVEL_COUNT; level += 1) {
+              keys[getSkinPickupLevelSettingKey(SKIN_OPTIONS[skinOptionIndex].value, level)] = true;
+            }
+          }
+          continue;
+        }
+        keys[field.key] = true;
       }
     }
     return Object.keys(keys);
@@ -1443,7 +1524,8 @@ Main tuning points:
       fields: [
         { key: "fullscreenAutoEnabled", label: "Auto fullscreen on mobile", type: "checkbox" },
         { key: "modernVisualsEnabled", label: "Modern visuals", type: "checkbox" },
-        { key: "selectedSkin", label: "Skin", type: "select", options: SKIN_OPTIONS }
+        { key: "selectedSkin", label: "Skin", type: "select", options: SKIN_OPTIONS },
+        { key: "skinPickupLevels", label: "Skin Pickup Level", type: "skin-pickup-levels" }
       ]
     }
   ];
@@ -2348,6 +2430,7 @@ Main tuning points:
     } else {
       adminPanel.hidden = true;
       adminPanel.classList.add("hidden");
+      setAdminResetConfirmOpen(false);
       state.adminPaused = false;
     }
 
@@ -2451,35 +2534,75 @@ Main tuning points:
           globalInput.value = globalField.key === "selectedSkin"
             ? normalizeSkinName(C[globalField.key])
             : String(C[globalField.key]);
+        } else if (globalField.type === "skin-pickup-levels") {
+          globalRow.classList.add("admin-field-stacked");
+          globalInput = document.createElement("div");
+          globalInput.className = "admin-inline-checkbox-wrap";
+
+          var selectedSkinName = normalizeSkinName(C.selectedSkin);
+          var selectedSkinCaption = document.createElement("div");
+          selectedSkinCaption.className = "admin-inline-checkbox-caption";
+          selectedSkinCaption.textContent = "Configure pickup levels for " + selectedSkinName;
+          globalInput.appendChild(selectedSkinCaption);
+
+          var levelCheckboxList = document.createElement("div");
+          levelCheckboxList.className = "admin-inline-checkbox-list";
+          for (var skinPickupLevel = 1; skinPickupLevel <= LEVEL_COUNT; skinPickupLevel += 1) {
+            var levelItem = document.createElement("label");
+            levelItem.className = "admin-inline-checkbox-item";
+
+            var levelCheckbox = document.createElement("input");
+            levelCheckbox.type = "checkbox";
+            levelCheckbox.checked = isSkinPickupLevelEnabled(selectedSkinName, skinPickupLevel);
+            levelCheckbox.dataset.key = getSkinPickupLevelSettingKey(selectedSkinName, skinPickupLevel);
+            levelCheckbox.addEventListener("change", function (event) {
+              var target = event.target;
+              var key = target.dataset.key;
+              var nextValue = Boolean(target.checked);
+              saveGlobalAdminField(key, nextValue);
+              C[key] = nextValue;
+            });
+
+            var levelText = document.createElement("span");
+            levelText.textContent = "Level " + String(skinPickupLevel);
+
+            levelItem.appendChild(levelCheckbox);
+            levelItem.appendChild(levelText);
+            levelCheckboxList.appendChild(levelItem);
+          }
+          globalInput.appendChild(levelCheckboxList);
         } else {
           continue;
         }
 
-        globalInput.id = "admin-global-" + globalField.key;
-        globalInput.dataset.key = globalField.key;
-        globalInput.addEventListener("change", function (event) {
-          var target = event.target;
-          var key = target.dataset.key;
-          var nextValue;
-          if (target.type === "checkbox") {
-            nextValue = Boolean(target.checked);
-          } else {
-            nextValue = String(target.value);
-            if (key === "selectedSkin") {
-              nextValue = normalizeSkinName(nextValue);
-              target.value = nextValue;
+        if (globalField.type !== "skin-pickup-levels") {
+          globalInput.id = "admin-global-" + globalField.key;
+          globalInput.dataset.key = globalField.key;
+          globalInput.addEventListener("change", function (event) {
+            var target = event.target;
+            var key = target.dataset.key;
+            var nextValue;
+            if (target.type === "checkbox") {
+              nextValue = Boolean(target.checked);
+            } else {
+              nextValue = String(target.value);
+              if (key === "selectedSkin") {
+                nextValue = normalizeSkinName(nextValue);
+                target.value = nextValue;
+              }
             }
-          }
-          saveGlobalAdminField(key, nextValue);
-          C[key] = nextValue;
-          if (key === "modernVisualsEnabled") {
-            applyVisualThemeToUi();
-            updateLivesUi();
-          } else if (key === "selectedSkin") {
-            C.selectedSkin = normalizeSkinName(nextValue);
-            refreshPreRunSkinSelection();
-          }
-        });
+            saveGlobalAdminField(key, nextValue);
+            C[key] = nextValue;
+            if (key === "modernVisualsEnabled") {
+              applyVisualThemeToUi();
+              updateLivesUi();
+            } else if (key === "selectedSkin") {
+              C.selectedSkin = normalizeSkinName(nextValue);
+              refreshPreRunSkinSelection();
+              renderAdminForm();
+            }
+          });
+        }
 
         globalRow.appendChild(globalLabel);
         globalRow.appendChild(globalInput);
@@ -2816,6 +2939,7 @@ Main tuning points:
     });
 
     adminClose.addEventListener("click", function () {
+      setAdminResetConfirmOpen(false);
       setAdminOpen(false);
     });
 
@@ -2831,6 +2955,25 @@ Main tuning points:
     if (adminExportBtn) {
       adminExportBtn.addEventListener("click", function () {
         triggerSettingsExportDownload();
+      });
+    }
+
+    if (adminResetAllBtn) {
+      adminResetAllBtn.addEventListener("click", function () {
+        setAdminResetConfirmOpen(true);
+      });
+    }
+
+    if (adminResetConfirmCancelBtn) {
+      adminResetConfirmCancelBtn.addEventListener("click", function () {
+        setAdminResetConfirmOpen(false);
+      });
+    }
+
+    if (adminResetConfirmApplyBtn) {
+      adminResetConfirmApplyBtn.addEventListener("click", function () {
+        setAdminResetConfirmOpen(false);
+        resetAllSettingsToDefaults();
       });
     }
 

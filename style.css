@@ -1194,6 +1194,66 @@ body.visual-theme-retro .brief-live::before {
   z-index: 25;
 }
 
+.admin-reset-confirm {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(12, 23, 34, 0.45);
+  z-index: 40;
+}
+
+.admin-reset-confirm.hidden {
+  display: none;
+}
+
+.admin-reset-confirm-card {
+  width: min(560px, 100%);
+  background: #ffffff;
+  border: 1px solid #1d2a35;
+  border-radius: 12px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+  padding: 18px 18px 16px;
+}
+
+.admin-reset-confirm-card h3 {
+  margin: 0 0 12px;
+  font-size: 22px;
+}
+
+.admin-reset-confirm-card p {
+  margin: 0 0 12px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.admin-reset-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+#admin-reset-confirm-cancel,
+#admin-reset-confirm-apply {
+  border: 1px solid #222;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#admin-reset-confirm-cancel {
+  background: #ffffff;
+}
+
+#admin-reset-confirm-apply {
+  background: #ffe0e0;
+}
+
 .admin-header {
   display: flex;
   justify-content: space-between;
@@ -1210,6 +1270,7 @@ body.visual-theme-retro .brief-live::before {
 #admin-copy-json,
 #admin-import-file-btn,
 #admin-import-text,
+#admin-reset-all,
 #admin-privacy,
 #admin-close {
   border: 1px solid #222;
@@ -1223,7 +1284,8 @@ body.visual-theme-retro .brief-live::before {
 #admin-export,
 #admin-copy-json,
 #admin-import-file-btn,
-#admin-import-text {
+#admin-import-text,
+#admin-reset-all {
   background: #eef7ff;
 }
 
@@ -1429,6 +1491,40 @@ body.visual-theme-retro .brief-live::before {
   margin: 0;
   border: 0;
   padding: 0;
+}
+
+.admin-field.admin-field-stacked {
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+.admin-inline-checkbox-wrap {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-inline-checkbox-caption {
+  font-size: 12px;
+  color: #4a4a4a;
+}
+
+.admin-inline-checkbox-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.admin-inline-checkbox-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.admin-inline-checkbox-item input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
 }
 
 #mode-switch {
