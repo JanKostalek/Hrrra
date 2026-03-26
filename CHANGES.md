@@ -495,6 +495,17 @@ Rules:
 - Changed the pre-run mode-selection grid so the `Jump Mode` and `Full Mode` cards stretch to the same height.
 - This removes the uneven look where the left card ended lower than the right one on wide screens.
 - Follow-up alignment tweak: vertically centered the `Easy` and `Hard` buttons in the middle column so they sit in the true center between the two mode panels.
+- Follow-up art-direction pass: replaced the flat white start screen with layered abstract gradients, softly tinted mode cards, and more expressive difficulty buttons so the menu feels less empty and more intentional.
+- Follow-up background pass: cropped the white border from `assets/start_bkg.png` and switched the main start screen backdrop to that image with a soft dark overlay.
+- Follow-up top-panel pass: added `assets/start_top_bkg.png` as a decorative background for the upper area inside the white start card so the header region feels less empty without cluttering the lower panels.
+- Follow-up mode-card pass: wired `assets/jump_mode_bkg.jpg` and `assets/full_mode_bkg.jpg` directly into the `Jump Mode` and `Full Mode` selection cards with a light overlay to preserve text readability.
+- Follow-up asset cleanup: cropped the visible white edge artifacts from `assets/start_top_bkg.png` so the decorative top texture blends cleanly inside the start card.
+- Follow-up mode-card tweak: reduced the white overlay on the `Jump Mode` and `Full Mode` cards so the supplied background art reads much more clearly.
+- Follow-up Full Mode visual update: replaced the old drawn mobile control diagram with `assets/start_phone.png`, clipped through rounded UI framing so the sharp source corners no longer clash with the rest of the screen.
+- Follow-up text cleanup: split the `Mobile` and `Desktop` labels in both mode cards onto their own heading lines, with the actual control text placed underneath for cleaner reading.
+- Follow-up wording cleanup: changed the Full Mode desktop jump hint from `Space to jump` to `Space = Jump` so both mode cards use the same phrasing.
+- Follow-up difficulty pass: added `assets/easy_bkg.png` and `assets/hard_bkg.png` as the actual backgrounds for the Easy/Hard buttons while keeping their selected state readable.
+- Follow-up difficulty emphasis: made the selected `Easy`/`Hard` button much more obvious by giving the active difficulty a dramatically thicker border and stronger outer highlight ring.
 
 ### 2026-03-26 - Moved the HUD level label to the top-right stack
 - Removed the in-game `Level` label from the left score column so it no longer overlaps the playfield edge.
