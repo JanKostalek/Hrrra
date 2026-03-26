@@ -6698,7 +6698,9 @@ Main tuning points:
   }
 
   function drawHud() {
-    ctx.fillStyle = "#111";
+    var hudTextColor =
+      state.currentLevel === 2 || state.currentLevel === 3 ? "#ffffff" : "#111";
+    ctx.fillStyle = hudTextColor;
     ctx.font = "24px Arial";
     ctx.fillText("Score: " + state.score, 18, 36);
     ctx.font = "20px Arial";

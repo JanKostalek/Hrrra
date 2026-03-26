@@ -422,3 +422,12 @@ Rules:
 - Timed `Double Jump` / `Tripple Jump` effects now carry into the next level with `2x` the remaining time.
 - The carried timer stays paused on the new level's starting platform and only begins ticking after the first jump made in that level.
 - Tripple Jump carry-over also preserves its stored fallback Double Jump time so the full upgrade chain continues correctly after the transition.
+
+### 2026-03-26 - Switched HUD text to white in Levels 2 and 3
+- Changed the in-game HUD text color to white for `Level 2` and `Level 3` so score, jump timers, and other top-bar info stay readable over the darker backgrounds.
+- Left the other levels unchanged and did not add any outline or shadow treatment.
+
+### 2026-03-26 - Added a reusable tester-facing game overview document
+- Added `TESTER_INFO.md` in the project root as a structured summary of the game's purpose, controls, pickups, hazards, score systems, and progression.
+- The text is written so it can be reused later for tester onboarding, a form, a web page, or store-facing explanatory copy.
+- Follow-up update: added a tester note that admin is intentionally available during testing and supports full tuning plus settings export/import.
