@@ -203,25 +203,32 @@ Main tuning points:
     "hero-jump-06.png",
     "hero-jump-07.png"
   ];
+  var SKIN_DISPLAY_NAMES = {
+    Skin01: "Zyro",
+    Skin02: "Vexi",
+    Skin03: "Nemu"
+  };
+  var FUTURE_SKIN_SLOT_COUNT = 2;
+  var FUTURE_SKIN_ICON_PATH = "assets/hero%20question%20mark%20icon.png";
   var SKIN_OPTIONS = [
-    { value: "Skin01", label: "Skin01" },
-    { value: "Skin02", label: "Skin02" },
-    { value: "Skin03", label: "Skin03" }
+    { value: "Skin01", label: "Zyro" },
+    { value: "Skin02", label: "Vexi" },
+    { value: "Skin03", label: "Nemu" }
   ];
   var DISCOVERABLE_SKIN_OPTIONS = ["Skin02", "Skin03"];
   var SKIN_UI_CONFIGS = {
     Skin01: {
-      label: "Skin01",
+      label: "Zyro",
       previewAssetPath: "assets/skins/Skin01/hero-walk-01.png",
       pickupAssetPath: "assets/skins/Skin01/hero-walk-01.png"
     },
     Skin02: {
-      label: "Skin02",
+      label: "Vexi",
       previewAssetPath: "assets/skins/Skin02/hero-icon.png",
       pickupAssetPath: "assets/skins/Skin02/hero-icon.png"
     },
     Skin03: {
-      label: "Skin03",
+      label: "Nemu",
       previewAssetPath: "assets/skins/Skin03/hero-icon.png",
       pickupAssetPath: "assets/skins/Skin03/hero-icon.png"
     }
@@ -443,7 +450,7 @@ Main tuning points:
       return false;
     }
     state.unlockedSkins[normalized] = true;
-    state.skinUnlockToastText = normalized + " unlocked";
+    state.skinUnlockToastText = getSkinDisplayName(normalized) + " unlocked";
     state.skinUnlockToastTimeLeft = 3;
     writePlayerSkinProgress();
     refreshPreRunBriefValues();
@@ -462,6 +469,11 @@ Main tuning points:
 
   function getSkinUiConfig(skinName) {
     return SKIN_UI_CONFIGS[normalizeSkinName(skinName)] || SKIN_UI_CONFIGS.Skin01;
+  }
+
+  function getSkinDisplayName(skinName) {
+    var normalized = normalizeSkinName(skinName);
+    return SKIN_DISPLAY_NAMES[normalized] || normalized;
   }
 
   function getSkinPreviewAssetPath(skinName) {
@@ -2098,7 +2110,7 @@ Main tuning points:
     }
 
     if (state.skinDiscoveryPlan.active && !state.skinDiscoveryPlan.assigned) {
-      return "This run can reveal " + state.skinDiscoveryPlan.skinName + " in Level " + state.skinDiscoveryPlan.level + ".";
+      return "This run can reveal " + getSkinDisplayName(state.skinDiscoveryPlan.skinName) + " in Level " + state.skinDiscoveryPlan.level + ".";
     }
 
     return "A hidden skin can appear once per run in Level 3 or 4.";
@@ -2130,12 +2142,12 @@ Main tuning points:
       var previewImg = document.createElement("img");
       previewImg.className = "pre-run-skin-preview-img pre-run-skin-preview-" + skinName.toLowerCase();
       previewImg.src = getSkinPreviewAssetPath(skinName);
-      previewImg.alt = skinName;
+      previewImg.alt = getSkinDisplayName(skinName);
       preview.appendChild(previewImg);
 
       var nameEl = document.createElement("span");
       nameEl.className = "pre-run-skin-name";
-      nameEl.textContent = skinName;
+      nameEl.textContent = getSkinDisplayName(skinName);
 
       var statusEl = document.createElement("span");
       statusEl.className = "pre-run-skin-status";
@@ -2149,6 +2161,33 @@ Main tuning points:
       skinBtn.appendChild(nameEl);
       skinBtn.appendChild(statusEl);
       preRunSkinGridEl.appendChild(skinBtn);
+    }
+
+    for (var futureSkinIndex = 0; futureSkinIndex < FUTURE_SKIN_SLOT_COUNT; futureSkinIndex += 1) {
+      var futureSkinCard = document.createElement("div");
+      futureSkinCard.className = "pre-run-skin-btn future";
+      futureSkinCard.setAttribute("aria-hidden", "true");
+
+      var futurePreview = document.createElement("span");
+      futurePreview.className = "pre-run-skin-preview";
+      var futurePreviewImg = document.createElement("img");
+      futurePreviewImg.className = "pre-run-skin-preview-img pre-run-skin-preview-future";
+      futurePreviewImg.src = FUTURE_SKIN_ICON_PATH;
+      futurePreviewImg.alt = "Future hero";
+      futurePreview.appendChild(futurePreviewImg);
+
+      var futureNameEl = document.createElement("span");
+      futureNameEl.className = "pre-run-skin-name";
+      futureNameEl.textContent = "????";
+
+      var futureStatusEl = document.createElement("span");
+      futureStatusEl.className = "pre-run-skin-status";
+      futureStatusEl.textContent = "Soon";
+
+      futureSkinCard.appendChild(futurePreview);
+      futureSkinCard.appendChild(futureNameEl);
+      futureSkinCard.appendChild(futureStatusEl);
+      preRunSkinGridEl.appendChild(futureSkinCard);
     }
 
     if (preRunSkinCopyEl) {
@@ -2543,7 +2582,7 @@ Main tuning points:
           var selectedSkinName = normalizeSkinName(C.selectedSkin);
           var selectedSkinCaption = document.createElement("div");
           selectedSkinCaption.className = "admin-inline-checkbox-caption";
-          selectedSkinCaption.textContent = "Configure pickup levels for " + selectedSkinName;
+          selectedSkinCaption.textContent = "Configure pickup levels for " + getSkinDisplayName(selectedSkinName);
           globalInput.appendChild(selectedSkinCaption);
 
           var levelCheckboxList = document.createElement("div");

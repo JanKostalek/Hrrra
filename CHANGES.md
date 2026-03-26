@@ -464,3 +464,14 @@ Rules:
 - Follow-up spacing polish: tightened the desktop header columns once more so the rules block sits almost flush with the `Jump Mode` column and has a little more room before overflowing on medium-width windows.
 - Follow-up UI polish: changed the `Bottom Death Zone` note so the main rule stays on one line and the reassurance `Shield can ALWAYS save you` appears underneath in smaller text.
 - Follow-up UI polish: reduced the whole skin selection panel footprint by about one third by shrinking the panel padding, skin cards, preview boxes, and text sizing.
+
+### 2026-03-26 - Replaced working skin slot names with character names in the UI
+- Kept the stable internal skin IDs `Skin01`, `Skin02`, and `Skin03`, but changed all player-facing labels to the real character names `Zyro`, `Vexi`, and `Nemu`.
+- Updated the pre-run skin selection, admin skin dropdown, skin pickup level caption, unlock toast, and run discovery hint text to use the new display names.
+- Added small marker subfolders `_Zyro`, `_Vexi`, and `_Nemu` inside the existing skin asset folders so the local directory structure stays easy to recognize without renaming the actual `SkinXX` folders.
+
+### 2026-03-26 - Added two future placeholder hero slots to the skin panel
+- Extended the pre-run `Skins` panel with two extra non-interactive placeholder cards for future characters.
+- These cards use `assets/hero question mark icon.png`, show `????` as the name, and `Soon` as the status while matching the existing skin-card styling.
+- Kept them completely outside the unlock/selection mechanics so they are only visual placeholders for now.
+- Follow-up visual tweak: made the future `?` icon blend into the preview card with a transparent-looking result instead of keeping its original white square background.
