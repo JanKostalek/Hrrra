@@ -448,3 +448,15 @@ Rules:
 - This change affects only that selection screen preview and does not change in-game skin rendering.
 - Follow-up fix: corrected the CSS selector specificity so the larger `Skin01` preview size actually overrides the generic preview image rule.
 - Follow-up tweak: enlarged the `Skin01` preview by roughly another `33%` so it visually matches the newer skins more closely.
+
+### 2026-03-26 - Added Bottom Death Zone copy to the pre-run rules line
+- Extended the pre-run briefing rules row with `Bottom Death Zone: Instant Death (but Shield can save you)`.
+- This is only a wording/UI addition to make the bottom death rule clearer before a run starts.
+- Follow-up tweak: forced `Bottom Death Zone` onto its own second row in the briefing rules area so the full text stays visible.
+- Follow-up layout adjustment: moved the whole rules block next to the Back/Start buttons on desktop so the header uses space more evenly and the content below the skin panel stays visible sooner.
+- Follow-up layout adjustment: reorganized the desktop briefing header into three columns so buttons stay left, mode/level info sits in the middle, and the rules block sits on the right; the skin panel now lives below that header row.
+- Follow-up tweak: reduced the size of the left `Back` / `Start Run` buttons on desktop so the rules text has more horizontal space and is less likely to overflow.
+- Follow-up correction: reduced those desktop briefing buttons by roughly `75%` from the original size, not just down to `75%` of their previous scale.
+- Follow-up correction: rebalanced that desktop header again so the left button column is not too tiny, while the middle and right columns still sit further left than before.
+- Follow-up tweak: reduced the desktop `Jump Mode` title size by roughly one third and increased the left button heights so the left column fills that header area more evenly.
+- Follow-up tweak: increased the text size inside the left briefing buttons so their labels better fill the button height.
