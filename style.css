@@ -189,13 +189,14 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 180px minmax(0, 1fr);
   gap: 28px;
-  align-items: center;
+  align-items: stretch;
 }
 
 .pre-run-mode-card {
   border: 10px solid #08293a;
   border-radius: 28px;
   min-height: 300px;
+  height: 100%;
   width: 100%;
   background: #fff;
   padding: 26px 22px;
@@ -221,8 +222,10 @@ body {
 .pre-run-difficulty-column {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 24px;
   align-items: center;
+  height: 100%;
 }
 
 .pre-run-difficulty-btn {

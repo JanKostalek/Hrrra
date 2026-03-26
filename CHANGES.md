@@ -486,6 +486,16 @@ Rules:
 - Updated the global source defaults to match the Firefox snapshot for shared settings such as fullscreen behavior, while keeping hero progression clean by default.
 - Intentionally left the player skin progress default untouched so a fresh reset/build still starts with only `Skin01` unlocked and selected.
 
+### 2026-03-26 - Reworked Magnet to physically pull collectibles
+- Replaced the old instant screen-collect behavior with moving attracted pickup entities for platform coins, elevator coins, and lives.
+- Magnetized items now travel through space toward the player and only award their effect when they actually touch the hero.
+- This fixes the previous visual glitch where new pickups only flashed and disappeared instead of being visibly pulled in.
+
+### 2026-03-26 - Equalized the two mode cards on the start screen
+- Changed the pre-run mode-selection grid so the `Jump Mode` and `Full Mode` cards stretch to the same height.
+- This removes the uneven look where the left card ended lower than the right one on wide screens.
+- Follow-up alignment tweak: vertically centered the `Easy` and `Hard` buttons in the middle column so they sit in the true center between the two mode panels.
+
 ### 2026-03-26 - Moved the HUD level label to the top-right stack
 - Removed the in-game `Level` label from the left score column so it no longer overlaps the playfield edge.
 - The HUD now shows `Level` in the top-right at the larger former `Speed` size, with `Speed` moved directly underneath at the smaller former `Level` size.

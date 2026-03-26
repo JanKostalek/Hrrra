@@ -1129,6 +1129,12 @@ Every gameplay-related change must be added here with date and short reason.
 - Score-driven speed scaling still continues normally in the background because the slow effect only multiplies the runtime speed.
 - Why: makes the slowdown mechanic easier to tune precisely for different levels and difficulties.
 
+### v0.1.183 - Magnet now physically pulls pickups through space (2026-03-26)
+- Active `Magnet` no longer instantly deletes visible coins/lives; instead it converts them into attracted pickups that visibly fly toward the player.
+- Coins and lives are only actually collected when the moving icon physically touches the hero.
+- Elevator coins are detached from the elevator and then follow the same attraction behavior once magnetized.
+- Why: makes the magnet effect read as a true magnetic pull instead of a screen-wide auto-collect flash.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.

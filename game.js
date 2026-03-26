@@ -1427,6 +1427,7 @@ Main tuning points:
       y: 0,
       size: C.playerSize * C.magnetIconSizeRatio
     },
+    magnetAttractedItems: [],
     curseRespawnTimer: 0,
     curseTimeLeft: 0,
     blockedDistanceScore: 0,
@@ -3296,6 +3297,7 @@ Main tuning points:
     state.magnetIcon.x = 0;
     state.magnetIcon.y = 0;
     state.magnetIcon.size = C.playerSize * C.magnetIconSizeRatio;
+    state.magnetAttractedItems = [];
     state.curseRespawnTimer = randomRange(
       C.curseRespawnMinSeconds,
       C.curseRespawnMaxSeconds
@@ -4232,6 +4234,7 @@ Main tuning points:
     drawProjectile2();
     drawSkinPickupIcon();
     drawPlatformCoinIcon();
+    drawMagnetAttractedItems();
     drawElevatorCoins();
     drawPlayerStatusEffects();
     drawPlayer();
@@ -5590,7 +5593,7 @@ Main tuning points:
       icon.active = false;
       state.magnetTimeLeft += C.magnetEffectSeconds;
       scheduleNextMagnetSpawn();
-      collectMagnetPickupsOnScreen();
+      convertVisiblePickupsToMagnetTargets();
     }
   }
 
@@ -5604,7 +5607,17 @@ Main tuning points:
     );
   }
 
-  function collectMagnetPickupsOnScreen() {
+  function addMagnetAttractedItem(type, x, y, size) {
+    state.magnetAttractedItems.push({
+      type: type,
+      x: x,
+      y: y,
+      size: size,
+      age: 0
+    });
+  }
+
+  function convertVisiblePickupsToMagnetTargets() {
     if (state.magnetTimeLeft <= 0) {
       return;
     }
@@ -5617,13 +5630,8 @@ Main tuning points:
         h: state.platformCoinIcon.size
       };
       if (isRectVisibleOnScreen(platformCoinRect, 0)) {
+        addMagnetAttractedItem("platformCoin", state.platformCoinIcon.x, state.platformCoinIcon.y, state.platformCoinIcon.size);
         state.platformCoinIcon.active = false;
-        if (!isCurseActive()) {
-          state.bonusScore += C.coinScoreBonus;
-        }
-        state.collectedCoins += 1;
-        state.levelCollectedCoins += 1;
-        scheduleNextPlatformCoinSpawn();
       }
     }
 
@@ -5635,10 +5643,8 @@ Main tuning points:
         h: state.liveIcon.size
       };
       if (isRectVisibleOnScreen(liveRect, 0)) {
+        addMagnetAttractedItem("live", state.liveIcon.x, state.liveIcon.y, state.liveIcon.size);
         state.liveIcon.active = false;
-        state.livesLeft = Math.min(state.maxLives, state.livesLeft + 1);
-        updateLivesUi();
-        scheduleNextLiveSpawn();
       }
     }
 
@@ -5650,9 +5656,11 @@ Main tuning points:
         }
 
         var coinSize = C.playerSize * C.coinIconSizeRatio;
+        var elevatorCoinX = elevator.x + elevator.width * 0.5 - coinSize * 0.5;
+        var elevatorCoinY = elevator.y - coinSize;
         var elevatorCoinRect = {
-          x: elevator.x + elevator.width * 0.5 - coinSize * 0.5,
-          y: elevator.y - coinSize,
+          x: elevatorCoinX,
+          y: elevatorCoinY,
           w: coinSize,
           h: coinSize
         };
@@ -5660,24 +5668,72 @@ Main tuning points:
           continue;
         }
 
+        addMagnetAttractedItem("elevatorCoin", elevatorCoinX, elevatorCoinY, coinSize);
         elevator.consumeCoin();
-        if (!isCurseActive()) {
-          state.bonusScore += C.coinScoreBonus;
-        }
-        state.collectedCoins += 1;
-        state.levelCollectedCoins += 1;
+      }
+    }
+  }
+
+  function collectMagnetAttractedItem(item) {
+    if (item.type === "live") {
+      state.livesLeft = Math.min(state.maxLives, state.livesLeft + 1);
+      updateLivesUi();
+      scheduleNextLiveSpawn();
+      return;
+    }
+
+    if (!isCurseActive()) {
+      state.bonusScore += C.coinScoreBonus;
+    }
+    state.collectedCoins += 1;
+    state.levelCollectedCoins += 1;
+    if (item.type === "platformCoin") {
+      scheduleNextPlatformCoinSpawn();
+    }
+  }
+
+  function updateMagnetAttractedItems(dt) {
+    if (!state.magnetAttractedItems.length) {
+      return;
+    }
+
+    var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
+    var playerCenterX = player.x + player.width * 0.5;
+    var playerCenterY = player.y + player.height * 0.5;
+    var attractSpeed = Math.max(520, state.scrollSpeed * 2.6);
+    var collectDelay = 0.08;
+
+    for (var i = state.magnetAttractedItems.length - 1; i >= 0; i -= 1) {
+      var item = state.magnetAttractedItems[i];
+      item.age += dt;
+      var itemCenterX = item.x + item.size * 0.5;
+      var itemCenterY = item.y + item.size * 0.5;
+      var dx = playerCenterX - itemCenterX;
+      var dy = playerCenterY - itemCenterY;
+      var distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance > 0.001) {
+        var step = Math.min(distance, attractSpeed * dt);
+        item.x += (dx / distance) * step;
+        item.y += (dy / distance) * step;
+      }
+
+      var itemRect = { x: item.x, y: item.y, w: item.size, h: item.size };
+      if (item.age >= collectDelay && isRectIntersect(playerRect, itemRect)) {
+        collectMagnetAttractedItem(item);
+        state.magnetAttractedItems.splice(i, 1);
       }
     }
   }
 
   function updateMagnetEffect(dt) {
-    if (state.magnetTimeLeft <= 0) {
+    if (state.magnetTimeLeft > 0) {
+      state.magnetTimeLeft = Math.max(0, state.magnetTimeLeft - dt);
+      convertVisiblePickupsToMagnetTargets();
+    } else {
       state.magnetTimeLeft = 0;
-      return;
     }
-
-    state.magnetTimeLeft = Math.max(0, state.magnetTimeLeft - dt);
-    collectMagnetPickupsOnScreen();
+    updateMagnetAttractedItems(dt);
   }
 
   function updateCurseEffect(dt) {
@@ -6863,6 +6919,32 @@ Main tuning points:
       return;
     }
     drawCoinSymbol(worldToScreenX(coin.x), coin.y, coin.size);
+  }
+
+  function drawMagnetAttractedItems() {
+    for (var i = 0; i < state.magnetAttractedItems.length; i += 1) {
+      var item = state.magnetAttractedItems[i];
+      var screenX = worldToScreenX(item.x);
+      if (item.type === "live") {
+        var liveArt = getCurrentLevelSceneArt("heart");
+        if (useModernVisuals() && liveArt) {
+          ctx.drawImage(liveArt, screenX, item.y, item.size, item.size);
+        } else {
+          var cx = screenX + item.size * 0.5;
+          ctx.strokeStyle = "#111";
+          ctx.lineWidth = Math.max(2, item.size * 0.06);
+          ctx.beginPath();
+          ctx.moveTo(cx, item.y + item.size * 0.92);
+          ctx.bezierCurveTo(screenX + item.size * 0.18, item.y + item.size * 0.7, screenX + item.size * 0.08, item.y + item.size * 0.38, screenX + item.size * 0.26, item.y + item.size * 0.22);
+          ctx.bezierCurveTo(screenX + item.size * 0.4, item.y + item.size * 0.08, cx, item.y + item.size * 0.18, cx, item.y + item.size * 0.34);
+          ctx.bezierCurveTo(cx, item.y + item.size * 0.18, screenX + item.size * 0.6, item.y + item.size * 0.08, screenX + item.size * 0.74, item.y + item.size * 0.22);
+          ctx.bezierCurveTo(screenX + item.size * 0.92, item.y + item.size * 0.38, screenX + item.size * 0.82, item.y + item.size * 0.7, cx, item.y + item.size * 0.92);
+          ctx.stroke();
+        }
+      } else {
+        drawCoinSymbol(screenX, item.y, item.size);
+      }
+    }
   }
 
   function drawElevatorCoins() {
