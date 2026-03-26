@@ -460,3 +460,5 @@ Rules:
 - Follow-up correction: rebalanced that desktop header again so the left button column is not too tiny, while the middle and right columns still sit further left than before.
 - Follow-up tweak: reduced the desktop `Jump Mode` title size by roughly one third and increased the left button heights so the left column fills that header area more evenly.
 - Follow-up tweak: increased the text size inside the left briefing buttons so their labels better fill the button height.
+- Follow-up responsive polish: moved the desktop briefing rules even closer to the middle mode column and lowered the breakpoint where `Controls` and `Level Goal` stack vertically, so both panels stay side by side until a much smaller window width.
+- Follow-up spacing polish: tightened the desktop header columns once more so the rules block sits almost flush with the `Jump Mode` column and has a little more room before overflowing on medium-width windows.
