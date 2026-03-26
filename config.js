@@ -66,6 +66,7 @@
     doubleJumpRespawnMaxSeconds: 15,
     slowUnlockSpeedPercent: 150,
     slowIconSizeRatio: 1.2,
+    slowDownByPercent: 50,
     slowRespawnMinSeconds: 10,
     slowRespawnMaxSeconds: 20,
     scoreBagUnlockScore: 0,

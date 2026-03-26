@@ -475,3 +475,14 @@ Rules:
 - These cards use `assets/hero question mark icon.png`, show `????` as the name, and `Soon` as the status while matching the existing skin-card styling.
 - Kept them completely outside the unlock/selection mechanics so they are only visual placeholders for now.
 - Follow-up visual tweak: made the future `?` icon blend into the preview card with a transparent-looking result instead of keeping its original white square background.
+
+### 2026-03-26 - Added configurable Slow slowdown percentage to admin
+- Added `Slow down by %` to the `Slow` admin section for every level/mode/difficulty combination.
+- Wired the `Slow` pickup to use that percentage at pickup time instead of always halving the speed.
+- Kept the existing acceleration model intact, so score-based speed progression continues while the slowdown multiplier is active.
+
+### 2026-03-26 - Moved the HUD level label to the top-right stack
+- Removed the in-game `Level` label from the left score column so it no longer overlaps the playfield edge.
+- The HUD now shows `Level` in the top-right at the larger former `Speed` size, with `Speed` moved directly underneath at the smaller former `Level` size.
+- Shifted the right-side `Shield` and `Magnet` timers down to keep that stack readable.
+- Follow-up cleanup: removed the leftover old `Level` line from the left HUD column so the label now exists only in the new top-right position.

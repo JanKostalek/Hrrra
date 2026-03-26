@@ -26,7 +26,7 @@ Main tuning points:
 - Double jump: doubleJumpUnlockScore, doubleJumpGravity, doubleJumpInitialVelocity, doubleJumpHoldAcceleration, doubleJumpHoldMaxTime, doubleJumpIconSizeRatio, doubleJumpEffectSeconds, doubleJumpRespawnMinSeconds, doubleJumpRespawnMaxSeconds
 - Tripple jump: tripleJumpUnlockScore, tripleJumpEffectSeconds
 - Tripple jump movement: tripleJumpGravity, tripleJumpInitialVelocity, tripleJumpHoldAcceleration, tripleJumpHoldMaxTime
-- Slow icon: slowUnlockSpeedPercent, slowIconSizeRatio, slowRespawnMinSeconds, slowRespawnMaxSeconds
+- Slow icon: slowUnlockSpeedPercent, slowDownByPercent, slowIconSizeRatio, slowRespawnMinSeconds, slowRespawnMaxSeconds
 - Money bag: scoreBagUnlockScore, scoreBagBonus, scoreBagIconSizeRatio, scoreBagRespawnMinSeconds, scoreBagRespawnMaxSeconds
 - Cracked coin: crackedCoinUnlockScore, crackedCoinPenaltyPercent, crackedCoinRespawnMinSeconds, crackedCoinRespawnMaxSeconds
 - Question coin: questionCoinUnlockScore, questionCoinRespawnMinSeconds, questionCoinRespawnMaxSeconds
@@ -1707,6 +1707,7 @@ Main tuning points:
       title: "Slow",
       fields: [
         { key: "slowUnlockSpeedPercent", label: "Unlock speed %" },
+        { key: "slowDownByPercent", label: "Slow down by %" },
         { key: "slowRespawnMinSeconds", label: "Respawn min sec" },
         { key: "slowRespawnMaxSeconds", label: "Respawn max sec" }
       ]
@@ -5464,9 +5465,11 @@ Main tuning points:
     var iconRect = { x: icon.x, y: icon.y, w: icon.size, h: icon.size };
 
     if (isRectIntersect(playerRect, iconRect)) {
+      var slowDownPercent = Math.max(0, Number(C.slowDownByPercent) || 0);
+      var slowMultiplier = Math.max(0, 1 - (slowDownPercent / 100));
       icon.active = false;
-      state.scrollSpeed *= 0.5;
-      state.speedSlowMultiplier *= 0.5;
+      state.scrollSpeed *= slowMultiplier;
+      state.speedSlowMultiplier *= slowMultiplier;
       scheduleNextSlowSpawn();
     }
   }
@@ -6888,7 +6891,6 @@ Main tuning points:
     ctx.fillText("Score: " + state.score, 18, 36);
     ctx.font = "20px Arial";
     ctx.fillText("Max Score: " + sessionMaxScore, 18, 64);
-    ctx.fillText(getLevelDisplayName(state.currentLevel), 18, 90);
     ctx.font = "24px Arial";
     ctx.textAlign = "center";
     if (state.gameMode === 2) {
@@ -6907,13 +6909,14 @@ Main tuning points:
     }
     ctx.textAlign = "right";
     ctx.font = "24px Arial";
-    ctx.fillText("Speed +" + state.speedPercent + "%", canvas.width - 18, 36);
+    ctx.fillText(getLevelDisplayName(state.currentLevel), canvas.width - 18, 36);
     ctx.font = "20px Arial";
+    ctx.fillText("Speed +" + state.speedPercent + "%", canvas.width - 18, 64);
     if (state.shieldCharges > 0) {
-      ctx.fillText("Shield: ON", canvas.width - 18, 64);
+      ctx.fillText("Shield: ON", canvas.width - 18, 90);
     }
     if (state.magnetTimeLeft > 0) {
-      ctx.fillText("Magnet: " + state.magnetTimeLeft.toFixed(1) + "s", canvas.width - 18, 90);
+      ctx.fillText("Magnet: " + state.magnetTimeLeft.toFixed(1) + "s", canvas.width - 18, 116);
     }
     ctx.textAlign = "left";
 

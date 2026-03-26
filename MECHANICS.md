@@ -1123,6 +1123,12 @@ Every gameplay-related change must be added here with date and short reason.
 - Default setup keeps `Skin02` and `Skin03` allowed in Levels `3` and `4`, matching the previous behavior.
 - Why: makes skin progression easier to tune for testing and future content pacing.
 
+### v0.1.182 - Slow slowdown percentage is now configurable (2026-03-26)
+- Added a new `Slow down by %` admin field for every level/mode/difficulty combination.
+- The `Slow` pickup now reduces the current game speed by the configured percentage instead of using a fixed hard-coded multiplier.
+- Score-driven speed scaling still continues normally in the background because the slow effect only multiplies the runtime speed.
+- Why: makes the slowdown mechanic easier to tune precisely for different levels and difficulties.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.
