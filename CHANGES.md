@@ -481,6 +481,11 @@ Rules:
 - Wired the `Slow` pickup to use that percentage at pickup time instead of always halving the speed.
 - Kept the existing acceleration model intact, so score-based speed progression continues while the slowdown multiplier is active.
 
+### 2026-03-26 - Promoted current Firefox admin tuning into source defaults
+- Imported the current Firefox local admin snapshot into source tuning defaults so `Reset` / `Default` now returns to the same mechanic values without depending on browser storage.
+- Updated the global source defaults to match the Firefox snapshot for shared settings such as fullscreen behavior, while keeping hero progression clean by default.
+- Intentionally left the player skin progress default untouched so a fresh reset/build still starts with only `Skin01` unlocked and selected.
+
 ### 2026-03-26 - Moved the HUD level label to the top-right stack
 - Removed the in-game `Level` label from the left score column so it no longer overlaps the playfield edge.
 - The HUD now shows `Level` in the top-right at the larger former `Speed` size, with `Speed` moved directly underneath at the smaller former `Level` size.
