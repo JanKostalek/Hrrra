@@ -528,3 +528,4 @@ Rules:
 - Follow-up seam cleanup: removed the inner white highlight layer and inset highlight shadow from the main briefing card so the top and bottom inner edges no longer draw as pale white strips.
 - Rewrote `TESTER_INFO.md` so it now reflects the current game state more completely, including progression locks, skins, special mechanics, briefing flow, admin testing tools, and export/import behavior.
 - Added a new `Tester Info` button to the pre-run detail screen so testers can open `TESTER_INFO.md` directly from the game UI.
+- Prepared Android release signing locally for Play upload by wiring optional `key.properties` support into `android/app/build.gradle`, bumping Android versioning to `versionCode 2` / `versionName 1.0.1`, and generating a fresh signed release bundle for closed testing.
