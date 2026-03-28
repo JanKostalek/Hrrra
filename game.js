@@ -63,6 +63,7 @@ Main tuning points:
   var preRunFullLockEl = document.getElementById("pre-run-full-lock");
   var preRunHardLockEl = document.getElementById("pre-run-hard-lock");
   var preRunBackBtn = document.getElementById("pre-run-back-btn");
+  var preRunTesterInfoBtn = document.getElementById("pre-run-tester-info-btn");
   var preRunStartBtn = document.getElementById("pre-run-start-btn");
   var preRunDetailTitleEl = document.getElementById("pre-run-detail-title");
   var preRunDetailSubtitleEl = document.getElementById("pre-run-detail-subtitle");
@@ -2585,6 +2586,11 @@ Main tuning points:
       preRunBackBtn.addEventListener("click", function () {
         state.preRunStep = "select";
         renderPreRunScreen();
+      });
+    }
+    if (preRunTesterInfoBtn) {
+      preRunTesterInfoBtn.addEventListener("click", function () {
+        window.open("TESTER_INFO.md", "_blank");
       });
     }
     if (preRunStartBtn) {

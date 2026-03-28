@@ -525,3 +525,6 @@ Rules:
 - Follow-up button styling: the detail-screen `Start Run` button now uses a green treatment and the `Back` button a red treatment so their purpose is readable at a glance.
 - Follow-up seam fix: extended the briefing-panel background image slightly past the panel bounds to remove the thin white strip that was showing at the bottom edge.
 - Follow-up background fix: replaced the remaining light base of the main briefing card with the same `start screen bkg` texture so the outer top/bottom/side areas no longer read as flat white.
+- Follow-up seam cleanup: removed the inner white highlight layer and inset highlight shadow from the main briefing card so the top and bottom inner edges no longer draw as pale white strips.
+- Rewrote `TESTER_INFO.md` so it now reflects the current game state more completely, including progression locks, skins, special mechanics, briefing flow, admin testing tools, and export/import behavior.
+- Added a new `Tester Info` button to the pre-run detail screen so testers can open `TESTER_INFO.md` directly from the game UI.
