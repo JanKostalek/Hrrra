@@ -60,6 +60,8 @@ Main tuning points:
   var preRunFullBtn = document.getElementById("pre-run-full-btn");
   var preRunEasyBtn = document.getElementById("pre-run-easy-btn");
   var preRunHardBtn = document.getElementById("pre-run-hard-btn");
+  var preRunFullLockEl = document.getElementById("pre-run-full-lock");
+  var preRunHardLockEl = document.getElementById("pre-run-hard-lock");
   var preRunBackBtn = document.getElementById("pre-run-back-btn");
   var preRunStartBtn = document.getElementById("pre-run-start-btn");
   var preRunDetailTitleEl = document.getElementById("pre-run-detail-title");
@@ -370,8 +372,19 @@ Main tuning points:
         Skin02: false,
         Skin03: false
       },
-      selectedSkin: "Skin01"
+      selectedSkin: "Skin01",
+      highestLevelReached: 1,
+      hardModeOverride: "default",
+      fullModeOverride: "default"
     };
+  }
+
+  function sanitizeHighestLevelReached(value) {
+    var parsed = Math.floor(Number(value));
+    if (!Number.isFinite(parsed)) {
+      return 1;
+    }
+    return Math.max(1, Math.min(LEVEL_COUNT, parsed));
   }
 
   function cloneSkinUnlocks(source) {
@@ -403,7 +416,14 @@ Main tuning points:
       }
       return {
         unlockedSkins: cloneSkinUnlocks(parsed.unlockedSkins),
-        selectedSkin: normalizeSkinName(parsed.selectedSkin)
+        selectedSkin: normalizeSkinName(parsed.selectedSkin),
+        highestLevelReached: sanitizeHighestLevelReached(parsed.highestLevelReached),
+        hardModeOverride: parsed.hardModeOverride === "locked" || parsed.hardModeOverride === "unlocked"
+          ? parsed.hardModeOverride
+          : "default",
+        fullModeOverride: parsed.fullModeOverride === "locked" || parsed.fullModeOverride === "unlocked"
+          ? parsed.fullModeOverride
+          : "default"
       };
     } catch (error) {
       return fallback;
@@ -416,7 +436,14 @@ Main tuning points:
         PLAYER_SKIN_PROGRESS_STORAGE_KEY,
         JSON.stringify({
           unlockedSkins: cloneSkinUnlocks(state.unlockedSkins),
-          selectedSkin: normalizeOwnedSkinName(C.selectedSkin)
+          selectedSkin: normalizeOwnedSkinName(C.selectedSkin),
+          highestLevelReached: sanitizeHighestLevelReached(state.highestLevelReached),
+          hardModeOverride: state.hardModeOverride === "locked" || state.hardModeOverride === "unlocked"
+            ? state.hardModeOverride
+            : "default",
+          fullModeOverride: state.fullModeOverride === "locked" || state.fullModeOverride === "unlocked"
+            ? state.fullModeOverride
+            : "default"
         })
       );
     } catch (error) {
@@ -441,7 +468,85 @@ Main tuning points:
     var progress = readPlayerSkinProgress();
     state.unlockedSkins = cloneSkinUnlocks(progress.unlockedSkins);
     C.selectedSkin = normalizeOwnedSkinName(progress.selectedSkin);
+    state.highestLevelReached = sanitizeHighestLevelReached(progress.highestLevelReached);
+    state.hardModeOverride = progress.hardModeOverride;
+    state.fullModeOverride = progress.fullModeOverride;
     writePlayerSkinProgress();
+  }
+
+  function sanitizeGlobalAdminNumber(key, value) {
+    var parsed = Math.floor(Number(value));
+    if (!Number.isFinite(parsed)) {
+      return C[key];
+    }
+    if (key === "hardModeUnlockLevel") {
+      return Math.max(1, Math.min(LEVEL_COUNT, parsed));
+    }
+    if (key === "fullModeUnlockJumpHardScore") {
+      return Math.max(0, parsed);
+    }
+    return parsed;
+  }
+
+  function getHardModeUnlockLevel() {
+    return sanitizeGlobalAdminNumber("hardModeUnlockLevel", C.hardModeUnlockLevel);
+  }
+
+  function isHardDifficultyUnlocked() {
+    if (state.hardModeOverride === "unlocked") {
+      return true;
+    }
+    if (state.hardModeOverride === "locked") {
+      return false;
+    }
+    return state.highestLevelReached >= getHardModeUnlockLevel();
+  }
+
+  function getFullModeUnlockJumpHardScore() {
+    return sanitizeGlobalAdminNumber("fullModeUnlockJumpHardScore", C.fullModeUnlockJumpHardScore);
+  }
+
+  function getJumpHardBestScore() {
+    return readMaxScoreFromStorage(2, "hard");
+  }
+
+  function isFullModeUnlocked() {
+    if (state.fullModeOverride === "unlocked") {
+      return true;
+    }
+    if (state.fullModeOverride === "locked") {
+      return false;
+    }
+    return getJumpHardBestScore() >= getFullModeUnlockJumpHardScore();
+  }
+
+  function getHardDifficultyLockText() {
+    return "Locked - Reach " + getLevelDisplayName(getHardModeUnlockLevel()) + ".";
+  }
+
+  function getFullModeLockText() {
+    return "Locked - Reach " + getFullModeUnlockJumpHardScore().toLocaleString("en-US") + " score in Jump Mode Hard.";
+  }
+
+  function normalizeUnlockedPreRunSelection() {
+    if (!isFullModeUnlocked() && state.gameMode === 1) {
+      state.gameMode = 2;
+    }
+    if (!isHardDifficultyUnlocked() && state.gameDifficulty === "hard") {
+      state.gameDifficulty = "easy";
+    }
+  }
+
+  function setModeUnlockOverride(kind, value) {
+    var normalized = value === "locked" || value === "unlocked" ? value : "default";
+    if (kind === "hard") {
+      state.hardModeOverride = normalized;
+    } else if (kind === "full") {
+      state.fullModeOverride = normalized;
+    }
+    normalizeUnlockedPreRunSelection();
+    writePlayerSkinProgress();
+    renderPreRunScreen();
   }
 
   function unlockSkin(skinName) {
@@ -866,6 +971,8 @@ Main tuning points:
       var value = stored[key];
       if (typeof C[key] === "boolean" && typeof value === "boolean") {
         C[key] = value;
+      } else if (typeof C[key] === "number" && Number.isFinite(value)) {
+        C[key] = sanitizeGlobalAdminNumber(key, value);
       } else if (typeof C[key] === "string" && typeof value === "string") {
         C[key] = key === "selectedSkin" ? normalizeSkinName(value) : value;
       }
@@ -984,6 +1091,12 @@ Main tuning points:
       var globalKey = globalKeys[globalKeyIndex];
       if (typeof C[globalKey] === "boolean") {
         exportData.global[globalKey] = Boolean(C[globalKey]);
+      } else if (typeof C[globalKey] === "number" && Number.isFinite(C[globalKey])) {
+        exportData.global[globalKey] = sanitizeGlobalAdminNumber(globalKey, C[globalKey]);
+      } else if (typeof C[globalKey] === "string") {
+        exportData.global[globalKey] = globalKey === "selectedSkin"
+          ? normalizeSkinName(C[globalKey])
+          : String(C[globalKey]);
       }
     }
     if (globalState.adminUiState && typeof globalState.adminUiState === "object") {
@@ -1063,6 +1176,13 @@ Main tuning points:
       var globalKey = globalKeys[globalKeyIndex];
       if (typeof parsed.global[globalKey] === "boolean") {
         saveGlobalAdminField(globalKey, parsed.global[globalKey]);
+      } else if (typeof C[globalKey] === "number" && Number.isFinite(parsed.global[globalKey])) {
+        saveGlobalAdminField(globalKey, sanitizeGlobalAdminNumber(globalKey, parsed.global[globalKey]));
+      } else if (typeof C[globalKey] === "string" && typeof parsed.global[globalKey] === "string") {
+        saveGlobalAdminField(
+          globalKey,
+          globalKey === "selectedSkin" ? normalizeSkinName(parsed.global[globalKey]) : parsed.global[globalKey]
+        );
       }
     }
 
@@ -1324,6 +1444,9 @@ Main tuning points:
     preRunActive: false,
     preRunStep: "select",
     currentLevel: 1,
+    highestLevelReached: 1,
+    hardModeOverride: "default",
+    fullModeOverride: "default",
     gameMode: 2,
     gameDifficulty: "easy",
     unlockedSkins: {
@@ -1538,7 +1661,11 @@ Main tuning points:
         { key: "fullscreenAutoEnabled", label: "Auto fullscreen on mobile", type: "checkbox" },
         { key: "modernVisualsEnabled", label: "Modern visuals", type: "checkbox" },
         { key: "selectedSkin", label: "Skin", type: "select", options: SKIN_OPTIONS },
-        { key: "skinPickupLevels", label: "Skin Pickup Level", type: "skin-pickup-levels" }
+        { key: "skinPickupLevels", label: "Skin Pickup Level", type: "skin-pickup-levels" },
+        { key: "hardModeUnlockLevel", label: "Jump Hard unlock at Level", type: "number", min: 1, max: LEVEL_COUNT, step: 1 },
+        { key: "hardModeOverrideControls", label: "", type: "hard-mode-override-controls" },
+        { key: "fullModeUnlockJumpHardScore", label: "Full Mode unlock on Jump Hard score", type: "number", min: 0, step: 1 },
+        { key: "fullModeOverrideControls", label: "", type: "full-mode-override-controls" }
       ]
     }
   ];
@@ -2247,6 +2374,11 @@ Main tuning points:
   }
 
   function renderPreRunScreen() {
+    var hardUnlocked = isHardDifficultyUnlocked();
+    var fullUnlocked = isFullModeUnlocked();
+
+    normalizeUnlockedPreRunSelection();
+
     if (preRunSelectScreenEl) {
       preRunSelectScreenEl.classList.toggle("hidden", state.preRunStep !== "select");
     }
@@ -2258,6 +2390,24 @@ Main tuning points:
     }
     if (preRunHardBtn) {
       preRunHardBtn.classList.toggle("active", state.gameDifficulty === "hard");
+      preRunHardBtn.classList.toggle("locked", !hardUnlocked);
+      preRunHardBtn.disabled = !hardUnlocked;
+      preRunHardBtn.title = hardUnlocked ? "" : getHardDifficultyLockText();
+      preRunHardBtn.setAttribute("aria-disabled", hardUnlocked ? "false" : "true");
+    }
+    if (preRunHardLockEl) {
+      preRunHardLockEl.classList.toggle("hidden", hardUnlocked);
+      preRunHardLockEl.textContent = getHardDifficultyLockText();
+    }
+    if (preRunFullBtn) {
+      preRunFullBtn.classList.toggle("locked", !fullUnlocked);
+      preRunFullBtn.disabled = !fullUnlocked;
+      preRunFullBtn.title = fullUnlocked ? "" : getFullModeLockText();
+      preRunFullBtn.setAttribute("aria-disabled", fullUnlocked ? "false" : "true");
+    }
+    if (preRunFullLockEl) {
+      preRunFullLockEl.classList.toggle("hidden", fullUnlocked);
+      preRunFullLockEl.textContent = getFullModeLockText();
     }
   }
 
@@ -2271,6 +2421,7 @@ Main tuning points:
   function prepareRunSetup(mode, difficulty) {
     state.gameMode = mode === 1 ? 1 : 2;
     state.gameDifficulty = difficulty === "hard" ? "hard" : "easy";
+    normalizeUnlockedPreRunSelection();
     state.currentLevel = 1;
     state.skinDiscoveryPlan = buildSkinDiscoveryPlan(state.gameMode, state.gameDifficulty);
     state.scoreCarryOver = 0;
@@ -2300,6 +2451,8 @@ Main tuning points:
     }
 
     state.currentLevel = Math.max(1, Math.min(LEVEL_COUNT, level));
+    state.highestLevelReached = Math.max(state.highestLevelReached, state.currentLevel);
+    writePlayerSkinProgress();
     loadCurrentLevelConfig();
     restartGame(false);
     state.pendingDoubleJumpTimeLeft = carryDoubleJumpTime;
@@ -2335,11 +2488,19 @@ Main tuning points:
   }
 
   function openPreRunModeDetails(mode) {
+    if (mode === 1 && !isFullModeUnlocked()) {
+      renderPreRunScreen();
+      return;
+    }
     state.preRunStep = "details";
     prepareRunSetup(mode, state.gameDifficulty);
   }
 
   function setPreRunDifficulty(difficulty) {
+    if (difficulty === "hard" && !isHardDifficultyUnlocked()) {
+      renderPreRunScreen();
+      return;
+    }
     state.gameDifficulty = difficulty === "hard" ? "hard" : "easy";
     if (state.preRunStep === "details") {
       prepareRunSetup(state.gameMode, state.gameDifficulty);
@@ -2576,6 +2737,20 @@ Main tuning points:
           globalInput.value = globalField.key === "selectedSkin"
             ? normalizeSkinName(C[globalField.key])
             : String(C[globalField.key]);
+        } else if (globalField.type === "number") {
+          if (typeof C[globalField.key] !== "number") {
+            continue;
+          }
+          globalInput = document.createElement("input");
+          globalInput.type = "number";
+          if (typeof globalField.min === "number") {
+            globalInput.min = String(globalField.min);
+          }
+          if (typeof globalField.max === "number") {
+            globalInput.max = String(globalField.max);
+          }
+          globalInput.step = typeof globalField.step === "number" ? String(globalField.step) : "1";
+          globalInput.value = String(sanitizeGlobalAdminNumber(globalField.key, C[globalField.key]));
         } else if (globalField.type === "skin-pickup-levels") {
           globalRow.classList.add("admin-field-stacked");
           globalInput = document.createElement("div");
@@ -2613,6 +2788,46 @@ Main tuning points:
             levelCheckboxList.appendChild(levelItem);
           }
           globalInput.appendChild(levelCheckboxList);
+        } else if (
+          globalField.type === "hard-mode-override-controls" ||
+          globalField.type === "full-mode-override-controls"
+        ) {
+          globalRow.classList.add("admin-field-stacked");
+          globalRow.classList.add("admin-field-no-label");
+          globalInput = document.createElement("div");
+          globalInput.className = "admin-inline-checkbox-wrap";
+
+          var targetKind = globalField.type === "hard-mode-override-controls" ? "hard" : "full";
+          var currentOverride = targetKind === "hard" ? state.hardModeOverride : state.fullModeOverride;
+
+          var overrideCaption = document.createElement("div");
+          overrideCaption.className = "admin-inline-checkbox-caption";
+          overrideCaption.textContent =
+            "Current override: " +
+            (currentOverride === "default" ? "Default progression" : currentOverride === "unlocked" ? "Forced unlock" : "Forced lock");
+          globalInput.appendChild(overrideCaption);
+
+          var overrideButtonWrap = document.createElement("div");
+          overrideButtonWrap.className = "admin-inline-checkbox-list";
+
+          function makeOverrideButton(kind, labelText, overrideValue, isActive) {
+            var button = document.createElement("button");
+            button.type = "button";
+            button.className = "admin-reset-max-btn";
+            if (isActive) {
+              button.classList.add("is-active");
+            }
+            button.textContent = labelText;
+            button.addEventListener("click", function () {
+              setModeUnlockOverride(kind, overrideValue);
+              renderAdminForm();
+            });
+            return button;
+          }
+
+          overrideButtonWrap.appendChild(makeOverrideButton(targetKind, "Unlock", "unlocked", currentOverride === "unlocked"));
+          overrideButtonWrap.appendChild(makeOverrideButton(targetKind, "Lock", "locked", currentOverride === "locked" || currentOverride === "default"));
+          globalInput.appendChild(overrideButtonWrap);
         } else {
           continue;
         }
@@ -2626,6 +2841,13 @@ Main tuning points:
             var nextValue;
             if (target.type === "checkbox") {
               nextValue = Boolean(target.checked);
+            } else if (target.type === "number") {
+              nextValue = parseFloat(target.value);
+              if (!Number.isFinite(nextValue)) {
+                nextValue = sanitizeGlobalAdminNumber(key, C[key]);
+              }
+              nextValue = sanitizeGlobalAdminNumber(key, nextValue);
+              target.value = String(nextValue);
             } else {
               nextValue = String(target.value);
               if (key === "selectedSkin") {
@@ -2642,11 +2864,17 @@ Main tuning points:
               C.selectedSkin = normalizeSkinName(nextValue);
               refreshPreRunSkinSelection();
               renderAdminForm();
+            } else if (key === "hardModeUnlockLevel" || key === "fullModeUnlockJumpHardScore") {
+              normalizeUnlockedPreRunSelection();
+              refreshPreRunBriefValues();
+              renderPreRunScreen();
             }
           });
         }
 
-        globalRow.appendChild(globalLabel);
+        if (!globalRow.classList.contains("admin-field-no-label")) {
+          globalRow.appendChild(globalLabel);
+        }
         globalRow.appendChild(globalInput);
         globalSectionContent.appendChild(globalRow);
       }

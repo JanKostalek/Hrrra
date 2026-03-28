@@ -512,3 +512,9 @@ Rules:
 - The HUD now shows `Level` in the top-right at the larger former `Speed` size, with `Speed` moved directly underneath at the smaller former `Level` size.
 - Shifted the right-side `Shield` and `Magnet` timers down to keep that stack readable.
 - Follow-up cleanup: removed the leftover old `Level` line from the left HUD column so the label now exists only in the new top-right position.
+- Added progression locks for the start screen so a fresh profile begins with only `Jump Mode / Easy`, with `Hard` unlocking at a configurable target level and `Full Mode` unlocking at a configurable `Jump Mode Hard` high score.
+- Extended player progress storage with `highestLevelReached` while keeping skin unlocks separate, so admin skin testing does not falsely unlock gameplay progression.
+- Added the two new unlock thresholds into Global admin and updated global export/import/loading so these numeric settings persist correctly.
+- Locked `Hard` and `Full Mode` now render greyed out with visible lock-condition text in the pre-run UI instead of silently allowing selection.
+- Follow-up admin pass: added `Unlock`, `Lock`, and `Use Default` buttons under both new progression thresholds so `Hard` and `Full Mode` can be force-tested without altering the normal unlock conditions.
+- Follow-up cleanup: removed the `Use Default` buttons again so the admin now keeps only `Unlock` and `Lock`, with `Default / Reset all` returning both modes to the default locked state.

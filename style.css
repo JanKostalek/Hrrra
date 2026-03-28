@@ -224,11 +224,21 @@ body {
     border-color 180ms ease;
 }
 
+.pre-run-mode-card:disabled,
+.pre-run-difficulty-btn:disabled {
+  cursor: default;
+}
+
 .pre-run-mode-card:hover {
   transform: translateY(-3px);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
     0 20px 34px rgba(8, 41, 58, 0.14);
+}
+
+.pre-run-mode-card:disabled:hover,
+.pre-run-difficulty-btn:disabled:hover {
+  transform: none;
 }
 
 #pre-run-jump-btn {
@@ -283,6 +293,12 @@ body {
     border-width 180ms ease,
     background 180ms ease,
     border-color 180ms ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
 }
 
 .pre-run-difficulty-btn:hover {
@@ -303,11 +319,49 @@ body {
     0 0 0 6px rgba(255, 227, 142, 0.45);
 }
 
+.pre-run-difficulty-title {
+  display: block;
+  line-height: 1;
+}
+
 #pre-run-easy-btn {
   --difficulty-art: url("assets/easy_bkg.png") center / cover no-repeat;
   background:
     linear-gradient(180deg, rgba(255, 248, 223, 0.24), rgba(255, 233, 173, 0.18)),
     url("assets/easy_bkg.png") center / cover no-repeat;
+}
+
+.pre-run-lock-note {
+  display: block;
+  font-size: clamp(12px, 1.2vw, 16px);
+  line-height: 1.2;
+  font-weight: 700;
+  color: #4f5f69;
+}
+
+.pre-run-difficulty-btn.locked,
+.pre-run-mode-card.locked {
+  filter: grayscale(0.7) saturate(0.45);
+  opacity: 0.82;
+}
+
+.pre-run-difficulty-btn.locked {
+  border-color: #70848f;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 10px 20px rgba(8, 41, 58, 0.06);
+}
+
+.pre-run-mode-card.locked {
+  border-color: #70848f;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 12px 22px rgba(8, 41, 58, 0.06);
+}
+
+.pre-run-difficulty-btn.locked .pre-run-lock-note,
+.pre-run-mode-card.locked .pre-run-lock-note {
+  color: #3c4e59;
 }
 
 #pre-run-hard-btn {
@@ -1600,6 +1654,10 @@ body.visual-theme-retro .brief-live::before {
   align-items: start;
 }
 
+.admin-field.admin-field-no-label {
+  margin-top: -4px;
+}
+
 .admin-inline-checkbox-wrap {
   display: grid;
   gap: 8px;
@@ -1614,6 +1672,16 @@ body.visual-theme-retro .brief-live::before {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 14px;
+}
+
+.admin-inline-checkbox-list .admin-reset-max-btn {
+  min-width: 110px;
+}
+
+.admin-inline-checkbox-list .admin-reset-max-btn.is-active {
+  border-color: #08293a;
+  background: #fff2bd;
+  box-shadow: 0 0 0 2px rgba(8, 41, 58, 0.14);
 }
 
 .admin-inline-checkbox-item {

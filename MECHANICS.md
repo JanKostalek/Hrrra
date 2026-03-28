@@ -1135,6 +1135,14 @@ Every gameplay-related change must be added here with date and short reason.
 - Elevator coins are detached from the elevator and then follow the same attraction behavior once magnetized.
 - Why: makes the magnet effect read as a true magnetic pull instead of a screen-wide auto-collect flash.
 
+### v0.1.184 - Hard and Full Mode now unlock through player progression (2026-03-26)
+- A fresh profile now starts with only `Jump Mode / Easy` available.
+- `Jump Mode / Hard` unlocks after reaching the configured target level, default `Level 5`.
+- `Full Mode` unlocks after reaching the configured target score in `Jump Mode / Hard`, default `150,000`.
+- The pre-run screen now greys out locked choices and shows the unlock condition directly on the locked button/card.
+- Global admin also includes explicit `Unlock` / `Lock` testing buttons for both `Hard` and `Full Mode`, without changing the normal progression thresholds.
+- Why: adds a clearer long-term progression path before the player reaches the harder rule sets.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.

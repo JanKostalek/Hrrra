@@ -23,6 +23,8 @@
     fullscreenAutoEnabled: true,
     modernVisualsEnabled: true,
     selectedSkin: "Skin01",
+    hardModeUnlockLevel: 5,
+    fullModeUnlockJumpHardScore: 150000,
     skinPickupSkin01Level1Enabled: false,
     skinPickupSkin01Level2Enabled: false,
     skinPickupSkin01Level3Enabled: false,

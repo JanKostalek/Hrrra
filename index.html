@@ -72,11 +72,17 @@
               <span class="pre-run-mode-copy"><strong>Double Jump</strong> is always enabled</span>
             </button>
             <div class="pre-run-difficulty-column" aria-label="Difficulty selection">
-              <button id="pre-run-easy-btn" class="pre-run-difficulty-btn active" aria-label="Choose Easy difficulty">Easy</button>
-              <button id="pre-run-hard-btn" class="pre-run-difficulty-btn" aria-label="Choose Hard difficulty">Hard</button>
+              <button id="pre-run-easy-btn" class="pre-run-difficulty-btn active" aria-label="Choose Easy difficulty">
+                <span class="pre-run-difficulty-title">Easy</span>
+              </button>
+              <button id="pre-run-hard-btn" class="pre-run-difficulty-btn" aria-label="Choose Hard difficulty">
+                <span class="pre-run-difficulty-title">Hard</span>
+                <span id="pre-run-hard-lock" class="pre-run-lock-note hidden"></span>
+              </button>
             </div>
             <button id="pre-run-full-btn" class="pre-run-mode-card" aria-label="Choose Full Mode">
               <span class="pre-run-mode-title">Full Mode</span>
+              <span id="pre-run-full-lock" class="pre-run-lock-note hidden"></span>
               <span class="pre-run-mode-copy"><strong>Mobile:</strong></span>
               <span class="pre-run-phone-art" aria-hidden="true">
                 <img src="assets/start_phone.png" alt="" />
