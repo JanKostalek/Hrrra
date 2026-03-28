@@ -518,3 +518,10 @@ Rules:
 - Locked `Hard` and `Full Mode` now render greyed out with visible lock-condition text in the pre-run UI instead of silently allowing selection.
 - Follow-up admin pass: added `Unlock`, `Lock`, and `Use Default` buttons under both new progression thresholds so `Hard` and `Full Mode` can be force-tested without altering the normal unlock conditions.
 - Follow-up cleanup: removed the `Use Default` buttons again so the admin now keeps only `Unlock` and `Lock`, with `Default / Reset all` returning both modes to the default locked state.
+- Briefing detail panels (`Skins`, `Controls`, `Level Goal`, and the lower mechanics panel) now use `assets/start screen bkg.png` instead of flat white, while keeping a soft light overlay so the text stays readable.
+- Follow-up fix: switched that briefing-panel background to a URL-encoded asset path and reduced the white overlay so the texture is actually visible instead of reading as flat white.
+- Follow-up rendering tweak: the briefing panel background now scales the whole `start screen bkg` image to the full panel area instead of using a cropped `cover` view.
+- Follow-up polish: non-selected skin cards in the `Skins` panel now use the same soft textured background treatment instead of flat white, while the selected card keeps its stronger gold highlight.
+- Follow-up button styling: the detail-screen `Start Run` button now uses a green treatment and the `Back` button a red treatment so their purpose is readable at a glance.
+- Follow-up seam fix: extended the briefing-panel background image slightly past the panel bounds to remove the thin white strip that was showing at the bottom edge.
+- Follow-up background fix: replaced the remaining light base of the main briefing card with the same `start screen bkg` texture so the outer top/bottom/side areas no longer read as flat white.

@@ -27,7 +27,8 @@ const assetFilesToCopy = [
   "assets/teleport02.png",
   "assets/teleport03.png",
   "assets/rocket01-clean.png",
-  "assets/rocket02-clean.png"
+  "assets/rocket02-clean.png",
+  "assets/start screen bkg.png"
 ];
 const assetDirectoriesToCopy = [
   "assets/skins",
