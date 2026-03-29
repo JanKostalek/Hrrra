@@ -1,52 +1,59 @@
 # Hrrra - Info Pro Testery
 
-## Co Je Hrrra
-Hrrra je 2D arkadova platformova hra postavena na postupu pres vice levelu. Hrac beha, skace, vyhyba se nebezpecim, sbira bonusy, odemyka novy obsah a snazi se dojit co nejdal s co nejvyssim score.
+Děkuji, že jste si hru nainstalovali.
+V tuto chvíli ověřuji, jak aplikaci vytvořit pomoci AI a dostat ji az do Google Store.
 
+## Co Je Hrrra
+Hrrra je 2D arkadova platformova hra postavena na postupu pres vice levelu. 
+-------------------------------------------------
+
+## Administrace Behem Testovani
+Po dobu testovani je ve hre otevrena administrace.
+
+Administrace umoznuje:
+
+Můžete si resetovat cokoliv nastavite do "default". lze to jednotlivě i tlačítkem nahoře "UPLNE vše".
+
+- menit mechaniky pro vsechny levely
+- menit nastaveni pro oba mody a obe obtiznosti
+- menit spawn hodnoty, unlocky, score cile a dalsi parametry
+- testovat zamceni a odemceni `Hard` a `Full Mode`
+- vybrat skin natvrdo kvuli testovani
+
+Dulezite:
+- admin vyber skinu slouzi pro test
+- sam o sobe skin trvale neodemkne
+
+## Export A Import Nastaveni
+Administrace podporuje:
+- `Export`
+- `Copy JSON`
+- `Import File`
+- `Paste JSON`
+
+To znamena, ze tester muze:
+- ulozit cele aktualni nastaveni do souboru
+- znovu ho nahrat
+- nebo ho poslat vyvojari
+
+
+-------------------------------------------------
 Hra momentalne obsahuje:
 - `Jump Mode`
-- `Full Mode`
-- obtiznosti `Easy` a `Hard`
+- `Full Mode` - Odemkne se postupně
+- obtiznosti `Easy` a `Hard`- Odemkne se postupně
 - `5` levelu
 - odemykatelne skiny postavy
 
+Nicméně Full mode jsem jeste vůbec "neladil". snažil jsem se pouze Jump Mode Easy a Hard.
+
 Prvni ctyri levely se dokoncuji dosazenim ciloveho score a pruchodem teleportem. Posledni level muze fungovat jako endless cast hry.
-
-## Jak Vypada Aktualni Verze
-- Hra ma vyraznejsi startovaci obrazovku s vyberem modu a obtiznosti.
-- Jednotlive levely maji rozdilna pozadi a vlastni atmosferu.
-- Pred kazdym runem se zobrazuje briefing obrazovka s pravidly, cilem levelu a vyberem skinu.
-- Po dokonceni levelu se zobrazi `Level Finished` meziscreen s rekapitulaci runu.
-
-## Zakladni Cil Hry
-Cilem hrace je:
-- prezit
-- ziskavat score
-- dokoncovat jednotlive levely
-- odemykat dalsi hratelne moznosti
-- odemykat nove skiny postavy
 
 V prvnich 4 levelech hra smeruje k dosazeni nastaveneho score. Po splneni podminky se objevi teleport. Pruchodem teleportem level konci. V poslednim levelu muze hra pokracovat endless.
 
-## Ovladaani
-### Jump Mode
-#### Desktop
-- `Space = Jump`
-
-#### Mobil
-- cela dotykova plocha = skok
-
-### Full Mode
-#### Desktop
-- `Left/Right Arrows` nebo `A/D` = pohyb
-- `Space = Jump`
-
-#### Mobil
-- leve a prave casti displeje = pohyb
-- vyhrazena cast = skok
 
 ## Postup Hrou
-Hra uz nezacina se vsemi moznostmi otevrenymi.
+Hra nezacina se vsemi moznostmi otevrenymi.
 
 Na cistem profilu je dostupne jen:
 - `Jump Mode`
@@ -67,9 +74,9 @@ Vychozi nastaveni:
 
 Tyto podminky jsou nastavitelne v administraci.
 
+----------------------------------------------------------------
 ## Levely
 Kazdy level muze mit:
-- vlastni pozadi
 - vlastni tuning mechanik
 - vlastni obtiznost podle modu a difficulty
 - vlastni cilove score
@@ -85,10 +92,6 @@ Mezi levely se prenasi:
 
 ## Teleport A Dokonceni Levelu
 - Po splneni score podminky se objevi teleport.
-- Teleport se objevuje jako svisla brana.
-- Kdyz se postava dotkne aktivniho jadra teleportu, hra se na chvili zastavi.
-- Probeha kratka teleportacni animace postavy.
-- Potom se zobrazi `Level Finished`.
 
 ## Skore
 Score roste:
@@ -190,7 +193,9 @@ Aktualni hratelne skiny:
 Na zacatku je dostupny jen:
 - `Zyro`
 
-`Vexi` a `Nemu` se daji odemykat behem hry.
+`Vexi`, `Nemu` a `Krob` se daji odemykat behem hry.
+
+-------------------------------------------------------------
 
 ### Jak Funguje Odemykani Skinu
 - Pred runem hra vybere, jestli se v danem runu muze objevit novy skin pickup.
@@ -219,56 +224,35 @@ Pri testovani je uzitecne sledovat hlavne:
 - jestli animace a pohyb postavy pusobi plynule
 - jestli magnet, shield, curse, cracked coin a question coin pusobi srozumitelne
 
-## Administrace Behem Testovani
-Po dobu testovani je ve hre otevrena administrace.
+-----------------------------------------------------------------
 
-Administrace umoznuje:
-- menit mechaniky pro vsechny levely
-- menit nastaveni pro oba mody a obe obtiznosti
-- menit spawn hodnoty, unlocky, score cile a dalsi parametry
-- testovat zamceni a odemceni `Hard` a `Full Mode`
-- vybrat skin natvrdo kvuli testovani
 
-Dulezite:
-- admin vyber skinu slouzi pro test
-- sam o sobe skin trvale neodemkne
-
-## Export A Import Nastaveni
-Administrace podporuje:
-- `Export`
-- `Copy JSON`
-- `Import File`
-- `Paste JSON`
-
-To znamena, ze tester muze:
-- ulozit cele aktualni nastaveni do souboru
-- znovu ho nahrat
-- nebo ho poslat vyvojari
-
-K dispozici je i:
-- `Default / Reset all`
-
-Tento reset vraci hru do vychoziho stavu prvniho spusteni, vcetne:
-- score
-- odemcenych skinu
-- odemceni `Hard`
-- odemceni `Full Mode`
-- admin nastaveni
-
-## Strucne Shrnutie Pro Prvni Spusteni
-- Zacinas v `Jump Mode / Easy`.
-- Behaj, skakej a sbirej bonusy.
-- Vyhybej se prekazkam a projektilum.
-- Dokonci level dosazenim ciloveho score a pruchodem teleportem.
-- Pozdeji odemknes `Hard`, `Full Mode` a dalsi skiny.
-- Pokud chces, muzes si pro testovani pomoct administraci.
 
 ## Poznamka Pro Testery
-Hra je stale ve vyvoji. Grafika, balans, pravidla i rozmisteni nekterych mechanik se jeste mohou menit. Smyslem testovani je overit:
+Hra je stale ve vyvoji. Grafika, balans, pravidla i rozmisteni nekterych mechanik se jeste mohou a pravdepodobne budou menit. Smyslem testovani je overit:
 - srozumitelnost
 - citelnost
 - zabavnost
 - ferovost
 - technickou stabilitu
+
+----------------------------------
+## Ovladani
+### Jump Mode
+#### Desktop
+- `Space = Jump`
+
+#### Mobil
+- cela dotykova plocha = skok
+
+### Full Mode
+#### Desktop
+- `Left/Right Arrows` nebo `A/D` = pohyb
+- `Space = Jump`
+
+#### Mobil
+- leve a prave casti displeje = pohyb
+- vyhrazena cast = skok
+
 
 Zpetna vazba je cennejsi nez "perfektni run". Zajimaji nas i situace, kdy neco pusobi nejasne, neferove nebo vizualne matouci.

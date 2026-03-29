@@ -544,3 +544,21 @@ Rules:
 - Made the in-game HUD text in Level 4 white as well, matching the existing Level 2 and Level 3 readability treatment for dark backgrounds.
 - Renamed the user-facing `Skin04` hero name everywhere in the UI and support pages to `Krob` while keeping the internal `Skin04` technical ID unchanged.
 - Added one more `Soon` placeholder card to the pre-run `Skins` panel so there are now two future hero slots shown for upcoming characters.
+- Added `Krob` to the discoverable skin pool, so it can now unlock in runs through the same random skin-pickup system that already reveals `Vexi` and `Nemu`.
+- Made the pre-run `Skins` panel use a responsive auto-fit grid, so hero cards stay side by side when there is room and only wrap under each other when the screen is too narrow.
+- Added shield bubble burst VFX sourced from `assets/bubbel burst.png`, sliced into transparent animation frames in `assets/Bubble_burst` and played for about half a second when shield is consumed by projectile, blocker, or top death zone. Bottom death zone shield rescue intentionally keeps its existing special handling without the burst effect.
+- Replaced the old shield outline with the first `Bubble_burst` frame as the idle shield visual and reduced opacity for both the held shield and the burst animation so the effect stays softer over the character.
+- Increased the idle bubble shield size so it fully wraps the character and raised its opacity to a softer semi-transparent look.
+- Centered the bubble shield art over the character by compensating for the source frame's internal offset, and applied the same alignment to the burst animation.
+- Rebuilt the `Bubble_burst` frames onto a shared center so the animation no longer visibly jumps from frame to frame.
+- Increased both the idle shield bubble and the shield burst animation by 20% while keeping their shared center alignment unchanged.
+- Switched the held shield visual from the first bubble frame to a cleaner bubble frame so the idle shield no longer shows the extra top glow shape.
+- Moved the held shield render above the player sprite instead of behind it, so the bubble reads as one full shield around the character instead of looking like a second bubble shape over the head.
+- 2026-03-29: Replaced the idle shield bubble with a dedicated clean static asset generated into `assets/Bubble_burst/shield-idle.png`, leaving the burst animation unchanged so the extra top shape no longer appears over the hero.
+- 2026-03-29: Reduced the active shield bubble size by about 20% while keeping its center and burst animation unchanged.
+- 2026-03-29: Nudged the active shield bubble slightly upward and increased it a touch so the hero sits fully inside the bubble without changing the burst effect.
+- 2026-03-29: Shifted the active shield bubble a touch further upward for a cleaner fit around the hero sprite.
+- 2026-03-29: Updated `future-release.html` so the planned-changes list now explicitly mentions frame rate tuning for the individual character animation sets.
+- 2026-03-29: Expanded `future-release.html` planned items to include character frame-rate tuning, animation updates, and visual level-art upgrades for platforms, elevators, and future gameplay assets.
+- 2026-03-29: Pointed the in-app `Future Release` button to the live Vercel page at `https://hrrra.vercel.app/future-release.html` so Android no longer opens a localhost URL.
+- 2026-03-29: Pointed the in-app `Tester Info` button to the live Vercel page at `https://hrrra.vercel.app/TESTER_INFO.md` so Android no longer opens a localhost URL.

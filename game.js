@@ -65,6 +65,8 @@ Main tuning points:
   var preRunBackBtn = document.getElementById("pre-run-back-btn");
   var preRunTesterInfoBtn = document.getElementById("pre-run-tester-info-btn");
   var preRunFutureReleaseBtn = document.getElementById("pre-run-future-release-btn");
+  var TESTER_INFO_URL = "https://hrrra.vercel.app/TESTER_INFO.md";
+  var FUTURE_RELEASE_URL = "https://hrrra.vercel.app/future-release.html";
   var preRunStartBtn = document.getElementById("pre-run-start-btn");
   var preRunDetailTitleEl = document.getElementById("pre-run-detail-title");
   var preRunDetailSubtitleEl = document.getElementById("pre-run-detail-subtitle");
@@ -147,6 +149,8 @@ Main tuning points:
     rocket1: null,
     rocket2: null,
     teleportFrames: [],
+    shieldBurstFrames: [],
+    shieldIdleFrame: null,
     levelVariants: {}
   };
   var HERO_WALK_FRAME_FILENAMES = [
@@ -248,7 +252,7 @@ Main tuning points:
     { value: "Skin03", label: "Nemu" },
     { value: "Skin04", label: "Krob" }
   ];
-  var DISCOVERABLE_SKIN_OPTIONS = ["Skin02", "Skin03"];
+  var DISCOVERABLE_SKIN_OPTIONS = ["Skin02", "Skin03", "Skin04"];
   var SKIN_UI_CONFIGS = {
     Skin01: {
       label: "Zyro",
@@ -346,6 +350,18 @@ Main tuning points:
     "assets/teleport02.png",
     "assets/teleport03.png"
   ];
+  var SHIELD_BURST_ART_PATHS = [
+    "assets/Bubble_burst/bubble-burst-01.png",
+    "assets/Bubble_burst/bubble-burst-02.png",
+    "assets/Bubble_burst/bubble-burst-03.png",
+    "assets/Bubble_burst/bubble-burst-04.png",
+    "assets/Bubble_burst/bubble-burst-05.png",
+    "assets/Bubble_burst/bubble-burst-06.png",
+    "assets/Bubble_burst/bubble-burst-07.png",
+    "assets/Bubble_burst/bubble-burst-08.png",
+    "assets/Bubble_burst/bubble-burst-09.png"
+  ];
+  var SHIELD_IDLE_ART_PATH = "assets/Bubble_burst/shield-idle.png";
   var HERO_WALK_FRAME_SOURCE_RECTS_SKIN01 = [
     { x: 40, y: 40, w: 80, h: 80 },
     { x: 40, y: 35, w: 80, h: 80 },
@@ -1578,6 +1594,9 @@ Main tuning points:
     },
     shieldRespawnTimer: 0,
     shieldCharges: 0,
+    shieldBurstActive: false,
+    shieldBurstElapsed: 0,
+    shieldBurstDuration: 0.5,
     shieldIcon: {
       active: false,
       x: 0,
@@ -1985,6 +2004,16 @@ Main tuning points:
         });
       })(teleportFrameIndex);
     }
+    for (var shieldBurstFrameIndex = 0; shieldBurstFrameIndex < SHIELD_BURST_ART_PATHS.length; shieldBurstFrameIndex += 1) {
+      (function (targetIndex) {
+        loadSceneArtAsset(SHIELD_BURST_ART_PATHS[targetIndex], function (image) {
+          sceneArt.shieldBurstFrames[targetIndex] = image;
+        });
+      })(shieldBurstFrameIndex);
+    }
+    loadSceneArtAsset(SHIELD_IDLE_ART_PATH, function (image) {
+      sceneArt.shieldIdleFrame = image;
+    });
   }
 
   function primeLevelVariantSceneArt() {
@@ -2631,13 +2660,13 @@ Main tuning points:
     }
     if (preRunTesterInfoBtn) {
       preRunTesterInfoBtn.addEventListener("click", function () {
-        window.open("TESTER_INFO.md", "_blank");
+        window.open(TESTER_INFO_URL, "_blank");
       });
     }
 
     if (preRunFutureReleaseBtn) {
       preRunFutureReleaseBtn.addEventListener("click", function () {
-        window.open("future-release.html", "_blank");
+        window.open(FUTURE_RELEASE_URL, "_blank");
       });
     }
     if (preRunStartBtn) {
@@ -3565,6 +3594,9 @@ Main tuning points:
       C.shieldRespawnMaxSeconds
     );
     state.shieldCharges = carriedShieldCharges;
+    state.shieldBurstActive = false;
+    state.shieldBurstElapsed = 0;
+    state.shieldBurstDuration = 0.5;
     state.shieldIcon.active = false;
     state.shieldIcon.x = 0;
     state.shieldIcon.y = 0;
@@ -3933,10 +3965,18 @@ Main tuning points:
       input.jumpPressed = false;
       state.playerRotationLockedInAir = false;
       state.playerAirSpinRemainingRad = 0;
+      startShieldBurstEffect();
       return true;
     }
 
+    startShieldBurstEffect();
     return true;
+  }
+
+  function startShieldBurstEffect() {
+    state.shieldBurstActive = true;
+    state.shieldBurstElapsed = 0;
+    state.shieldBurstDuration = 0.5;
   }
 
   function consumeLife(cause) {
@@ -4228,6 +4268,7 @@ Main tuning points:
     if (state.skinUnlockToastTimeLeft > 0) {
       state.skinUnlockToastTimeLeft = Math.max(0, state.skinUnlockToastTimeLeft - dt);
     }
+    updateShieldBurstEffect(dt);
     updateDoubleJumpEffect(dt);
     updateMagnetEffect(dt);
     updateCurseEffect(dt);
@@ -4369,6 +4410,18 @@ Main tuning points:
         return;
       }
       startProjectileDeathAnimation();
+    }
+  }
+
+  function updateShieldBurstEffect(dt) {
+    if (!state.shieldBurstActive) {
+      return;
+    }
+
+    state.shieldBurstElapsed += dt;
+    if (state.shieldBurstElapsed >= state.shieldBurstDuration) {
+      state.shieldBurstActive = false;
+      state.shieldBurstElapsed = 0;
     }
   }
 
@@ -4517,8 +4570,9 @@ Main tuning points:
     drawPlatformCoinIcon();
     drawMagnetAttractedItems();
     drawElevatorCoins();
-    drawPlayerStatusEffects();
     drawPlayer();
+    drawPlayerStatusEffects();
+    drawShieldBurstEffect();
     drawTeleportFinishAnimation();
     ctx.restore();
     drawTeleport();
@@ -6913,15 +6967,31 @@ Main tuning points:
     var time = state.runTimeSeconds;
 
     if (state.shieldCharges > 0) {
-      ctx.save();
-      ctx.strokeStyle = "rgba(79, 215, 255, 0.92)";
-      ctx.lineWidth = Math.max(3, player.width * 0.06);
-      ctx.shadowColor = "rgba(79, 215, 255, 0.35)";
-      ctx.shadowBlur = player.width * 0.18;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-      ctx.stroke();
-      ctx.restore();
+      var shieldFrame = sceneArt.shieldIdleFrame || sceneArt.shieldBurstFrames[0] || null;
+      if (shieldFrame) {
+        var shieldSize = player.width * 2.18;
+        var shieldCenterY = centerY - player.height * 0.10;
+        ctx.save();
+        ctx.globalAlpha = 0.5;
+        ctx.drawImage(
+          shieldFrame,
+          centerX - shieldSize * 0.5,
+          shieldCenterY - shieldSize * 0.5,
+          shieldSize,
+          shieldSize
+        );
+        ctx.restore();
+      } else {
+        ctx.save();
+        ctx.strokeStyle = "rgba(79, 215, 255, 0.25)";
+        ctx.lineWidth = Math.max(3, player.width * 0.06);
+        ctx.shadowColor = "rgba(79, 215, 255, 0.18)";
+        ctx.shadowBlur = player.width * 0.18;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
     }
 
     if (state.magnetTimeLeft > 0) {
@@ -6936,6 +7006,41 @@ Main tuning points:
       ctx.stroke();
       ctx.restore();
     }
+  }
+
+  function drawShieldBurstEffect() {
+    if (!state.shieldBurstActive || !sceneArt.shieldBurstFrames.length) {
+      return;
+    }
+
+    var loadedFrames = sceneArt.shieldBurstFrames.filter(function (frame) {
+      return Boolean(frame);
+    });
+    if (!loadedFrames.length) {
+      return;
+    }
+
+    var progress = Math.max(0, Math.min(1, state.shieldBurstElapsed / Math.max(0.001, state.shieldBurstDuration)));
+    var frameIndex = Math.min(
+      loadedFrames.length - 1,
+      Math.floor(progress * loadedFrames.length)
+    );
+    var frame = loadedFrames[frameIndex];
+    var visualYOffset = getPlayerVisualYOffset();
+    var centerX = worldToScreenX(player.x + player.width * 0.5);
+    var centerY = player.y + visualYOffset + player.height * 0.5;
+    var burstSize = player.width * 2.46;
+
+    ctx.save();
+    ctx.globalAlpha = 0.25 * (1 - progress * 0.2);
+    ctx.drawImage(
+      frame,
+      centerX - burstSize * 0.5,
+      centerY - burstSize * 0.5,
+      burstSize,
+      burstSize
+    );
+    ctx.restore();
   }
 
   function drawBlockerIcon() {

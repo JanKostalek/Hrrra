@@ -33,6 +33,7 @@ const assetFilesToCopy = [
 ];
 const assetDirectoriesToCopy = [
   "assets/skins",
+  "assets/Bubble_burst",
   "assets/level1",
   "assets/level2",
   "assets/level3",

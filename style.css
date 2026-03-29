@@ -470,7 +470,7 @@ body {
 }
 
 .pre-run-skin-panel {
-  width: min(620px, 100%);
+  width: min(760px, 100%);
   min-width: 280px;
   border: 2px solid #d7e0e6;
   border-radius: 18px;
@@ -488,7 +488,7 @@ body {
 
 .pre-run-skin-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   gap: 8px;
 }
 
