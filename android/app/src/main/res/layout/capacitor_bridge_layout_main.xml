@@ -24,17 +24,5 @@
         android:background="#FFF7D6"
         android:minHeight="56dp"
         android:paddingTop="4dp"
-        android:paddingBottom="4dp">
-
-        <TextView
-            android:id="@+id/ad_debug_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="6dp"
-            android:text="@string/ad_debug_waiting"
-            android:textColor="#FF111111"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-    </FrameLayout>
+        android:paddingBottom="4dp" />
 </LinearLayout>

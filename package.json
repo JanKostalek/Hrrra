@@ -5,7 +5,8 @@
   "main": "config.js",
   "scripts": {
     "copy:web": "node scripts/copy-web-assets.js",
-    "cap:sync": "npm run copy:web && npx cap sync",
+    "copy:web:android": "node scripts/copy-web-assets.js --android-public",
+    "cap:sync": "npm run copy:web && npx cap sync && npm run copy:web:android",
     "android": "npm run cap:sync && npx cap open android",
     "android:run": "npm run cap:sync && npx cap run android",
     "bscript": "powershell -ExecutionPolicy Bypass -File scripts/bscript.ps1",

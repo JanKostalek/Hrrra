@@ -562,3 +562,8 @@ Rules:
 - 2026-03-29: Expanded `future-release.html` planned items to include character frame-rate tuning, animation updates, and visual level-art upgrades for platforms, elevators, and future gameplay assets.
 - 2026-03-29: Pointed the in-app `Future Release` button to the live Vercel page at `https://hrrra.vercel.app/future-release.html` so Android no longer opens a localhost URL.
 - 2026-03-29: Pointed the in-app `Tester Info` button to the live Vercel page at `https://hrrra.vercel.app/TESTER_INFO.md` so Android no longer opens a localhost URL.
+- 2026-03-29: Bumped Android release version to `versionCode 3` / `versionName 1.0.2` to prepare a new signed App Bundle for the next Play closed-test upload.
+- 2026-03-29: Fixed web asset syncing for copied asset directories so stale files are cleaned before each sync, preventing accidental leftover blobs from inflating future Android App Bundles.
+- 2026-03-29: Fixed Android asset mirroring for Skin02/Vexi and future skin placeholders by mirroring copied web assets directly into android public assets after Capacitor sync and switching placeholder icons to a no-space filename for Android-safe loading.
+- 2026-03-29: Removed the temporary Android ad debug status overlay so test banners still load, but the in-game `Ad debug: ...` text no longer appears above the banner.
+- 2026-03-29: Temporarily disabled Android banner activation while keeping the AdMob code in place, so the banner area is hidden for now but can be re-enabled later with a single flag change.

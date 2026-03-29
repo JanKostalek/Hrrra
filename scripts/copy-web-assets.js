@@ -4,6 +4,8 @@ const path = require("path");
 const projectRoot = path.resolve(__dirname, "..");
 const outputDir = path.join(projectRoot, "www");
 const outputAssetsDir = path.join(outputDir, "assets");
+const androidPublicDir = path.join(projectRoot, "android", "app", "src", "main", "assets", "public");
+const copyToAndroidPublic = process.argv.includes("--android-public");
 const filesToCopy = [
   "index.html",
   "future-release.html",
@@ -29,7 +31,8 @@ const assetFilesToCopy = [
   "assets/teleport03.png",
   "assets/rocket01-clean.png",
   "assets/rocket02-clean.png",
-  "assets/start screen bkg.png"
+  "assets/start screen bkg.png",
+  "assets/hero-question-mark-icon.png"
 ];
 const assetDirectoriesToCopy = [
   "assets/skins",
@@ -67,22 +70,51 @@ const dynamicAssetFilesToCopy = assetDirectoriesToCopy.flatMap((dirName) =>
 );
 const allAssetFilesToCopy = Array.from(new Set(assetFilesToCopy.concat(dynamicAssetFilesToCopy)));
 
-fs.mkdirSync(outputDir, { recursive: true });
-fs.mkdirSync(outputAssetsDir, { recursive: true });
-
-for (const fileName of filesToCopy) {
-  const sourcePath = path.join(projectRoot, fileName);
-  const targetPath = path.join(outputDir, fileName);
-  fs.copyFileSync(sourcePath, targetPath);
-  console.log(`copied ${fileName}`);
+function ensureDir(dirPath) {
+  fs.mkdirSync(dirPath, { recursive: true });
 }
 
-for (const fileName of allAssetFilesToCopy) {
-  const sourcePath = path.join(projectRoot, fileName);
-  const targetPath = path.join(outputDir, fileName);
-  fs.mkdirSync(path.dirname(targetPath), { recursive: true });
-  fs.copyFileSync(sourcePath, targetPath);
-  console.log(`copied ${fileName}`);
+function cleanAssetDirectories(baseDir, logPrefix) {
+  for (const dirName of assetDirectoriesToCopy) {
+    const relativeDir = path.relative(projectRoot, path.join(projectRoot, dirName));
+    const targetDir = path.join(baseDir, relativeDir);
+    if (fs.existsSync(targetDir)) {
+      fs.rmSync(targetDir, { recursive: true, force: true });
+      console.log(`${logPrefix} cleaned ${relativeDir}`);
+    }
+  }
 }
 
+function copyProjectFiles(baseDir, logPrefix) {
+  ensureDir(baseDir);
+  ensureDir(path.join(baseDir, "assets"));
+
+  for (const fileName of filesToCopy) {
+    const sourcePath = path.join(projectRoot, fileName);
+    const targetPath = path.join(baseDir, fileName);
+    ensureDir(path.dirname(targetPath));
+    fs.copyFileSync(sourcePath, targetPath);
+    console.log(`${logPrefix} copied ${fileName}`);
+  }
+
+  for (const fileName of allAssetFilesToCopy) {
+    const sourcePath = path.join(projectRoot, fileName);
+    const targetPath = path.join(baseDir, fileName);
+    ensureDir(path.dirname(targetPath));
+    fs.copyFileSync(sourcePath, targetPath);
+    console.log(`${logPrefix} copied ${fileName}`);
+  }
+}
+
+ensureDir(outputDir);
+ensureDir(outputAssetsDir);
+cleanAssetDirectories(outputDir, "web");
+copyProjectFiles(outputDir, "web");
 console.log(`web assets copied to ${outputDir}`);
+
+if (copyToAndroidPublic) {
+  ensureDir(androidPublicDir);
+  cleanAssetDirectories(androidPublicDir, "android");
+  copyProjectFiles(androidPublicDir, "android");
+  console.log(`android public assets mirrored to ${androidPublicDir}`);
+}

@@ -245,7 +245,7 @@ Main tuning points:
     Skin04: "Krob"
   };
   var FUTURE_SKIN_SLOT_COUNT = 2;
-  var FUTURE_SKIN_ICON_PATH = "assets/hero%20question%20mark%20icon.png";
+  var FUTURE_SKIN_ICON_PATH = "assets/hero-question-mark-icon.png";
   var SKIN_OPTIONS = [
     { value: "Skin01", label: "Zyro" },
     { value: "Skin02", label: "Vexi" },

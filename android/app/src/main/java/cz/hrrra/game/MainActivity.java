@@ -12,7 +12,6 @@ import android.view.WindowMetrics;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -32,8 +31,8 @@ import com.google.android.ump.FormError;
 import com.google.android.ump.UserMessagingPlatform;
 
 public class MainActivity extends BridgeActivity {
+    private static final boolean ADS_ENABLED = false;
     private FrameLayout adContainer;
-    private TextView adDebugStatus;
     private AdView bannerView;
     private ConsentInformation consentInformation;
     private boolean adsInitialized = false;
@@ -43,12 +42,16 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(PrivacyOptionsPlugin.class);
         super.onCreate(savedInstanceState);
         adContainer = findViewById(R.id.ad_container);
-        adDebugStatus = findViewById(R.id.ad_debug_status);
+        if (!ADS_ENABLED && adContainer != null) {
+            adContainer.setVisibility(View.GONE);
+        }
         configureWebViewCache();
         configureEdgeToEdgeWindow();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         hideSystemBars();
-        requestConsentAndLoadAds();
+        if (ADS_ENABLED) {
+            requestConsentAndLoadAds();
+        }
     }
 
     @Override
@@ -108,7 +111,6 @@ public class MainActivity extends BridgeActivity {
     }
 
     private void requestConsentAndLoadAds() {
-        setAdDebugStatus(R.string.ad_debug_requesting_consent);
         consentInformation = UserMessagingPlatform.getConsentInformation(this);
         ConsentRequestParameters params = new ConsentRequestParameters.Builder().build();
 
@@ -122,8 +124,6 @@ public class MainActivity extends BridgeActivity {
                         if (consentInformation.canRequestAds()) {
                             initializeAdsIfNeeded();
                             loadBannerIfPossible();
-                        } else {
-                            setAdDebugStatus(R.string.ad_debug_consent_blocked);
                         }
                     }
                 );
@@ -131,16 +131,12 @@ public class MainActivity extends BridgeActivity {
                 if (consentInformation.canRequestAds()) {
                     initializeAdsIfNeeded();
                     loadBannerIfPossible();
-                } else {
-                    setAdDebugStatus(R.string.ad_debug_consent_blocked);
                 }
             },
             requestConsentError -> {
                 if (consentInformation.canRequestAds()) {
                     initializeAdsIfNeeded();
                     loadBannerIfPossible();
-                } else {
-                    setAdDebugStatus(R.string.ad_debug_consent_blocked);
                 }
             }
         );
@@ -157,7 +153,6 @@ public class MainActivity extends BridgeActivity {
 
     private void loadBannerIfPossible() {
         if (adContainer == null || consentInformation == null || !consentInformation.canRequestAds()) {
-            setAdDebugStatus(R.string.ad_debug_consent_blocked);
             return;
         }
 
@@ -165,20 +160,10 @@ public class MainActivity extends BridgeActivity {
             return;
         }
 
-        setAdDebugStatus(R.string.ad_debug_loading_banner);
         bannerView = new AdView(this);
         bannerView.setAdUnitId(getString(R.string.admob_banner_ad_unit_id));
         bannerView.setAdSize(getAdaptiveBannerSize());
         bannerView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                setAdDebugStatus(R.string.ad_debug_banner_loaded);
-            }
-
-            @Override
-            public void onAdFailedToLoad(LoadAdError adError) {
-                setAdDebugStatus(getString(R.string.ad_debug_banner_failed) + ": " + adError.getCode());
-            }
         });
 
         adContainer.removeAllViews();
@@ -189,16 +174,6 @@ public class MainActivity extends BridgeActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
         );
-        if (adDebugStatus != null) {
-            adContainer.addView(
-                adDebugStatus,
-                new FrameLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-            );
-        }
-
         bannerView.loadAd(new AdRequest.Builder().build());
     }
 
@@ -240,19 +215,5 @@ public class MainActivity extends BridgeActivity {
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         return Math.max(1, displayMetrics.widthPixels);
-    }
-
-    private void setAdDebugStatus(int stringResId) {
-        if (adDebugStatus != null) {
-            adDebugStatus.setText(stringResId);
-            adDebugStatus.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void setAdDebugStatus(String text) {
-        if (adDebugStatus != null) {
-            adDebugStatus.setText(text);
-            adDebugStatus.setVisibility(View.VISIBLE);
-        }
     }
 }
