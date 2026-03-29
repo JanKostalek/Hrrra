@@ -404,6 +404,7 @@ body {
 
 .pre-run-back-btn,
 #pre-run-tester-info-btn,
+#pre-run-future-release-btn,
 #pre-run-start-btn {
   border: 2px solid #08293a;
   border-radius: 999px;
@@ -432,6 +433,15 @@ body {
   color: #123c5d;
 }
 
+#pre-run-future-release-btn {
+  align-self: flex-start;
+  min-width: 190px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.1)),
+    linear-gradient(180deg, #ffe8bf 0%, #ffbc6b 100%);
+  color: #5b3510;
+}
+
 #pre-run-start-btn {
   max-width: 100%;
   background:
@@ -452,8 +462,10 @@ body {
 
 .pre-run-detail-rules {
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  gap: 12px;
   min-width: 0;
 }
 
@@ -1038,6 +1050,7 @@ body.visual-theme-retro .brief-live::before {
 
   .pre-run-detail-rules {
     width: 100%;
+    gap: 10px;
   }
 
   .pre-run-detail-heading h2 {
@@ -1081,8 +1094,10 @@ body.visual-theme-retro .brief-live::before {
 
   #pre-run-start-btn,
   .pre-run-back-btn,
-  #pre-run-tester-info-btn {
+  #pre-run-tester-info-btn,
+  #pre-run-future-release-btn {
     width: 100%;
+    min-width: 0;
     justify-content: center;
     min-height: 48px;
   }
@@ -1222,6 +1237,7 @@ body.visual-theme-retro .brief-live::before {
 
   .pre-run-back-btn,
   #pre-run-tester-info-btn,
+  #pre-run-future-release-btn,
   #pre-run-start-btn {
     min-height: 38px;
     padding: 6px 14px;

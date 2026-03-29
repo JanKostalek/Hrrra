@@ -64,6 +64,7 @@ Main tuning points:
   var preRunHardLockEl = document.getElementById("pre-run-hard-lock");
   var preRunBackBtn = document.getElementById("pre-run-back-btn");
   var preRunTesterInfoBtn = document.getElementById("pre-run-tester-info-btn");
+  var preRunFutureReleaseBtn = document.getElementById("pre-run-future-release-btn");
   var preRunStartBtn = document.getElementById("pre-run-start-btn");
   var preRunDetailTitleEl = document.getElementById("pre-run-detail-title");
   var preRunDetailSubtitleEl = document.getElementById("pre-run-detail-subtitle");
@@ -206,17 +207,46 @@ Main tuning points:
     "hero-jump-06.png",
     "hero-jump-07.png"
   ];
+  var HERO_WALK_FRAME_FILENAMES_SKIN04 = [
+    "hero-walk-01.png",
+    "hero-walk-02.png",
+    "hero-walk-03.png",
+    "hero-walk-04.png",
+    "hero-walk-05.png",
+    "hero-walk-06.png",
+    "hero-walk-07.png",
+    "hero-walk-08.png",
+    "hero-walk-09.png",
+    "hero-walk-10.png",
+    "hero-walk-11.png",
+    "hero-walk-12.png",
+    "hero-walk-13.png",
+    "hero-walk-14.png",
+    "hero-walk-15.png",
+    "hero-walk-16.png"
+  ];
+  var HERO_JUMP_FRAME_FILENAMES_SKIN04 = [
+    "hero-jump-01.png",
+    "hero-jump-02.png",
+    "hero-jump-03.png",
+    "hero-jump-04.png",
+    "hero-jump-05.png",
+    "hero-jump-06.png",
+    "hero-jump-07.png"
+  ];
   var SKIN_DISPLAY_NAMES = {
     Skin01: "Zyro",
     Skin02: "Vexi",
-    Skin03: "Nemu"
+    Skin03: "Nemu",
+    Skin04: "Krob"
   };
   var FUTURE_SKIN_SLOT_COUNT = 2;
   var FUTURE_SKIN_ICON_PATH = "assets/hero%20question%20mark%20icon.png";
   var SKIN_OPTIONS = [
     { value: "Skin01", label: "Zyro" },
     { value: "Skin02", label: "Vexi" },
-    { value: "Skin03", label: "Nemu" }
+    { value: "Skin03", label: "Nemu" },
+    { value: "Skin04", label: "Krob" }
   ];
   var DISCOVERABLE_SKIN_OPTIONS = ["Skin02", "Skin03"];
   var SKIN_UI_CONFIGS = {
@@ -234,6 +264,11 @@ Main tuning points:
       label: "Nemu",
       previewAssetPath: "assets/skins/Skin03/hero-icon.png",
       pickupAssetPath: "assets/skins/Skin03/hero-icon.png"
+    },
+    Skin04: {
+      label: "Krob",
+      previewAssetPath: "assets/skins/Skin04/hero-icon.png",
+      pickupAssetPath: "assets/skins/Skin04/hero-icon.png"
     }
   };
   for (var skinOptionIndex = 0; skinOptionIndex < SKIN_OPTIONS.length; skinOptionIndex += 1) {
@@ -258,6 +293,13 @@ Main tuning points:
       jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN02,
       usesFullFrameSourceRects: true,
       renderScale: 1.25
+    },
+    Skin04: {
+      walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN04,
+      jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN04,
+      usesFullFrameSourceRects: true,
+      renderScale: 1.1,
+      walkFrameSeconds: 0.032
     }
   };
   for (var sceneArtLevel = 1; sceneArtLevel <= LEVEL_COUNT; sceneArtLevel += 1) {
@@ -355,9 +397,6 @@ Main tuning points:
     if (value === "Skin07") {
       return "Skin02";
     }
-    if (value === "Skin04") {
-      return "Skin03";
-    }
     for (var i = 0; i < SKIN_OPTIONS.length; i += 1) {
       if (SKIN_OPTIONS[i].value === value) {
         return value;
@@ -367,12 +406,13 @@ Main tuning points:
   }
 
   function createDefaultSkinProgress() {
-    return {
-      unlockedSkins: {
-        Skin01: true,
-        Skin02: false,
-        Skin03: false
-      },
+      return {
+        unlockedSkins: {
+          Skin01: true,
+          Skin02: false,
+          Skin03: false,
+          Skin04: false
+        },
       selectedSkin: "Skin01",
       highestLevelReached: 1,
       hardModeOverride: "default",
@@ -1453,7 +1493,8 @@ Main tuning points:
     unlockedSkins: {
       Skin01: true,
       Skin02: false,
-      Skin03: false
+      Skin03: false,
+      Skin04: false
     },
     skinDiscoveryPlan: {
       active: false,
@@ -2591,6 +2632,12 @@ Main tuning points:
     if (preRunTesterInfoBtn) {
       preRunTesterInfoBtn.addEventListener("click", function () {
         window.open("TESTER_INFO.md", "_blank");
+      });
+    }
+
+    if (preRunFutureReleaseBtn) {
+      preRunFutureReleaseBtn.addEventListener("click", function () {
+        window.open("future-release.html", "_blank");
       });
     }
     if (preRunStartBtn) {
@@ -6205,13 +6252,20 @@ Main tuning points:
     }
   }
 
+  function getPlayerVisualYOffset() {
+    if (player && player.isGrounded && player.supportType === "elevator") {
+      return 4;
+    }
+    return 0;
+  }
+
   function drawPlayer() {
     if (state.projectileDeathAnimActive || state.teleportFinishAnimActive || state.levelFinishedActive) {
       return;
     }
 
     var x = worldToScreenX(player.x);
-    var y = player.y;
+    var y = player.y + getPlayerVisualYOffset();
     var cx = x + player.width * 0.5;
     var cy = y + player.height * 0.5;
     var heroFrame = useModernVisuals() ? getCurrentHeroFrame() : null;
@@ -6362,7 +6416,10 @@ Main tuning points:
       return null;
     }
 
-    var frameIndex = Math.floor(state.runTimeSeconds / HERO_WALK_FRAME_SECONDS) % loadedFrames.length;
+    var selectedSkinName = getSelectedHeroSkinName();
+    var skinFrameConfig = SKIN_FRAME_CONFIGS[selectedSkinName] || SKIN_FRAME_CONFIGS.Skin01;
+    var walkFrameSeconds = skinFrameConfig.walkFrameSeconds || HERO_WALK_FRAME_SECONDS;
+    var frameIndex = Math.floor(state.runTimeSeconds / walkFrameSeconds) % loadedFrames.length;
     return {
       image: loadedFrames[frameIndex] || null,
       index: frameIndex,
@@ -6849,8 +6906,9 @@ Main tuning points:
       return;
     }
 
+    var visualYOffset = getPlayerVisualYOffset();
     var centerX = worldToScreenX(player.x + player.width * 0.5);
-    var centerY = player.y + player.height * 0.5;
+    var centerY = player.y + visualYOffset + player.height * 0.5;
     var radius = player.width * 0.62;
     var time = state.runTimeSeconds;
 
@@ -7201,7 +7259,7 @@ Main tuning points:
 
   function drawHud() {
     var hudTextColor =
-      state.currentLevel === 2 || state.currentLevel === 3 ? "#ffffff" : "#111";
+      state.currentLevel === 2 || state.currentLevel === 3 || state.currentLevel === 4 ? "#ffffff" : "#111";
     ctx.fillStyle = hudTextColor;
     ctx.font = "24px Arial";
     ctx.fillText("Score: " + state.score, 18, 36);

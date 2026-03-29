@@ -529,3 +529,18 @@ Rules:
 - Rewrote `TESTER_INFO.md` so it now reflects the current game state more completely, including progression locks, skins, special mechanics, briefing flow, admin testing tools, and export/import behavior.
 - Added a new `Tester Info` button to the pre-run detail screen so testers can open `TESTER_INFO.md` directly from the game UI.
 - Prepared Android release signing locally for Play upload by wiring optional `key.properties` support into `android/app/build.gradle`, bumping Android versioning to `versionCode 2` / `versionName 1.0.1`, and generating a fresh signed release bundle for closed testing.
+- Added a new testable `Skin04` built from the external `_test/spider walk.gif` source: generated a 16-frame spider run loop, derived a first 7-frame jump animation, added a `hero-icon`, and wired the skin into the selectable skin system without changing the current unlock flow for `Vexi` and `Nemu`.
+- Increased `Skin04` run animation speed so the spider leg motion better matches its in-game travel speed.
+- Follow-up tuning: increased `Skin04` walk animation speed much more aggressively so the spider leg loop now cycles several times faster than the default hero run.
+- Android compatibility pass for Play review: marked the app as resizable game content, removed an old splash translucency flag, replaced the deprecated display-width lookup for banner sizing with `WindowMetrics` on modern Android, and simplified the custom edge-to-edge setup while keeping the game landscape-first.
+- Switched the Android banner ad unit back to Google's official test banner unit so AdMob rendering can be verified independently of production no-fill behavior during testing.
+- Added a new `Future Release` button to the pre-run detail screen and a standalone `future-release.html` page so testers can see what is already planned for the next version.
+- Moved the `Future Release` button out of the left action stack and into the upper-right rules area of the pre-run briefing header so the main navigation column stays cleaner.
+- Added a small render-only downward offset for the hero while standing on elevators so the character visually sits on the lift surface without changing any physics or collision logic.
+- Doubled the `Skin04` run-loop playback rate again so the spider leg cycle now completes about twice as fast as in the previous tuning pass.
+- Fixed `Skin04` walk timing to read the active selected skin from the same source as the rest of the renderer, and pushed the spider loop even faster so its leg animation no longer falls back to the default hero cadence.
+- Follow-up tuning: slowed the `Skin04` walk loop back down to half of that aggressive pass so the spider animation stays lively without looking unnaturally hyper-fast.
+- Follow-up tuning again: halved `Skin04` walk playback one more time for a calmer, more readable spider leg cadence.
+- Made the in-game HUD text in Level 4 white as well, matching the existing Level 2 and Level 3 readability treatment for dark backgrounds.
+- Renamed the user-facing `Skin04` hero name everywhere in the UI and support pages to `Krob` while keeping the internal `Skin04` technical ID unchanged.
+- Added one more `Soon` placeholder card to the pre-run `Skins` panel so there are now two future hero slots shown for upcoming characters.

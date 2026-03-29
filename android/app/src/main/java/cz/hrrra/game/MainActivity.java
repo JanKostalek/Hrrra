@@ -1,16 +1,19 @@
 package cz.hrrra.game;
 
 import android.os.Bundle;
+import android.os.Build;
+import android.graphics.Rect;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
+import android.view.WindowManager;
+import android.view.WindowMetrics;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
@@ -42,6 +45,7 @@ public class MainActivity extends BridgeActivity {
         adContainer = findViewById(R.id.ad_container);
         adDebugStatus = findViewById(R.id.ad_debug_status);
         configureWebViewCache();
+        configureEdgeToEdgeWindow();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         hideSystemBars();
         requestConsentAndLoadAds();
@@ -92,17 +96,15 @@ public class MainActivity extends BridgeActivity {
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         );
         controller.hide(WindowInsetsCompat.Type.systemBars());
+    }
 
-        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (view, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            view.setPadding(0, 0, 0, 0);
-            return insets.replaceSystemWindowInsets(
-                systemBars.left,
-                0,
-                systemBars.right,
-                0
-            );
-        });
+    private void configureEdgeToEdgeWindow() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            WindowManager.LayoutParams attributes = getWindow().getAttributes();
+            attributes.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
+            getWindow().setAttributes(attributes);
+        }
     }
 
     private void requestConsentAndLoadAds() {
@@ -216,16 +218,28 @@ public class MainActivity extends BridgeActivity {
     }
 
     private AdSize getAdaptiveBannerSize() {
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
-
+        DisplayMetrics outMetrics = getResources().getDisplayMetrics();
         float density = outMetrics.density;
         float adWidthPixels = adContainer != null && adContainer.getWidth() > 0
             ? adContainer.getWidth()
-            : outMetrics.widthPixels;
-        int adWidth = (int) (adWidthPixels / density);
+            : getCurrentWindowWidthPixels();
+        int adWidth = Math.max(1, (int) (adWidthPixels / density));
 
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
+
+    private int getCurrentWindowWidthPixels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowMetrics metrics = getWindowManager().getCurrentWindowMetrics();
+            Rect bounds = metrics.getBounds();
+            WindowInsets insets = metrics.getWindowInsets();
+            android.graphics.Insets systemBarInsets =
+                insets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars());
+            return Math.max(1, bounds.width() - systemBarInsets.left - systemBarInsets.right);
+        }
+
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        return Math.max(1, displayMetrics.widthPixels);
     }
 
     private void setAdDebugStatus(int stringResId) {

@@ -6,6 +6,7 @@ const outputDir = path.join(projectRoot, "www");
 const outputAssetsDir = path.join(outputDir, "assets");
 const filesToCopy = [
   "index.html",
+  "future-release.html",
   "style.css",
   "game.js",
   "config.js",

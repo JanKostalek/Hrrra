@@ -185,6 +185,7 @@ Aktualni hratelne skiny:
 - `Zyro`
 - `Vexi`
 - `Nemu`
+- `Krob`
 
 Na zacatku je dostupny jen:
 - `Zyro`
