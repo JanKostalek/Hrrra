@@ -54,6 +54,11 @@ Main tuning points:
   var finalBagsEl = document.getElementById("final-bags");
   var finalHighscoresEl = document.getElementById("final-highscores");
   var preRunScreenEl = document.getElementById("pre-run-screen");
+  var updateNoticeEl = document.getElementById("update-notice");
+  var updateNoticeTitleEl = document.getElementById("update-notice-title");
+  var updateNoticeMessageEl = document.getElementById("update-notice-message");
+  var updateNoticeLaterBtn = document.getElementById("update-notice-later");
+  var updateNoticeApplyBtn = document.getElementById("update-notice-apply");
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
   var preRunDetailScreenEl = document.getElementById("pre-run-detail-screen");
   var preRunJumpBtn = document.getElementById("pre-run-jump-btn");
@@ -65,8 +70,12 @@ Main tuning points:
   var preRunBackBtn = document.getElementById("pre-run-back-btn");
   var preRunTesterInfoBtn = document.getElementById("pre-run-tester-info-btn");
   var preRunFutureReleaseBtn = document.getElementById("pre-run-future-release-btn");
+  var APP_VERSION_INFO = window.HrrraVersionInfo || { versionCode: 0, versionName: "0.0.0" };
   var TESTER_INFO_URL = "https://hrrra.vercel.app/TESTER_INFO.md";
   var FUTURE_RELEASE_URL = "https://hrrra.vercel.app/future-release.html";
+  var VERSION_INFO_URL = "https://hrrra.vercel.app/version.json";
+  var STORE_URL = "https://play.google.com/store/apps/details?id=cz.hrrra.game";
+  var STORE_MARKET_URL = "market://details?id=cz.hrrra.game";
   var preRunStartBtn = document.getElementById("pre-run-start-btn");
   var preRunDetailTitleEl = document.getElementById("pre-run-detail-title");
   var preRunDetailSubtitleEl = document.getElementById("pre-run-detail-subtitle");
@@ -1504,6 +1513,9 @@ Main tuning points:
     highestLevelReached: 1,
     hardModeOverride: "default",
     fullModeOverride: "default",
+    updateNoticeActive: false,
+    updateNoticeForce: false,
+    availableUpdateInfo: null,
     gameMode: 2,
     gameDifficulty: "easy",
     unlockedSkins: {
@@ -1933,6 +1945,7 @@ Main tuning points:
     attachLevelFinishedScreen();
     renderAdminForm();
     updateOverlayUiVisibility();
+    checkForAvailableUpdate();
     requestAnimationFrame(loop);
   }
 
@@ -2482,6 +2495,94 @@ Main tuning points:
     }
   }
 
+  function isNativeAndroidPlatform() {
+    return !!(
+      window.Capacitor &&
+      typeof window.Capacitor.getPlatform === "function" &&
+      window.Capacitor.getPlatform() === "android"
+    );
+  }
+
+  function setUpdateNoticeOpen(isOpen, forceUpdate) {
+    state.updateNoticeActive = Boolean(isOpen);
+    state.updateNoticeForce = Boolean(forceUpdate);
+    if (!updateNoticeEl) {
+      return;
+    }
+    updateNoticeEl.classList.toggle("hidden", !state.updateNoticeActive);
+    if (updateNoticeLaterBtn) {
+      updateNoticeLaterBtn.classList.toggle("hidden", state.updateNoticeForce);
+    }
+  }
+
+  function applyAvailableUpdateInfo(info) {
+    state.availableUpdateInfo = info;
+    if (updateNoticeTitleEl) {
+      updateNoticeTitleEl.textContent = "New Version Available";
+    }
+    if (updateNoticeMessageEl) {
+      var versionLabel = info.versionName ? " " + info.versionName : "";
+      updateNoticeMessageEl.textContent =
+        info.message ||
+        ("Hrrra" + versionLabel + " is now available in Google Play. Update now to get the latest fixes and improvements.");
+    }
+    if (updateNoticeApplyBtn) {
+      updateNoticeApplyBtn.textContent = info.forceUpdate ? "Update now" : "Open update";
+    }
+    setUpdateNoticeOpen(true, info.forceUpdate);
+  }
+
+  function openStoreUpdatePage() {
+    var targetUrl =
+      (state.availableUpdateInfo && state.availableUpdateInfo.storeUrl) || STORE_URL;
+    if (isNativeAndroidPlatform()) {
+      try {
+        window.location.href = STORE_MARKET_URL;
+      } catch (error) {}
+      window.setTimeout(function () {
+        window.open(targetUrl, "_blank");
+      }, 700);
+      return;
+    }
+    window.open(targetUrl, "_blank");
+  }
+
+  function checkForAvailableUpdate() {
+    if (!isNativeAndroidPlatform() || typeof window.fetch !== "function") {
+      return;
+    }
+
+    var requestUrl = VERSION_INFO_URL + "?t=" + Date.now();
+    window
+      .fetch(requestUrl, { cache: "no-store" })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("Version request failed.");
+        }
+        return response.json();
+      })
+      .then(function (data) {
+        if (!data || !Number.isFinite(Number(data.latestVersionCode))) {
+          return;
+        }
+        var latestVersionCode = Number(data.latestVersionCode);
+        var minSupportedVersionCode = Number.isFinite(Number(data.minSupportedVersionCode))
+          ? Number(data.minSupportedVersionCode)
+          : 0;
+        if (latestVersionCode <= APP_VERSION_INFO.versionCode) {
+          return;
+        }
+        applyAvailableUpdateInfo({
+          versionCode: latestVersionCode,
+          versionName: data.latestVersionName || "",
+          storeUrl: data.storeUrl || STORE_URL,
+          message: data.message || "",
+          forceUpdate: APP_VERSION_INFO.versionCode < minSupportedVersionCode
+        });
+      })
+      .catch(function () {});
+  }
+
   function loadCurrentLevelConfig() {
     applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
     loadGlobalAdminConfig();
@@ -2632,6 +2733,16 @@ Main tuning points:
   }
 
   function attachPreRunScreen() {
+    if (updateNoticeLaterBtn) {
+      updateNoticeLaterBtn.addEventListener("click", function () {
+        setUpdateNoticeOpen(false, false);
+      });
+    }
+    if (updateNoticeApplyBtn) {
+      updateNoticeApplyBtn.addEventListener("click", function () {
+        openStoreUpdatePage();
+      });
+    }
     if (preRunJumpBtn) {
       preRunJumpBtn.addEventListener("click", function () {
         openPreRunModeDetails(2);

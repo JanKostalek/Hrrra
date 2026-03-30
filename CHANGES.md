@@ -567,3 +567,7 @@ Rules:
 - 2026-03-29: Fixed Android asset mirroring for Skin02/Vexi and future skin placeholders by mirroring copied web assets directly into android public assets after Capacitor sync and switching placeholder icons to a no-space filename for Android-safe loading.
 - 2026-03-29: Removed the temporary Android ad debug status overlay so test banners still load, but the in-game `Ad debug: ...` text no longer appears above the banner.
 - 2026-03-29: Temporarily disabled Android banner activation while keeping the AdMob code in place, so the banner area is hidden for now but can be re-enabled later with a single flag change.
+- 2026-03-30: Added an Android update checker backed by an online `version.json` feed, with an in-game update prompt that can open the Google Play page when a newer build is available.
+- 2026-03-30: Added generated `version-info.js` metadata to keep the web/app runtime aware of the current Android version code and name.
+- 2026-03-30: Bumped Android release version to `versionCode 6` / `versionName 1.0.5` for the next store upload.
+2026-03-30: Bumped Android release version to versionCode 7 / versionName 1.0.6 for a new Android bundle with the latest asset-loading fixes.

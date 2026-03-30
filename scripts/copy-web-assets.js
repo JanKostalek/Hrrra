@@ -5,10 +5,14 @@ const projectRoot = path.resolve(__dirname, "..");
 const outputDir = path.join(projectRoot, "www");
 const outputAssetsDir = path.join(outputDir, "assets");
 const androidPublicDir = path.join(projectRoot, "android", "app", "src", "main", "assets", "public");
+const androidBuildGradlePath = path.join(projectRoot, "android", "app", "build.gradle");
+const generatedVersionInfoPath = path.join(projectRoot, "version-info.js");
 const copyToAndroidPublic = process.argv.includes("--android-public");
 const filesToCopy = [
   "index.html",
   "future-release.html",
+  "version.json",
+  "version-info.js",
   "style.css",
   "game.js",
   "config.js",
@@ -70,6 +74,29 @@ const dynamicAssetFilesToCopy = assetDirectoriesToCopy.flatMap((dirName) =>
 );
 const allAssetFilesToCopy = Array.from(new Set(assetFilesToCopy.concat(dynamicAssetFilesToCopy)));
 
+function readAndroidVersionInfo() {
+  const buildGradleContent = fs.readFileSync(androidBuildGradlePath, "utf8");
+  const versionCodeMatch = buildGradleContent.match(/versionCode\s+(\d+)/);
+  const versionNameMatch = buildGradleContent.match(/versionName\s+"([^"]+)"/);
+
+  return {
+    versionCode: versionCodeMatch ? Number(versionCodeMatch[1]) : 0,
+    versionName: versionNameMatch ? versionNameMatch[1] : "0.0.0"
+  };
+}
+
+function writeGeneratedVersionInfo() {
+  const versionInfo = readAndroidVersionInfo();
+  const output = [
+    "window.HrrraVersionInfo = Object.freeze({",
+    "  versionCode: " + versionInfo.versionCode + ",",
+    "  versionName: " + JSON.stringify(versionInfo.versionName),
+    "});",
+    ""
+  ].join("\n");
+  fs.writeFileSync(generatedVersionInfoPath, output, "utf8");
+}
+
 function ensureDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true });
 }
@@ -108,6 +135,7 @@ function copyProjectFiles(baseDir, logPrefix) {
 
 ensureDir(outputDir);
 ensureDir(outputAssetsDir);
+writeGeneratedVersionInfo();
 cleanAssetDirectories(outputDir, "web");
 copyProjectFiles(outputDir, "web");
 console.log(`web assets copied to ${outputDir}`);

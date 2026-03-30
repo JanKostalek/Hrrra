@@ -9,6 +9,18 @@
 <body>
   <div id="game-shell">
     <canvas id="game-canvas" width="1200" height="700"></canvas>
+    <div id="update-notice" class="update-notice hidden" aria-label="Update available">
+      <div class="update-notice-card">
+        <h3 id="update-notice-title">New Version Available</h3>
+        <p id="update-notice-message">
+          A newer Hrrra build is available. Update now to get the latest fixes and improvements.
+        </p>
+        <div class="update-notice-actions">
+          <button id="update-notice-later" type="button">Later</button>
+          <button id="update-notice-apply" type="button">Update now</button>
+        </div>
+      </div>
+    </div>
     <div id="mode-switch" aria-label="Game mode switch">
       <div id="mode-1-wrap" class="mode-slot">
         <div id="mode-1-btn" class="mode-badge" aria-label="Full Mode active">Full Mode</div>
@@ -182,6 +194,7 @@
   <script src="player.js"></script>
   <script src="world.js"></script>
   <script src="physics.js"></script>
+  <script src="version-info.js"></script>
   <script src="game.js"></script>
 </body>
 </html>
