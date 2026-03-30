@@ -583,3 +583,9 @@ Rules:
 - Updated the Level 1 pre-run Admin button styling so it now matches the other rounded briefing action buttons.
 
 - Matched the Level 1 pre-run `Admin` button size and font to `Future Release`, while keeping the Admin button background white.
+- Hard-aligned the Level 1 pre-run `Admin` button with `Future Release` so both now share the same width, height, font sizing, and centered label layout.
+
+- Replaced the magnet pickup art with the new `assets/magnet.png`, removed its blue background to transparency, normalized it to a centered square canvas, and wired the game to render the asset instead of the old procedural magnet icon.
+
+- Increased the magnet pickup icon size by roughly one third and made the `Question Coin` stake label larger and yellow with a dark outline for better readability on mixed backgrounds.
+- Increased the `Question Coin` stake text above the coin by about one third again for stronger readability at gameplay scale.

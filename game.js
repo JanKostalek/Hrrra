@@ -159,6 +159,7 @@ Main tuning points:
     elevator: null,
     blocker: null,
     coin: null,
+    magnet: null,
     moneybag: null,
     heart: null,
     heroSkins: {},
@@ -350,6 +351,7 @@ Main tuning points:
   var ELEVATOR_ART_PATH = "assets/vytah01-clean.png";
   var BLOCKER_ART_PATH = "assets/blocker01-clean.png";
   var COIN_ART_PATH = "assets/coin01-clean.png";
+  var MAGNET_ART_PATH = "assets/magnet.png";
   var MONEYBAG_ART_PATH = "assets/moneybag-clean.png";
   var HEART_ART_PATH = "assets/heart01.png";
   var LEVEL_SCENE_ART_FILENAMES = {
@@ -2002,6 +2004,9 @@ Main tuning points:
     });
     loadSceneArtAsset(COIN_ART_PATH, function (image) {
       sceneArt.coin = image;
+    });
+    loadSceneArtAsset(MAGNET_ART_PATH, function (image) {
+      sceneArt.magnet = image;
     });
     loadSceneArtAsset(MONEYBAG_ART_PATH, function (image) {
       sceneArt.moneybag = image;
@@ -6962,8 +6967,11 @@ Main tuning points:
     ctx.textAlign = "center";
     ctx.font = "bold " + Math.max(18, Math.floor(s * 0.54)) + "px Arial";
     ctx.fillText("?", cx, y + s * 0.68);
-    ctx.font = "bold " + Math.max(12, Math.floor(s * 0.22)) + "px Arial";
-    ctx.fillStyle = "#111";
+    ctx.font = "bold " + Math.max(19, Math.floor(s * 0.37)) + "px Arial";
+    ctx.lineWidth = Math.max(2, s * 0.05);
+    ctx.strokeStyle = "rgba(52, 35, 0, 0.95)";
+    ctx.strokeText(stakeText, cx, y - Math.max(8, s * 0.14));
+    ctx.fillStyle = "#ffe45e";
     ctx.fillText(stakeText, cx, y - Math.max(8, s * 0.14));
     ctx.restore();
   }
@@ -7081,6 +7089,10 @@ Main tuning points:
     var x = worldToScreenX(icon.x);
     var y = icon.y;
     var s = icon.size;
+    if (sceneArt.magnet) {
+      ctx.drawImage(sceneArt.magnet, x, y, s, s);
+      return;
+    }
     var poleWidth = s * 0.22;
     var topY = y + s * 0.16;
     var bottomY = y + s * 0.72;

@@ -28,6 +28,7 @@ const assetFilesToCopy = [
   "assets/platform-tile-clean.png",
   "assets/blocker01-clean.png",
   "assets/coin01-clean.png",
+  "assets/magnet.png",
   "assets/heart01.png",
   "assets/moneybag-clean.png",
   "assets/teleport01.png",

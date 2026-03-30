@@ -94,7 +94,7 @@
     shieldRespawnMinSeconds: 12,
     shieldRespawnMaxSeconds: 22,
     magnetUnlockScore: 12000,
-    magnetIconSizeRatio: 0.92,
+    magnetIconSizeRatio: 1.22,
     magnetEffectSeconds: 5,
     magnetRespawnMinSeconds: 12,
     magnetRespawnMaxSeconds: 22,
