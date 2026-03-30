@@ -68,8 +68,12 @@ Main tuning points:
   var preRunFullLockEl = document.getElementById("pre-run-full-lock");
   var preRunHardLockEl = document.getElementById("pre-run-hard-lock");
   var preRunBackBtn = document.getElementById("pre-run-back-btn");
+  var preRunCompactBackBtn = document.getElementById("pre-run-compact-back-btn");
+  var preRunCompactAdminBtn = document.getElementById("pre-run-compact-admin-btn");
+  var preRunCompactStartBtn = document.getElementById("pre-run-compact-start-btn");
   var preRunTesterInfoBtn = document.getElementById("pre-run-tester-info-btn");
   var preRunFutureReleaseBtn = document.getElementById("pre-run-future-release-btn");
+  var preRunDetailAdminBtn = document.getElementById("pre-run-detail-admin-btn");
   var APP_VERSION_INFO = window.HrrraVersionInfo || { versionCode: 0, versionName: "0.0.0" };
   var TESTER_INFO_URL = "https://hrrra.vercel.app/TESTER_INFO.md";
   var FUTURE_RELEASE_URL = "https://hrrra.vercel.app/future-release.html";
@@ -80,10 +84,14 @@ Main tuning points:
   var preRunDetailTitleEl = document.getElementById("pre-run-detail-title");
   var preRunDetailSubtitleEl = document.getElementById("pre-run-detail-subtitle");
   var preRunDetailLevelEl = document.getElementById("pre-run-detail-level");
+  var preRunCompactLevelEl = document.getElementById("pre-run-compact-level");
   var preRunDetailLifeRulesEl = document.getElementById("pre-run-detail-life-rules");
   var preRunLevelGoalCopyEl = document.getElementById("pre-run-level-goal-copy");
+  var preRunCompactGoalCopyEl = document.getElementById("pre-run-compact-goal-copy");
   var preRunSkinGridEl = document.getElementById("pre-run-skin-grid");
   var preRunSkinCopyEl = document.getElementById("pre-run-skin-copy");
+  var preRunCompactShellEl = document.getElementById("pre-run-compact-shell");
+  var preRunDetailFullContentEl = document.getElementById("pre-run-detail-full-content");
   var briefTopDeathZoneRuleEl = document.getElementById("brief-top-death-zone-rule");
   var briefProjectilesRuleEl = document.getElementById("brief-projectiles-rule");
   var briefBlockerRuleEl = document.getElementById("brief-blocker-rule");
@@ -2409,6 +2417,7 @@ Main tuning points:
   }
 
   function refreshPreRunBriefValues() {
+    var compactLevelBriefing = state.currentLevel > 1;
     if (briefMoneyBagEl) {
       briefMoneyBagEl.textContent = String(C.scoreBagBonus);
     }
@@ -2439,11 +2448,20 @@ Main tuning points:
     if (preRunDetailLevelEl) {
       preRunDetailLevelEl.textContent = getLevelDisplayName(state.currentLevel);
     }
+    if (preRunCompactLevelEl) {
+      preRunCompactLevelEl.textContent = getLevelDisplayName(state.currentLevel);
+    }
     if (preRunLevelGoalCopyEl) {
       preRunLevelGoalCopyEl.textContent = getFinishScoreGoalText(C.finishScore);
     }
+    if (preRunCompactGoalCopyEl) {
+      preRunCompactGoalCopyEl.textContent = getFinishScoreGoalText(C.finishScore);
+    }
     if (preRunStartBtn) {
       preRunStartBtn.textContent = state.currentLevel > 1 ? "Continue" : "Start Run";
+    }
+    if (preRunCompactStartBtn) {
+      preRunCompactStartBtn.textContent = "Start";
     }
     if (preRunDetailLifeRulesEl) {
       preRunDetailLifeRulesEl.classList.toggle("hidden", false);
@@ -2455,11 +2473,16 @@ Main tuning points:
       preRunControlsCopyEl.innerHTML = getModeControlsHtml();
     }
     refreshPreRunSkinSelection();
+    if (preRunBackBtn) {
+      preRunBackBtn.textContent = compactLevelBriefing ? "Exit Run" : "Back";
+      preRunBackBtn.setAttribute("aria-label", compactLevelBriefing ? "Exit run and go back" : "Back to mode selection");
+    }
   }
 
   function renderPreRunScreen() {
     var hardUnlocked = isHardDifficultyUnlocked();
     var fullUnlocked = isFullModeUnlocked();
+    var compactLevelBriefing = state.preRunStep === "details" && state.currentLevel > 1;
 
     normalizeUnlockedPreRunSelection();
 
@@ -2468,6 +2491,12 @@ Main tuning points:
     }
     if (preRunDetailScreenEl) {
       preRunDetailScreenEl.classList.toggle("hidden", state.preRunStep !== "details");
+    }
+    if (preRunCompactShellEl) {
+      preRunCompactShellEl.classList.toggle("hidden", !compactLevelBriefing);
+    }
+    if (preRunDetailFullContentEl) {
+      preRunDetailFullContentEl.classList.toggle("hidden", compactLevelBriefing);
     }
     if (preRunEasyBtn) {
       preRunEasyBtn.classList.toggle("active", state.gameDifficulty === "easy");
@@ -2765,8 +2794,22 @@ Main tuning points:
     }
     if (preRunBackBtn) {
       preRunBackBtn.addEventListener("click", function () {
+        if (state.currentLevel > 1) {
+          openPreRunScreen();
+          return;
+        }
         state.preRunStep = "select";
         renderPreRunScreen();
+      });
+    }
+    if (preRunCompactBackBtn) {
+      preRunCompactBackBtn.addEventListener("click", function () {
+        openPreRunScreen();
+      });
+    }
+    if (preRunCompactAdminBtn) {
+      preRunCompactAdminBtn.addEventListener("click", function () {
+        setAdminOpen(true);
       });
     }
     if (preRunTesterInfoBtn) {
@@ -2780,8 +2823,18 @@ Main tuning points:
         window.open(FUTURE_RELEASE_URL, "_blank");
       });
     }
+    if (preRunDetailAdminBtn) {
+      preRunDetailAdminBtn.addEventListener("click", function () {
+        setAdminOpen(true);
+      });
+    }
     if (preRunStartBtn) {
       preRunStartBtn.addEventListener("click", function () {
+        closePreRunScreenAndStartRun();
+      });
+    }
+    if (preRunCompactStartBtn) {
+      preRunCompactStartBtn.addEventListener("click", function () {
         closePreRunScreenAndStartRun();
       });
     }

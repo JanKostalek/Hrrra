@@ -106,62 +106,83 @@
           </div>
         </div>
         <div id="pre-run-detail-screen" class="pre-run-stage hidden">
-          <div class="pre-run-detail-header">
-            <div class="pre-run-detail-actions">
-              <button id="pre-run-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
-              <button id="pre-run-tester-info-btn" class="pre-run-tester-info-btn" aria-label="Open tester information">Tester Info</button>
-              <button id="pre-run-start-btn" aria-label="Start run">Start Run</button>
-            </div>
-            <div class="pre-run-detail-heading">
-              <h2 id="pre-run-detail-title">Jump Mode</h2>
-              <p id="pre-run-detail-subtitle">Easy briefing</p>
-              <p id="pre-run-detail-level">Level 1</p>
-            </div>
-            <div class="pre-run-detail-rules">
-              <p id="pre-run-detail-life-rules" class="pre-run-detail-life-rules">
-                <span><strong>Top Death Zone:</strong> <span id="brief-top-death-zone-rule">Lose 1 Life</span></span>
-                <span><strong>Projectiles:</strong> <span id="brief-projectiles-rule">Lose 1 Life</span></span>
-                <span><strong>Blocker:</strong> <span id="brief-blocker-rule">Lose 1 Life</span></span>
-                <span class="pre-run-detail-life-rules-linebreak" aria-hidden="true"></span>
-                <span>
-                  <strong>Bottom Death Zone:</strong> Instant Death
-                  <small class="pre-run-detail-rule-note">Shield can ALWAYS save you</small>
-                </span>
-              </p>
-              <button id="pre-run-future-release-btn" class="pre-run-future-release-btn" aria-label="Open future release changes">Future Release</button>
-            </div>
-          </div>
-          <div class="pre-run-skin-panel" aria-label="Skin selection">
-            <h3>Skins</h3>
-            <div id="pre-run-skin-grid" class="pre-run-skin-grid"></div>
-            <p id="pre-run-skin-copy" class="pre-run-skin-copy">Find new skins in Levels 3 and 4.</p>
-          </div>
-          <div class="pre-run-detail-grid">
-            <div class="pre-run-detail-panel">
-              <h3>Controls</h3>
-              <div id="pre-run-controls-copy"></div>
-            </div>
-            <div class="pre-run-detail-panel pre-run-level-panel">
-              <h3>Level Goal</h3>
-              <p id="pre-run-level-goal-copy">Finish Level with 50 000 score.</p>
-            </div>
-          </div>
-          <div class="pre-run-detail-panel pre-run-brief-panel">
-            <div class="pre-run-brief-columns">
-              <div class="pre-run-brief-column">
-                <h3>Hazards & Bonuses</h3>
-                <p class="brief-row"><span class="brief-icon brief-money" aria-hidden="true"></span><strong>Money Bag</strong>: <span>+<span id="brief-money-bag">2000</span> score.</span></p>
-                <p class="brief-row"><span class="brief-icon brief-coin" aria-hidden="true"></span><strong>Coin</strong>: <span>+<span id="brief-coin">200</span> score.</span></p>
-                <p class="brief-row"><span class="brief-icon brief-live" aria-hidden="true"></span><strong>Live</strong>: restore 1 lost life up to max.</p>
-                <p class="brief-row"><span class="brief-icon brief-blocker" aria-hidden="true"></span><strong>Blocker</strong>: do not touch, always jump over it.</p>
-                <p class="brief-row"><span class="brief-icon brief-projectile" aria-hidden="true"></span><strong>Projectile</strong>: do not touch.</p>
+          <div id="pre-run-compact-shell" class="pre-run-compact-shell hidden">
+            <div class="pre-run-compact-top">
+              <button id="pre-run-compact-back-btn" class="pre-run-back-btn" aria-label="Exit run and go back">Back</button>
+              <div class="pre-run-compact-heading">
+                <h2 id="pre-run-compact-level">Level 2</h2>
+                <div class="pre-run-compact-goal-line">
+                  <strong>Level Goal:</strong>
+                  <span id="pre-run-compact-goal-copy">Finish Level with 50 000 score.</span>
+                </div>
               </div>
-              <div class="pre-run-brief-column">
-                <h3>Special Mechanics</h3>
-                <p class="brief-row"><span class="brief-icon brief-cracked-coin" aria-hidden="true"></span><strong>Cracked Coin</strong>: removes 33% of score earned in this level.</p>
-                <p class="brief-row"><span class="brief-icon brief-question-coin" aria-hidden="true"></span><strong>Question Coin</strong>: gamble for a big score win or loss.</p>
-                <p class="brief-row"><span class="brief-icon brief-curse" aria-hidden="true"></span><strong>Curse</strong>: normal score gain is frozen for a short time.</p>
-                <p class="brief-row"><span class="brief-icon brief-shield" aria-hidden="true"></span><strong>Shield</strong>: blocks one deadly hit and can save you from bottom death zone.</p>
+              <button id="pre-run-compact-admin-btn" class="pre-run-compact-admin-btn" aria-label="Open mechanics admin">Admin</button>
+            </div>
+            <button id="pre-run-compact-start-btn" class="pre-run-compact-start-btn" aria-label="Start next level">
+              <span class="pre-run-compact-start-label">Start</span>
+            </button>
+          </div>
+          <div id="pre-run-detail-full-content">
+            <div class="pre-run-detail-header">
+              <div class="pre-run-detail-actions">
+                <button id="pre-run-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
+                <button id="pre-run-tester-info-btn" class="pre-run-tester-info-btn" aria-label="Open tester information">Tester Info</button>
+                <button id="pre-run-start-btn" aria-label="Start run">Start Run</button>
+              </div>
+              <div class="pre-run-detail-heading">
+                <h2 id="pre-run-detail-title">Jump Mode</h2>
+                <p id="pre-run-detail-subtitle">Easy briefing</p>
+                <p id="pre-run-detail-level">Level 1</p>
+              </div>
+              <div class="pre-run-detail-rules">
+                <p id="pre-run-detail-life-rules" class="pre-run-detail-life-rules">
+                  <span><strong>Top Death Zone:</strong> <span id="brief-top-death-zone-rule">Lose 1 Life</span></span>
+                  <span><strong>Projectiles:</strong> <span id="brief-projectiles-rule">Lose 1 Life</span></span>
+                  <span><strong>Blocker:</strong> <span id="brief-blocker-rule">Lose 1 Life</span></span>
+                  <span class="pre-run-detail-life-rules-linebreak" aria-hidden="true"></span>
+                  <span>
+                    <strong>Bottom Death Zone:</strong> Instant Death
+                    <small class="pre-run-detail-rule-note">Shield can ALWAYS save you</small>
+                  </span>
+                </p>
+                <div class="pre-run-detail-rule-actions">
+                  <button id="pre-run-future-release-btn" class="pre-run-future-release-btn" aria-label="Open future release changes">Future Release</button>
+                  <button id="pre-run-detail-admin-btn" class="pre-run-detail-admin-btn" aria-label="Open mechanics admin">Admin</button>
+                </div>
+              </div>
+            </div>
+            <div class="pre-run-skin-panel" aria-label="Skin selection">
+              <h3>Skins</h3>
+              <div id="pre-run-skin-grid" class="pre-run-skin-grid"></div>
+              <p id="pre-run-skin-copy" class="pre-run-skin-copy">Find new skins in Levels 3 and 4.</p>
+            </div>
+            <div class="pre-run-detail-grid">
+              <div class="pre-run-detail-panel">
+                <h3>Controls</h3>
+                <div id="pre-run-controls-copy"></div>
+              </div>
+              <div class="pre-run-detail-panel pre-run-level-panel">
+                <h3>Level Goal</h3>
+                <p id="pre-run-level-goal-copy">Finish Level with 50 000 score.</p>
+              </div>
+            </div>
+            <div class="pre-run-detail-panel pre-run-brief-panel">
+              <div class="pre-run-brief-columns">
+                <div class="pre-run-brief-column">
+                  <h3>Hazards & Bonuses</h3>
+                  <p class="brief-row"><span class="brief-icon brief-money" aria-hidden="true"></span><strong>Money Bag</strong>: <span>+<span id="brief-money-bag">2000</span> score.</span></p>
+                  <p class="brief-row"><span class="brief-icon brief-coin" aria-hidden="true"></span><strong>Coin</strong>: <span>+<span id="brief-coin">200</span> score.</span></p>
+                  <p class="brief-row"><span class="brief-icon brief-live" aria-hidden="true"></span><strong>Live</strong>: restore 1 lost life up to max.</p>
+                  <p class="brief-row"><span class="brief-icon brief-blocker" aria-hidden="true"></span><strong>Blocker</strong>: do not touch, always jump over it.</p>
+                  <p class="brief-row"><span class="brief-icon brief-projectile" aria-hidden="true"></span><strong>Projectile</strong>: do not touch.</p>
+                </div>
+                <div class="pre-run-brief-column">
+                  <h3>Special Mechanics</h3>
+                  <p class="brief-row"><span class="brief-icon brief-cracked-coin" aria-hidden="true"></span><strong>Cracked Coin</strong>: removes 33% of score earned in this level.</p>
+                  <p class="brief-row"><span class="brief-icon brief-question-coin" aria-hidden="true"></span><strong>Question Coin</strong>: gamble for a big score win or loss.</p>
+                  <p class="brief-row"><span class="brief-icon brief-curse" aria-hidden="true"></span><strong>Curse</strong>: normal score gain is frozen for a short time.</p>
+                  <p class="brief-row"><span class="brief-icon brief-shield" aria-hidden="true"></span><strong>Shield</strong>: blocks one deadly hit and can save you from bottom death zone.</p>
+                </div>
               </div>
             </div>
           </div>

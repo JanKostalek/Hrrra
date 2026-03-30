@@ -571,3 +571,15 @@ Rules:
 - 2026-03-30: Added generated `version-info.js` metadata to keep the web/app runtime aware of the current Android version code and name.
 - 2026-03-30: Bumped Android release version to `versionCode 6` / `versionName 1.0.5` for the next store upload.
 2026-03-30: Bumped Android release version to versionCode 7 / versionName 1.0.6 for a new Android bundle with the latest asset-loading fixes.
+- 2026-03-30: Replaced the full pre-run briefing after completing later levels with a compact between-level screen that keeps only `Back`, `Admin`, the current level label, level goal, and a large `Start` area, while leaving the original full briefing intact for the first level.
+- 2026-03-30: Simplified the compact between-level screen further so the entire lower area acts as one large `Start` target with the level goal inside it, and raised the admin panel above the overlay so `Admin` opens correctly from that screen.
+
+- Refined the compact between-level screen so Level Goal is shown directly under the level heading, while the full lower area remains a transparent Start target.
+
+- Matched the compact between-level Back button styling to the Admin button so both top buttons now use the same size and font.
+
+- Added an Admin button to the full Level 1 pre-run screen, placed next to Future Release in the right-side briefing actions.
+
+- Updated the Level 1 pre-run Admin button styling so it now matches the other rounded briefing action buttons.
+
+- Matched the Level 1 pre-run `Admin` button size and font to `Future Release`, while keeping the Admin button background white.
