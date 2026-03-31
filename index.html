@@ -91,6 +91,7 @@
                 <span class="pre-run-difficulty-title">Hard</span>
                 <span id="pre-run-hard-lock" class="pre-run-lock-note hidden"></span>
               </button>
+              <button id="pre-run-badges-btn" class="pre-run-badges-btn" aria-label="Open badges overview">Badges</button>
             </div>
             <button id="pre-run-full-btn" class="pre-run-mode-card" aria-label="Choose Full Mode">
               <span class="pre-run-mode-title">Full Mode</span>
@@ -104,6 +105,24 @@
               <span class="pre-run-mode-copy">Space = Jump</span>
             </button>
           </div>
+        </div>
+        <div id="pre-run-badges-screen" class="pre-run-stage hidden" aria-label="Badges overview">
+          <div class="pre-run-badges-header">
+            <div class="pre-run-badges-topbar">
+              <button id="pre-run-badges-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
+              <div class="pre-run-badges-heading">
+                <h2>Badges</h2>
+                <p>First-pass collection screen for progression, skill, and discovery goals.</p>
+              </div>
+            </div>
+            <div class="pre-run-badges-summary">
+              <div class="pre-run-badges-summary-card">
+                <strong id="pre-run-badges-total-value">0/0</strong>
+                <span id="pre-run-badges-total-label">Total Badges Collected</span>
+              </div>
+            </div>
+          </div>
+          <div id="pre-run-badges-groups" class="pre-run-badges-groups"></div>
         </div>
         <div id="pre-run-detail-screen" class="pre-run-stage hidden">
           <div id="pre-run-compact-shell" class="pre-run-compact-shell hidden">
@@ -197,6 +216,21 @@
       <p id="final-bags">Bags collected: 0</p>
       <div id="final-highscores" aria-label="Stored highscores"></div>
       <p>Press Enter or Space to restart</p>
+    </div>
+    <div id="badge-reward-overlay" class="hidden" aria-label="New badge unlocked">
+      <div class="badge-reward-backdrop"></div>
+      <div class="badge-reward-flash" aria-hidden="true"></div>
+      <div class="badge-reward-card">
+        <p id="badge-reward-kicker" class="badge-reward-kicker">New Badge</p>
+        <h2 id="badge-reward-name" class="badge-reward-name">Lucky</h2>
+        <p id="badge-reward-tier" class="badge-reward-tier">Bronze unlocked</p>
+        <div class="badge-reward-medal-wrap">
+          <span id="badge-reward-medal" class="badge-reward-medal badge-sprite-bronze" aria-hidden="true"></span>
+        </div>
+        <p id="badge-reward-goal" class="badge-reward-goal">1 positive ? Coin win</p>
+        <p id="badge-reward-progress" class="badge-reward-progress">1 of 2 new badges from this run</p>
+        <p id="badge-reward-prompt" class="badge-reward-prompt">Tap or press Space to continue</p>
+      </div>
     </div>
     <div id="level-finished" class="hidden">
       <h1 id="level-finished-title">Level Finished</h1>

@@ -53,6 +53,14 @@ Main tuning points:
   var finalCoinsEl = document.getElementById("final-coins");
   var finalBagsEl = document.getElementById("final-bags");
   var finalHighscoresEl = document.getElementById("final-highscores");
+  var badgeRewardOverlayEl = document.getElementById("badge-reward-overlay");
+  var badgeRewardKickerEl = document.getElementById("badge-reward-kicker");
+  var badgeRewardNameEl = document.getElementById("badge-reward-name");
+  var badgeRewardTierEl = document.getElementById("badge-reward-tier");
+  var badgeRewardMedalEl = document.getElementById("badge-reward-medal");
+  var badgeRewardGoalEl = document.getElementById("badge-reward-goal");
+  var badgeRewardProgressEl = document.getElementById("badge-reward-progress");
+  var badgeRewardPromptEl = document.getElementById("badge-reward-prompt");
   var preRunScreenEl = document.getElementById("pre-run-screen");
   var updateNoticeEl = document.getElementById("update-notice");
   var updateNoticeTitleEl = document.getElementById("update-notice-title");
@@ -60,11 +68,17 @@ Main tuning points:
   var updateNoticeLaterBtn = document.getElementById("update-notice-later");
   var updateNoticeApplyBtn = document.getElementById("update-notice-apply");
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
+  var preRunBadgesScreenEl = document.getElementById("pre-run-badges-screen");
   var preRunDetailScreenEl = document.getElementById("pre-run-detail-screen");
   var preRunJumpBtn = document.getElementById("pre-run-jump-btn");
   var preRunFullBtn = document.getElementById("pre-run-full-btn");
   var preRunEasyBtn = document.getElementById("pre-run-easy-btn");
   var preRunHardBtn = document.getElementById("pre-run-hard-btn");
+  var preRunBadgesBtn = document.getElementById("pre-run-badges-btn");
+  var preRunBadgesBackBtn = document.getElementById("pre-run-badges-back-btn");
+  var preRunBadgesGroupsEl = document.getElementById("pre-run-badges-groups");
+  var preRunBadgesTotalValueEl = document.getElementById("pre-run-badges-total-value");
+  var preRunBadgesTotalLabelEl = document.getElementById("pre-run-badges-total-label");
   var preRunFullLockEl = document.getElementById("pre-run-full-lock");
   var preRunHardLockEl = document.getElementById("pre-run-hard-lock");
   var preRunBackBtn = document.getElementById("pre-run-back-btn");
@@ -138,11 +152,373 @@ Main tuning points:
   var GLOBAL_ADMIN_STORAGE_KEY = "hrrra_admin_global_v1";
   var MAX_SCORE_STORAGE_KEY_PREFIX = "hrrra_max_score_v2_";
   var PLAYER_SKIN_PROGRESS_STORAGE_KEY = "hrrra_player_skin_progress_v1";
+  var BADGE_STATS_STORAGE_KEY = "hrrra_badge_stats_v1";
   var LEVEL_COUNT = 5;
+  var BADGE_CATEGORY_ORDER = ["Single Run", "All Runs", "Skills", "Lifetime Legends", "Discovery"];
+  var BADGE_CATEGORY_COPY = {
+    "Single Run": "Push a single run as far as possible and hit big one-shot milestones.",
+    "All Runs": "Long-term collection goals that reward steady return play.",
+    "Skills": "Style, survival, and mechanic-driven challenges for mastery runs.",
+    "Lifetime Legends": "Rare long-term badges for players who keep building a real Hrrra career.",
+    "Discovery": "Badges tied to unlocking more of Hrrra over time."
+  };
+  var BADGE_SERIES = [
+    {
+      id: "greedy_single_run",
+      category: "Single Run",
+      name: "Greedy",
+      description: "Stack raw score in one explosive run.",
+      tiers: [
+        { tier: "Bronze", value: "100k points", sprite: "bronze" },
+        { tier: "Silver", value: "250k points", sprite: "silver" },
+        { tier: "Gold", value: "500k points", sprite: "gold" }
+      ]
+    },
+    {
+      id: "coin_collector_single_run",
+      category: "Single Run",
+      name: "Coin Collector",
+      description: "Vacuum up coins before the run breaks.",
+      tiers: [
+        { tier: "Bronze", value: "100 coins", sprite: "bronze" },
+        { tier: "Silver", value: "200 coins", sprite: "silver" },
+        { tier: "Gold", value: "400 coins", sprite: "gold" }
+      ]
+    },
+    {
+      id: "bag_collector_single_run",
+      category: "Single Run",
+      name: "Bag Collector",
+      description: "Turn one run into a real jackpot.",
+      tiers: [
+        { tier: "Bronze", value: "10 money bags", sprite: "bronze" },
+        { tier: "Silver", value: "50 money bags", sprite: "silver" },
+        { tier: "Gold", value: "100 money bags", sprite: "gold" }
+      ]
+    },
+    {
+      id: "lucky_single_run",
+      category: "Single Run",
+      name: "Lucky",
+      description: "Win big repeatedly on Question Coin rolls.",
+      tiers: [
+        { tier: "Bronze", value: "5 positive ? Coin wins", sprite: "bronze" },
+        { tier: "Silver", value: "10 positive ? Coin wins", sprite: "silver" },
+        { tier: "Gold", value: "20 positive ? Coin wins", sprite: "gold" }
+      ]
+    },
+    {
+      id: "unlucky_single_run",
+      category: "Single Run",
+      name: "Unlucky",
+      description: "Survive a run full of bad gambles.",
+      tiers: [
+        { tier: "Bronze", value: "5 negative ? Coin results", sprite: "bronze" },
+        { tier: "Silver", value: "10 negative ? Coin results", sprite: "silver" },
+        { tier: "Gold", value: "20 negative ? Coin results", sprite: "gold" }
+      ]
+    },
+    {
+      id: "untouchable_single_run",
+      category: "Single Run",
+      name: "Untouchable",
+      description: "Chain clean levels without giving up a life.",
+      tiers: [
+        { tier: "Bronze", value: "Finish 2 levels clean", sprite: "bronze" },
+        { tier: "Silver", value: "Finish 3 levels clean", sprite: "silver" },
+        { tier: "Gold", value: "Finish 4 levels clean", sprite: "gold" }
+      ]
+    },
+    {
+      id: "endless_greed_all_runs",
+      category: "All Runs",
+      name: "Endless Greed",
+      description: "Build lifetime score across many return runs.",
+      tiers: [
+        { tier: "Bronze", value: "1m total score", sprite: "bronze" },
+        { tier: "Silver", value: "5m total score", sprite: "silver" },
+        { tier: "Gold", value: "10m total score", sprite: "gold" }
+      ]
+    },
+    {
+      id: "coin_collector_all_runs",
+      category: "All Runs",
+      name: "Coin Collector",
+      description: "Persistent coin progress for long-term players.",
+      tiers: [
+        { tier: "Bronze", value: "1k lifetime coins", sprite: "bronze" },
+        { tier: "Silver", value: "5k lifetime coins", sprite: "silver" },
+        { tier: "Gold", value: "10k lifetime coins", sprite: "gold" }
+      ]
+    },
+    {
+      id: "bag_collector_all_runs",
+      category: "All Runs",
+      name: "Bag Collector",
+      description: "Keep banking high-value pickups across runs.",
+      tiers: [
+        { tier: "Bronze", value: "500 lifetime bags", sprite: "bronze" },
+        { tier: "Silver", value: "1k lifetime bags", sprite: "silver" },
+        { tier: "Gold", value: "5k lifetime bags", sprite: "gold" }
+      ]
+    },
+    {
+      id: "fortunate_all_runs",
+      category: "All Runs",
+      name: "Fortunate",
+      description: "Track your long-term winning streak with Question Coin.",
+      tiers: [
+        { tier: "Bronze", value: "50 positive ? Coin wins", sprite: "bronze" },
+        { tier: "Silver", value: "100 positive ? Coin wins", sprite: "silver" },
+        { tier: "Gold", value: "200 positive ? Coin wins", sprite: "gold" }
+      ]
+    },
+    {
+      id: "doom_magnet_all_runs",
+      category: "All Runs",
+      name: "Doom Magnet",
+      description: "Even bad luck counts toward the legend.",
+      tiers: [
+        { tier: "Bronze", value: "50 negative ? Coin results", sprite: "bronze" },
+        { tier: "Silver", value: "100 negative ? Coin results", sprite: "silver" },
+        { tier: "Gold", value: "200 negative ? Coin results", sprite: "gold" }
+      ]
+    },
+    {
+      id: "speed_demon_skills",
+      category: "Skills",
+      name: "Speed Demon",
+      description: "Prove you can handle the late-run acceleration.",
+      tiers: [
+        { tier: "Bronze", value: "Reach +200% speed", sprite: "bronze" },
+        { tier: "Silver", value: "Reach +300% speed", sprite: "silver" },
+        { tier: "Gold", value: "Reach +500% speed", sprite: "gold" }
+      ]
+    },
+    {
+      id: "shield_teleporter_skills",
+      category: "Skills",
+      name: "Shield Teleporter",
+      description: "Finish levels while still holding protection.",
+      tiers: [
+        { tier: "Bronze", value: "Teleport with shield 20x", sprite: "bronze" },
+        { tier: "Silver", value: "Teleport with shield 50x", sprite: "silver" },
+        { tier: "Gold", value: "Teleport with shield 100x", sprite: "gold" }
+      ]
+    },
+    {
+      id: "survivor_skills",
+      category: "Skills",
+      name: "Survivor",
+      description: "Reach the endgame without losing a life.",
+      tiers: [
+        { tier: "Bronze", value: "Level 5 on Easy Jump", sprite: "bronze" },
+        { tier: "Silver", value: "Level 5 on Hard Jump", sprite: "silver" },
+        { tier: "Gold", value: "Level 5 on Hard Jump & Full", sprite: "gold" }
+      ]
+    },
+    {
+      id: "martyr_skills",
+      category: "Skills",
+      name: "Martyr",
+      description: "A brutal run still leaves scars worth tracking.",
+      tiers: [
+        { tier: "Bronze", value: "Lose 5 lives in one run", sprite: "bronze" },
+        { tier: "Silver", value: "Lose 20 lives in one run", sprite: "silver" },
+        { tier: "Gold", value: "Lose 50 lives in one run", sprite: "gold" }
+      ]
+    },
+    {
+      id: "purist_skills",
+      category: "Skills",
+      name: "Purist",
+      description: "Climb deep into Hrrra without touching a negative pickup.",
+      tiers: [
+        { tier: "Bronze", value: "Reach Level 2 clean", sprite: "bronze" },
+        { tier: "Silver", value: "Reach Level 4 clean", sprite: "silver" },
+        { tier: "Gold", value: "Reach Level 5 clean", sprite: "gold" }
+      ]
+    },
+    {
+      id: "first_runner_legends",
+      category: "Lifetime Legends",
+      name: "First Runner",
+      description: "Start your very first run and enter the world of Hrrra.",
+      tiers: [
+        { tier: "Legend", value: "Start 1 run", sprite: "bronze" }
+      ]
+    },
+    {
+      id: "heart_hunter_legends",
+      category: "Lifetime Legends",
+      name: "Heart Hunter",
+      description: "Collect an absurd number of bonus lives over time.",
+      tiers: [
+        { tier: "Legend", value: "Collect 1000 lives", sprite: "gold" }
+      ]
+    },
+    {
+      id: "still_running_legends",
+      category: "Lifetime Legends",
+      name: "Still Running",
+      description: "Lose a huge number of lives and keep coming back anyway.",
+      tiers: [
+        { tier: "Legend", value: "Lose 1000 lives", sprite: "gold" }
+      ]
+    },
+    {
+      id: "teleporter_legends",
+      category: "Lifetime Legends",
+      name: "Teleporter",
+      description: "Use teleports so often it becomes second nature.",
+      tiers: [
+        { tier: "Legend", value: "Use 500 teleports", sprite: "gold" }
+      ]
+    },
+    {
+      id: "bubble_saver_legends",
+      category: "Lifetime Legends",
+      name: "Bubble Saver",
+      description: "Let shield saves stack up into a real legend stat.",
+      tiers: [
+        { tier: "Legend", value: "Trigger 500 shield saves", sprite: "gold" }
+      ]
+    },
+    {
+      id: "cursed_legends",
+      category: "Lifetime Legends",
+      name: "Cursed",
+      description: "Spend a very long time playing under cursed score lock.",
+      tiers: [
+        { tier: "Legend", value: "Stay cursed for 1000s", sprite: "gold" }
+      ]
+    },
+    {
+      id: "magneto_legends",
+      category: "Lifetime Legends",
+      name: "Magneto",
+      description: "Lean on magnet pickups often enough to earn a title.",
+      tiers: [
+        { tier: "Legend", value: "Pick up 1000 magnets", sprite: "gold" }
+      ]
+    },
+    {
+      id: "starter_legends",
+      category: "Lifetime Legends",
+      name: "Starter",
+      description: "Start run after run until the count itself becomes a badge.",
+      tiers: [
+        { tier: "Legend", value: "Start 500 runs", sprite: "gold" }
+      ]
+    },
+    {
+      id: "unlocker_discovery",
+      category: "Discovery",
+      name: "Unlocker",
+      description: "Open up the full game and complete the collection.",
+      tiers: [
+        { tier: "Bronze", value: "Unlock Hard", sprite: "bronze" },
+        { tier: "Silver", value: "Unlock Full", sprite: "silver" },
+        { tier: "Gold", value: "Unlock all skins", sprite: "gold" }
+      ]
+    }
+  ];
   var configDefaultsSnapshot = {};
   var modeTuning = window.HrrraModeTuning || {};
   var difficultyTuning = window.HrrraDifficultyTuning || {};
   var levelTuning = window.HrrraLevelTuning || {};
+
+  function createDefaultBadgeStats() {
+    return {
+      unlockedDates: {},
+      lifetime: {
+        totalScore: 0,
+        totalCoins: 0,
+        totalBags: 0,
+        questionPositive: 0,
+        questionNegative: 0,
+        livesCollected: 0,
+        livesLost: 0,
+        teleportsUsed: 0,
+        shieldSaves: 0,
+        shieldTeleports: 0,
+        cursedSeconds: 0,
+        magnetPickups: 0,
+        runsStarted: 0
+      },
+      best: {
+        singleRunScore: 0,
+        singleRunCoins: 0,
+        singleRunBags: 0,
+        singleRunQuestionPositive: 0,
+        singleRunQuestionNegative: 0,
+        cleanLevelsSingleRun: 0,
+        maxSpeedPercent: 0,
+        livesLostSingleRun: 0,
+        puristLevel: 0,
+        survivorEasyJumpLevel: 0,
+        survivorHardJumpLevel: 0,
+        survivorHardFullLevel: 0
+      }
+    };
+  }
+
+  function sanitizeBadgeStats(raw) {
+    var defaults = createDefaultBadgeStats();
+    var out = createDefaultBadgeStats();
+    var key;
+
+    if (!raw || typeof raw !== "object") {
+      return defaults;
+    }
+
+    if (raw.unlockedDates && typeof raw.unlockedDates === "object") {
+      for (key in raw.unlockedDates) {
+        if (!Object.prototype.hasOwnProperty.call(raw.unlockedDates, key)) {
+          continue;
+        }
+        if (typeof raw.unlockedDates[key] === "string" && raw.unlockedDates[key].trim()) {
+          out.unlockedDates[key] = raw.unlockedDates[key].trim();
+        }
+      }
+    }
+
+    ["lifetime", "best"].forEach(function (section) {
+      var source = raw[section];
+      var target = out[section];
+      var sectionDefaults = defaults[section];
+      for (key in sectionDefaults) {
+        if (!Object.prototype.hasOwnProperty.call(sectionDefaults, key)) {
+          continue;
+        }
+        target[key] = Number.isFinite(source && source[key]) ? Math.max(0, Number(source[key])) : sectionDefaults[key];
+      }
+    });
+
+    return out;
+  }
+
+  function readBadgeStats() {
+    try {
+      var raw = window.localStorage.getItem(BADGE_STATS_STORAGE_KEY);
+      if (!raw) {
+        return createDefaultBadgeStats();
+      }
+      return sanitizeBadgeStats(JSON.parse(raw));
+    } catch (error) {
+      return createDefaultBadgeStats();
+    }
+  }
+
+  function writeBadgeStats() {
+    try {
+      window.localStorage.setItem(BADGE_STATS_STORAGE_KEY, JSON.stringify(badgeStats));
+    } catch (error) {
+      // ignore write failures
+    }
+  }
+
+  var badgeStats = readBadgeStats();
   var sceneArt = {
     backgroundSky: null,
     backgroundForeground: null,
@@ -898,6 +1274,7 @@ Main tuning points:
         if (
           key === GLOBAL_ADMIN_STORAGE_KEY ||
           key === PLAYER_SKIN_PROGRESS_STORAGE_KEY ||
+          key === BADGE_STATS_STORAGE_KEY ||
           key.indexOf(ADMIN_STORAGE_KEY_PREFIX) === 0 ||
           key.indexOf(LEGACY_ADMIN_STORAGE_KEY_PREFIX) === 0 ||
           key.indexOf(MAX_SCORE_STORAGE_KEY_PREFIX) === 0
@@ -917,6 +1294,7 @@ Main tuning points:
   function resetAllSettingsToDefaults() {
     setAdminOpen(false);
     clearAllHrrraStorageData();
+    badgeStats = createDefaultBadgeStats();
     state.gameMode = 2;
     state.gameDifficulty = "easy";
     state.currentLevel = 1;
@@ -928,6 +1306,18 @@ Main tuning points:
     renderAdminForm();
     refreshPreRunBriefValues();
     updateLivesUi();
+  }
+
+  function resetBadgeProgressOnly() {
+    badgeStats = createDefaultBadgeStats();
+    state.badgeCursedSecondsAccumulator = 0;
+    state.badgeStatsDirty = false;
+    state.badgeStatsWriteElapsed = 0;
+    writeBadgeStats();
+    if (state.preRunActive && state.preRunStep === "badges") {
+      renderBadgesScreen();
+    }
+    renderAdminForm();
   }
 
   function setAdminResetConfirmOpen(isOpen) {
@@ -962,10 +1352,693 @@ Main tuning points:
           }
           continue;
         }
+        if (field.type === "badges-config") {
+          for (var badgeSeriesIndex = 0; badgeSeriesIndex < BADGE_SERIES.length; badgeSeriesIndex += 1) {
+            var badgeSeries = BADGE_SERIES[badgeSeriesIndex];
+            keys[getBadgeSeriesNameStorageKey(badgeSeries.id)] = true;
+            for (var badgeTierIndex = 0; badgeTierIndex < badgeSeries.tiers.length; badgeTierIndex += 1) {
+              keys[getBadgeSeriesTierTargetStorageKey(badgeSeries.id, badgeTierIndex)] = true;
+            }
+          }
+          continue;
+        }
         keys[field.key] = true;
       }
     }
     return Object.keys(keys);
+  }
+
+  function getBadgeSeriesNameStorageKey(seriesId) {
+    return "badgeSeriesName_" + String(seriesId);
+  }
+
+  function getBadgeTierKey(series, tierIndex) {
+    return String(series.id) + "_" + String(tierIndex);
+  }
+
+  function getLegacyBadgeSeriesTierValueStorageKey(seriesId, tierIndex) {
+    return "badgeSeriesTierValue_" + String(seriesId) + "_" + String(tierIndex);
+  }
+
+  function getBadgeSeriesTierTargetStorageKey(seriesId, tierIndex) {
+    return "badgeSeriesTierTarget_" + String(seriesId) + "_" + String(tierIndex);
+  }
+
+  function getBadgeSeriesName(series) {
+    var stored = readGlobalAdminStorageObject();
+    var override = stored[getBadgeSeriesNameStorageKey(series.id)];
+    if (typeof override === "string" && override.trim()) {
+      return override.trim();
+    }
+    return series.name;
+  }
+
+  function getDefaultBadgeTierTarget(series, tierIndex) {
+    switch (series.id) {
+      case "greedy_single_run":
+        return [100000, 250000, 500000][tierIndex] || 0;
+      case "coin_collector_single_run":
+        return [100, 200, 400][tierIndex] || 0;
+      case "bag_collector_single_run":
+        return [10, 50, 100][tierIndex] || 0;
+      case "lucky_single_run":
+      case "unlucky_single_run":
+        return [5, 10, 20][tierIndex] || 0;
+      case "untouchable_single_run":
+        return [2, 3, 4][tierIndex] || 0;
+      case "endless_greed_all_runs":
+        return [1000000, 5000000, 10000000][tierIndex] || 0;
+      case "coin_collector_all_runs":
+        return [1000, 5000, 10000][tierIndex] || 0;
+      case "bag_collector_all_runs":
+        return [500, 1000, 5000][tierIndex] || 0;
+      case "fortunate_all_runs":
+      case "doom_magnet_all_runs":
+        return [50, 100, 200][tierIndex] || 0;
+      case "speed_demon_skills":
+        return [200, 300, 500][tierIndex] || 0;
+      case "shield_teleporter_skills":
+        return [20, 50, 100][tierIndex] || 0;
+      case "survivor_skills":
+        return 5;
+      case "martyr_skills":
+        return [5, 20, 50][tierIndex] || 0;
+      case "purist_skills":
+        return [2, 4, 5][tierIndex] || 0;
+      case "heart_hunter_legends":
+      case "still_running_legends":
+      case "cursed_legends":
+      case "magneto_legends":
+        return 1000;
+      case "first_runner_legends":
+        return 1;
+      case "teleporter_legends":
+      case "bubble_saver_legends":
+      case "starter_legends":
+        return 500;
+      case "unlocker_discovery":
+        return 1;
+      default:
+        return 0;
+    }
+  }
+
+  function sanitizeBadgeTarget(series, tierIndex, value) {
+    var parsed = Math.floor(Number(value));
+    if (!Number.isFinite(parsed)) {
+      return getDefaultBadgeTierTarget(series, tierIndex);
+    }
+    return Math.max(0, parsed);
+  }
+
+  function parseLegacyBadgeTarget(series, tierIndex, rawValue) {
+    if (typeof rawValue !== "string" || !rawValue.trim()) {
+      return getDefaultBadgeTierTarget(series, tierIndex);
+    }
+
+    var match = rawValue.trim().match(/([0-9]+(?:\.[0-9]+)?)\s*([kKmM]?)/);
+    if (!match) {
+      return getDefaultBadgeTierTarget(series, tierIndex);
+    }
+
+    var numeric = Number(match[1]);
+    if (!Number.isFinite(numeric)) {
+      return getDefaultBadgeTierTarget(series, tierIndex);
+    }
+
+    var suffix = String(match[2] || "").toLowerCase();
+    if (suffix === "k") {
+      numeric *= 1000;
+    } else if (suffix === "m") {
+      numeric *= 1000000;
+    }
+    return sanitizeBadgeTarget(series, tierIndex, numeric);
+  }
+
+  function getBadgeTierTarget(series, tierIndex) {
+    var stored = readGlobalAdminStorageObject();
+    var directOverride = stored[getBadgeSeriesTierTargetStorageKey(series.id, tierIndex)];
+    if (Number.isFinite(directOverride)) {
+      return sanitizeBadgeTarget(series, tierIndex, directOverride);
+    }
+    var legacyOverride = stored[getLegacyBadgeSeriesTierValueStorageKey(series.id, tierIndex)];
+    if (typeof legacyOverride === "string" && legacyOverride.trim()) {
+      return parseLegacyBadgeTarget(series, tierIndex, legacyOverride);
+    }
+    return getDefaultBadgeTierTarget(series, tierIndex);
+  }
+
+  function formatBadgeCompactNumber(value) {
+    var safe = Math.max(0, Number(value) || 0);
+    if (safe >= 1000000) {
+      var millions = safe / 1000000;
+      return (millions % 1 === 0 ? String(millions) : millions.toFixed(1)) + "m";
+    }
+    if (safe >= 1000) {
+      var thousands = safe / 1000;
+      return (thousands % 1 === 0 ? String(thousands) : thousands.toFixed(1)) + "k";
+    }
+    return String(safe);
+  }
+
+  function formatBadgeGoalText(series, tierIndex) {
+    var target = getBadgeTierTarget(series, tierIndex);
+    switch (series.id) {
+      case "greedy_single_run":
+        return formatBadgeCompactNumber(target) + " points";
+      case "coin_collector_single_run":
+      case "coin_collector_all_runs":
+        return formatBadgeCompactNumber(target) + " coins";
+      case "bag_collector_single_run":
+      case "bag_collector_all_runs":
+        return formatBadgeCompactNumber(target) + " money bags";
+      case "lucky_single_run":
+      case "fortunate_all_runs":
+        return formatBadgeCompactNumber(target) + " positive ? Coin wins";
+      case "unlucky_single_run":
+      case "doom_magnet_all_runs":
+        return formatBadgeCompactNumber(target) + " negative ? Coin results";
+      case "untouchable_single_run":
+        return "Finish " + target + " levels clean";
+      case "endless_greed_all_runs":
+        return formatBadgeCompactNumber(target) + " total score";
+      case "speed_demon_skills":
+        return "Reach +" + target + "% speed";
+      case "shield_teleporter_skills":
+        return "Teleport with shield " + target + "x";
+      case "survivor_skills":
+        if (tierIndex === 0) {
+          return "Level " + target + " on Easy Jump";
+        }
+        if (tierIndex === 1) {
+          return "Level " + target + " on Hard Jump";
+        }
+        return "Level " + target + " on Hard Full";
+      case "martyr_skills":
+        return "Lose " + target + " lives in one run";
+      case "purist_skills":
+        return "Reach Level " + target + " clean";
+      case "first_runner_legends":
+        return "Start " + target + " run";
+      case "heart_hunter_legends":
+        return "Collect " + target + " lives";
+      case "still_running_legends":
+        return "Lose " + target + " lives";
+      case "teleporter_legends":
+        return "Use " + target + " teleports";
+      case "bubble_saver_legends":
+        return "Trigger " + target + " shield saves";
+      case "cursed_legends":
+        return "Stay cursed for " + target + "s";
+      case "magneto_legends":
+        return "Pick up " + target + " magnets";
+      case "starter_legends":
+        return "Start " + target + " runs";
+      case "unlocker_discovery":
+        if (tierIndex === 0) {
+          return "Unlock Hard";
+        }
+        if (tierIndex === 1) {
+          return "Unlock Full";
+        }
+        return "Unlock all skins";
+      default:
+        return series.tiers[tierIndex] ? series.tiers[tierIndex].value : "";
+    }
+  }
+
+  function getBadgeAdminUnitText(series, tierIndex) {
+    switch (series.id) {
+      case "greedy_single_run":
+      case "endless_greed_all_runs":
+        return "points";
+      case "coin_collector_single_run":
+      case "coin_collector_all_runs":
+        return "coins";
+      case "bag_collector_single_run":
+      case "bag_collector_all_runs":
+        return "money bags";
+      case "lucky_single_run":
+      case "fortunate_all_runs":
+        return "positive ? Coin wins";
+      case "unlucky_single_run":
+      case "doom_magnet_all_runs":
+        return "negative ? Coin results";
+      case "untouchable_single_run":
+        return "clean levels";
+      case "speed_demon_skills":
+        return "% speed";
+      case "shield_teleporter_skills":
+        return "shield teleports";
+      case "survivor_skills":
+        return tierIndex === 0 ? "level on Easy Jump" : (tierIndex === 1 ? "level on Hard Jump" : "level on Hard Full");
+      case "martyr_skills":
+        return "lives lost in one run";
+      case "purist_skills":
+        return "clean level reached";
+      case "first_runner_legends":
+        return "runs";
+      case "heart_hunter_legends":
+        return "lives";
+      case "still_running_legends":
+        return "lives lost";
+      case "teleporter_legends":
+        return "teleports";
+      case "bubble_saver_legends":
+        return "shield saves";
+      case "cursed_legends":
+        return "seconds cursed";
+      case "magneto_legends":
+        return "magnets";
+      case "starter_legends":
+        return "runs";
+      case "unlocker_discovery":
+        return tierIndex === 0 ? "Hard unlock" : (tierIndex === 1 ? "Full unlock" : "all skins unlock");
+      default:
+        return "";
+    }
+  }
+
+  function getUnlockedSkinCount() {
+    var count = 0;
+    for (var i = 0; i < SKIN_OPTIONS.length; i += 1) {
+      if (isSkinUnlocked(SKIN_OPTIONS[i].value)) {
+        count += 1;
+      }
+    }
+    return count;
+  }
+
+  function getBadgeCollectedValue(series, tierIndex) {
+    switch (series.id) {
+      case "greedy_single_run":
+        return badgeStats.best.singleRunScore;
+      case "coin_collector_single_run":
+        return badgeStats.best.singleRunCoins;
+      case "bag_collector_single_run":
+        return badgeStats.best.singleRunBags;
+      case "lucky_single_run":
+        return badgeStats.best.singleRunQuestionPositive;
+      case "unlucky_single_run":
+        return badgeStats.best.singleRunQuestionNegative;
+      case "untouchable_single_run":
+        return badgeStats.best.cleanLevelsSingleRun;
+      case "endless_greed_all_runs":
+        return badgeStats.lifetime.totalScore;
+      case "coin_collector_all_runs":
+        return badgeStats.lifetime.totalCoins;
+      case "bag_collector_all_runs":
+        return badgeStats.lifetime.totalBags;
+      case "fortunate_all_runs":
+        return badgeStats.lifetime.questionPositive;
+      case "doom_magnet_all_runs":
+        return badgeStats.lifetime.questionNegative;
+      case "speed_demon_skills":
+        return badgeStats.best.maxSpeedPercent;
+      case "shield_teleporter_skills":
+        return badgeStats.lifetime.shieldTeleports;
+      case "survivor_skills":
+        return tierIndex === 0
+          ? badgeStats.best.survivorEasyJumpLevel
+          : (tierIndex === 1 ? badgeStats.best.survivorHardJumpLevel : badgeStats.best.survivorHardFullLevel);
+      case "martyr_skills":
+        return badgeStats.best.livesLostSingleRun;
+      case "purist_skills":
+        return badgeStats.best.puristLevel;
+      case "first_runner_legends":
+        return badgeStats.lifetime.runsStarted;
+      case "heart_hunter_legends":
+        return badgeStats.lifetime.livesCollected;
+      case "still_running_legends":
+        return badgeStats.lifetime.livesLost;
+      case "teleporter_legends":
+        return badgeStats.lifetime.teleportsUsed;
+      case "bubble_saver_legends":
+        return badgeStats.lifetime.shieldSaves;
+      case "cursed_legends":
+        return badgeStats.lifetime.cursedSeconds;
+      case "magneto_legends":
+        return badgeStats.lifetime.magnetPickups;
+      case "starter_legends":
+        return badgeStats.lifetime.runsStarted;
+      case "unlocker_discovery":
+        if (tierIndex === 0) {
+          return isHardDifficultyUnlocked() ? 1 : 0;
+        }
+        if (tierIndex === 1) {
+          return isFullModeUnlocked() ? 1 : 0;
+        }
+        return getUnlockedSkinCount() >= SKIN_OPTIONS.length ? 1 : 0;
+      default:
+        return 0;
+    }
+  }
+
+  function isBadgeTierCollected(series, tierIndex) {
+    return getBadgeCollectedValue(series, tierIndex) >= getBadgeTierTarget(series, tierIndex);
+  }
+
+  function formatBadgeCollectedNumber(series, tierIndex) {
+    var value = Math.floor(Math.max(0, getBadgeCollectedValue(series, tierIndex)));
+    if (series.id === "greedy_single_run" || series.id === "endless_greed_all_runs") {
+      return value.toLocaleString("en-US");
+    }
+    return String(value);
+  }
+
+  function getTodayBadgeDateString() {
+    var now = new Date();
+    var day = String(now.getDate()).padStart(2, "0");
+    var month = String(now.getMonth() + 1).padStart(2, "0");
+    var year = String(now.getFullYear()).slice(-2);
+    return day + "." + month + "." + year;
+  }
+
+  function syncBadgeUnlockDates() {
+    var changed = false;
+    BADGE_SERIES.forEach(function (series) {
+      for (var tierIndex = 0; tierIndex < series.tiers.length; tierIndex += 1) {
+        var badgeTierKey = getBadgeTierKey(series, tierIndex);
+        if (isBadgeTierCollected(series, tierIndex) && !badgeStats.unlockedDates[badgeTierKey]) {
+          badgeStats.unlockedDates[badgeTierKey] = getTodayBadgeDateString();
+          changed = true;
+        }
+      }
+    });
+    return changed;
+  }
+
+  function getBadgeUnlockDate(series, tierIndex) {
+    return badgeStats.unlockedDates[getBadgeTierKey(series, tierIndex)] || "";
+  }
+
+  function getCollectedBadgeKeyMap() {
+    var map = {};
+    BADGE_SERIES.forEach(function (series) {
+      for (var tierIndex = 0; tierIndex < series.tiers.length; tierIndex += 1) {
+        if (isBadgeTierCollected(series, tierIndex)) {
+          map[getBadgeTierKey(series, tierIndex)] = true;
+        }
+      }
+    });
+    return map;
+  }
+
+  function resetBadgeRewardQueue() {
+    state.pendingBadgeRewardQueue = [];
+    state.badgeRewardIndex = 0;
+    state.badgeRewardPhase = "idle";
+    state.badgeRewardTimer = 0;
+    state.badgeRewardActive = false;
+    state.badgeRewardShowRip = false;
+    if (badgeRewardOverlayEl) {
+      badgeRewardOverlayEl.classList.add("hidden");
+      badgeRewardOverlayEl.classList.remove("is-revealing", "is-ready");
+    }
+  }
+
+  function buildNewlyUnlockedBadgeQueueForRun() {
+    var queue = [];
+    BADGE_SERIES.forEach(function (series) {
+      for (var tierIndex = 0; tierIndex < series.tiers.length; tierIndex += 1) {
+        var badgeKey = getBadgeTierKey(series, tierIndex);
+        if (!isBadgeTierCollected(series, tierIndex) || state.runUnlockedBadgeKeysAtStart[badgeKey]) {
+          continue;
+        }
+        queue.push({
+          seriesId: series.id,
+          tierIndex: tierIndex,
+          name: getBadgeSeriesName(series),
+          tier: series.tiers[tierIndex].tier,
+          sprite: series.tiers[tierIndex].sprite,
+          goal: formatBadgeGoalText(series, tierIndex)
+        });
+      }
+    });
+    return queue;
+  }
+
+  function populateBadgeRewardOverlay(item) {
+    if (!badgeRewardOverlayEl || !item) {
+      return;
+    }
+
+    if (badgeRewardKickerEl) {
+      badgeRewardKickerEl.textContent = state.pendingBadgeRewardQueue.length > 1 ? "New Badge Unlocked" : "Badge Unlocked";
+    }
+    if (badgeRewardNameEl) {
+      badgeRewardNameEl.textContent = item.name;
+    }
+    if (badgeRewardTierEl) {
+      badgeRewardTierEl.textContent = item.tier + " unlocked";
+    }
+    if (badgeRewardGoalEl) {
+      badgeRewardGoalEl.textContent = item.goal;
+    }
+    if (badgeRewardProgressEl) {
+      badgeRewardProgressEl.textContent =
+        (state.badgeRewardIndex + 1) + " of " + state.pendingBadgeRewardQueue.length + " new badges from this run";
+    }
+    if (badgeRewardPromptEl) {
+      badgeRewardPromptEl.textContent = "Tap or press Space to continue";
+    }
+    if (badgeRewardMedalEl) {
+      badgeRewardMedalEl.className = "badge-reward-medal " + getBadgeSpriteClassName(item.sprite);
+    }
+  }
+
+  function showCurrentBadgeRewardItem() {
+    var item = state.pendingBadgeRewardQueue[state.badgeRewardIndex];
+    if (!item || !badgeRewardOverlayEl) {
+      return;
+    }
+
+    populateBadgeRewardOverlay(item);
+    state.badgeRewardActive = true;
+    state.badgeRewardPhase = "intro";
+    state.badgeRewardTimer = 0;
+    state.badgeRewardShowRip = true;
+    badgeRewardOverlayEl.classList.remove("hidden", "is-revealing", "is-ready");
+    void badgeRewardOverlayEl.offsetWidth;
+  }
+
+  function startBadgeRewardSequence(queue) {
+    state.pendingBadgeRewardQueue = Array.isArray(queue) ? queue.slice() : [];
+    state.badgeRewardIndex = 0;
+    if (!state.pendingBadgeRewardQueue.length) {
+      resetBadgeRewardQueue();
+      return false;
+    }
+    showCurrentBadgeRewardItem();
+    return true;
+  }
+
+  function finishBadgeRewardSequence() {
+    resetBadgeRewardQueue();
+    updateGameOverSummary();
+    gameOverEl.classList.remove("hidden");
+  }
+
+  function advanceBadgeRewardSequence() {
+    if (!state.badgeRewardActive || state.badgeRewardPhase !== "ready") {
+      return;
+    }
+
+    state.badgeRewardIndex += 1;
+    if (state.badgeRewardIndex >= state.pendingBadgeRewardQueue.length) {
+      finishBadgeRewardSequence();
+      return;
+    }
+    showCurrentBadgeRewardItem();
+  }
+
+  function updateBadgeRewardSequence(dt) {
+    if (!state.badgeRewardActive) {
+      return;
+    }
+
+    state.badgeRewardTimer += dt;
+    if (state.badgeRewardPhase === "intro" && state.badgeRewardTimer >= 2) {
+      state.badgeRewardPhase = "reveal";
+      state.badgeRewardTimer = 0;
+      state.badgeRewardShowRip = false;
+      if (badgeRewardOverlayEl) {
+        badgeRewardOverlayEl.classList.remove("is-ready");
+        badgeRewardOverlayEl.classList.add("is-revealing");
+      }
+      return;
+    }
+
+    if (state.badgeRewardPhase === "reveal" && state.badgeRewardTimer >= 0.85) {
+      state.badgeRewardPhase = "ready";
+      state.badgeRewardTimer = 0;
+      if (badgeRewardOverlayEl) {
+        badgeRewardOverlayEl.classList.remove("is-revealing");
+        badgeRewardOverlayEl.classList.add("is-ready");
+      }
+    }
+  }
+
+  function createEmptyRunBadgeStats() {
+    return {
+      questionPositive: 0,
+      questionNegative: 0,
+      livesLost: 0,
+      cleanLevelsFinished: 0,
+      levelHadLifeLoss: false,
+      touchedNegativePickup: false
+    };
+  }
+
+  function resetRunBadgeStats() {
+    state.runBadgeStats = createEmptyRunBadgeStats();
+  }
+
+  function persistBadgeStats() {
+    syncBadgeUnlockDates();
+    state.badgeStatsDirty = true;
+    if (state.preRunActive && state.preRunStep === "badges") {
+      renderBadgesScreen();
+    }
+  }
+
+  function flushBadgeStatsStorage(force, dt) {
+    if (!state.badgeStatsDirty) {
+      state.badgeStatsWriteElapsed = 0;
+      return;
+    }
+
+    if (!force) {
+      state.badgeStatsWriteElapsed += Math.max(0, Number(dt) || 0);
+      if (state.badgeStatsWriteElapsed < 10) {
+        return;
+      }
+    }
+
+    writeBadgeStats();
+    state.badgeStatsDirty = false;
+    state.badgeStatsWriteElapsed = 0;
+  }
+
+  function incrementBadgeLifetimeStat(key, amount) {
+    var delta = Number.isFinite(amount) ? amount : 1;
+    if (!badgeStats.lifetime || !Number.isFinite(badgeStats.lifetime[key])) {
+      return;
+    }
+    badgeStats.lifetime[key] = Math.max(0, badgeStats.lifetime[key] + delta);
+    persistBadgeStats();
+  }
+
+  function updateBadgeBestStat(key, value) {
+    var safe = Math.max(0, Number(value) || 0);
+    if (!badgeStats.best || !Number.isFinite(badgeStats.best[key])) {
+      return;
+    }
+    if (safe <= badgeStats.best[key]) {
+      return;
+    }
+    badgeStats.best[key] = safe;
+    persistBadgeStats();
+  }
+
+  function recordNegativePickupTouch() {
+    state.runBadgeStats.touchedNegativePickup = true;
+  }
+
+  function recordCoinCollected(amount) {
+    var delta = Number.isFinite(amount) ? amount : 1;
+    state.collectedCoins += delta;
+    state.levelCollectedCoins += delta;
+    incrementBadgeLifetimeStat("totalCoins", delta);
+    updateBadgeBestStat("singleRunCoins", state.collectedCoins);
+  }
+
+  function recordBagCollected(amount) {
+    var delta = Number.isFinite(amount) ? amount : 1;
+    state.collectedBags += delta;
+    state.levelCollectedBags += delta;
+    incrementBadgeLifetimeStat("totalBags", delta);
+    updateBadgeBestStat("singleRunBags", state.collectedBags);
+  }
+
+  function recordLifeCollected(amount) {
+    incrementBadgeLifetimeStat("livesCollected", Number.isFinite(amount) ? amount : 1);
+  }
+
+  function recordQuestionCoinOutcome(result) {
+    if (result === "+") {
+      state.runBadgeStats.questionPositive += 1;
+      incrementBadgeLifetimeStat("questionPositive", 1);
+      updateBadgeBestStat("singleRunQuestionPositive", state.runBadgeStats.questionPositive);
+      return;
+    }
+
+    state.runBadgeStats.questionNegative += 1;
+    incrementBadgeLifetimeStat("questionNegative", 1);
+    updateBadgeBestStat("singleRunQuestionNegative", state.runBadgeStats.questionNegative);
+    recordNegativePickupTouch();
+  }
+
+  function recordLifeLost() {
+    state.runBadgeStats.livesLost += 1;
+    state.runBadgeStats.levelHadLifeLoss = true;
+    incrementBadgeLifetimeStat("livesLost", 1);
+    updateBadgeBestStat("livesLostSingleRun", state.runBadgeStats.livesLost);
+  }
+
+  function recordShieldSave() {
+    incrementBadgeLifetimeStat("shieldSaves", 1);
+  }
+
+  function recordTeleportUse(withShield) {
+    incrementBadgeLifetimeStat("teleportsUsed", 1);
+    if (withShield) {
+      incrementBadgeLifetimeStat("shieldTeleports", 1);
+    }
+  }
+
+  function recordMagnetPickup() {
+    incrementBadgeLifetimeStat("magnetPickups", 1);
+  }
+
+  function recordFreshRunStartIfNeeded() {
+    if (!state.pendingFreshRunStart) {
+      return;
+    }
+    state.pendingFreshRunStart = false;
+    incrementBadgeLifetimeStat("runsStarted", 1);
+  }
+
+  function updateSurvivorBadgeProgressForCurrentRun() {
+    if (state.runBadgeStats.livesLost > 0) {
+      return;
+    }
+
+    if (state.gameMode === 2 && state.gameDifficulty === "easy") {
+      updateBadgeBestStat("survivorEasyJumpLevel", state.currentLevel);
+      return;
+    }
+    if (state.gameMode === 2 && state.gameDifficulty === "hard") {
+      updateBadgeBestStat("survivorHardJumpLevel", state.currentLevel);
+      return;
+    }
+    if (state.gameMode === 1 && state.gameDifficulty === "hard") {
+      updateBadgeBestStat("survivorHardFullLevel", state.currentLevel);
+    }
+  }
+
+  function updatePuristBadgeProgressForCurrentRun() {
+    if (state.runBadgeStats.touchedNegativePickup) {
+      return;
+    }
+    updateBadgeBestStat("puristLevel", state.currentLevel);
+  }
+
+  function finalizeLevelBadgeProgress() {
+    if (!state.runBadgeStats.levelHadLifeLoss) {
+      state.runBadgeStats.cleanLevelsFinished += 1;
+      updateBadgeBestStat("cleanLevelsSingleRun", state.runBadgeStats.cleanLevelsFinished);
+    }
   }
 
   function getAdminUiStorageObject() {
@@ -1173,6 +2246,12 @@ Main tuning points:
         exportData.global[globalKey] = globalKey === "selectedSkin"
           ? normalizeSkinName(C[globalKey])
           : String(C[globalKey]);
+      } else if (typeof globalState[globalKey] === "string") {
+        exportData.global[globalKey] = globalState[globalKey];
+      } else if (typeof globalState[globalKey] === "boolean") {
+        exportData.global[globalKey] = globalState[globalKey];
+      } else if (Number.isFinite(globalState[globalKey])) {
+        exportData.global[globalKey] = globalState[globalKey];
       }
     }
     if (globalState.adminUiState && typeof globalState.adminUiState === "object") {
@@ -1259,6 +2338,10 @@ Main tuning points:
           globalKey,
           globalKey === "selectedSkin" ? normalizeSkinName(parsed.global[globalKey]) : parsed.global[globalKey]
         );
+      } else if (typeof parsed.global[globalKey] === "string") {
+        saveGlobalAdminField(globalKey, parsed.global[globalKey]);
+      } else if (Number.isFinite(parsed.global[globalKey])) {
+        saveGlobalAdminField(globalKey, parsed.global[globalKey]);
       }
     }
 
@@ -1552,6 +2635,25 @@ Main tuning points:
     collectedBags: 0,
     levelCollectedCoins: 0,
     levelCollectedBags: 0,
+    runBadgeStats: {
+      questionPositive: 0,
+      questionNegative: 0,
+      livesLost: 0,
+      cleanLevelsFinished: 0,
+      levelHadLifeLoss: false,
+      touchedNegativePickup: false
+    },
+    pendingFreshRunStart: false,
+    badgeCursedSecondsAccumulator: 0,
+    badgeStatsDirty: false,
+    badgeStatsWriteElapsed: 0,
+    runUnlockedBadgeKeysAtStart: {},
+    pendingBadgeRewardQueue: [],
+    badgeRewardActive: false,
+    badgeRewardIndex: 0,
+    badgeRewardPhase: "idle",
+    badgeRewardTimer: 0,
+    badgeRewardShowRip: false,
     maxLives: 1,
     livesLeft: 1,
     lifeLossFlashTimeLeft: 0,
@@ -1749,6 +2851,12 @@ Main tuning points:
         { key: "hardModeOverrideControls", label: "", type: "hard-mode-override-controls" },
         { key: "fullModeUnlockJumpHardScore", label: "Full Mode unlock on Jump Hard score", type: "number", min: 0, step: 1 },
         { key: "fullModeOverrideControls", label: "", type: "full-mode-override-controls" }
+      ]
+    },
+    {
+      title: "Badges",
+      fields: [
+        { key: "badgeConfig", label: "", type: "badges-config" }
       ]
     }
   ];
@@ -2494,6 +3602,9 @@ Main tuning points:
     if (preRunSelectScreenEl) {
       preRunSelectScreenEl.classList.toggle("hidden", state.preRunStep !== "select");
     }
+    if (preRunBadgesScreenEl) {
+      preRunBadgesScreenEl.classList.toggle("hidden", state.preRunStep !== "badges");
+    }
     if (preRunDetailScreenEl) {
       preRunDetailScreenEl.classList.toggle("hidden", state.preRunStep !== "details");
     }
@@ -2527,6 +3638,162 @@ Main tuning points:
       preRunFullLockEl.classList.toggle("hidden", fullUnlocked);
       preRunFullLockEl.textContent = getFullModeLockText();
     }
+    if (state.preRunStep === "badges") {
+      renderBadgesScreen();
+    }
+  }
+
+  function getTotalBadgeCount() {
+    var count = 0;
+    BADGE_SERIES.forEach(function (series) {
+      count += Array.isArray(series.tiers) ? series.tiers.length : 0;
+    });
+    return count;
+  }
+
+  function getCollectedBadgeCount() {
+    var count = 0;
+    BADGE_SERIES.forEach(function (series) {
+      for (var i = 0; i < series.tiers.length; i += 1) {
+        if (isBadgeTierCollected(series, i)) {
+          count += 1;
+        }
+      }
+    });
+    return count;
+  }
+
+  function getBadgeSpriteClassName(sprite) {
+    if (sprite === "silver") {
+      return "badge-sprite-silver";
+    }
+    if (sprite === "gold") {
+      return "badge-sprite-gold";
+    }
+    return "badge-sprite-bronze";
+  }
+
+  function renderBadgesScreen() {
+    if (!preRunBadgesGroupsEl) {
+      return;
+    }
+
+    if (syncBadgeUnlockDates()) {
+      state.badgeStatsDirty = true;
+      flushBadgeStatsStorage(true, 0);
+    }
+
+    var totalBadges = getTotalBadgeCount();
+    var collectedBadges = getCollectedBadgeCount();
+
+    if (preRunBadgesTotalValueEl) {
+      preRunBadgesTotalValueEl.textContent = collectedBadges + "/" + totalBadges;
+    }
+    if (preRunBadgesTotalLabelEl) {
+      preRunBadgesTotalLabelEl.textContent = "Total Badges Collected";
+    }
+
+    var categoryMarkup = BADGE_CATEGORY_ORDER.map(function (categoryName) {
+      var seriesForCategory = BADGE_SERIES.filter(function (series) {
+        return series.category === categoryName;
+      });
+      var categoryBadgeCount = 0;
+      var categoryCollectedCount = 0;
+
+      if (!seriesForCategory.length) {
+        return "";
+      }
+
+      seriesForCategory.forEach(function (series) {
+        categoryBadgeCount += Array.isArray(series.tiers) ? series.tiers.length : 0;
+        for (var categoryTierIndex = 0; categoryTierIndex < series.tiers.length; categoryTierIndex += 1) {
+          if (isBadgeTierCollected(series, categoryTierIndex)) {
+            categoryCollectedCount += 1;
+          }
+        }
+      });
+
+      var cardsMarkup = seriesForCategory.map(function (series) {
+        var tiersMarkup = (series.tiers || []).map(function (tier) {
+          var tierIndex = series.tiers.indexOf(tier);
+          var isCollected = isBadgeTierCollected(series, tierIndex);
+          var unlockDate = isCollected ? getBadgeUnlockDate(series, tierIndex) : "";
+          return [
+            '<article class="pre-run-badge-tier ',
+            isCollected ? "is-unlocked" : "is-locked",
+            '" aria-label="',
+            tier.tier,
+            " ",
+            getBadgeSeriesName(series),
+            '">',
+            '<div class="pre-run-badge-medal-wrap">',
+            '<span class="pre-run-badge-medal ',
+            getBadgeSpriteClassName(tier.sprite),
+            '" aria-hidden="true"></span>',
+            "</div>",
+            '<div class="pre-run-badge-tier-copy">',
+            '<span class="pre-run-badge-tier-meta">',
+            '<span class="pre-run-badge-tier-label">',
+            tier.tier,
+            "</span>",
+            unlockDate ? '<span class="pre-run-badge-tier-date">' + unlockDate + "</span>" : "",
+            "</span>",
+            '<span class="pre-run-badge-tier-value">',
+            formatBadgeGoalText(series, tierIndex),
+            "</span>",
+            "</div>",
+            "</article>"
+          ].join("");
+        }).join("");
+
+        return [
+          '<section class="pre-run-badge-card">',
+          '<header class="pre-run-badge-card-header">',
+          "<h3>",
+          getBadgeSeriesName(series),
+          "</h3>",
+          "<p>",
+          series.description,
+          "</p>",
+          "</header>",
+          '<div class="pre-run-badge-tier-grid">',
+          tiersMarkup,
+          "</div>",
+          "</section>"
+        ].join("");
+      }).join("");
+
+      return [
+        '<section class="pre-run-badge-group">',
+        '<div class="pre-run-badge-group-header">',
+        "<h3>",
+        categoryName,
+        "</h3>",
+        "<p>",
+        BADGE_CATEGORY_COPY[categoryName] || "",
+        "</p>",
+        '<span class="pre-run-badge-group-count">',
+        categoryCollectedCount,
+        "/",
+        categoryBadgeCount,
+        " collected",
+        "</span>",
+        "</div>",
+        '<div class="pre-run-badge-card-grid">',
+        cardsMarkup,
+        "</div>",
+        "</section>"
+      ].join("");
+    }).join("");
+
+    preRunBadgesGroupsEl.innerHTML = [
+      '<div class="pre-run-badges-intro">',
+      "<p>",
+      "This first draft keeps every badge visible while live progress tracking feeds the counters.",
+      "</p>",
+      "</div>",
+      categoryMarkup
+    ].join("");
   }
 
   function isNativeAndroidPlatform() {
@@ -2634,6 +3901,11 @@ Main tuning points:
     state.runTimeSeconds = 0;
     state.collectedCoins = 0;
     state.collectedBags = 0;
+    resetRunBadgeStats();
+    resetBadgeRewardQueue();
+    state.runUnlockedBadgeKeysAtStart = getCollectedBadgeKeyMap();
+    state.pendingFreshRunStart = true;
+    state.badgeCursedSecondsAccumulator = 0;
     loadCurrentLevelConfig();
     restartGame(true);
     state.preRunActive = true;
@@ -2659,6 +3931,8 @@ Main tuning points:
     state.currentLevel = Math.max(1, Math.min(LEVEL_COUNT, level));
     state.highestLevelReached = Math.max(state.highestLevelReached, state.currentLevel);
     writePlayerSkinProgress();
+    updateSurvivorBadgeProgressForCurrentRun();
+    updatePuristBadgeProgressForCurrentRun();
     loadCurrentLevelConfig();
     restartGame(false);
     state.pendingDoubleJumpTimeLeft = carryDoubleJumpTime;
@@ -2717,6 +3991,7 @@ Main tuning points:
 
   function closePreRunScreenAndStartRun() {
     setAdminOpen(false);
+    recordFreshRunStartIfNeeded();
     state.preRunActive = false;
     if (preRunScreenEl) {
       preRunScreenEl.classList.add("hidden");
@@ -2795,6 +4070,18 @@ Main tuning points:
     if (preRunHardBtn) {
       preRunHardBtn.addEventListener("click", function () {
         setPreRunDifficulty("hard");
+      });
+    }
+    if (preRunBadgesBtn) {
+      preRunBadgesBtn.addEventListener("click", function () {
+        state.preRunStep = "badges";
+        renderPreRunScreen();
+      });
+    }
+    if (preRunBadgesBackBtn) {
+      preRunBadgesBackBtn.addEventListener("click", function () {
+        state.preRunStep = "select";
+        renderPreRunScreen();
       });
     }
     if (preRunBackBtn) {
@@ -2878,6 +4165,8 @@ Main tuning points:
     }
 
     if (isOpen) {
+      flushBadgeStatsStorage(true, 0);
+      renderAdminForm();
       adminPanel.hidden = false;
       adminPanel.classList.remove("hidden");
       state.adminPaused = true;
@@ -2931,6 +4220,9 @@ Main tuning points:
       globalSectionEl.className = "admin-section admin-global-section";
 
       var globalSectionCollapsed = getGlobalCollapseState("section_" + String(globalSectionIndex));
+      var globalSectionTitleRow = document.createElement("div");
+      globalSectionTitleRow.className = "admin-section-title-row";
+
       var globalSectionTitle = document.createElement("button");
       globalSectionTitle.type = "button";
       globalSectionTitle.className = "admin-collapsible-toggle admin-section-title-toggle";
@@ -2948,7 +4240,20 @@ Main tuning points:
       globalSectionArrow.textContent = globalSectionCollapsed ? ">" : "v";
       globalSectionTitle.appendChild(globalSectionTitleLabel);
       globalSectionTitle.appendChild(globalSectionArrow);
-      globalSectionEl.appendChild(globalSectionTitle);
+      globalSectionTitleRow.appendChild(globalSectionTitle);
+      if (globalSection.title === "Badges") {
+        var resetBadgesBtn = document.createElement("button");
+        resetBadgesBtn.type = "button";
+        resetBadgesBtn.className = "admin-reset-max-btn admin-reset-badges-btn";
+        resetBadgesBtn.textContent = "Reset Badges";
+        resetBadgesBtn.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          resetBadgeProgressOnly();
+        });
+        globalSectionTitleRow.appendChild(resetBadgesBtn);
+      }
+      globalSectionEl.appendChild(globalSectionTitleRow);
 
       var globalSectionContent = document.createElement("div");
       globalSectionContent.className = "admin-collapsible-content";
@@ -3079,6 +4384,111 @@ Main tuning points:
           overrideButtonWrap.appendChild(makeOverrideButton(targetKind, "Unlock", "unlocked", currentOverride === "unlocked"));
           overrideButtonWrap.appendChild(makeOverrideButton(targetKind, "Lock", "locked", currentOverride === "locked" || currentOverride === "default"));
           globalInput.appendChild(overrideButtonWrap);
+        } else if (globalField.type === "badges-config") {
+          globalRow.classList.add("admin-field-stacked");
+          globalRow.classList.add("admin-field-no-label");
+          globalInput = document.createElement("div");
+          globalInput.className = "admin-badges-config";
+
+          for (var badgeCategoryIndex = 0; badgeCategoryIndex < BADGE_CATEGORY_ORDER.length; badgeCategoryIndex += 1) {
+            var badgeCategoryName = BADGE_CATEGORY_ORDER[badgeCategoryIndex];
+            var badgeCategorySeries = BADGE_SERIES.filter(function (series) {
+              return series.category === badgeCategoryName;
+            });
+
+            if (!badgeCategorySeries.length) {
+              continue;
+            }
+
+            var badgeCategoryCard = document.createElement("section");
+            badgeCategoryCard.className = "admin-badge-category";
+
+            var badgeCategoryHeader = document.createElement("div");
+            badgeCategoryHeader.className = "admin-badge-category-header";
+            var badgeCategoryTitle = document.createElement("h4");
+            badgeCategoryTitle.textContent = badgeCategoryName;
+            var badgeCategoryCopy = document.createElement("p");
+            badgeCategoryCopy.textContent = BADGE_CATEGORY_COPY[badgeCategoryName] || "";
+            badgeCategoryHeader.appendChild(badgeCategoryTitle);
+            badgeCategoryHeader.appendChild(badgeCategoryCopy);
+            badgeCategoryCard.appendChild(badgeCategoryHeader);
+
+            var badgeSeriesGrid = document.createElement("div");
+            badgeSeriesGrid.className = "admin-badge-series-grid";
+
+            for (var badgeSeriesIndex = 0; badgeSeriesIndex < badgeCategorySeries.length; badgeSeriesIndex += 1) {
+              var badgeSeries = badgeCategorySeries[badgeSeriesIndex];
+              var badgeSeriesCard = document.createElement("div");
+              badgeSeriesCard.className = "admin-badge-series-card";
+
+              var badgeNameField = document.createElement("div");
+              badgeNameField.className = "admin-field";
+              var badgeNameLabel = document.createElement("label");
+              badgeNameLabel.textContent = "Badge name";
+              var badgeNameInput = document.createElement("input");
+              badgeNameInput.type = "text";
+              badgeNameInput.value = getBadgeSeriesName(badgeSeries);
+              badgeNameInput.dataset.key = getBadgeSeriesNameStorageKey(badgeSeries.id);
+              badgeNameInput.addEventListener("change", function (event) {
+                var target = event.target;
+                var value = String(target.value || "").trim();
+                var fallbackSeries = BADGE_SERIES.find(function (series) {
+                  return getBadgeSeriesNameStorageKey(series.id) === target.dataset.key;
+                });
+                saveGlobalAdminField(target.dataset.key, value || (fallbackSeries ? fallbackSeries.name : ""));
+                renderPreRunScreen();
+              });
+              badgeNameField.appendChild(badgeNameLabel);
+              badgeNameField.appendChild(badgeNameInput);
+              badgeSeriesCard.appendChild(badgeNameField);
+
+              for (var badgeSeriesTierIndex = 0; badgeSeriesTierIndex < badgeSeries.tiers.length; badgeSeriesTierIndex += 1) {
+                (function (series, tierIndex) {
+                  var tier = series.tiers[tierIndex];
+                  var badgeTierField = document.createElement("div");
+                  badgeTierField.className = "admin-field admin-badge-goal-field";
+                  var badgeTierLabel = document.createElement("label");
+                  badgeTierLabel.textContent = tier.tier + " goal";
+                  var badgeTierControl = document.createElement("div");
+                  badgeTierControl.className = "admin-badge-goal-control";
+                  var collectedValue = document.createElement("span");
+                  collectedValue.className = "admin-badge-goal-collected";
+                  collectedValue.textContent = formatBadgeCollectedNumber(series, tierIndex) + " (collected)";
+                  var fromText = document.createElement("span");
+                  fromText.className = "admin-badge-goal-from";
+                  fromText.textContent = "from";
+                  var badgeTierInput = document.createElement("input");
+                  badgeTierInput.type = "number";
+                  badgeTierInput.min = "0";
+                  badgeTierInput.step = "1";
+                  badgeTierInput.value = String(getBadgeTierTarget(series, tierIndex));
+                  badgeTierInput.dataset.key = getBadgeSeriesTierTargetStorageKey(series.id, tierIndex);
+                  var badgeTierUnit = document.createElement("span");
+                  badgeTierUnit.className = "admin-badge-goal-unit";
+                  badgeTierUnit.textContent = getBadgeAdminUnitText(series, tierIndex);
+                  badgeTierInput.addEventListener("change", function (event) {
+                    var target = event.target;
+                    var value = sanitizeBadgeTarget(series, tierIndex, target.value);
+                    target.value = String(value);
+                    saveGlobalAdminField(target.dataset.key, value);
+                    renderPreRunScreen();
+                  });
+                  badgeTierField.appendChild(badgeTierLabel);
+                  badgeTierControl.appendChild(collectedValue);
+                  badgeTierControl.appendChild(fromText);
+                  badgeTierControl.appendChild(badgeTierInput);
+                  badgeTierControl.appendChild(badgeTierUnit);
+                  badgeTierField.appendChild(badgeTierControl);
+                  badgeSeriesCard.appendChild(badgeTierField);
+                })(badgeSeries, badgeSeriesTierIndex);
+              }
+
+              badgeSeriesGrid.appendChild(badgeSeriesCard);
+            }
+
+            badgeCategoryCard.appendChild(badgeSeriesGrid);
+            globalInput.appendChild(badgeCategoryCard);
+          }
         } else {
           continue;
         }
@@ -3695,6 +5105,14 @@ Main tuning points:
     state.levelRunTimeSeconds = 0;
     state.levelCollectedCoins = 0;
     state.levelCollectedBags = 0;
+    if (resetLives || !state.runBadgeStats) {
+      resetRunBadgeStats();
+    } else {
+      state.runBadgeStats.levelHadLifeLoss = false;
+    }
+    if (resetLives) {
+      state.badgeCursedSecondsAccumulator = 0;
+    }
     state.maxLives = sanitizeConfigValue("livesCount", C.livesCount);
     if (resetLives) {
       state.livesLeft = state.maxLives;
@@ -4115,7 +5533,11 @@ Main tuning points:
     state.lifeLossFlashTimeLeft = 0.25;
 
     if (cause === "bottomDeathZone") {
-      return rescuePlayerFromBottomDeathZone();
+      if (!rescuePlayerFromBottomDeathZone()) {
+        return false;
+      }
+      recordShieldSave();
+      return true;
     }
 
     if (cause === "topDeathZone") {
@@ -4135,10 +5557,12 @@ Main tuning points:
       state.playerRotationLockedInAir = false;
       state.playerAirSpinRemainingRad = 0;
       startShieldBurstEffect();
+      recordShieldSave();
       return true;
     }
 
     startShieldBurstEffect();
+    recordShieldSave();
     return true;
   }
 
@@ -4160,6 +5584,7 @@ Main tuning points:
 
     state.livesLeft = Math.max(1, state.livesLeft - 1);
     state.lifeLossFlashTimeLeft = 0.25;
+    recordLifeLost();
 
     if (cause === "topDeathZone") {
       player.y = C.topDeathLineY;
@@ -4277,6 +5702,13 @@ Main tuning points:
       tryForceFullscreen();
       var key = event.key.toLowerCase();
 
+      if (state.badgeRewardActive) {
+        if (event.key === " " || event.key === "Enter") {
+          advanceBadgeRewardSequence();
+        }
+        return;
+      }
+
       if (state.preRunActive && state.preRunStep === "details" && (event.key === " " || event.key === "Enter")) {
         closePreRunScreenAndStartRun();
         return;
@@ -4340,6 +5772,13 @@ Main tuning points:
         openPreRunScreen();
       }
     });
+
+    if (badgeRewardOverlayEl) {
+      badgeRewardOverlayEl.addEventListener("pointerdown", function () {
+        tryForceFullscreen();
+        advanceBadgeRewardSequence();
+      });
+    }
 
     canvas.addEventListener("pointerdown", function () {
       tryForceFullscreen();
@@ -4421,7 +5860,10 @@ Main tuning points:
       updateTeleportFinishAnimation(dt);
     } else if (state.projectileDeathAnimActive && !state.adminPaused && !state.preRunActive) {
       updateProjectileDeathAnimation(dt);
+    } else if (state.badgeRewardActive && !state.adminPaused && !state.preRunActive) {
+      updateBadgeRewardSequence(dt);
     }
+    flushBadgeStatsStorage(false, dt);
     render();
 
     input.jumpPressed = false;
@@ -4476,11 +5918,13 @@ Main tuning points:
     state.lastRawDistanceScore = rawDistanceScore;
     var distanceScore = Math.max(0, rawDistanceScore - state.blockedDistanceScore);
     state.score = state.scoreCarryOver + distanceScore + state.bonusScore;
+    updateBadgeBestStat("singleRunScore", state.score);
     if (state.score > sessionMaxScore) {
       sessionMaxScore = state.score;
       writeMaxScoreToStorage(state.gameMode, state.gameDifficulty, sessionMaxScore);
     }
     state.speedPercent = Math.round((state.scrollSpeed / C.worldAutoRunSpeed - 1) * 100);
+    updateBadgeBestStat("maxSpeedPercent", Math.max(0, state.speedPercent));
     updateSkinDiscoverySpawner();
     updateLevelGoalTeleport();
     if (checkTeleportCollision()) {
@@ -4596,8 +6040,15 @@ Main tuning points:
 
   function finishRunAndShowGameOver() {
     state.running = false;
-    updateGameOverSummary();
-    gameOverEl.classList.remove("hidden");
+    incrementBadgeLifetimeStat("totalScore", state.score);
+    updateBadgeBestStat("singleRunScore", state.score);
+    updateSurvivorBadgeProgressForCurrentRun();
+    updatePuristBadgeProgressForCurrentRun();
+    flushBadgeStatsStorage(true, 0);
+    if (!startBadgeRewardSequence(buildNewlyUnlockedBadgeQueueForRun())) {
+      updateGameOverSummary();
+      gameOverEl.classList.remove("hidden");
+    }
   }
 
   function finishCurrentLevel() {
@@ -4605,6 +6056,8 @@ Main tuning points:
     state.levelFinishedActive = true;
     state.teleport.active = false;
     state.scoreCarryOver = state.score;
+    finalizeLevelBadgeProgress();
+    flushBadgeStatsStorage(true, 0);
     updateLevelFinishedSummary();
     if (levelFinishedEl) {
       levelFinishedEl.classList.remove("hidden");
@@ -4618,6 +6071,7 @@ Main tuning points:
     }
 
     var heroRenderMetrics = getHeroRenderMetrics();
+    recordTeleportUse(state.shieldCharges > 0);
     state.running = false;
     state.teleportFinishAnimActive = true;
     state.teleportFinishAnimElapsed = 0;
@@ -4706,6 +6160,7 @@ Main tuning points:
         state.questionCoinAnimDelta = applyLevelScoreDelta(-Math.floor(stake * 0.5));
       }
       state.questionCoinAnimApplied = true;
+      recordQuestionCoinOutcome(state.questionCoinAnimResult);
     }
 
     if (state.questionCoinAnimElapsed >= state.questionCoinAnimDuration) {
@@ -5974,9 +7429,14 @@ Main tuning points:
     if (isRectIntersect(playerRect, iconRect)) {
       var slowDownPercent = Math.max(0, Number(C.slowDownByPercent) || 0);
       var slowMultiplier = Math.max(0, 1 - (slowDownPercent / 100));
+      var baseSpeed = Math.max(1, C.worldAutoRunSpeed);
+      var scoreMultiplier = getSpeedMultiplierFromScore(state.score);
+      var currentTotalMultiplier = Math.max(1, state.scrollSpeed / baseSpeed);
+      var currentBonusMultiplier = Math.max(0, currentTotalMultiplier - 1);
+      var nextTotalMultiplier = 1 + (currentBonusMultiplier * slowMultiplier);
       icon.active = false;
-      state.scrollSpeed *= slowMultiplier;
-      state.speedSlowMultiplier *= slowMultiplier;
+      state.speedSlowMultiplier = Math.max(1 / Math.max(1e-6, scoreMultiplier), nextTotalMultiplier / Math.max(1e-6, scoreMultiplier));
+      state.scrollSpeed = baseSpeed * scoreMultiplier * state.speedSlowMultiplier;
       scheduleNextSlowSpawn();
     }
   }
@@ -5995,8 +7455,7 @@ Main tuning points:
       if (!isCurseActive()) {
         state.bonusScore += C.scoreBagBonus;
       }
-      state.collectedBags += 1;
-      state.levelCollectedBags += 1;
+      recordBagCollected(1);
       scheduleNextScoreBagSpawn();
     }
   }
@@ -6013,6 +7472,7 @@ Main tuning points:
     if (isRectIntersect(playerRect, iconRect)) {
       icon.active = false;
       applyLevelScoreDelta(-Math.floor(getLevelEarnedScore() * (C.crackedCoinPenaltyPercent / 100)));
+      recordNegativePickupTouch();
       scheduleNextCrackedCoinSpawn();
     }
   }
@@ -6047,6 +7507,7 @@ Main tuning points:
     if (isRectIntersect(playerRect, iconRect)) {
       icon.active = false;
       state.curseTimeLeft += C.curseEffectSeconds;
+      recordNegativePickupTouch();
       scheduleNextCurseSpawn();
     }
   }
@@ -6063,6 +7524,7 @@ Main tuning points:
     if (isRectIntersect(playerRect, iconRect)) {
       icon.active = false;
       state.livesLeft = Math.min(state.maxLives, state.livesLeft + 1);
+      recordLifeCollected(1);
       updateLivesUi();
       scheduleNextLiveSpawn();
     }
@@ -6096,6 +7558,7 @@ Main tuning points:
     if (isRectIntersect(playerRect, iconRect)) {
       icon.active = false;
       state.magnetTimeLeft += C.magnetEffectSeconds;
+      recordMagnetPickup();
       scheduleNextMagnetSpawn();
       convertVisiblePickupsToMagnetTargets();
     }
@@ -6181,6 +7644,7 @@ Main tuning points:
   function collectMagnetAttractedItem(item) {
     if (item.type === "live") {
       state.livesLeft = Math.min(state.maxLives, state.livesLeft + 1);
+      recordLifeCollected(1);
       updateLivesUi();
       scheduleNextLiveSpawn();
       return;
@@ -6189,8 +7653,7 @@ Main tuning points:
     if (!isCurseActive()) {
       state.bonusScore += C.coinScoreBonus;
     }
-    state.collectedCoins += 1;
-    state.levelCollectedCoins += 1;
+    recordCoinCollected(1);
     if (item.type === "platformCoin") {
       scheduleNextPlatformCoinSpawn();
     }
@@ -6246,6 +7709,12 @@ Main tuning points:
       return;
     }
 
+    state.badgeCursedSecondsAccumulator += Math.min(dt, state.curseTimeLeft);
+    if (state.badgeCursedSecondsAccumulator >= 1) {
+      var wholeSeconds = Math.floor(state.badgeCursedSecondsAccumulator);
+      state.badgeCursedSecondsAccumulator -= wholeSeconds;
+      incrementBadgeLifetimeStat("cursedSeconds", wholeSeconds);
+    }
     state.curseTimeLeft = Math.max(0, state.curseTimeLeft - dt);
   }
 
@@ -6281,8 +7750,7 @@ Main tuning points:
       if (!isCurseActive()) {
         state.bonusScore += C.coinScoreBonus;
       }
-      state.collectedCoins += 1;
-      state.levelCollectedCoins += 1;
+      recordCoinCollected(1);
       scheduleNextPlatformCoinSpawn();
     }
   }
@@ -6333,8 +7801,7 @@ Main tuning points:
         if (!isCurseActive()) {
           state.bonusScore += C.coinScoreBonus;
         }
-        state.collectedCoins += 1;
-        state.levelCollectedCoins += 1;
+        recordCoinCollected(1);
       }
     }
   }
@@ -7365,7 +8832,7 @@ Main tuning points:
   }
 
   function drawProjectileDeathAnimation() {
-    if (!state.projectileDeathAnimActive) {
+    if (!state.projectileDeathAnimActive && !(state.badgeRewardActive && state.badgeRewardShowRip)) {
       return;
     }
     drawProjectileDeathIcon(

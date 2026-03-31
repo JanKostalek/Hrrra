@@ -1143,6 +1143,31 @@ Every gameplay-related change must be added here with date and short reason.
 - Global admin also includes explicit `Unlock` / `Lock` testing buttons for both `Hard` and `Full Mode`, without changing the normal progression thresholds.
 - Why: adds a clearer long-term progression path before the player reaches the harder rule sets.
 
+### v0.1.185 - Slow now reduces only bonus speed and never drops below base speed (2026-03-30)
+- `Slow down by %` now reduces only the current speed bonus above the base run speed, instead of multiplying the entire current speed.
+- Example with `Slow down by 50%`: `Speed +50%` now becomes `Speed +25%`, and another pickup becomes `Speed +12.5%`.
+- `Slow` can no longer push the run below the base starting speed, even if collected repeatedly at low acceleration.
+- HUD speed still reports the final total speed relative to the original base speed.
+- Why: matches the intended tuning model where Slow trims acceleration without ever making the game slower than its normal starting pace.
+
+### v0.1.186 - Badges now track real gameplay stats for admin and progression counters (2026-03-30)
+- Badge progress now reads from real run and lifetime gameplay stats instead of placeholder text, including score, coins, bags, Question Coin results, lives collected/lost, teleports, shield saves, curse time, magnets, runs started, speed peaks, clean-level chains, and clean progression milestones.
+- Single-run badge metrics store the best achieved value from any run, while long-term and legend badges accumulate lifetime totals across runs.
+- The `Badges` admin now edits numeric thresholds only, with the unit text shown outside the field and a live `collected` counter shown next to each goal.
+- Badge screen totals and category counts now read from the tracked badge progress instead of always showing every badge as already collected.
+- Why: turns badges into a tunable meta-progression system backed by real gameplay data instead of static presentation text.
+
+### v0.1.187 - Badge tiers now remember and display their unlock date (2026-03-31)
+- Each badge tier now stores the first day it was unlocked and shows that date next to the tier label on the badge screen in `DD.MM.RR` format.
+- Existing already-collected badge tiers that had no stored date are backfilled the next time the badge screen is rendered.
+- Resetting badge progress clears these stored unlock dates together with the badge counters.
+- Why: gives badge unlocks a stronger collectible feel and makes progression history visible at a glance.
+
+### v0.1.188 - Added a guaranteed first-run starter badge (2026-03-31)
+- Added `First Runner` as a one-off `Lifetime Legends` badge that unlocks when the player starts their first real run.
+- The badge uses the same run-start lifetime tracking as the existing run-count progression badges, but with a target of `1`.
+- Why: gives every player an immediate first collectible milestone the first time they actually begin playing.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.

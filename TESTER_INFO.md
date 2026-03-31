@@ -1,249 +1,249 @@
-# Hrrra - Info Pro Testery
+# Hrrra - Info pro testery
 
 Děkuji, že jste si hru nainstalovali.
-V tuto chvíli ověřuji, jak aplikaci vytvořit pomoci AI a dostat ji az do Google Store.
+V tuto chvíli ověřuji, jak aplikaci vytvořit pomocí AI a dostat ji až do Google Store.
 
-## Co Je Hrrra
-Hrrra je 2D arkadova platformova hra postavena na postupu pres vice levelu. 
+## Co je Hrrra
+Hrrra je 2D arkádová plošinová hra postavená na postupu přes více levelů.
+
 -------------------------------------------------
 
-## Administrace Behem Testovani
-Po dobu testovani je ve hre otevrena administrace.
+## Administrace během testování
+Po dobu testování je ve hře otevřená administrace.
 
-Administrace umoznuje:
+Administrace umožňuje:
 
-Můžete si resetovat cokoliv nastavite do "default". lze to jednotlivě i tlačítkem nahoře "UPLNE vše".
+Můžete si resetovat cokoliv nastavíte do "default". Lze to jednotlivě i tlačítkem nahoře "ÚPLNĚ vše".
 
-- menit mechaniky pro vsechny levely
-- menit nastaveni pro oba mody a obe obtiznosti
-- menit spawn hodnoty, unlocky, score cile a dalsi parametry
-- testovat zamceni a odemceni `Hard` a `Full Mode`
-- vybrat skin natvrdo kvuli testovani
+- měnit mechaniky pro všechny levely
+- měnit nastavení pro oba módy a obě obtížnosti
+- měnit spawn hodnoty, unlocky, score cíle a další parametry
+- testovat zamčení a odemčení `Hard` a `Full Mode`
+- vybrat skin natvrdo kvůli testování
 
-Dulezite:
-- admin vyber skinu slouzi pro test
-- sam o sobe skin trvale neodemkne
+Důležité:
+- admin výběr skinu slouží pro test
+- sám o sobě skin trvale neodemkne
 
-## Export A Import Nastaveni
+## Export a import nastavení
 Administrace podporuje:
 - `Export`
 - `Copy JSON`
 - `Import File`
 - `Paste JSON`
 
-To znamena, ze tester muze:
-- ulozit cele aktualni nastaveni do souboru
-- znovu ho nahrat
-- nebo ho poslat vyvojari
-
+To znamená, že tester může:
+- uložit celé aktuální nastavení do souboru
+- znovu ho nahrát
+- nebo ho poslat vývojáři
 
 -------------------------------------------------
-Hra momentalne obsahuje:
+
+Hra momentálně obsahuje:
 - `Jump Mode`
-- `Full Mode` - Odemkne se postupně
-- obtiznosti `Easy` a `Hard`- Odemkne se postupně
-- `5` levelu
-- odemykatelne skiny postavy
+- `Full Mode` - odemyká se postupně
+- obtížnosti `Easy` a `Hard` - odemykají se postupně
+- `5` levelů
+- odemykatelné skiny postavy
 
-Nicméně Full mode jsem jeste vůbec "neladil". snažil jsem se pouze Jump Mode Easy a Hard.
+Nicméně `Full Mode` jsem ještě vůbec neladil. Snažil jsem se pouze o `Jump Mode Easy` a `Jump Mode Hard`.
 
-Prvni ctyri levely se dokoncuji dosazenim ciloveho score a pruchodem teleportem. Posledni level muze fungovat jako endless cast hry.
+První čtyři levely se dokončují dosažením cílového score a průchodem teleportem. Poslední level může fungovat jako endless část hry.
 
-V prvnich 4 levelech hra smeruje k dosazeni nastaveneho score. Po splneni podminky se objevi teleport. Pruchodem teleportem level konci. V poslednim levelu muze hra pokracovat endless.
+V prvních 4 levelech hra směřuje k dosažení nastaveného score. Po splnění podmínky se objeví teleport. Průchodem teleportem level končí. V posledním levelu může hra pokračovat endless.
 
+## Postup hrou
+Hra nezačíná se všemi možnostmi otevřenými.
 
-## Postup Hrou
-Hra nezacina se vsemi moznostmi otevrenymi.
-
-Na cistem profilu je dostupne jen:
+Na čistém profilu je dostupné jen:
 - `Jump Mode`
 - `Easy`
 - skin `Zyro`
 
-### Odemknuti Hard
-`Jump Mode Hard` se odemyka po dosazeni urciteho levelu.
+### Odemknutí Hard
+`Jump Mode Hard` se odemyká po dosažení určitého levelu.
 
-Vychozi nastaveni:
-- `Hard` se odemkne pri dosazeni `Level 5`
+Výchozí nastavení:
+- `Hard` se odemkne při dosažení `Level 5`
 
-### Odemknuti Full Mode
-`Full Mode` se odemyka az po dosazeni urciteho score v `Jump Mode Hard`.
+### Odemknutí Full Mode
+`Full Mode` se odemyká až po dosažení určitého score v `Jump Mode Hard`.
 
-Vychozi nastaveni:
-- `Full Mode` se odemkne po dosazeni `150 000` score v `Jump Mode Hard`
+Výchozí nastavení:
+- `Full Mode` se odemkne po dosažení `150 000` score v `Jump Mode Hard`
 
-Tyto podminky jsou nastavitelne v administraci.
+Tyto podmínky jsou nastavitelné v administraci.
 
 ----------------------------------------------------------------
+
 ## Levely
-Kazdy level muze mit:
-- vlastni tuning mechanik
-- vlastni obtiznost podle modu a difficulty
-- vlastni cilove score
+Každý level může mít:
+- vlastní tuning mechanik
+- vlastní obtížnost podle módu a difficulty
+- vlastní cílové score
 
-Aktualni flow:
+Aktuální flow:
 - `Level 1-4` = score target + teleport
-- `Level 5` = muze byt endless
+- `Level 5` = může být endless
 
-Mezi levely se prenasi:
+Mezi levely se přenáší:
 - score
-- zivoty
-- nektere docasne efekty
+- životy
+- některé dočasné efekty
 
-## Teleport A Dokonceni Levelu
-- Po splneni score podminky se objevi teleport.
+## Teleport a dokončení levelu
+- Po splnění score podmínky se objeví teleport.
 
-## Skore
+## Score
 Score roste:
-- za ubihajici vzdalenost
-- za sbirani bonusu
-- za nektere specialni vyhry
+- za ubíhající vzdálenost
+- za sbírání bonusů
+- za některé speciální výhry
 
-Score muze byt take:
+Score může být také:
 - zpomaleno
-- docasne zmrazeno
-- snizeno negativnimi mechanikami
+- dočasně zmraženo
+- sníženo negativními mechanikami
 
-## Co Hrac Muze Sbirat
+## Co hráč může sbírat
 ### Coin
-- zakladni score pickup
+- základní score pickup
 
 ### Money Bag
-- hodnotnejsi score pickup
+- hodnotnější score pickup
 
 ### Life
-- vraci ztraceny zivot az do maxima
+- vrací ztracený život až do maxima
 
 ### Double Jump
-- docasne umozni dvojskok
+- dočasně umožní dvojskok
 
 ### Tripple Jump
-- docasne umozni trojskok
+- dočasně umožní trojskok
 
 ### Shield
-- ochrani pred jednim jinak nebezpecnym zasahem
-- muze zachranit i pri padu do spodní death zony
+- ochrání před jedním jinak nebezpečným zásahem
+- může zachránit i při pádu do spodní death zóny
 
 ### Magnet
-- po omezenou dobu pritahuje vybrane pickupy k postave
-- pickup se nesebere okamzite, ale fyzicky leti k hraci
-- sebere se az ve chvili dotyku s postavou
+- po omezenou dobu přitahuje vybrané pickupy k postavě
+- pickup se nesebere okamžitě, ale fyzicky letí k hráči
+- sebere se až ve chvíli dotyku s postavou
 
 ### Slow
-- docasne zpomali hru o nastavene procento
-- zrychlovani hry ale dal na pozadi pokracuje
+- dočasně zpomalí hru o nastavené procento
+- zrychlování hry ale dál na pozadí pokračuje
 
 ### Skin Pickup
-- specialni pickup pro odemceni nove postavy
+- speciální pickup pro odemčení nové postavy
 
-## Nebezpeci
+## Nebezpečí
 ### Blocker
-- prekazka, ktere je treba se vyhnout
+- překážka, které je třeba se vyhnout
 
 ### Projectile
-- nebezpecny letici objekt
+- nebezpečný letící objekt
 
 ### Top Death Zone
-- kontakt znamena ztratu zivota
+- kontakt znamená ztrátu života
 
 ### Bottom Death Zone
-- bez ochrany znamena smrt
-- `Shield` muze hrace vzdy zachranit
+- bez ochrany znamená smrt
+- `Shield` může hráče vždy zachránit
 
-## Specialni Mechaniky
+## Speciální mechaniky
 ### Cracked Coin
-- negativni pickup
-- odebere cast score ziskaneho v aktualnim levelu
+- negativní pickup
+- odebere část score získaného v aktuálním levelu
 
 ### Question Coin
 - risk/reward mechanika
-- po sebrani se na chvili zastavi hra
-- nahodne se rozhodne, zda hrac score ziska nebo ztrati
+- po sebrání se na chvíli zastaví hra
+- náhodně se rozhodne, zda hráč score získá nebo ztratí
 
 ### Curse
-- na kratkou dobu zmrazi bezny score gain
-- hra jede dal, ale normalni score nepribyva
+- na krátkou dobu zmrazí běžný score gain
+- hra jede dál, ale normální score nepřibývá
 
 ### Shield
-- funguje i jako ochrana pred bottom death zone
-- pri padu muze vratit hrace na bezpecnou plochu
+- funguje i jako ochrana před `Bottom Death Zone`
+- při pádu může vrátit hráče na bezpečnou plochu
 
 ### Magnet
-- pritahuje coin a life pickupy prostorem smerem k hraci
-- je viditelne, jak k hraci leti
+- přitahuje coin a life pickupy prostorem směrem k hráči
+- je dobře vidět, jak k hráči letí
 
-## Jump Efekty Pres Levely
-Pokud hrac dokonci level a jeste ma aktivni:
+## Jump efekty přes levely
+Pokud hráč dokončí level a ještě má aktivní:
 - `Double Jump`
 - nebo `Tripple Jump`
 
-pak se zbyvajici cas prenese do dalsiho levelu a zdvojnasobi se.
+pak se zbývající čas přenese do dalšího levelu a zdvojnásobí se.
 
-Odpočet ale v nove urovni nezacne bezet hned:
-- na uvodni dlouhe plosine stoji
-- rozebehne se az po prvnim skutecnem skoku hrace
+Odpočet ale v nové úrovni nezačne běžet hned:
+- na úvodní dlouhé plošině stojí
+- rozeběhne se až po prvním skutečném skoku hráče
 
-## Skiny Postavy
-Aktualni hratelne skiny:
+## Skiny postavy
+Aktuální hratelné skiny:
 - `Zyro`
 - `Vexi`
 - `Nemu`
 - `Krob`
 
-Na zacatku je dostupny jen:
+Na začátku je dostupný jen:
 - `Zyro`
 
-`Vexi`, `Nemu` a `Krob` se daji odemykat behem hry.
+`Vexi`, `Nemu` a `Krob` se dají odemykat během hry.
 
 -------------------------------------------------------------
 
-### Jak Funguje Odemykani Skinu
-- Pred runem hra vybere, jestli se v danem runu muze objevit novy skin pickup.
-- Nabizi se jen skin, ktery hrac jeste nema odemceny.
-- Skin pickup se objevi jen jednou za run.
-- Pokud se v tom runu uz objevil, znovu se neobjevi, i kdyz ho hrac nesebere.
-- Skin pickup se objevuje na nejspodnejsim vytahu.
-- V briefing obrazovce je videt, ktery skin se v tom runu muze objevit.
+### Jak funguje odemykání skinů
+- Před runem hra vybere, jestli se v daném runu může objevit nový skin pickup.
+- Nabízí se jen skin, který hráč ještě nemá odemčený.
+- Skin pickup se objeví jen jednou za run.
+- Pokud se v tom runu už objevil, znovu se neobjeví, i když ho hráč nesebere.
+- Skin pickup se objevuje na nejspodnějším výtahu.
+- V briefing obrazovce je vidět, který skin se v tom runu může objevit.
 
-### Skin Vyber Pred Runem
+### Skin výběr před runem
 V briefing obrazovce je panel `Skins`:
-- odemcene postavy jsou klikatelne
-- zamcene postavy jsou zobrazeny jako locked
-- dalsi budouci sloty jsou oznacene jako `Soon`
+- odemčené postavy jsou klikatelné
+- zamčené postavy jsou zobrazené jako locked
+- další budoucí sloty jsou označené jako `Soon`
 
-## Co Testovat
-Pri testovani je uzitecne sledovat hlavne:
-- jestli je na prvni pohled jasne, co je cil hry
-- jestli jsou pickupy citelne a srozumitelne
-- jestli je jasne, proc hrac ztratil zivot nebo score
-- jestli jsou levely ferove
-- jestli je teleport citelny a level finish pusobi dobre
-- jestli briefing obrazovka dava dost informaci pred runem
-- jestli odemykani `Hard`, `Full Mode` a skinu pusobi logicky
-- jestli je HUD dobre citelny na vsech pozadich
-- jestli animace a pohyb postavy pusobi plynule
-- jestli magnet, shield, curse, cracked coin a question coin pusobi srozumitelne
+## Co testovat
+Při testování je užitečné sledovat hlavně:
+- jestli je na první pohled jasné, co je cíl hry
+- jestli jsou pickupy čitelné a srozumitelné
+- jestli je jasné, proč hráč ztratil život nebo score
+- jestli jsou levely férové
+- jestli je teleport čitelný a level finish působí dobře
+- jestli briefing obrazovka dává dost informací před runem
+- jestli odemykání `Hard`, `Full Mode` a skinů působí logicky
+- jestli je HUD dobře čitelný na všech pozadích
+- jestli animace a pohyb postavy působí plynule
+- jestli `Magnet`, `Shield`, `Curse`, `Cracked Coin` a `Question Coin` působí srozumitelně
 
 -----------------------------------------------------------------
 
-
-
-## Poznamka Pro Testery
-Hra je stale ve vyvoji. Grafika, balans, pravidla i rozmisteni nekterych mechanik se jeste mohou a pravdepodobne budou menit. Smyslem testovani je overit:
+## Poznámka pro testery
+Hra je stále ve vývoji. Grafika, balans, pravidla i rozmístění některých mechanik se ještě mohou a pravděpodobně budou měnit. Smyslem testování je ověřit:
 - srozumitelnost
-- citelnost
-- zabavnost
-- ferovost
+- čitelnost
+- zábavnost
+- férovost
 - technickou stabilitu
 
 ----------------------------------
-## Ovladani
+
+## Ovládání
 ### Jump Mode
 #### Desktop
 - `Space = Jump`
 
 #### Mobil
-- cela dotykova plocha = skok
+- celá dotyková plocha = skok
 
 ### Full Mode
 #### Desktop
@@ -251,8 +251,7 @@ Hra je stale ve vyvoji. Grafika, balans, pravidla i rozmisteni nekterych mechani
 - `Space = Jump`
 
 #### Mobil
-- leve a prave casti displeje = pohyb
-- vyhrazena cast = skok
+- levá a pravá část displeje = pohyb
+- vyhrazená část = skok
 
-
-Zpetna vazba je cennejsi nez "perfektni run". Zajimaji nas i situace, kdy neco pusobi nejasne, neferove nebo vizualne matouci.
+Zpětná vazba je cennější než "perfektní run". Zajímají nás i situace, kdy něco působí nejasně, nefér nebo vizuálně matoucím dojmem.

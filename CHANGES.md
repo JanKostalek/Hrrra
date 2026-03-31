@@ -589,3 +589,19 @@ Rules:
 
 - Increased the magnet pickup icon size by roughly one third and made the `Question Coin` stake label larger and yellow with a dark outline for better readability on mixed backgrounds.
 - Increased the `Question Coin` stake text above the coin by about one third again for stronger readability at gameplay scale.
+- 2026-03-30: Removed the `Game Over` 3D text-shadow styling from the overlay title and stat lines so the text now renders as clean flat typography on Android WebView instead of looking blurred.
+- 2026-03-30: Cleaned and normalized `TESTER_INFO.md` into consistent readable Czech UTF-8 text without changing the documented tester-facing rules.
+- 2026-03-30: Adopted a workflow rule that non-mechanic changes continue to be logged in `CHANGES.md`, while any gameplay/mechanic behavior changes must also be logged in `MECHANICS.md`.
+- 2026-03-30: Added a first-pass `Badges` screen prototype to the pre-run flow, reachable from the initial mode/difficulty selection via a new `Badges` button, with category-grouped badge cards rendered from proposal data and using `assets/badges/badges.png` as the medal sprite source.
+- 2026-03-30: Refined the first `Badges` screen pass by simplifying the top summary to one centered `Total Badges Collected (51/51)` card, removing redundant per-card category pills, and aligning the start-screen `Badges` button higher under the difficulty selector.
+- 2026-03-30: Moved the start-screen `Badges` button directly into the central difficulty column under `Easy` / `Hard`, and changed each badge-category header counter from `series / badges` to a direct collected readout such as `18/18 collected`.
+- 2026-03-30: Expanded the badge proposal with a new `Lifetime Legends` category for one-off long-term milestones (`Heart Hunter`, `Still Running`, `Teleporter`, `Bubble Saver`, `Cursed`, `Magneto`, `Starter`), and made the top badges summary compute its collected total dynamically from the rendered proposal data.
+- 2026-03-30: Fixed badge category counters to use the real number of rendered badge entries per category instead of assuming three tiers per series, and renamed the `Unlocker` final discovery tier from `Platinum` to `Gold`.
+- 2026-03-30: Added a new global `Badges` admin section near the top of the mechanics admin, grouped by badge category and series, with editable badge names and tier goal texts stored through the existing global admin persistence and included in settings export/import.
+- 2026-03-30: Reworked the `Badges` admin from free-text goal strings into numeric target fields with inline unit labels and live `collected` counters, and refreshed the badge screen counters to read from actual tracked progress instead of fixed mock totals.
+- 2026-03-30: Relaxed the background badge-stat autosave cadence from sub-second flushing to `10s`, while keeping immediate saves on `Level Finished`, `Game Over`, and admin open so progression writes stay lighter during active runs.
+- 2026-03-30: Added a dedicated `Reset Badges` button to the Badges admin section header so badge progress can be cleared independently without resetting skins, mode unlocks, scores, or the rest of the admin state.
+- 2026-03-31: Strengthened the locked-badge presentation on the `Badges` screen so uncollected tiers are now clearly greyed out and visually distinct from unlocked ones.
+- 2026-03-31: Added per-tier badge unlock dates in `DD.MM.RR` format on the `Badges` screen, shown next to the tier label once that badge tier is unlocked.
+- 2026-03-31: Added a post-death badge reward presentation that can pause before `Game Over`, then reveal newly earned badges from that run one by one with a flash / shake / medal-pop sequence before returning to the normal game-over screen.
+- 2026-03-31: Added a new one-off `First Runner` badge to `Lifetime Legends`, awarded for starting the very first run so every player gets an initial collectible milestone on their first real game start.
