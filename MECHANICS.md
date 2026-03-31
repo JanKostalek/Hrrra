@@ -1168,6 +1168,12 @@ Every gameplay-related change must be added here with date and short reason.
 - The badge uses the same run-start lifetime tracking as the existing run-count progression badges, but with a target of `1`.
 - Why: gives every player an immediate first collectible milestone the first time they actually begin playing.
 
+### v0.1.189 - Firefox local Jump level tuning is now the default baseline (2026-03-31)
+- Replaced the shipped `Jump Mode` per-level defaults with the current locally tested Firefox admin tuning for `Level 1-5 Easy` and `Level 1-4 Hard`.
+- This updates the default balance baseline for new clean installs without carrying over any badge progress, unlocked skins, or mode unlock state.
+- Notable default changes include `Level 1 Easy finishScore 15000`, `Slow unlock at +50%` on `Level 1 Easy`, fast early `Shield` on `Level 1 Easy`, `Level 3 Hard finishScore 80000`, and `Level 4 Hard finishScore 110000`.
+- Why: makes the built-in default progression match the currently tested live balance instead of relying on extra local admin overrides.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.

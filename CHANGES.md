@@ -605,4 +605,10 @@ Rules:
 - 2026-03-31: Added per-tier badge unlock dates in `DD.MM.RR` format on the `Badges` screen, shown next to the tier label once that badge tier is unlocked.
 - 2026-03-31: Added a post-death badge reward presentation that can pause before `Game Over`, then reveal newly earned badges from that run one by one with a flash / shake / medal-pop sequence before returning to the normal game-over screen.
 - 2026-03-31: Added a new one-off `First Runner` badge to `Lifetime Legends`, awarded for starting the very first run so every player gets an initial collectible milestone on their first real game start.
+- 2026-03-31: Cleaned the badge medal sprite sheet to transparent centered icons and refined the end-of-run badge reward reveal so the top/bottom copy is visible immediately while the name, medal, and goal appear progressively.
 - 2026-03-31: Fixed the online badge medal sprite loading by aligning the CSS path with the real committed asset location `assets/Badges/badges.png` and including that sprite in the repository.
+- 2026-03-31: Unified badge sprite paths to lowercase `assets/badges/badges.png` and made the badge reward overlay shrink responsively for smaller Android emulator screens so the full card stays visible.
+- 2026-03-31: Added a first-launch-per-version `What's New` popup that reads its bullet list from `version-info.js` and appears once after installing or updating to a newer app version.
+- 2026-03-31: Promoted the current Firefox local Jump-mode level admin tuning to project defaults in `tuning.js` / Android public `tuning.js`, while intentionally leaving badges, skins, and mode unlock progression on a clean locked profile by default.
+- 2026-03-31: Rewrote the player-facing `What's New` popup copy into a shorter release-note style message about badges, future tuning, and upcoming sound.
+- 2026-03-31: Bumped Android/store versioning to `versionCode 8` / `versionName 1.0.7` for the next Play upload and aligned the in-game `What's New` / update metadata to the same release.

@@ -149,7 +149,7 @@
     1: {
       easy: {
         2: {
-          finishScore: 10000,
+          finishScore: 15000,
           moveSpeedGroundPercentL: 75,
           moveSpeedGroundPercentR: 75,
           moveSpeedAir: 70,
@@ -202,7 +202,7 @@
           liveUnlockScore: 100000,
           liveRespawnMinSeconds: 10,
           liveRespawnMaxSeconds: 20,
-          slowUnlockSpeedPercent: 200,
+          slowUnlockSpeedPercent: 50,
           slowRespawnMinSeconds: 10,
           slowRespawnMaxSeconds: 20,
           elevatorSpeed: 95,
@@ -210,9 +210,12 @@
           questionCoinRespawnMinSeconds: 15,
           questionCoinRespawnMaxSeconds: 30,
           curseUnlockScore: 100000,
-          magnetUnlockScore: 100000,
+          magnetUnlockScore: 0,
           magnetRespawnMinSeconds: 20,
-          magnetRespawnMaxSeconds: 30
+          magnetRespawnMaxSeconds: 30,
+          shieldUnlockScore: 1000,
+          shieldRespawnMinSeconds: 1,
+          shieldRespawnMaxSeconds: 2
         }
       },
       hard: {
@@ -343,7 +346,7 @@
       },
       hard: {
         2: {
-          finishScore: 60000,
+          finishScore: 80000,
           livesCount: 3,
           crackedCoinRespawnMinSeconds: 15,
           crackedCoinRespawnMaxSeconds: 25,
@@ -404,7 +407,7 @@
       },
       hard: {
         2: {
-          finishScore: 90000,
+          finishScore: 110000,
           livesCount: 3,
           questionCoinRespawnMinSeconds: 20,
           questionCoinRespawnMaxSeconds: 35,

@@ -67,6 +67,11 @@ Main tuning points:
   var updateNoticeMessageEl = document.getElementById("update-notice-message");
   var updateNoticeLaterBtn = document.getElementById("update-notice-later");
   var updateNoticeApplyBtn = document.getElementById("update-notice-apply");
+  var whatsNewNoticeEl = document.getElementById("whats-new-notice");
+  var whatsNewTitleEl = document.getElementById("whats-new-title");
+  var whatsNewVersionEl = document.getElementById("whats-new-version");
+  var whatsNewListEl = document.getElementById("whats-new-list");
+  var whatsNewOkBtn = document.getElementById("whats-new-ok");
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
   var preRunBadgesScreenEl = document.getElementById("pre-run-badges-screen");
   var preRunDetailScreenEl = document.getElementById("pre-run-detail-screen");
@@ -153,6 +158,7 @@ Main tuning points:
   var MAX_SCORE_STORAGE_KEY_PREFIX = "hrrra_max_score_v2_";
   var PLAYER_SKIN_PROGRESS_STORAGE_KEY = "hrrra_player_skin_progress_v1";
   var BADGE_STATS_STORAGE_KEY = "hrrra_badge_stats_v1";
+  var WHATS_NEW_SEEN_VERSION_STORAGE_KEY = "hrrra_whats_new_seen_version_v1";
   var LEVEL_COUNT = 5;
   var BADGE_CATEGORY_ORDER = ["Single Run", "All Runs", "Skills", "Lifetime Legends", "Discovery"];
   var BADGE_CATEGORY_COPY = {
@@ -519,6 +525,24 @@ Main tuning points:
   }
 
   var badgeStats = readBadgeStats();
+
+  function readWhatsNewSeenVersionCode() {
+    try {
+      var raw = window.localStorage.getItem(WHATS_NEW_SEEN_VERSION_STORAGE_KEY);
+      var parsed = Number(raw);
+      return Number.isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : 0;
+    } catch (error) {
+      return 0;
+    }
+  }
+
+  function writeWhatsNewSeenVersionCode(versionCode) {
+    try {
+      window.localStorage.setItem(WHATS_NEW_SEEN_VERSION_STORAGE_KEY, String(Math.max(0, Math.floor(Number(versionCode) || 0))));
+    } catch (error) {
+      // ignore write failures
+    }
+  }
   var sceneArt = {
     backgroundSky: null,
     backgroundForeground: null,
@@ -1275,6 +1299,7 @@ Main tuning points:
           key === GLOBAL_ADMIN_STORAGE_KEY ||
           key === PLAYER_SKIN_PROGRESS_STORAGE_KEY ||
           key === BADGE_STATS_STORAGE_KEY ||
+          key === WHATS_NEW_SEEN_VERSION_STORAGE_KEY ||
           key.indexOf(ADMIN_STORAGE_KEY_PREFIX) === 0 ||
           key.indexOf(LEGACY_ADMIN_STORAGE_KEY_PREFIX) === 0 ||
           key.indexOf(MAX_SCORE_STORAGE_KEY_PREFIX) === 0
@@ -1873,7 +1898,6 @@ Main tuning points:
       state.badgeRewardPhase = "ready";
       state.badgeRewardTimer = 0;
       if (badgeRewardOverlayEl) {
-        badgeRewardOverlayEl.classList.remove("is-revealing");
         badgeRewardOverlayEl.classList.add("is-ready");
       }
     }
@@ -2608,6 +2632,7 @@ Main tuning points:
     fullModeOverride: "default",
     updateNoticeActive: false,
     updateNoticeForce: false,
+    whatsNewActive: false,
     availableUpdateInfo: null,
     gameMode: 2,
     gameDifficulty: "easy",
@@ -3063,6 +3088,7 @@ Main tuning points:
     attachLevelFinishedScreen();
     renderAdminForm();
     updateOverlayUiVisibility();
+    maybeShowWhatsNewNotice();
     checkForAvailableUpdate();
     requestAnimationFrame(loop);
   }
@@ -3816,6 +3842,45 @@ Main tuning points:
     }
   }
 
+  function setWhatsNewNoticeOpen(isOpen) {
+    state.whatsNewActive = Boolean(isOpen);
+    if (!whatsNewNoticeEl) {
+      return;
+    }
+    whatsNewNoticeEl.classList.toggle("hidden", !state.whatsNewActive);
+  }
+
+  function maybeShowWhatsNewNotice() {
+    var versionInfo = APP_VERSION_INFO || {};
+    var currentVersionCode = Number.isFinite(Number(versionInfo.versionCode)) ? Math.floor(Number(versionInfo.versionCode)) : 0;
+    var items = Array.isArray(versionInfo.whatsNew) ? versionInfo.whatsNew.filter(function (item) {
+      return typeof item === "string" && item.trim();
+    }) : [];
+
+    if (!currentVersionCode || !items.length) {
+      return;
+    }
+
+    if (readWhatsNewSeenVersionCode() >= currentVersionCode) {
+      return;
+    }
+
+    if (whatsNewTitleEl) {
+      whatsNewTitleEl.textContent = "What's New";
+    }
+    if (whatsNewVersionEl) {
+      whatsNewVersionEl.textContent = "Version " + (versionInfo.versionName || String(currentVersionCode));
+    }
+    if (whatsNewListEl) {
+      whatsNewListEl.innerHTML = items.map(function (item) {
+        return "<li>" + item.replace(/[&<>]/g, function (ch) {
+          return ch === "&" ? "&amp;" : (ch === "<" ? "&lt;" : "&gt;");
+        }) + "</li>";
+      }).join("");
+    }
+    setWhatsNewNoticeOpen(true);
+  }
+
   function applyAvailableUpdateInfo(info) {
     state.availableUpdateInfo = info;
     if (updateNoticeTitleEl) {
@@ -4050,6 +4115,12 @@ Main tuning points:
     if (updateNoticeApplyBtn) {
       updateNoticeApplyBtn.addEventListener("click", function () {
         openStoreUpdatePage();
+      });
+    }
+    if (whatsNewOkBtn) {
+      whatsNewOkBtn.addEventListener("click", function () {
+        writeWhatsNewSeenVersionCode(APP_VERSION_INFO.versionCode);
+        setWhatsNewNoticeOpen(false);
       });
     }
     if (preRunJumpBtn) {
