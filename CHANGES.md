@@ -605,3 +605,4 @@ Rules:
 - 2026-03-31: Added per-tier badge unlock dates in `DD.MM.RR` format on the `Badges` screen, shown next to the tier label once that badge tier is unlocked.
 - 2026-03-31: Added a post-death badge reward presentation that can pause before `Game Over`, then reveal newly earned badges from that run one by one with a flash / shake / medal-pop sequence before returning to the normal game-over screen.
 - 2026-03-31: Added a new one-off `First Runner` badge to `Lifetime Legends`, awarded for starting the very first run so every player gets an initial collectible milestone on their first real game start.
+- 2026-03-31: Fixed the online badge medal sprite loading by aligning the CSS path with the real committed asset location `assets/Badges/badges.png` and including that sprite in the repository.

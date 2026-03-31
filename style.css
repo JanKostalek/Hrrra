@@ -164,7 +164,7 @@ body {
 .badge-reward-medal {
   width: min(28vw, 240px);
   height: min(28vw, 240px);
-  background-image: url("assets/badges/badges.png");
+  background-image: url("assets/Badges/badges.png");
   background-repeat: no-repeat;
   background-size: 300% 100%;
   transform: scale(0.04);
@@ -683,7 +683,7 @@ body {
 .pre-run-badge-medal {
   width: 56px;
   height: 56px;
-  background-image: url("assets/badges/badges.png");
+  background-image: url("assets/Badges/badges.png");
   background-repeat: no-repeat;
   background-size: 300% 100%;
   filter: drop-shadow(0 4px 8px rgba(8, 41, 58, 0.18));
