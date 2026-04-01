@@ -91,3 +91,7 @@ jak se naývá tato obrazovka a má prirazeny nejaký zvuk? ten druhý obrazek je pre
 
 -------------------
 
+jdi na branch sfx a tam potom uprav ve hre devault hodnoty podle obrázku pro sounds zároven ty cesty ke zvukum  mužeš schovat. není potreba aby byly v administraci videt 
+
+-------------------
+

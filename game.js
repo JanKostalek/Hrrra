@@ -838,11 +838,11 @@ Main tuning points:
   }
 
   function getMasterAudioVolumeRatio() {
-    return getAudioVolumeRatio(C.audioMasterVolumePercent, 100);
+    return getAudioVolumeRatio(C.audioMasterVolumePercent, 75);
   }
 
   function getMusicAudioVolumeRatio() {
-    return getMasterAudioVolumeRatio() * getAudioVolumeRatio(C.audioMusicVolumePercent, 70);
+    return getMasterAudioVolumeRatio() * getAudioVolumeRatio(C.audioMusicVolumePercent, 10);
   }
 
   function getSfxAudioVolumeRatio() {
@@ -3380,14 +3380,7 @@ Main tuning points:
         { key: "audioSfxEnabled", label: "SFX enabled", type: "checkbox" },
         { key: "audioMasterVolumePercent", label: "Master volume %", type: "number", min: 0, max: 100, step: 1 },
         { key: "audioMusicVolumePercent", label: "Music volume %", type: "number", min: 0, max: 100, step: 1 },
-        { key: "audioSfxVolumePercent", label: "SFX volume %", type: "number", min: 0, max: 100, step: 1 },
-        { key: "uiSoundButtonPath", label: "UI button sound", type: "text" },
-        { key: "uiSoundPageOpenPath", label: "UI page-open sound", type: "text" },
-        { key: "uiSoundBadgesPagePath", label: "UI badges-page sound", type: "text" },
-        { key: "uiSoundBadgeRevealPath", label: "UI badge-reveal sound", type: "text" },
-        { key: "uiPreRunMusicPath", label: "Pre-run loop path", type: "text" },
-        { key: "uiLevelFinishedMusicPath", label: "Between-level loop path", type: "text" },
-        { key: "uiGameOverMusicPath", label: "Game Over loop path", type: "text" }
+        { key: "audioSfxVolumePercent", label: "SFX volume %", type: "number", min: 0, max: 100, step: 1 }
       ]
     }
   ];
@@ -3566,26 +3559,6 @@ Main tuning points:
       title: "Elevator",
       fields: [
         { key: "elevatorSpeed", label: "Elevator speed" }
-      ]
-    },
-    {
-      title: "Sounds",
-      fields: [
-        { key: "levelMusicLoopPath", label: "Music loop path", type: "text" },
-        { key: "levelJumpSoundPath", label: "Jump sound", type: "text" },
-        { key: "levelCoinSoundPath", label: "Coin sound", type: "text" },
-        { key: "levelBagSoundPath", label: "Bag sound", type: "text" },
-        { key: "levelQuestionCoinSoundPath", label: "Question Coin sound", type: "text" },
-        { key: "levelCrackedCoinSoundPath", label: "Cracked Coin sound", type: "text" },
-        { key: "levelCurseSoundPath", label: "Curse sound", type: "text" },
-        { key: "levelLifeSoundPath", label: "Life sound", type: "text" },
-        { key: "levelLifeLossSoundPath", label: "Life-loss sound", type: "text" },
-        { key: "levelShieldSoundPath", label: "Shield sound", type: "text" },
-        { key: "levelShieldBreakSoundPath", label: "Shield-break sound", type: "text" },
-        { key: "levelMagnetSoundPath", label: "Magnet sound", type: "text" },
-        { key: "levelSlowSoundPath", label: "Slow sound", type: "text" },
-        { key: "levelTeleportSoundPath", label: "Teleport sound", type: "text" },
-        { key: "levelDeathSoundPath", label: "Death sound", type: "text" }
       ]
     }
   ];
