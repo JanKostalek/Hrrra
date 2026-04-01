@@ -95,3 +95,19 @@ jdi na branch sfx a tam potom uprav ve hre devault hodnoty podle obrázku pro sou
 
 -------------------
 
+zvedni natvrdo zvuk v gameover screen o 100%
+
+-------------------
+
+mezi start obrazovkou a zacátkem runnu, ale i start obrazovkou mezi levely trochu zmeníme. Kdyz se klikne na start, tak vezmi z této obrazovky jen pozadí, veškery ostatní veci tam nebudou, objeví se na 1s zvetšující se (z malého na hodne velky) "READY..." a pak na 1s "RUN!".Kdyz na té start obrazovce klikneme na start, tak po dobu tech dvou S co bude obrazovka ready-go, tak muzika z start screen bude fade to silience. nechci aby pri prechodu ze start screen do run byl ostry lom mezi hudbami
+
+-------------------
+
+kolik rádku kodu uz má nas projekt?
+
+-------------------
+
+ted udelej commit local, online a priprav aab
+
+-------------------
+

@@ -62,6 +62,8 @@ Main tuning points:
   var badgeRewardProgressEl = document.getElementById("badge-reward-progress");
   var badgeRewardPromptEl = document.getElementById("badge-reward-prompt");
   var preRunScreenEl = document.getElementById("pre-run-screen");
+  var preRunLaunchOverlayEl = document.getElementById("pre-run-launch-overlay");
+  var preRunLaunchCopyEl = document.getElementById("pre-run-launch-copy");
   var updateNoticeEl = document.getElementById("update-notice");
   var updateNoticeTitleEl = document.getElementById("update-notice-title");
   var updateNoticeMessageEl = document.getElementById("update-notice-message");
@@ -92,6 +94,7 @@ Main tuning points:
   var preRunCompactBackBtn = document.getElementById("pre-run-compact-back-btn");
   var preRunCompactAdminBtn = document.getElementById("pre-run-compact-admin-btn");
   var preRunCompactStartBtn = document.getElementById("pre-run-compact-start-btn");
+  var preRunCompactStartLabelEl = document.getElementById("pre-run-compact-start-label");
   var preRunTesterInfoBtn = document.getElementById("pre-run-tester-info-btn");
   var preRunFutureReleaseBtn = document.getElementById("pre-run-future-release-btn");
   var preRunDetailAdminBtn = document.getElementById("pre-run-detail-admin-btn");
@@ -601,6 +604,7 @@ Main tuning points:
   };
   var audioState = {
     unlocked: false,
+    appActive: true,
     musicPath: "",
     musicAudio: null,
     musicStarted: false,
@@ -842,7 +846,14 @@ Main tuning points:
   }
 
   function getMusicAudioVolumeRatio() {
-    return getMasterAudioVolumeRatio() * getAudioVolumeRatio(C.audioMusicVolumePercent, 10);
+    return getMasterAudioVolumeRatio() * getAudioVolumeRatio(C.audioMusicVolumePercent, 10) * 0.33;
+  }
+
+  function getMusicFadeRatio() {
+    if (!state.preRunLaunchActive) {
+      return 1;
+    }
+    return Math.max(0, 1 - state.preRunLaunchElapsed / state.preRunLaunchDuration);
   }
 
   function getSfxAudioVolumeRatio() {
@@ -937,6 +948,7 @@ Main tuning points:
 
   function canPlayMusic() {
     return (
+      audioState.appActive &&
       audioState.unlocked &&
       Boolean(C.audioMusicEnabled) &&
       getMusicAudioVolumeRatio() > 0 &&
@@ -945,7 +957,14 @@ Main tuning points:
   }
 
   function canPlaySfx() {
-    return audioState.unlocked && Boolean(C.audioSfxEnabled) && getSfxAudioVolumeRatio() > 0;
+    return audioState.appActive && audioState.unlocked && Boolean(C.audioSfxEnabled) && getSfxAudioVolumeRatio() > 0;
+  }
+
+  function applyCurrentMusicVolume() {
+    if (!audioState.musicAudio) {
+      return;
+    }
+    audioState.musicAudio.volume = getMusicAudioVolumeRatio() * getMusicFadeRatio();
   }
 
   function ensureAudioContext() {
@@ -1117,6 +1136,28 @@ Main tuning points:
     audioState.musicStarted = false;
   }
 
+  function setAudioAppActive(isActive) {
+    var nextActive = Boolean(isActive);
+    if (audioState.appActive === nextActive) {
+      return;
+    }
+
+    audioState.appActive = nextActive;
+
+    if (!audioState.appActive) {
+      stopCurrentMusic();
+      if (audioState.audioContext && audioState.audioContext.state === "running") {
+        audioState.audioContext.suspend().catch(function () {});
+      }
+      return;
+    }
+
+    if (audioState.audioContext && audioState.audioContext.state === "suspended" && audioState.unlocked) {
+      audioState.audioContext.resume().catch(function () {});
+    }
+    refreshMusicPlayback();
+  }
+
   function refreshMusicPlayback() {
     var nextPath = canPlayMusic() ? getCurrentMusicPath() : "";
     if (!canPlayMusic() || !nextPath) {
@@ -1136,7 +1177,7 @@ Main tuning points:
     }
 
     audioState.musicAudio.loop = true;
-    audioState.musicAudio.volume = getMusicAudioVolumeRatio();
+    applyCurrentMusicVolume();
     if (!audioState.musicStarted) {
       var playResult = audioState.musicAudio.play();
       audioState.musicStarted = true;
@@ -3114,6 +3155,10 @@ Main tuning points:
     adminPaused: false,
     preRunActive: false,
     preRunStep: "select",
+    preRunLaunchActive: false,
+    preRunLaunchElapsed: 0,
+    preRunLaunchDuration: 2,
+    preRunLaunchPhase: "ready",
     currentLevel: 1,
     highestLevelReached: 1,
     hardModeOverride: "default",
@@ -3569,6 +3614,25 @@ Main tuning points:
     primeSceneArt();
     applyResponsiveLayout();
     window.addEventListener("resize", applyResponsiveLayout);
+    document.addEventListener("visibilitychange", function () {
+      setAudioAppActive(!document.hidden);
+    });
+    window.addEventListener("pagehide", function () {
+      setAudioAppActive(false);
+    });
+    window.addEventListener("pageshow", function () {
+      setAudioAppActive(true);
+    });
+    window.addEventListener("blur", function () {
+      if (document.hidden) {
+        setAudioAppActive(false);
+      }
+    });
+    window.addEventListener("focus", function () {
+      if (!document.hidden) {
+        setAudioAppActive(true);
+      }
+    });
     document.addEventListener("fullscreenchange", function () {
       fullscreenRequested = Boolean(document.fullscreenElement);
     });
@@ -4099,7 +4163,10 @@ Main tuning points:
       preRunStartBtn.textContent = state.currentLevel > 1 ? "Continue" : "Start Run";
     }
     if (preRunCompactStartBtn) {
-      preRunCompactStartBtn.textContent = "Start";
+      preRunCompactStartBtn.setAttribute("aria-label", state.currentLevel > 1 ? "Start next level" : "Start run");
+    }
+    if (preRunCompactStartLabelEl) {
+      preRunCompactStartLabelEl.textContent = "S T A R T";
     }
     if (preRunDetailLifeRulesEl) {
       preRunDetailLifeRulesEl.classList.toggle("hidden", false);
@@ -4139,6 +4206,9 @@ Main tuning points:
     if (preRunDetailFullContentEl) {
       preRunDetailFullContentEl.classList.toggle("hidden", compactLevelBriefing);
     }
+    if (preRunScreenEl) {
+      preRunScreenEl.classList.toggle("is-launch-transition", state.preRunLaunchActive);
+    }
     if (preRunEasyBtn) {
       preRunEasyBtn.classList.toggle("active", state.gameDifficulty === "easy");
     }
@@ -4162,6 +4232,24 @@ Main tuning points:
     if (preRunFullLockEl) {
       preRunFullLockEl.classList.toggle("hidden", fullUnlocked);
       preRunFullLockEl.textContent = getFullModeLockText();
+    }
+    if (preRunLaunchOverlayEl) {
+      preRunLaunchOverlayEl.classList.toggle("hidden", !state.preRunLaunchActive);
+      preRunLaunchOverlayEl.classList.toggle(
+        "phase-ready",
+        state.preRunLaunchActive && state.preRunLaunchPhase === "ready"
+      );
+      preRunLaunchOverlayEl.classList.toggle("phase-run", state.preRunLaunchActive && state.preRunLaunchPhase === "run");
+    }
+    if (preRunLaunchCopyEl) {
+      preRunLaunchCopyEl.textContent = state.preRunLaunchPhase === "run" ? "RUN!" : "READY...";
+      var phaseProgress = state.preRunLaunchPhase === "run"
+        ? Math.max(0, Math.min(1, state.preRunLaunchElapsed - 1))
+        : Math.max(0, Math.min(1, state.preRunLaunchElapsed));
+      var scale = 0.18 + phaseProgress * 1.22;
+      var opacity = 0.25 + phaseProgress * 0.75;
+      preRunLaunchCopyEl.style.transform = "scale(" + scale.toFixed(3) + ")";
+      preRunLaunchCopyEl.style.opacity = String(Math.max(0, Math.min(1, opacity)));
     }
     if (state.preRunStep === "badges") {
       renderBadgesScreen();
@@ -4468,6 +4556,9 @@ Main tuning points:
   }
 
   function prepareRunSetup(mode, difficulty) {
+    state.preRunLaunchActive = false;
+    state.preRunLaunchElapsed = 0;
+    state.preRunLaunchPhase = "ready";
     state.gameMode = mode === 1 ? 1 : 2;
     state.gameDifficulty = difficulty === "hard" ? "hard" : "easy";
     normalizeUnlockedPreRunSelection();
@@ -4572,6 +4663,9 @@ Main tuning points:
     setAdminOpen(false);
     unlockAudioIfNeeded();
     recordFreshRunStartIfNeeded();
+    state.preRunLaunchActive = false;
+    state.preRunLaunchElapsed = 0;
+    state.preRunLaunchPhase = "ready";
     state.preRunActive = false;
     stopBadgesPageMusicIfLeaving();
     if (preRunScreenEl) {
@@ -4579,6 +4673,31 @@ Main tuning points:
     }
     updateOverlayUiVisibility();
     refreshMusicPlayback();
+  }
+
+  function startPreRunLaunchTransition() {
+    if (!state.preRunActive || state.preRunLaunchActive) {
+      return;
+    }
+    setAdminOpen(false);
+    unlockAudioIfNeeded();
+    state.preRunLaunchActive = true;
+    state.preRunLaunchElapsed = 0;
+    state.preRunLaunchPhase = "ready";
+    renderPreRunScreen();
+  }
+
+  function updatePreRunLaunchTransition(dt) {
+    if (!state.preRunLaunchActive) {
+      return;
+    }
+    state.preRunLaunchElapsed += dt;
+    state.preRunLaunchPhase = state.preRunLaunchElapsed >= 1 ? "run" : "ready";
+    applyCurrentMusicVolume();
+    renderPreRunScreen();
+    if (state.preRunLaunchElapsed >= state.preRunLaunchDuration) {
+      closePreRunScreenAndStartRun();
+    }
   }
 
   function updateGameOverSummary() {
@@ -4751,14 +4870,14 @@ Main tuning points:
       preRunStartBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
-        closePreRunScreenAndStartRun();
+        startPreRunLaunchTransition();
       });
     }
     if (preRunCompactStartBtn) {
       preRunCompactStartBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
-        closePreRunScreenAndStartRun();
+        startPreRunLaunchTransition();
       });
     }
     if (preRunSkinGridEl) {
@@ -6425,7 +6544,7 @@ Main tuning points:
       }
 
       if (state.preRunActive && state.preRunStep === "details" && (event.key === " " || event.key === "Enter")) {
-        closePreRunScreenAndStartRun();
+        startPreRunLaunchTransition();
         return;
       }
       if (state.preRunActive) {
@@ -6572,7 +6691,9 @@ Main tuning points:
     var dt = Math.min((timestamp - lastTime) / 1000 || 0, 0.033);
     lastTime = timestamp;
 
-    if (state.running && !state.adminPaused && !state.preRunActive) {
+    if (state.preRunLaunchActive && !state.adminPaused) {
+      updatePreRunLaunchTransition(dt);
+    } else if (state.running && !state.adminPaused && !state.preRunActive) {
       update(dt);
     } else if (state.questionCoinAnimActive && !state.adminPaused && !state.preRunActive) {
       updateQuestionCoinAnimation(dt);

@@ -422,6 +422,7 @@ body {
 }
 
 .pre-run-card {
+  position: relative;
   width: min(1080px, 94vw);
   max-width: 100%;
   background:
@@ -434,6 +435,50 @@ body {
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
   max-height: calc(100dvh - 28px);
   overflow-y: auto;
+}
+
+#pre-run-screen.is-launch-transition .pre-run-stage {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pre-run-launch-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  pointer-events: none;
+}
+
+.pre-run-launch-copy {
+  color: #08293a;
+  font-size: clamp(48px, 11vw, 180px);
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
+  line-height: 0.95;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow:
+    0 8px 18px rgba(255, 255, 255, 0.55),
+    0 18px 40px rgba(8, 41, 58, 0.18);
+  opacity: 0;
+  transform: scale(0.18);
+}
+
+.pre-run-launch-overlay.phase-ready .pre-run-launch-copy,
+.pre-run-launch-overlay.phase-run .pre-run-launch-copy {
+  opacity: 1;
+}
+
+.pre-run-launch-overlay.phase-ready .pre-run-launch-copy {
+  color: #0d3551;
+}
+
+.pre-run-launch-overlay.phase-run .pre-run-launch-copy {
+  color: #0d4a23;
 }
 
 .pre-run-stage.hidden {
@@ -961,9 +1006,9 @@ body {
 
 .pre-run-compact-top {
   display: grid;
-  grid-template-columns: 132px 1fr 132px;
+  grid-template-columns: 92px 1fr 92px;
   align-items: center;
-  gap: 14px;
+  gap: 20px;
 }
 
 .pre-run-compact-heading {
@@ -994,20 +1039,24 @@ body {
   background: transparent;
   color: #08293a;
   font-weight: 800;
-  font-size: clamp(40px, 6vw, 68px);
+  font-size: clamp(64px, 10vw, 132px);
   cursor: pointer;
   padding: 20px 16px;
-  position: relative;
   text-align: center;
-}
-
-.pre-run-compact-start-label {
-  position: absolute;
-  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.pre-run-compact-start-label {
+  display: block;
   width: 100%;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  text-align: center;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .pre-run-detail-actions {
@@ -1089,15 +1138,19 @@ body {
 .pre-run-compact-admin-btn {
   background: rgba(255, 255, 255, 0.94);
   color: #08293a;
-  font-size: clamp(18px, 2vw, 30px);
-  min-height: 54px;
+  font-size: clamp(15px, 1.3vw, 20px);
+  min-height: 40px;
+  min-width: 92px;
+  padding: 4px 10px;
 }
 
 #pre-run-compact-back-btn {
   background: rgba(255, 255, 255, 0.94);
   color: #08293a;
-  font-size: clamp(18px, 2vw, 30px);
-  min-height: 54px;
+  font-size: clamp(15px, 1.3vw, 20px);
+  min-height: 40px;
+  min-width: 92px;
+  padding: 4px 10px;
 }
 
 .pre-run-detail-heading h2 {
@@ -1592,7 +1645,7 @@ body.visual-theme-retro .brief-live::before {
   }
 
   .pre-run-compact-top {
-    grid-template-columns: 120px 1fr 120px;
+    grid-template-columns: 84px 1fr 84px;
   }
 
   .pre-run-compact-start-btn {
@@ -1656,6 +1709,12 @@ body.visual-theme-retro .brief-live::before {
     max-height: calc(100dvh - 20px);
   }
 
+  .pre-run-launch-copy {
+    font-size: clamp(44px, 13vw, 108px);
+    letter-spacing: 0.12em;
+    text-indent: 0.12em;
+  }
+
   .pre-run-brand {
     margin-bottom: 18px;
     font-size: clamp(38px, 14vw, 56px);
@@ -1703,12 +1762,13 @@ body.visual-theme-retro .brief-live::before {
   }
 
   .pre-run-compact-top {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 76px 1fr 76px;
+    gap: 12px;
   }
 
   .pre-run-compact-heading {
-    grid-column: 1 / -1;
-    order: -1;
+    grid-column: auto;
+    order: 0;
   }
 
   .pre-run-skin-panel {
@@ -1805,7 +1865,12 @@ body.visual-theme-retro .brief-live::before {
 
   .pre-run-compact-start-btn {
     min-height: 150px;
-    font-size: clamp(32px, 8vw, 48px);
+    font-size: clamp(54px, 12vw, 86px);
+  }
+
+  .pre-run-compact-start-label {
+    letter-spacing: 0.16em;
+    text-indent: 0.16em;
   }
 }
 
@@ -2124,6 +2189,7 @@ body.visual-theme-retro .brief-live::before {
 
 #admin-panel {
   position: absolute;
+  top: 10px;
   right: 10px;
   bottom: 50px;
   width: min(980px, 96vw);
@@ -2337,6 +2403,23 @@ body.visual-theme-retro .brief-live::before {
   gap: 6px;
 }
 
+#admin-close {
+  min-width: 88px;
+  padding: 8px 18px;
+  font-size: 22px;
+  line-height: 1;
+  border: 2px solid #183427;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #bff4b5 0%, #5eb96a 100%);
+  color: #103120;
+  box-shadow: 0 6px 14px rgba(21, 58, 37, 0.2);
+}
+
+#admin-close:hover,
+#admin-close:focus-visible {
+  background: linear-gradient(180deg, #d4f9cc 0%, #6ec97b 100%);
+}
+
 #admin-panel .mode-default {
   border: 1px solid #222;
   background: #fff7d1;
@@ -2472,6 +2555,35 @@ body.visual-theme-retro .brief-live::before {
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 8px;
+}
+
+@media (max-width: 1100px), (max-height: 820px) {
+  #admin-panel {
+    top: 8px;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+    width: auto;
+    max-height: none;
+    padding: 12px;
+  }
+
+  .admin-header {
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .admin-header-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: 8px;
+  }
+
+  #admin-close {
+    min-width: 116px;
+    padding: 10px 20px;
+    font-size: 24px;
+  }
 }
 
 .admin-section-title-row {

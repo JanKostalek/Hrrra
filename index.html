@@ -66,7 +66,7 @@
           <button id="admin-import-file-btn" aria-label="Import settings from file">Import File</button>
           <button id="admin-import-text" aria-label="Paste settings JSON">Paste JSON</button>
           <button id="admin-privacy" class="hidden" aria-label="Open privacy options">Privacy</button>
-          <button id="admin-close" aria-label="Close mechanics admin">X</button>
+          <button id="admin-close" aria-label="Close mechanics admin">Back</button>
         </div>
       </div>
       <div id="admin-form"></div>
@@ -157,7 +157,7 @@
               <button id="pre-run-compact-admin-btn" class="pre-run-compact-admin-btn" aria-label="Open mechanics admin">Admin</button>
             </div>
             <button id="pre-run-compact-start-btn" class="pre-run-compact-start-btn" aria-label="Start next level">
-              <span class="pre-run-compact-start-label">Start</span>
+              <span id="pre-run-compact-start-label" class="pre-run-compact-start-label">S T A R T</span>
             </button>
           </div>
           <div id="pre-run-detail-full-content">
@@ -224,6 +224,9 @@
               </div>
             </div>
           </div>
+        </div>
+        <div id="pre-run-launch-overlay" class="pre-run-launch-overlay hidden" aria-hidden="true">
+          <div id="pre-run-launch-copy" class="pre-run-launch-copy">READY...</div>
         </div>
       </div>
     </div>

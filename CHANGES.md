@@ -626,3 +626,12 @@ Rules:
 - 2026-04-01: Extended `Reset Badges` to also clear the current run's in-memory badge state (`runUnlockedBadgeKeysAtStart`, pending badge reward queue, and run badge stats) so badges like `First Runner` no longer remain falsely unlocked until leaving/re-entering the screen.
 - 2026-04-01: On branch `sfx`, changed default `Sounds` volumes to `Master 75 / Music 10 / SFX 85` and hid the sound-path fields from the admin UI so the section now shows only the main audio controls.
 - 2026-04-01: Bumped Android/store versioning to `versionCode 9` / `versionName 1.0.8` and updated the in-game `What's New` text for the first experimental sound-testing release.
+- 2026-04-01: Reduced the effective maximum in-game music output to about `33%` of the previous ceiling so low admin music values like `5%` are much more usable during sound testing.
+- 2026-04-01: Added `WORKFLOW.md` as the dedicated home for standing collaboration rules such as prompt logging, `CHANGES` / `MECHANICS` logging expectations, Android asset mirroring, JS validation, release version consistency checks, and commit discipline.
+- 2026-04-01: Improved the mobile admin overlay by stretching it nearly full-height on smaller screens and replacing the small `X` close control with a much more visible green `Back` button on the top-right.
+- 2026-04-01: Refined the between-level compact pre-run screen by shrinking the `Back` / `Admin` buttons, keeping them tight beside the level title, and turning the central start prompt into a much larger wide-tracked `S T A R T` label to reduce accidental taps on navigation.
+- 2026-04-01: Added app lifecycle audio handling so music and SFX stop when the game is pushed into the background or another app takes focus, instead of continuing to play until the Android task is fully closed.
+- 2026-04-01: Boosted the Game Over loop asset by another 100% directly in the WAV file so the end-screen music is much more prominent without touching the global mixer.
+
+
+- 2026-04-01: Added a shared READY... / RUN! launch transition for both the main start briefing and between-level start screens. Starting a run now keeps only the existing briefing background visible for two seconds, shows a scaling READY... then RUN! callout, and fades the pre-run music to silence during the transition so the handoff into gameplay music is much smoother.
