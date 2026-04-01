@@ -614,3 +614,13 @@ Rules:
 - 2026-03-31: Bumped Android/store versioning to `versionCode 8` / `versionName 1.0.7` for the next Play upload and aligned the in-game `What's New` / update metadata to the same release.
 - 2026-03-31: Added a dedicated admin notice after `Reset Badges` so the player gets explicit confirmation that badge progress was cleared and all badges are locked again.
 - 2026-04-01: Added a persistent workflow note that every new user prompt should also be appended to `prompts.md`, with each prompt separated by a blank line, `-------------------`, and another blank line.
+- 2026-04-01: Started the new audio foundation with global `Sounds` admin controls, per-level sound-path fields, Level 1 default sound mappings, and valid silent `.wav` placeholder assets in `assets/ui-sound/` and `assets/level1/sound/` so audio can be swapped and tested incrementally without changing code.
+- 2026-04-01: Expanded the first audio pass with dedicated silent loop placeholders for `pre-run`, `between levels`, and `Game Over`, added a separate `shield break` SFX hook for Level 1, and documented the current sound routing in `sound.md`.
+- 2026-04-01: Added a separate Level 1 `life loss` sound route and placeholder so losing one life mid-run can be tuned independently from both `shield break` and full `death`.
+- 2026-04-01: Switched gameplay/UI `SFX` playback from cloned `HTMLAudio` elements to low-latency `Web Audio API` buffers with warm-up caching, while keeping longer music loops stream-based.
+- 2026-04-01: Changed the death flow so gameplay background music now stops immediately when the last life is lost and the death/RIP sequence starts, instead of continuing underneath the death animation or badge-reward queue.
+- 2026-04-01: Added a dedicated `Badges page` UI sound path/placeholder and boosted the `Game Over` loop directly in the WAV asset so it is more audible without forcing global in-game volume higher.
+- 2026-04-01: Reworked the `Badges` page audio from a one-shot trigger into page-scoped background audio that now starts only while the `Badges` page is open and stops immediately when leaving it.
+- Audio: Badges page background sound now hard-stops the moment you leave the Badges screen, so it can no longer keep playing under pre-run or gameplay music.
+- 2026-04-01: Fixed `Reset Badges` so the currently open pre-run/Badges UI refreshes immediately after the reset, and corrected the `ui-badge-reveal.wav` asset filename so badge reveal audio can load again.
+- 2026-04-01: Extended `Reset Badges` to also clear the current run's in-memory badge state (`runUnlockedBadgeKeysAtStart`, pending badge reward queue, and run badge stats) so badges like `First Runner` no longer remain falsely unlocked until leaving/re-entering the screen.

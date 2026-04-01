@@ -4,6 +4,14 @@ připrav soubor, kam budes kopírovat všechny moje prompty. Neco jako prompts.m
 
 -------------------
 
+souhlasím s doporucením na wav
+
+-------------------
+
+souhlasím. dělej to tak aby to bylo co nejlepsí pro budoucí změny a pro testovaní
+
+-------------------
+
 jeste tuto změnu uloz do changes, aby bylo jasné, ře toto máš vždy když něco napíšu automaticky dělat. abys to věděl, až ukončíme a znovu začneme relaci
 
 -------------------
@@ -19,3 +27,67 @@ souhlasím s tím co říkás. v administraci bych v budoucnu ale chtěl, aby ta
 naprosto se vsím souhlasím. ted ale udelej commit do main - local i online a pak vytvoř novou branch sfx ve které pak budeme pokračovat
 
 -------------------
+
+tak a ted můžeš začít s implementací tak jak jsi ji navrhoval. Pokud máš ještě nějaký dotaz a nebo návrh, tak mi ho řekni. Ještě mi navrhni, jmennou konvenci pro užívané zvuky. vytvoř rovnou potřebné složky a ideálně prázdné placeholder zvuky (v jakém budou formatu? wav? mp3) a já pak ty placeholder / prazdné soubory nahrazovat reálným obsahem. je to tak v pořádku? Abychom postupovali postupně a neutopili se v tom, navrhuji začít nejdřív pro Level1 a pak to můžeme multiplicovat pro ostatní
+
+-------------------
+
+a) kdyz nyní pustím hru na lokale, měl bych slyšet nějaké placeholder zvuky nebo jsou zatim jen "prázdné" čili tiché a uslyším az je zaměním. plus přidej zvuk pro ztrátu štítu. a hudba na screeny před začátkem hry jsou? potom je potreba nějaký zvuk mezi úrovněmi. na obrazovce, která říká, že začne další level. a pak gameover obrazovka by měla mít nějaký vlastní zvuk loop
+
+-------------------
+
+a jeste připrav soubor sound.md kam popíšeš, přikteré akci / události / menu je přehranýá který zvuk
+
+-------------------
+
+máme připravený zvuk pro ztrátu jednoho života ve hře?
+
+-------------------
+
+ano,připrav to
+
+-------------------
+
+Mužeš ověřit. nahral jsem vlastní jump a coin zvuky. a prijde mi, ze kdzy zkočím, tak zvuk začne o zlomek pozdeji nez postavička začne skákat. stejne tak při sebrání mince. mince zmizi, ale zvuk se ozve o chlup pozdeji. můžeš ověřit, zda to je v kodu a nebo zda ty zvuky mají prázdné místo na začátku, které to způsobují?
+
+-------------------
+
+proved to. a nebude lepsi to udelat u vseho?
+
+-------------------
+
+dve veci, kdyz postavička ztratí poslední život - objevuje se rip a prehrava se death zvuk, tak v okamzik, kdy prijdu o zivot, musí prestat hrát background b) nahral jsem badge reveal zvuk a game over loop ale kdyz jdu do sekce odznaků ani kdyz se objevi game over screen, tak se loopy neprhravaji. nejsem si jisty, zda tonení tím, ze jsem prejmenoval mp3 soubor na wav
+
+-------------------
+
+prejmenoval jsem soubor zpet na mp3 (ui-game-over-loop.mp3). dokážeš mi jej zkonvertovat na wav?
+
+-------------------
+
+ano, preved. protoze ted mi jeste ve hre nefunguje. 
+
+-------------------
+
+u gameover jsem zjistil, proc jsem nic neslysel. byl neskutečně ztlumeny. je sam o sobe potichu. kdyz nastavim zvuk, aby byl prijemny, tak tento uz není vůbec slyšet. kdyz dam vse na plno, neda se standardní zvuky vydrzet, ale gameover je slyset. můžes gameover zvednout natvrdo hlasitost? v tom wav souboru? bez zasahu do kodu? nebo se tomusí dělat přímo ve hře? a badges stále neslysím - a není to hlasitostí a uz jsem zjistil problem. ja badge reveal hledal na stránce, která zobrazuje vsechny odznaky. a to je jiná stranka. můžeš prosím vytvořit ještě placeholder a možnost prehravat zvuk při otevření stranky badges?
+
+-------------------
+
+badges page zvuk jsem zaměnil a funguje. ale kdyz ze stranky odejdu, tak hraje porad dál. musí zkončit ve chvíli,kdy odejdu. protoze jinak pak začnu hrát hru a krome urovnové muziky hraje i badge page muzika
+
+-------------------
+
+badges page zvuk jsem zaměnil a funguje. ale kdyz ze stranky odejdu, tak hraje porad dál. musí zkončit ve chvíli,kdy odejdu. protoze jinak pak začnu hrát hru a krome urovnové muziky hraje i badge page muzika
+
+-------------------
+mam dva chyby a) kdyz otevru badges, vidim first run objeveny. jdu do administrace, udelam reset , vypnu administraci a pokracuju ve hre... ale badge zustane odemcen�. pokud udel�m tot� a ze startovac� stranky dam back, tam otevru badges, tak najednou je first run zase zamceny. b) badge reveal zvuk se neprehrava ac jsem ho tam nahral
+
+-------------------
+
+ten reset badges se neumenil. pokud mam odemceny first run, hraju, jdu do administrace a resetnu, nezamkne se. kdyz umru, stale si mysli, ze ho mam. teprve kdyz zacnu novou hru, tak se objevi, ze jsem ho ziskal. pokud mam badge edemknut�, jdu na start screen do admin, resetnu a zacnu hru, je stale odemceny. kdyz zacnu dal�� run, je stale odemcen�, kdyz jdu do badges - po tom prvn�m ci druh�m runnu, je stale odemceny. kdyz na start screen resetnu badge a jdu zpet  a pak na badges, tak se zamkne
+
+-------------------
+
+jak se na�v� tato obrazovka a m� prirazeny nejak� zvuk? ten druh� obrazek je prerun, je to tak? uz asi rozum�m. oni jsou obe obrazovky prerun a maj� ten prerun zvuk. ale pri zpusten� hry se na te prvn� obrazovce zvuk neprehr�v�, dokud nekliknu... je to tak? protoze kdyz otevru badges a vratim se, uz hraje. ono to nejde udelat, aby zacala rovnou hrat?
+
+-------------------
+

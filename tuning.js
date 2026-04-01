@@ -74,7 +74,21 @@
 
     // Movement / Physics
     moveSpeedGroundPercentL: 75,
-    moveSpeedGroundPercentR: 75
+    moveSpeedGroundPercentR: 75,
+
+    // Audio
+    audioMusicEnabled: true,
+    audioSfxEnabled: true,
+    audioMasterVolumePercent: 100,
+    audioMusicVolumePercent: 70,
+    audioSfxVolumePercent: 85,
+    uiSoundButtonPath: "assets/ui-sound/ui-button-tap.wav",
+    uiSoundPageOpenPath: "assets/ui-sound/ui-page-open.wav",
+    uiSoundBadgesPagePath: "assets/ui-sound/ui-badges-page.wav",
+    uiSoundBadgeRevealPath: "assets/ui-sound/ui-badge-reveal.wav",
+    uiPreRunMusicPath: "assets/ui-sound/ui-prerun-loop.wav",
+    uiLevelFinishedMusicPath: "assets/ui-sound/ui-level-finished-loop.wav",
+    uiGameOverMusicPath: "assets/ui-sound/ui-game-over-loop.wav"
   };
 
   // Optional per-mode overrides.
@@ -215,7 +229,22 @@
           magnetRespawnMaxSeconds: 30,
           shieldUnlockScore: 1000,
           shieldRespawnMinSeconds: 1,
-          shieldRespawnMaxSeconds: 2
+          shieldRespawnMaxSeconds: 2,
+          levelMusicLoopPath: "assets/level1/sound/l1-music-loop.wav",
+          levelJumpSoundPath: "assets/level1/sound/l1-sfx-jump.wav",
+          levelCoinSoundPath: "assets/level1/sound/l1-sfx-coin.wav",
+          levelBagSoundPath: "assets/level1/sound/l1-sfx-bag.wav",
+          levelQuestionCoinSoundPath: "assets/level1/sound/l1-sfx-question-coin.wav",
+          levelCrackedCoinSoundPath: "assets/level1/sound/l1-sfx-cracked-coin.wav",
+          levelCurseSoundPath: "assets/level1/sound/l1-sfx-curse.wav",
+          levelLifeSoundPath: "assets/level1/sound/l1-sfx-life.wav",
+          levelLifeLossSoundPath: "assets/level1/sound/l1-sfx-life-loss.wav",
+          levelShieldSoundPath: "assets/level1/sound/l1-sfx-shield.wav",
+          levelShieldBreakSoundPath: "assets/level1/sound/l1-sfx-shield-break.wav",
+          levelMagnetSoundPath: "assets/level1/sound/l1-sfx-magnet.wav",
+          levelSlowSoundPath: "assets/level1/sound/l1-sfx-slow.wav",
+          levelTeleportSoundPath: "assets/level1/sound/l1-sfx-teleport.wav",
+          levelDeathSoundPath: "assets/level1/sound/l1-sfx-death.wav"
         }
       },
       hard: {
@@ -245,7 +274,22 @@
           shieldRespawnMinSeconds: 15,
           shieldRespawnMaxSeconds: 30,
           magnetUnlockScore: 10000,
-          slowUnlockSpeedPercent: 200
+          slowUnlockSpeedPercent: 200,
+          levelMusicLoopPath: "assets/level1/sound/l1-music-loop.wav",
+          levelJumpSoundPath: "assets/level1/sound/l1-sfx-jump.wav",
+          levelCoinSoundPath: "assets/level1/sound/l1-sfx-coin.wav",
+          levelBagSoundPath: "assets/level1/sound/l1-sfx-bag.wav",
+          levelQuestionCoinSoundPath: "assets/level1/sound/l1-sfx-question-coin.wav",
+          levelCrackedCoinSoundPath: "assets/level1/sound/l1-sfx-cracked-coin.wav",
+          levelCurseSoundPath: "assets/level1/sound/l1-sfx-curse.wav",
+          levelLifeSoundPath: "assets/level1/sound/l1-sfx-life.wav",
+          levelLifeLossSoundPath: "assets/level1/sound/l1-sfx-life-loss.wav",
+          levelShieldSoundPath: "assets/level1/sound/l1-sfx-shield.wav",
+          levelShieldBreakSoundPath: "assets/level1/sound/l1-sfx-shield-break.wav",
+          levelMagnetSoundPath: "assets/level1/sound/l1-sfx-magnet.wav",
+          levelSlowSoundPath: "assets/level1/sound/l1-sfx-slow.wav",
+          levelTeleportSoundPath: "assets/level1/sound/l1-sfx-teleport.wav",
+          levelDeathSoundPath: "assets/level1/sound/l1-sfx-death.wav"
         }
       }
     },

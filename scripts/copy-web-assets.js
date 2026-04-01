@@ -40,6 +40,7 @@ const assetFilesToCopy = [
   "assets/hero-question-mark-icon.png"
 ];
 const assetDirectoriesToCopy = [
+  "assets/ui-sound",
   "assets/skins",
   "assets/Bubble_burst",
   "assets/level1",
@@ -86,12 +87,38 @@ function readAndroidVersionInfo() {
   };
 }
 
+function readExistingVersionInfoExtras() {
+  if (!fs.existsSync(generatedVersionInfoPath)) {
+    return {
+      whatsNew: []
+    };
+  }
+
+  const currentContent = fs.readFileSync(generatedVersionInfoPath, "utf8");
+  const whatsNewMatch = currentContent.match(/whatsNew:\s*(\[[\s\S]*?\])/);
+  let whatsNew = [];
+
+  if (whatsNewMatch) {
+    try {
+      whatsNew = JSON.parse(whatsNewMatch[1]);
+    } catch (error) {
+      whatsNew = [];
+    }
+  }
+
+  return {
+    whatsNew
+  };
+}
+
 function writeGeneratedVersionInfo() {
   const versionInfo = readAndroidVersionInfo();
+  const extras = readExistingVersionInfoExtras();
   const output = [
     "window.HrrraVersionInfo = Object.freeze({",
     "  versionCode: " + versionInfo.versionCode + ",",
-    "  versionName: " + JSON.stringify(versionInfo.versionName),
+    "  versionName: " + JSON.stringify(versionInfo.versionName) + ",",
+    "  whatsNew: " + JSON.stringify(extras.whatsNew, null, 2),
     "});",
     ""
   ].join("\n");

@@ -170,6 +170,32 @@ Main tuning points:
     "Lifetime Legends": "Rare long-term badges for players who keep building a real Hrrra career.",
     "Discovery": "Badges tied to unlocking more of Hrrra over time."
   };
+  var AUDIO_LEVEL_FIELD_KEYS = [
+    "levelMusicLoopPath",
+    "levelJumpSoundPath",
+    "levelCoinSoundPath",
+    "levelBagSoundPath",
+    "levelQuestionCoinSoundPath",
+    "levelCrackedCoinSoundPath",
+    "levelCurseSoundPath",
+    "levelLifeSoundPath",
+    "levelLifeLossSoundPath",
+    "levelShieldSoundPath",
+    "levelShieldBreakSoundPath",
+    "levelMagnetSoundPath",
+    "levelSlowSoundPath",
+    "levelTeleportSoundPath",
+    "levelDeathSoundPath"
+  ];
+  var AUDIO_GLOBAL_PATH_KEYS = [
+    "uiSoundButtonPath",
+    "uiSoundPageOpenPath",
+    "uiSoundBadgesPagePath",
+    "uiSoundBadgeRevealPath",
+    "uiPreRunMusicPath",
+    "uiLevelFinishedMusicPath",
+    "uiGameOverMusicPath"
+  ];
   var BADGE_SERIES = [
     {
       id: "greedy_single_run",
@@ -573,6 +599,18 @@ Main tuning points:
     shieldIdleFrame: null,
     levelVariants: {}
   };
+  var audioState = {
+    unlocked: false,
+    musicPath: "",
+    musicAudio: null,
+    musicStarted: false,
+    audioElementCache: {},
+    audioContext: null,
+    sfxOutputGain: null,
+    decodedSfxCache: {},
+    pendingDecodedSfxLoads: {},
+    lastPlayTimes: {}
+  };
   var HERO_WALK_FRAME_FILENAMES = [
     "hero-walk-01.png",
     "hero-walk-02.png",
@@ -783,6 +821,410 @@ Main tuning points:
     "assets/Bubble_burst/bubble-burst-09.png"
   ];
   var SHIELD_IDLE_ART_PATH = "assets/Bubble_burst/shield-idle.png";
+
+  function getClampedAudioVolumePercent(value, fallback) {
+    var parsed = Number(value);
+    if (!Number.isFinite(parsed)) {
+      parsed = Number(fallback);
+    }
+    if (!Number.isFinite(parsed)) {
+      parsed = 100;
+    }
+    return Math.max(0, Math.min(100, parsed));
+  }
+
+  function getAudioVolumeRatio(percentValue, fallback) {
+    return getClampedAudioVolumePercent(percentValue, fallback) / 100;
+  }
+
+  function getMasterAudioVolumeRatio() {
+    return getAudioVolumeRatio(C.audioMasterVolumePercent, 100);
+  }
+
+  function getMusicAudioVolumeRatio() {
+    return getMasterAudioVolumeRatio() * getAudioVolumeRatio(C.audioMusicVolumePercent, 70);
+  }
+
+  function getSfxAudioVolumeRatio() {
+    return getMasterAudioVolumeRatio() * getAudioVolumeRatio(C.audioSfxVolumePercent, 85);
+  }
+
+  function getNormalizedLevelAudioPath(configKey) {
+    if (typeof C[configKey] !== "string") {
+      return "";
+    }
+    return sanitizeAudioPathValue(C[configKey]);
+  }
+
+  function getNormalizedGlobalAudioPath(configKey) {
+    if (typeof C[configKey] !== "string") {
+      return "";
+    }
+    return sanitizeAudioPathValue(C[configKey]);
+  }
+
+  function getUiButtonSoundPath() {
+    return getNormalizedGlobalAudioPath("uiSoundButtonPath");
+  }
+
+  function getUiPageOpenSoundPath() {
+    return getNormalizedGlobalAudioPath("uiSoundPageOpenPath");
+  }
+
+  function getUiBadgesPageSoundPath() {
+    return getNormalizedGlobalAudioPath("uiSoundBadgesPagePath");
+  }
+
+  function getUiBadgeRevealSoundPath() {
+    return getNormalizedGlobalAudioPath("uiSoundBadgeRevealPath");
+  }
+
+  function getUiPreRunMusicPath() {
+    return getNormalizedGlobalAudioPath("uiPreRunMusicPath");
+  }
+
+  function getUiLevelFinishedMusicPath() {
+    return getNormalizedGlobalAudioPath("uiLevelFinishedMusicPath");
+  }
+
+  function getUiGameOverMusicPath() {
+    return getNormalizedGlobalAudioPath("uiGameOverMusicPath");
+  }
+
+  function getLevelMusicLoopPath() {
+    return getNormalizedLevelAudioPath("levelMusicLoopPath");
+  }
+
+  function getLevelSfxPath(configKey) {
+    return getNormalizedLevelAudioPath(configKey);
+  }
+
+  function isGameplayAudioStateActive() {
+    return (
+      state.running ||
+      state.questionCoinAnimActive ||
+      state.teleportFinishAnimActive ||
+      state.projectileDeathAnimActive ||
+      state.badgeRewardActive
+    );
+  }
+
+  function isGameOverScreenVisible() {
+    return Boolean(gameOverEl && !gameOverEl.classList.contains("hidden"));
+  }
+
+  function getCurrentMusicPath() {
+    if (state.adminPaused) {
+      return "";
+    }
+    if (state.preRunActive) {
+      if (state.preRunStep === "badges") {
+        return getUiBadgesPageSoundPath();
+      }
+      return getUiPreRunMusicPath();
+    }
+    if (state.levelFinishedActive) {
+      return getUiLevelFinishedMusicPath();
+    }
+    if (state.projectileDeathAnimActive || state.badgeRewardActive) {
+      return "";
+    }
+    if (isGameOverScreenVisible()) {
+      return getUiGameOverMusicPath();
+    }
+    return isGameplayAudioStateActive() ? getLevelMusicLoopPath() : "";
+  }
+
+  function canPlayMusic() {
+    return (
+      audioState.unlocked &&
+      Boolean(C.audioMusicEnabled) &&
+      getMusicAudioVolumeRatio() > 0 &&
+      Boolean(getCurrentMusicPath())
+    );
+  }
+
+  function canPlaySfx() {
+    return audioState.unlocked && Boolean(C.audioSfxEnabled) && getSfxAudioVolumeRatio() > 0;
+  }
+
+  function ensureAudioContext() {
+    var AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+    if (typeof AudioContextCtor !== "function") {
+      return null;
+    }
+
+    if (!audioState.audioContext || audioState.audioContext.state === "closed") {
+      audioState.audioContext = new AudioContextCtor();
+      audioState.sfxOutputGain = audioState.audioContext.createGain();
+      audioState.sfxOutputGain.connect(audioState.audioContext.destination);
+    }
+
+    return audioState.audioContext;
+  }
+
+  function refreshSfxOutputGain() {
+    if (!audioState.sfxOutputGain) {
+      return;
+    }
+    audioState.sfxOutputGain.gain.value = getSfxAudioVolumeRatio();
+  }
+
+  function decodeAudioDataWithContext(audioContext, arrayBuffer) {
+    if (!audioContext) {
+      return Promise.resolve(null);
+    }
+
+    if (typeof audioContext.decodeAudioData === "function") {
+      var decodeResult = audioContext.decodeAudioData(arrayBuffer.slice(0));
+      if (decodeResult && typeof decodeResult.then === "function") {
+        return decodeResult;
+      }
+    }
+
+    return new Promise(function (resolve, reject) {
+      audioContext.decodeAudioData(
+        arrayBuffer.slice(0),
+        function (buffer) {
+          resolve(buffer || null);
+        },
+        function (error) {
+          reject(error);
+        }
+      );
+    });
+  }
+
+  function preloadDecodedSfx(path) {
+    var normalizedPath = sanitizeAudioPathValue(path);
+    if (!normalizedPath) {
+      return Promise.resolve(null);
+    }
+
+    if (Object.prototype.hasOwnProperty.call(audioState.decodedSfxCache, normalizedPath)) {
+      return Promise.resolve(audioState.decodedSfxCache[normalizedPath]);
+    }
+
+    if (audioState.pendingDecodedSfxLoads[normalizedPath]) {
+      return audioState.pendingDecodedSfxLoads[normalizedPath];
+    }
+
+    var audioContext = ensureAudioContext();
+    if (!audioContext || typeof window.fetch !== "function") {
+      return Promise.resolve(null);
+    }
+
+    var loadPromise = window.fetch(normalizedPath)
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("Failed to load audio: " + normalizedPath);
+        }
+        return response.arrayBuffer();
+      })
+      .then(function (arrayBuffer) {
+        return decodeAudioDataWithContext(audioContext, arrayBuffer);
+      })
+      .then(function (audioBuffer) {
+        audioState.decodedSfxCache[normalizedPath] = audioBuffer || null;
+        delete audioState.pendingDecodedSfxLoads[normalizedPath];
+        return audioState.decodedSfxCache[normalizedPath];
+      })
+      .catch(function () {
+        audioState.decodedSfxCache[normalizedPath] = null;
+        delete audioState.pendingDecodedSfxLoads[normalizedPath];
+        return null;
+      });
+
+    audioState.pendingDecodedSfxLoads[normalizedPath] = loadPromise;
+    return loadPromise;
+  }
+
+  function warmCurrentSfxBuffers() {
+    if (!audioState.unlocked) {
+      return;
+    }
+
+    var paths = [
+      getUiButtonSoundPath(),
+      getUiPageOpenSoundPath(),
+      getUiBadgesPageSoundPath(),
+      getUiBadgeRevealSoundPath()
+    ];
+
+    for (var sfxFieldIndex = 0; sfxFieldIndex < AUDIO_LEVEL_FIELD_KEYS.length; sfxFieldIndex += 1) {
+      var sfxFieldKey = AUDIO_LEVEL_FIELD_KEYS[sfxFieldIndex];
+      if (sfxFieldKey === "levelMusicLoopPath") {
+        continue;
+      }
+      paths.push(getLevelSfxPath(sfxFieldKey));
+    }
+
+    var seenPaths = {};
+    for (var pathIndex = 0; pathIndex < paths.length; pathIndex += 1) {
+      var normalizedPath = sanitizeAudioPathValue(paths[pathIndex]);
+      if (!normalizedPath || seenPaths[normalizedPath]) {
+        continue;
+      }
+      seenPaths[normalizedPath] = true;
+      preloadDecodedSfx(normalizedPath);
+    }
+  }
+
+  function getAudioCachedElement(path, loop) {
+    var normalizedPath = sanitizeAudioPathValue(path);
+    if (!normalizedPath) {
+      return null;
+    }
+    var cached = audioState.audioElementCache[normalizedPath];
+    if (!cached) {
+      cached = new Audio(normalizedPath);
+      cached.preload = "auto";
+      cached.loop = Boolean(loop);
+      audioState.audioElementCache[normalizedPath] = cached;
+    }
+    cached.loop = Boolean(loop);
+    return cached;
+  }
+
+  function unlockAudioIfNeeded() {
+    var audioContext = ensureAudioContext();
+    if (audioContext && audioContext.state === "suspended") {
+      audioContext.resume().catch(function () {});
+    }
+    refreshSfxOutputGain();
+    if (audioState.unlocked) {
+      refreshMusicPlayback();
+      warmCurrentSfxBuffers();
+      return;
+    }
+    audioState.unlocked = true;
+    refreshMusicPlayback();
+    warmCurrentSfxBuffers();
+  }
+
+  function stopCurrentMusic() {
+    if (!audioState.musicAudio) {
+      audioState.musicPath = "";
+      audioState.musicStarted = false;
+      return;
+    }
+    try {
+      audioState.musicAudio.pause();
+      audioState.musicAudio.currentTime = 0;
+    } catch (error) {}
+    audioState.musicAudio = null;
+    audioState.musicPath = "";
+    audioState.musicStarted = false;
+  }
+
+  function refreshMusicPlayback() {
+    var nextPath = canPlayMusic() ? getCurrentMusicPath() : "";
+    if (!canPlayMusic() || !nextPath) {
+      stopCurrentMusic();
+      return;
+    }
+
+    if (audioState.musicPath !== nextPath) {
+      stopCurrentMusic();
+      audioState.musicPath = nextPath;
+      audioState.musicAudio = getAudioCachedElement(nextPath, true);
+      audioState.musicStarted = false;
+    }
+
+    if (!audioState.musicAudio) {
+      return;
+    }
+
+    audioState.musicAudio.loop = true;
+    audioState.musicAudio.volume = getMusicAudioVolumeRatio();
+    if (!audioState.musicStarted) {
+      var playResult = audioState.musicAudio.play();
+      audioState.musicStarted = true;
+      if (playResult && typeof playResult.catch === "function") {
+        playResult.catch(function () {
+          audioState.musicStarted = false;
+        });
+      }
+    }
+  }
+
+  function stopBadgesPageMusicIfLeaving() {
+    var badgesMusicPath = sanitizeAudioPathValue(getUiBadgesPageSoundPath());
+    if (!badgesMusicPath) {
+      return;
+    }
+    if (state.preRunActive && state.preRunStep === "badges") {
+      return;
+    }
+    if (audioState.musicPath === badgesMusicPath) {
+      stopCurrentMusic();
+    }
+  }
+
+  function playAudioPath(path, volume, cooldownKey, cooldownMs) {
+    var normalizedPath = sanitizeAudioPathValue(path);
+    if (!normalizedPath || !canPlaySfx()) {
+      return;
+    }
+    var now = Date.now();
+    var key = cooldownKey || normalizedPath;
+    var minDelay = Number.isFinite(cooldownMs) ? cooldownMs : 0;
+    if (minDelay > 0 && audioState.lastPlayTimes[key] && now - audioState.lastPlayTimes[key] < minDelay) {
+      return;
+    }
+    audioState.lastPlayTimes[key] = now;
+
+    var audioContext = ensureAudioContext();
+    refreshSfxOutputGain();
+    if (audioContext) {
+      var decodedBuffer = audioState.decodedSfxCache[normalizedPath];
+      if (decodedBuffer) {
+        var sourceNode = audioContext.createBufferSource();
+        var gainNode = audioContext.createGain();
+        sourceNode.buffer = decodedBuffer;
+        gainNode.gain.value = Math.max(0, Math.min(1, Number.isFinite(volume) ? volume : 1));
+        sourceNode.connect(gainNode);
+        gainNode.connect(audioState.sfxOutputGain || audioContext.destination);
+        sourceNode.start(0);
+        return;
+      }
+      preloadDecodedSfx(normalizedPath);
+    }
+
+    var baseAudio = getAudioCachedElement(normalizedPath, false);
+    if (baseAudio) {
+      var audioInstance = baseAudio.cloneNode();
+      audioInstance.volume = Math.max(0, Math.min(1, Number.isFinite(volume) ? volume : getSfxAudioVolumeRatio()));
+      var playResult = audioInstance.play();
+      if (playResult && typeof playResult.catch === "function") {
+        playResult.catch(function () {});
+      }
+    }
+  }
+
+  function playUiSound(path, cooldownKey, cooldownMs) {
+    playAudioPath(path, getSfxAudioVolumeRatio(), cooldownKey, cooldownMs);
+  }
+
+  function playUiButtonSound() {
+    playUiSound(getUiButtonSoundPath(), "ui-button", 45);
+  }
+
+  function playUiPageOpenSound() {
+    playUiSound(getUiPageOpenSoundPath(), "ui-page-open", 100);
+  }
+
+  function playUiBadgesPageSound() {
+    playUiSound(getUiBadgesPageSoundPath(), "ui-badges-page", 100);
+  }
+
+  function playUiBadgeRevealSound() {
+    playUiSound(getUiBadgeRevealSoundPath(), "ui-badge-reveal", 80);
+  }
+
+  function playLevelSfx(configKey, cooldownMs) {
+    playAudioPath(getLevelSfxPath(configKey), getSfxAudioVolumeRatio(), configKey, cooldownMs);
+  }
   var HERO_WALK_FRAME_SOURCE_RECTS_SKIN01 = [
     { x: 40, y: 40, w: 80, h: 80 },
     { x: 40, y: 35, w: 80, h: 80 },
@@ -956,6 +1398,13 @@ Main tuning points:
     var parsed = Math.floor(Number(value));
     if (!Number.isFinite(parsed)) {
       return C[key];
+    }
+    if (
+      key === "audioMasterVolumePercent" ||
+      key === "audioMusicVolumePercent" ||
+      key === "audioSfxVolumePercent"
+    ) {
+      return Math.max(0, Math.min(100, parsed));
     }
     if (key === "hardModeUnlockLevel") {
       return Math.max(1, Math.min(LEVEL_COUNT, parsed));
@@ -1337,12 +1786,18 @@ Main tuning points:
 
   function resetBadgeProgressOnly() {
     badgeStats = createDefaultBadgeStats();
+    resetRunBadgeStats();
+    resetBadgeRewardQueue();
+    state.runUnlockedBadgeKeysAtStart = {};
     state.badgeCursedSecondsAccumulator = 0;
     state.badgeStatsDirty = false;
     state.badgeStatsWriteElapsed = 0;
+    if (state.preRunActive) {
+      state.pendingFreshRunStart = true;
+    }
     writeBadgeStats();
-    if (state.preRunActive && state.preRunStep === "badges") {
-      renderBadgesScreen();
+    if (state.preRunActive) {
+      renderPreRunScreen();
     }
     renderAdminForm();
     setBadgeResetNoticeOpen(true);
@@ -1398,6 +1853,21 @@ Main tuning points:
 
   function getBadgeSeriesNameStorageKey(seriesId) {
     return "badgeSeriesName_" + String(seriesId);
+  }
+
+  function isAudioLevelFieldKey(key) {
+    return AUDIO_LEVEL_FIELD_KEYS.indexOf(String(key)) >= 0;
+  }
+
+  function isAudioGlobalPathKey(key) {
+    return AUDIO_GLOBAL_PATH_KEYS.indexOf(String(key)) >= 0;
+  }
+
+  function sanitizeAudioPathValue(value) {
+    return String(value || "")
+      .replace(/\\/g, "/")
+      .replace(/\s+/g, " ")
+      .trim();
   }
 
   function getBadgeTierKey(series, tierIndex) {
@@ -1848,6 +2318,7 @@ Main tuning points:
     state.badgeRewardShowRip = true;
     badgeRewardOverlayEl.classList.remove("hidden", "is-revealing", "is-ready");
     void badgeRewardOverlayEl.offsetWidth;
+    refreshMusicPlayback();
   }
 
   function startBadgeRewardSequence(queue) {
@@ -1865,6 +2336,7 @@ Main tuning points:
     resetBadgeRewardQueue();
     updateGameOverSummary();
     gameOverEl.classList.remove("hidden");
+    refreshMusicPlayback();
   }
 
   function advanceBadgeRewardSequence() {
@@ -1890,6 +2362,7 @@ Main tuning points:
       state.badgeRewardPhase = "reveal";
       state.badgeRewardTimer = 0;
       state.badgeRewardShowRip = false;
+      playUiBadgeRevealSound();
       if (badgeRewardOverlayEl) {
         badgeRewardOverlayEl.classList.remove("is-ready");
         badgeRewardOverlayEl.classList.add("is-revealing");
@@ -2150,7 +2623,9 @@ Main tuning points:
       } else if (typeof C[key] === "number" && Number.isFinite(value)) {
         C[key] = sanitizeGlobalAdminNumber(key, value);
       } else if (typeof C[key] === "string" && typeof value === "string") {
-        C[key] = key === "selectedSkin" ? normalizeSkinName(value) : value;
+        C[key] = key === "selectedSkin"
+          ? normalizeSkinName(value)
+          : (isAudioGlobalPathKey(key) ? sanitizeAudioPathValue(value) : value);
       }
     }
   }
@@ -2226,6 +2701,8 @@ Main tuning points:
         C[key] = sanitizeConfigValue(key, value);
       } else if (typeof C[key] === "boolean" && typeof value === "boolean") {
         C[key] = value;
+      } else if (typeof C[key] === "string" && typeof value === "string") {
+        C[key] = isAudioLevelFieldKey(key) ? sanitizeAudioPathValue(value) : value;
       }
     }
   }
@@ -2301,6 +2778,8 @@ Main tuning points:
               snapshot[key] = sanitizeConfigValue(key, built[key]);
             } else if (typeof built[key] === "boolean") {
               snapshot[key] = built[key];
+            } else if (typeof built[key] === "string") {
+              snapshot[key] = isAudioLevelFieldKey(key) ? sanitizeAudioPathValue(built[key]) : String(built[key]);
             }
           }
           exportData.levels[String(level)][difficulty][String(mode)] = snapshot;
@@ -2408,6 +2887,8 @@ Main tuning points:
               persisted[key] = sanitizeConfigValue(key, value);
             } else if (typeof value === "boolean") {
               persisted[key] = value;
+            } else if (typeof value === "string") {
+              persisted[key] = isAudioLevelFieldKey(key) ? sanitizeAudioPathValue(value) : String(value);
             }
           }
           writeAdminStorageObject(level, mode, difficulty, persisted);
@@ -2472,6 +2953,10 @@ Main tuning points:
         C[key] = sanitizeConfigValue(key, value);
       } else if (typeof C[key] === "boolean" && typeof value === "boolean") {
         C[key] = value;
+      } else if (typeof C[key] === "string" && typeof value === "string") {
+        C[key] = isAudioLevelFieldKey(key) || isAudioGlobalPathKey(key)
+          ? sanitizeAudioPathValue(value)
+          : value;
       }
     }
   }
@@ -2887,6 +3372,23 @@ Main tuning points:
       fields: [
         { key: "badgeConfig", label: "", type: "badges-config" }
       ]
+    },
+    {
+      title: "Sounds",
+      fields: [
+        { key: "audioMusicEnabled", label: "Music enabled", type: "checkbox" },
+        { key: "audioSfxEnabled", label: "SFX enabled", type: "checkbox" },
+        { key: "audioMasterVolumePercent", label: "Master volume %", type: "number", min: 0, max: 100, step: 1 },
+        { key: "audioMusicVolumePercent", label: "Music volume %", type: "number", min: 0, max: 100, step: 1 },
+        { key: "audioSfxVolumePercent", label: "SFX volume %", type: "number", min: 0, max: 100, step: 1 },
+        { key: "uiSoundButtonPath", label: "UI button sound", type: "text" },
+        { key: "uiSoundPageOpenPath", label: "UI page-open sound", type: "text" },
+        { key: "uiSoundBadgesPagePath", label: "UI badges-page sound", type: "text" },
+        { key: "uiSoundBadgeRevealPath", label: "UI badge-reveal sound", type: "text" },
+        { key: "uiPreRunMusicPath", label: "Pre-run loop path", type: "text" },
+        { key: "uiLevelFinishedMusicPath", label: "Between-level loop path", type: "text" },
+        { key: "uiGameOverMusicPath", label: "Game Over loop path", type: "text" }
+      ]
     }
   ];
   var adminSections = [
@@ -3064,6 +3566,26 @@ Main tuning points:
       title: "Elevator",
       fields: [
         { key: "elevatorSpeed", label: "Elevator speed" }
+      ]
+    },
+    {
+      title: "Sounds",
+      fields: [
+        { key: "levelMusicLoopPath", label: "Music loop path", type: "text" },
+        { key: "levelJumpSoundPath", label: "Jump sound", type: "text" },
+        { key: "levelCoinSoundPath", label: "Coin sound", type: "text" },
+        { key: "levelBagSoundPath", label: "Bag sound", type: "text" },
+        { key: "levelQuestionCoinSoundPath", label: "Question Coin sound", type: "text" },
+        { key: "levelCrackedCoinSoundPath", label: "Cracked Coin sound", type: "text" },
+        { key: "levelCurseSoundPath", label: "Curse sound", type: "text" },
+        { key: "levelLifeSoundPath", label: "Life sound", type: "text" },
+        { key: "levelLifeLossSoundPath", label: "Life-loss sound", type: "text" },
+        { key: "levelShieldSoundPath", label: "Shield sound", type: "text" },
+        { key: "levelShieldBreakSoundPath", label: "Shield-break sound", type: "text" },
+        { key: "levelMagnetSoundPath", label: "Magnet sound", type: "text" },
+        { key: "levelSlowSoundPath", label: "Slow sound", type: "text" },
+        { key: "levelTeleportSoundPath", label: "Teleport sound", type: "text" },
+        { key: "levelDeathSoundPath", label: "Death sound", type: "text" }
       ]
     }
   ];
@@ -3671,6 +4193,8 @@ Main tuning points:
     if (state.preRunStep === "badges") {
       renderBadgesScreen();
     }
+    stopBadgesPageMusicIfLeaving();
+    refreshMusicPlayback();
   }
 
   function getTotalBadgeCount() {
@@ -3966,6 +4490,8 @@ Main tuning points:
     loadGlobalAdminConfig();
     C.selectedSkin = normalizeOwnedSkinName(C.selectedSkin);
     sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
+    warmCurrentSfxBuffers();
+    refreshMusicPlayback();
   }
 
   function prepareRunSetup(mode, difficulty) {
@@ -3991,6 +4517,7 @@ Main tuning points:
     refreshPreRunBriefValues();
     applyGameModeToUi();
     renderPreRunScreen();
+    refreshMusicPlayback();
   }
 
   function prepareLevelContinuation(level) {
@@ -4030,6 +4557,7 @@ Main tuning points:
     applyGameModeToUi();
     renderPreRunScreen();
     updateOverlayUiVisibility();
+    refreshMusicPlayback();
   }
 
   function openPreRunScreen() {
@@ -4042,6 +4570,7 @@ Main tuning points:
     }
     renderPreRunScreen();
     updateOverlayUiVisibility();
+    refreshMusicPlayback();
   }
 
   function openPreRunModeDetails(mode) {
@@ -4068,12 +4597,15 @@ Main tuning points:
 
   function closePreRunScreenAndStartRun() {
     setAdminOpen(false);
+    unlockAudioIfNeeded();
     recordFreshRunStartIfNeeded();
     state.preRunActive = false;
+    stopBadgesPageMusicIfLeaving();
     if (preRunScreenEl) {
       preRunScreenEl.classList.add("hidden");
     }
     updateOverlayUiVisibility();
+    refreshMusicPlayback();
   }
 
   function updateGameOverSummary() {
@@ -4121,59 +4653,84 @@ Main tuning points:
   function attachPreRunScreen() {
     if (updateNoticeLaterBtn) {
       updateNoticeLaterBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         setUpdateNoticeOpen(false, false);
       });
     }
     if (updateNoticeApplyBtn) {
       updateNoticeApplyBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         openStoreUpdatePage();
       });
     }
     if (whatsNewOkBtn) {
       whatsNewOkBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         writeWhatsNewSeenVersionCode(APP_VERSION_INFO.versionCode);
         setWhatsNewNoticeOpen(false);
       });
     }
     if (badgeResetOkBtn) {
       badgeResetOkBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         setBadgeResetNoticeOpen(false);
       });
     }
     if (preRunJumpBtn) {
       preRunJumpBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
         openPreRunModeDetails(2);
       });
     }
     if (preRunFullBtn) {
       preRunFullBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
         openPreRunModeDetails(1);
       });
     }
     if (preRunEasyBtn) {
       preRunEasyBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         setPreRunDifficulty("easy");
       });
     }
     if (preRunHardBtn) {
       preRunHardBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         setPreRunDifficulty("hard");
       });
     }
     if (preRunBadgesBtn) {
       preRunBadgesBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         state.preRunStep = "badges";
         renderPreRunScreen();
       });
     }
     if (preRunBadgesBackBtn) {
       preRunBadgesBackBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         state.preRunStep = "select";
         renderPreRunScreen();
       });
     }
     if (preRunBackBtn) {
       preRunBackBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
         if (state.currentLevel > 1) {
           openPreRunScreen();
           return;
@@ -4184,11 +4741,16 @@ Main tuning points:
     }
     if (preRunCompactBackBtn) {
       preRunCompactBackBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
         openPreRunScreen();
       });
     }
     if (preRunCompactAdminBtn) {
       preRunCompactAdminBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         setAdminOpen(true);
       });
     }
@@ -4200,21 +4762,29 @@ Main tuning points:
 
     if (preRunFutureReleaseBtn) {
       preRunFutureReleaseBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         window.open(FUTURE_RELEASE_URL, "_blank");
       });
     }
     if (preRunDetailAdminBtn) {
       preRunDetailAdminBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         setAdminOpen(true);
       });
     }
     if (preRunStartBtn) {
       preRunStartBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         closePreRunScreenAndStartRun();
       });
     }
     if (preRunCompactStartBtn) {
       preRunCompactStartBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         closePreRunScreenAndStartRun();
       });
     }
@@ -4224,6 +4794,8 @@ Main tuning points:
         if (!skinBtn || !skinBtn.dataset.skin || skinBtn.disabled) {
           return;
         }
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         setSelectedSkinFromUi(skinBtn.dataset.skin);
       });
     }
@@ -4234,6 +4806,8 @@ Main tuning points:
       return;
     }
     levelFinishedContinueBtn.addEventListener("click", function () {
+      unlockAudioIfNeeded();
+      playUiButtonSound();
       if (!state.levelFinishedActive) {
         return;
       }
@@ -4244,6 +4818,7 @@ Main tuning points:
       if (state.currentLevel < LEVEL_COUNT) {
         prepareLevelContinuation(state.currentLevel + 1);
       }
+      refreshMusicPlayback();
     });
   }
 
@@ -4253,22 +4828,28 @@ Main tuning points:
     }
 
     if (isOpen) {
+      unlockAudioIfNeeded();
       flushBadgeStatsStorage(true, 0);
       renderAdminForm();
       adminPanel.hidden = false;
       adminPanel.classList.remove("hidden");
       state.adminPaused = true;
+      playUiPageOpenSound();
     } else {
       adminPanel.hidden = true;
       adminPanel.classList.add("hidden");
       setAdminResetConfirmOpen(false);
       state.adminPaused = false;
+      if (state.preRunActive) {
+        renderPreRunScreen();
+      }
     }
 
     input.left = false;
     input.right = false;
     input.jumpDown = false;
     input.jumpPressed = false;
+    refreshMusicPlayback();
   }
 
   function isNativePrivacyOptionsAvailable() {
@@ -4337,6 +4918,8 @@ Main tuning points:
         resetBadgesBtn.addEventListener("click", function (event) {
           event.preventDefault();
           event.stopPropagation();
+          unlockAudioIfNeeded();
+          playUiButtonSound();
           resetBadgeProgressOnly();
         });
         globalSectionTitleRow.appendChild(resetBadgesBtn);
@@ -4366,6 +4949,13 @@ Main tuning points:
           globalInput = document.createElement("input");
           globalInput.type = "checkbox";
           globalInput.checked = Boolean(C[globalField.key]);
+        } else if (globalField.type === "text") {
+          if (typeof C[globalField.key] !== "string") {
+            continue;
+          }
+          globalInput = document.createElement("input");
+          globalInput.type = "text";
+          globalInput.value = String(C[globalField.key] || "");
         } else if (globalField.type === "select") {
           if (typeof C[globalField.key] !== "string") {
             continue;
@@ -4602,6 +5192,9 @@ Main tuning points:
               if (key === "selectedSkin") {
                 nextValue = normalizeSkinName(nextValue);
                 target.value = nextValue;
+              } else if (isAudioGlobalPathKey(key)) {
+                nextValue = sanitizeAudioPathValue(nextValue);
+                target.value = nextValue;
               }
             }
             saveGlobalAdminField(key, nextValue);
@@ -4617,6 +5210,18 @@ Main tuning points:
               normalizeUnlockedPreRunSelection();
               refreshPreRunBriefValues();
               renderPreRunScreen();
+            }
+            if (
+              key === "audioMusicEnabled" ||
+              key === "audioSfxEnabled" ||
+              key === "audioMasterVolumePercent" ||
+              key === "audioMusicVolumePercent" ||
+              key === "audioSfxVolumePercent" ||
+              isAudioGlobalPathKey(key)
+            ) {
+              refreshSfxOutputGain();
+              warmCurrentSfxBuffers();
+              refreshMusicPlayback();
             }
           });
         }
@@ -4803,6 +5408,8 @@ Main tuning points:
                   persisted[key] = sanitizeConfigValue(key, value);
                 } else if (typeof value === "boolean") {
                   persisted[key] = value;
+                } else if (typeof value === "string") {
+                  persisted[key] = isAudioLevelFieldKey(key) ? sanitizeAudioPathValue(value) : String(value);
                 }
               }
             }
@@ -4840,7 +5447,11 @@ Main tuning points:
               if (!isFieldVisibleForMode(mode, field.key)) {
                 continue;
               }
-              if (typeof modeConfig[field.key] !== "number" && typeof modeConfig[field.key] !== "boolean") {
+              if (
+                typeof modeConfig[field.key] !== "number" &&
+                typeof modeConfig[field.key] !== "boolean" &&
+                typeof modeConfig[field.key] !== "string"
+              ) {
                 continue;
               }
 
@@ -4856,9 +5467,11 @@ Main tuning points:
 
               var input = document.createElement("input");
               input.id = "admin-" + difficultyEntry.key + "-" + level + "-" + mode + "-" + field.key;
-              input.type = field.type === "checkbox" ? "checkbox" : "number";
+              input.type = field.type === "checkbox" ? "checkbox" : (field.type === "text" ? "text" : "number");
               if (field.type === "checkbox") {
                 input.checked = Boolean(modeConfig[field.key]);
+              } else if (field.type === "text") {
+                input.value = String(modeConfig[field.key] || "");
               } else {
                 input.step = field.step ? String(field.step) : "any";
                 if (typeof field.min === "number") {
@@ -4892,6 +5505,26 @@ Main tuning points:
                     C[key] = nextValue;
                   }
                   updateLivesUi();
+                  return;
+                }
+
+                if (target.type === "text") {
+                  nextValue = isAudioLevelFieldKey(key)
+                    ? sanitizeAudioPathValue(target.value)
+                    : String(target.value || "");
+                  target.value = nextValue;
+                  saveAdminFieldToStorage(targetLevel, targetMode, targetDifficulty, key, nextValue);
+                  if (
+                    state.currentLevel === targetLevel &&
+                    state.gameMode === targetMode &&
+                    state.gameDifficulty === targetDifficulty
+                  ) {
+                    C[key] = nextValue;
+                    if (isAudioLevelFieldKey(key)) {
+                      warmCurrentSfxBuffers();
+                      refreshMusicPlayback();
+                    }
+                  }
                   return;
                 }
 
@@ -4953,11 +5586,15 @@ Main tuning points:
     }
 
     adminToggle.addEventListener("click", function () {
+      unlockAudioIfNeeded();
+      playUiButtonSound();
       var shouldOpen = adminPanel.classList.contains("hidden");
       setAdminOpen(shouldOpen);
     });
 
     adminClose.addEventListener("click", function () {
+      unlockAudioIfNeeded();
+      playUiButtonSound();
       setAdminResetConfirmOpen(false);
       setAdminOpen(false);
     });
@@ -4973,24 +5610,32 @@ Main tuning points:
 
     if (adminExportBtn) {
       adminExportBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         triggerSettingsExportDownload();
       });
     }
 
     if (adminResetAllBtn) {
       adminResetAllBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         setAdminResetConfirmOpen(true);
       });
     }
 
     if (adminResetConfirmCancelBtn) {
       adminResetConfirmCancelBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         setAdminResetConfirmOpen(false);
       });
     }
 
     if (adminResetConfirmApplyBtn) {
       adminResetConfirmApplyBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         setAdminResetConfirmOpen(false);
         resetAllSettingsToDefaults();
       });
@@ -4998,12 +5643,16 @@ Main tuning points:
 
     if (adminCopyJsonBtn) {
       adminCopyJsonBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         copySettingsJsonToClipboard();
       });
     }
 
     if (adminImportFileBtn && adminImportFileInput) {
       adminImportFileBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         adminImportFileInput.click();
       });
       adminImportFileInput.addEventListener("change", function (event) {
@@ -5015,6 +5664,8 @@ Main tuning points:
 
     if (adminImportTextBtn) {
       adminImportTextBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
         promptAndImportSettingsJson();
       });
     }
@@ -5619,6 +6270,7 @@ Main tuning points:
 
     state.shieldCharges = Math.max(0, state.shieldCharges - 1);
     state.lifeLossFlashTimeLeft = 0.25;
+    playLevelSfx("levelShieldBreakSoundPath", 120);
 
     if (cause === "bottomDeathZone") {
       if (!rescuePlayerFromBottomDeathZone()) {
@@ -5673,6 +6325,7 @@ Main tuning points:
     state.livesLeft = Math.max(1, state.livesLeft - 1);
     state.lifeLossFlashTimeLeft = 0.25;
     recordLifeLost();
+    playLevelSfx("levelLifeLossSoundPath", 100);
 
     if (cause === "topDeathZone") {
       player.y = C.topDeathLineY;
@@ -5788,6 +6441,7 @@ Main tuning points:
   function attachInput() {
     window.addEventListener("keydown", function (event) {
       tryForceFullscreen();
+      unlockAudioIfNeeded();
       var key = event.key.toLowerCase();
 
       if (state.badgeRewardActive) {
@@ -5856,6 +6510,7 @@ Main tuning points:
 
     gameOverEl.addEventListener("click", function () {
       tryForceFullscreen();
+      unlockAudioIfNeeded();
       if (!state.running && !state.projectileDeathAnimActive && !state.teleportFinishAnimActive && !state.questionCoinAnimActive) {
         openPreRunScreen();
       }
@@ -5864,17 +6519,20 @@ Main tuning points:
     if (badgeRewardOverlayEl) {
       badgeRewardOverlayEl.addEventListener("pointerdown", function () {
         tryForceFullscreen();
+        unlockAudioIfNeeded();
         advanceBadgeRewardSequence();
       });
     }
 
     canvas.addEventListener("pointerdown", function () {
       tryForceFullscreen();
+      unlockAudioIfNeeded();
     });
 
     if (levelFinishedEl) {
       levelFinishedEl.addEventListener("pointerdown", function () {
         tryForceFullscreen();
+        unlockAudioIfNeeded();
       });
     }
   }
@@ -5887,6 +6545,7 @@ Main tuning points:
     button.addEventListener("pointerdown", function (event) {
       event.preventDefault();
       tryForceFullscreen();
+      unlockAudioIfNeeded();
       if (button.setPointerCapture) {
         button.setPointerCapture(event.pointerId);
       }
@@ -5987,6 +6646,9 @@ Main tuning points:
       state.pendingDoubleJumpTimeLeft = 0;
       state.pendingTripleJumpTimeLeft = 0;
       state.pendingStoredDoubleJumpTimeLeft = 0;
+    }
+    if (jumpStarted) {
+      playLevelSfx("levelJumpSoundPath", 45);
     }
     updatePlayerRotation(dt, jumpStartedInAir);
     updateHeroJumpAnimation(dt, jumpStarted, landedThisFrame);
@@ -6136,6 +6798,7 @@ Main tuning points:
     if (!startBadgeRewardSequence(buildNewlyUnlockedBadgeQueueForRun())) {
       updateGameOverSummary();
       gameOverEl.classList.remove("hidden");
+      refreshMusicPlayback();
     }
   }
 
@@ -6151,6 +6814,7 @@ Main tuning points:
       levelFinishedEl.classList.remove("hidden");
     }
     updateOverlayUiVisibility();
+    refreshMusicPlayback();
   }
 
   function startTeleportFinishAnimation() {
@@ -6159,6 +6823,7 @@ Main tuning points:
     }
 
     var heroRenderMetrics = getHeroRenderMetrics();
+    playLevelSfx("levelTeleportSoundPath", 160);
     recordTeleportUse(state.shieldCharges > 0);
     state.running = false;
     state.teleportFinishAnimActive = true;
@@ -6182,6 +6847,7 @@ Main tuning points:
   }
 
   function startProjectileDeathAnimation() {
+    playLevelSfx("levelDeathSoundPath", 200);
     state.running = false;
     state.projectile.active = false;
     state.projectile2.active = false;
@@ -6193,6 +6859,7 @@ Main tuning points:
     state.projectileDeathCurrentX = state.projectileDeathStartX;
     state.projectileDeathCurrentY = state.projectileDeathStartY;
     state.projectileDeathCurrentSize = state.projectileDeathStartSize;
+    refreshMusicPlayback();
   }
 
   function smoothStep01(t) {
@@ -6567,6 +7234,7 @@ Main tuning points:
       return;
     }
 
+    playLevelSfx("levelQuestionCoinSoundPath", 120);
     state.running = false;
     state.questionCoinAnimActive = true;
     state.questionCoinAnimElapsed = 0;
@@ -7525,6 +8193,7 @@ Main tuning points:
       icon.active = false;
       state.speedSlowMultiplier = Math.max(1 / Math.max(1e-6, scoreMultiplier), nextTotalMultiplier / Math.max(1e-6, scoreMultiplier));
       state.scrollSpeed = baseSpeed * scoreMultiplier * state.speedSlowMultiplier;
+      playLevelSfx("levelSlowSoundPath", 100);
       scheduleNextSlowSpawn();
     }
   }
@@ -7544,6 +8213,7 @@ Main tuning points:
         state.bonusScore += C.scoreBagBonus;
       }
       recordBagCollected(1);
+      playLevelSfx("levelBagSoundPath", 70);
       scheduleNextScoreBagSpawn();
     }
   }
@@ -7561,6 +8231,7 @@ Main tuning points:
       icon.active = false;
       applyLevelScoreDelta(-Math.floor(getLevelEarnedScore() * (C.crackedCoinPenaltyPercent / 100)));
       recordNegativePickupTouch();
+      playLevelSfx("levelCrackedCoinSoundPath", 110);
       scheduleNextCrackedCoinSpawn();
     }
   }
@@ -7596,6 +8267,7 @@ Main tuning points:
       icon.active = false;
       state.curseTimeLeft += C.curseEffectSeconds;
       recordNegativePickupTouch();
+      playLevelSfx("levelCurseSoundPath", 110);
       scheduleNextCurseSpawn();
     }
   }
@@ -7614,6 +8286,7 @@ Main tuning points:
       state.livesLeft = Math.min(state.maxLives, state.livesLeft + 1);
       recordLifeCollected(1);
       updateLivesUi();
+      playLevelSfx("levelLifeSoundPath", 80);
       scheduleNextLiveSpawn();
     }
   }
@@ -7630,6 +8303,7 @@ Main tuning points:
     if (isRectIntersect(playerRect, iconRect)) {
       icon.active = false;
       state.shieldCharges = 1;
+      playLevelSfx("levelShieldSoundPath", 90);
       scheduleNextShieldSpawn();
     }
   }
@@ -7649,6 +8323,7 @@ Main tuning points:
       recordMagnetPickup();
       scheduleNextMagnetSpawn();
       convertVisiblePickupsToMagnetTargets();
+      playLevelSfx("levelMagnetSoundPath", 100);
     }
   }
 
@@ -7734,6 +8409,7 @@ Main tuning points:
       state.livesLeft = Math.min(state.maxLives, state.livesLeft + 1);
       recordLifeCollected(1);
       updateLivesUi();
+      playLevelSfx("levelLifeSoundPath", 80);
       scheduleNextLiveSpawn();
       return;
     }
@@ -7742,6 +8418,7 @@ Main tuning points:
       state.bonusScore += C.coinScoreBonus;
     }
     recordCoinCollected(1);
+    playLevelSfx("levelCoinSoundPath", 35);
     if (item.type === "platformCoin") {
       scheduleNextPlatformCoinSpawn();
     }
@@ -7839,6 +8516,7 @@ Main tuning points:
         state.bonusScore += C.coinScoreBonus;
       }
       recordCoinCollected(1);
+      playLevelSfx("levelCoinSoundPath", 35);
       scheduleNextPlatformCoinSpawn();
     }
   }
@@ -7890,6 +8568,7 @@ Main tuning points:
           state.bonusScore += C.coinScoreBonus;
         }
         recordCoinCollected(1);
+        playLevelSfx("levelCoinSoundPath", 35);
       }
     }
   }

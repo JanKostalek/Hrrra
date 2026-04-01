@@ -1174,6 +1174,47 @@ Every gameplay-related change must be added here with date and short reason.
 - Notable default changes include `Level 1 Easy finishScore 15000`, `Slow unlock at +50%` on `Level 1 Easy`, fast early `Shield` on `Level 1 Easy`, `Level 3 Hard finishScore 80000`, and `Level 4 Hard finishScore 110000`.
 - Why: makes the built-in default progression match the currently tested live balance instead of relying on extra local admin overrides.
 
+### v0.1.190 - Level 1 audio system foundation and sound routing (2026-04-01)
+- Added persistent global audio settings for `master/music/sfx` enable flags and volume percentages, plus editable global UI sound paths in admin.
+- Added per-level `Sounds` admin fields so each level can map its own music loop and action SFX paths without changing gameplay code.
+- Level 1 now ships with a first-pass sound mapping for music, jump, coin, bag, Question Coin, Cracked Coin, Curse, Life, Shield, Magnet, Slow, Teleport, and Death.
+- Gameplay now routes Level 1 audio events through those mappings for real run states, while music only plays during active gameplay / end-of-run sequences and stops in menus, admin, and level-finished screens.
+- Added valid silent `.wav` placeholder assets as the swap-ready baseline, using a naming convention built around `assets/ui-sound/ui-*.wav` and `assets/level1/sound/l1-*.wav`.
+- Why: establishes a testable, replaceable audio pipeline that can be expanded level by level without reworking the event wiring later.
+
+### v0.1.191 - Added screen-specific loop routing and shield-break audio (2026-04-01)
+- Added separate global loop mappings for `pre-run`, `between levels`, and `Game Over`, so the game can use different background audio outside active gameplay while keeping the same admin-driven path system.
+- Added a dedicated `shield break` Level 1 sound path that plays when a shield is actually consumed to save the player from death.
+- Added `sound.md` as a routing reference for which current event/menu uses which sound asset.
+- Why: makes non-gameplay screens and shield saves audibly distinct while keeping the sound system documented and easy to swap.
+
+### v0.1.192 - Added a separate mid-run life-loss sound (2026-04-01)
+- Added `levelLifeLossSoundPath` so losing one life while the run continues can use its own SFX instead of sharing the final-death sound.
+- Level 1 now includes a placeholder `l1-sfx-life-loss.wav` wired into `consumeLife()` after a real life is removed.
+- Updated `sound.md` so the new route is documented alongside the other Level 1 gameplay events.
+- Why: separates the feedback for “you were hurt but survived” from both shield saves and actual run-ending death.
+
+### v0.1.193 - Moved SFX to low-latency Web Audio playback (2026-04-01)
+- Switched short gameplay and UI sounds to `Web Audio API` buffer playback with warm-up caching after audio unlock, so actions like `jump` and `coin pickup` no longer depend on cloned `HTMLAudio` startup timing.
+- Kept longer music loops on the existing stream-style playback path, while global/per-level sound mapping and admin tuning stay the same.
+- Why: improves timing accuracy for responsive action sounds without forcing long music loops into unnecessary full-buffer decoding.
+
+### v0.1.194 - Last-life death now hard-stops gameplay music immediately (2026-04-01)
+- When the player loses the final life and the RIP / death sequence starts, gameplay background music now stops immediately instead of continuing under the death animation or badge reward flow.
+- The `Game Over` loop still takes over only once the actual `Game Over` screen becomes visible.
+- Why: makes the final death hit cleaner and prevents the run music from diluting the death / end-of-run feedback.
+
+### v0.1.195 - Added a separate Badges-page UI sound and boosted Game Over loop asset (2026-04-01)
+- Added `uiSoundBadgesPagePath` with a dedicated placeholder so opening the pre-run `Badges` page can use its own sound instead of sharing the generic page-open sound.
+- Raised the `Game Over` loop directly in the audio asset so it remains audible at normal in-game volume settings without increasing every other sound.
+- Updated `sound.md` to document the new `Badges` page route.
+- Why: gives the badges screen its own hook and fixes the balance gap where the game-over loop was too quiet relative to the rest of the mix.
+
+### v0.1.196 - Badges-page audio is now page-scoped instead of one-shot (2026-04-01)
+- The `Badges` page audio now behaves like page background audio: it starts while the pre-run `Badges` page is open and stops immediately when leaving that page.
+- This prevents the badges-page track from continuing underneath gameplay or overlapping with level music after the player exits the page.
+- Why: keeps page audio tied to the page lifecycle instead of letting a long badges track bleed into the run.
+
 ### v0.1.116 - Player size doubled (2026-03-16)
 - Increased the base `playerSize` from `40` to `80`, making the character 100% larger.
 - Because gameplay sizing is derived from `playerSize`, the change also scales related sprite-driven pickup and hazard sizes consistently with the new hero size.
