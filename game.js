@@ -72,6 +72,8 @@ Main tuning points:
   var whatsNewVersionEl = document.getElementById("whats-new-version");
   var whatsNewListEl = document.getElementById("whats-new-list");
   var whatsNewOkBtn = document.getElementById("whats-new-ok");
+  var badgeResetNoticeEl = document.getElementById("badge-reset-notice");
+  var badgeResetOkBtn = document.getElementById("badge-reset-ok");
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
   var preRunBadgesScreenEl = document.getElementById("pre-run-badges-screen");
   var preRunDetailScreenEl = document.getElementById("pre-run-detail-screen");
@@ -1343,6 +1345,7 @@ Main tuning points:
       renderBadgesScreen();
     }
     renderAdminForm();
+    setBadgeResetNoticeOpen(true);
   }
 
   function setAdminResetConfirmOpen(isOpen) {
@@ -2633,6 +2636,7 @@ Main tuning points:
     updateNoticeActive: false,
     updateNoticeForce: false,
     whatsNewActive: false,
+    badgeResetNoticeActive: false,
     availableUpdateInfo: null,
     gameMode: 2,
     gameDifficulty: "easy",
@@ -3850,6 +3854,14 @@ Main tuning points:
     whatsNewNoticeEl.classList.toggle("hidden", !state.whatsNewActive);
   }
 
+  function setBadgeResetNoticeOpen(isOpen) {
+    state.badgeResetNoticeActive = Boolean(isOpen);
+    if (!badgeResetNoticeEl) {
+      return;
+    }
+    badgeResetNoticeEl.classList.toggle("hidden", !state.badgeResetNoticeActive);
+  }
+
   function maybeShowWhatsNewNotice() {
     var versionInfo = APP_VERSION_INFO || {};
     var currentVersionCode = Number.isFinite(Number(versionInfo.versionCode)) ? Math.floor(Number(versionInfo.versionCode)) : 0;
@@ -4121,6 +4133,11 @@ Main tuning points:
       whatsNewOkBtn.addEventListener("click", function () {
         writeWhatsNewSeenVersionCode(APP_VERSION_INFO.versionCode);
         setWhatsNewNoticeOpen(false);
+      });
+    }
+    if (badgeResetOkBtn) {
+      badgeResetOkBtn.addEventListener("click", function () {
+        setBadgeResetNoticeOpen(false);
       });
     }
     if (preRunJumpBtn) {

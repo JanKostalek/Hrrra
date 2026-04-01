@@ -2206,7 +2206,8 @@ body.visual-theme-retro .brief-live::before {
 
 #update-notice-later,
 #update-notice-apply,
-#whats-new-ok {
+#whats-new-ok,
+#badge-reset-ok {
   border: 2px solid #123040;
   border-radius: 999px;
   padding: 10px 18px;
@@ -2227,6 +2228,11 @@ body.visual-theme-retro .brief-live::before {
 
 #whats-new-ok {
   background: linear-gradient(180deg, #fff3cf 0%, #ffd878 100%);
+  color: #123040;
+}
+
+#badge-reset-ok {
+  background: linear-gradient(180deg, #dff6ff 0%, #91d5f4 100%);
   color: #123040;
 }
 

@@ -612,3 +612,5 @@ Rules:
 - 2026-03-31: Promoted the current Firefox local Jump-mode level admin tuning to project defaults in `tuning.js` / Android public `tuning.js`, while intentionally leaving badges, skins, and mode unlock progression on a clean locked profile by default.
 - 2026-03-31: Rewrote the player-facing `What's New` popup copy into a shorter release-note style message about badges, future tuning, and upcoming sound.
 - 2026-03-31: Bumped Android/store versioning to `versionCode 8` / `versionName 1.0.7` for the next Play upload and aligned the in-game `What's New` / update metadata to the same release.
+- 2026-03-31: Added a dedicated admin notice after `Reset Badges` so the player gets explicit confirmation that badge progress was cleared and all badges are locked again.
+- 2026-04-01: Added a persistent workflow note that every new user prompt should also be appended to `prompts.md`, with each prompt separated by a blank line, `-------------------`, and another blank line.
