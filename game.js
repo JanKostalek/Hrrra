@@ -53,6 +53,9 @@ Main tuning points:
   var finalCoinsEl = document.getElementById("final-coins");
   var finalBagsEl = document.getElementById("final-bags");
   var finalHighscoresEl = document.getElementById("final-highscores");
+  var finalOnlineHighscoreEl = document.getElementById("final-online-highscore");
+  var finalOnlineStatusEl = document.getElementById("final-online-status");
+  var finalOnlineListEl = document.getElementById("final-online-list");
   var badgeRewardOverlayEl = document.getElementById("badge-reward-overlay");
   var badgeRewardKickerEl = document.getElementById("badge-reward-kicker");
   var badgeRewardNameEl = document.getElementById("badge-reward-name");
@@ -76,6 +79,12 @@ Main tuning points:
   var whatsNewOkBtn = document.getElementById("whats-new-ok");
   var badgeResetNoticeEl = document.getElementById("badge-reset-notice");
   var badgeResetOkBtn = document.getElementById("badge-reset-ok");
+  var playerNameNoticeEl = document.getElementById("player-name-notice");
+  var playerNameTitleEl = document.getElementById("player-name-title");
+  var playerNameCopyEl = document.getElementById("player-name-copy");
+  var playerNameInputEl = document.getElementById("player-name-input");
+  var playerNameErrorEl = document.getElementById("player-name-error");
+  var playerNameSaveBtn = document.getElementById("player-name-save");
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
   var preRunBadgesScreenEl = document.getElementById("pre-run-badges-screen");
   var preRunDetailScreenEl = document.getElementById("pre-run-detail-screen");
@@ -84,6 +93,7 @@ Main tuning points:
   var preRunEasyBtn = document.getElementById("pre-run-easy-btn");
   var preRunHardBtn = document.getElementById("pre-run-hard-btn");
   var preRunBadgesBtn = document.getElementById("pre-run-badges-btn");
+  var preRunPlayerNameBtn = document.getElementById("pre-run-player-name-btn");
   var preRunBadgesBackBtn = document.getElementById("pre-run-badges-back-btn");
   var preRunBadgesGroupsEl = document.getElementById("pre-run-badges-groups");
   var preRunBadgesTotalValueEl = document.getElementById("pre-run-badges-total-value");
@@ -162,8 +172,16 @@ Main tuning points:
   var GLOBAL_ADMIN_STORAGE_KEY = "hrrra_admin_global_v1";
   var MAX_SCORE_STORAGE_KEY_PREFIX = "hrrra_max_score_v2_";
   var PLAYER_SKIN_PROGRESS_STORAGE_KEY = "hrrra_player_skin_progress_v1";
+  var PLAYER_NAME_STORAGE_KEY = "hrrra_player_name_v1";
+  var PLAYER_ID_STORAGE_KEY = "hrrra_player_id_v1";
   var BADGE_STATS_STORAGE_KEY = "hrrra_badge_stats_v1";
   var WHATS_NEW_SEEN_VERSION_STORAGE_KEY = "hrrra_whats_new_seen_version_v1";
+  var ONLINE_HIGHSCORE_API_URL = (function () {
+    var origin = typeof window !== "undefined" && window.location && /^https?:$/i.test(window.location.protocol)
+      ? window.location.origin
+      : "https://hrrra.vercel.app";
+    return origin.replace(/\/$/, "") + "/api/highscore";
+  })();
   var LEVEL_COUNT = 5;
   var BADGE_CATEGORY_ORDER = ["Single Run", "All Runs", "Skills", "Lifetime Legends", "Discovery"];
   var BADGE_CATEGORY_COPY = {
@@ -573,6 +591,79 @@ Main tuning points:
     } catch (error) {
       // ignore write failures
     }
+  }
+
+  function normalizePlayerName(value) {
+    return String(value || "")
+      .replace(/[^\p{L}\p{N} _-]+/gu, "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 16);
+  }
+
+  function normalizePlayerId(value) {
+    return String(value || "")
+      .replace(/[^a-z0-9_-]+/gi, "")
+      .trim()
+      .slice(0, 48);
+  }
+
+  function createPlayerId() {
+    return normalizePlayerId(
+      "p_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 10)
+    );
+  }
+
+  function readPlayerNameFromStorage() {
+    try {
+      return normalizePlayerName(window.localStorage.getItem(PLAYER_NAME_STORAGE_KEY) || "");
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function writePlayerNameToStorage(value) {
+    try {
+      var normalized = normalizePlayerName(value);
+      if (normalized) {
+        window.localStorage.setItem(PLAYER_NAME_STORAGE_KEY, normalized);
+      } else {
+        window.localStorage.removeItem(PLAYER_NAME_STORAGE_KEY);
+      }
+    } catch (error) {
+      // ignore write failures
+    }
+  }
+
+  function readPlayerIdFromStorage() {
+    try {
+      return normalizePlayerId(window.localStorage.getItem(PLAYER_ID_STORAGE_KEY) || "");
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function writePlayerIdToStorage(value) {
+    try {
+      var normalized = normalizePlayerId(value);
+      if (normalized) {
+        window.localStorage.setItem(PLAYER_ID_STORAGE_KEY, normalized);
+      } else {
+        window.localStorage.removeItem(PLAYER_ID_STORAGE_KEY);
+      }
+    } catch (error) {
+      // ignore write failures
+    }
+  }
+
+  function ensurePlayerId() {
+    var existingId = readPlayerIdFromStorage();
+    if (existingId) {
+      return existingId;
+    }
+    var nextId = createPlayerId();
+    writePlayerIdToStorage(nextId);
+    return nextId;
   }
   var sceneArt = {
     backgroundSky: null,
@@ -3159,6 +3250,9 @@ Main tuning points:
     preRunLaunchElapsed: 0,
     preRunLaunchDuration: 2,
     preRunLaunchPhase: "ready",
+    playerName: "",
+    playerId: "",
+    playerNamePromptActive: false,
     currentLevel: 1,
     highestLevelReached: 1,
     hardModeOverride: "default",
@@ -3213,6 +3307,15 @@ Main tuning points:
     badgeRewardPhase: "idle",
     badgeRewardTimer: 0,
     badgeRewardShowRip: false,
+    onlineHighscore: {
+      loading: false,
+      message: "",
+      entries: [],
+      rank: null,
+      currentRunRank: null,
+      bestScore: 0,
+      requestId: 0
+    },
     maxLives: 1,
     livesLeft: 1,
     lifeLossFlashTimeLeft: 0,
@@ -3639,6 +3742,9 @@ Main tuning points:
     applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
     loadGlobalAdminConfig();
     loadPlayerSkinProgress();
+    state.playerName = readPlayerNameFromStorage();
+    state.playerId = ensurePlayerId();
+    resetOnlineHighscoreUi("");
     applyVisualThemeToUi();
     sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
     openPreRunScreen();
@@ -3653,6 +3759,7 @@ Main tuning points:
     updateOverlayUiVisibility();
     maybeShowWhatsNewNotice();
     checkForAvailableUpdate();
+    maybeShowPlayerNamePromptIfMissing();
     requestAnimationFrame(loop);
   }
 
@@ -4190,6 +4297,7 @@ Main tuning points:
     var compactLevelBriefing = state.preRunStep === "details" && state.currentLevel > 1;
 
     normalizeUnlockedPreRunSelection();
+    syncPlayerNameUi();
 
     if (preRunSelectScreenEl) {
       preRunSelectScreenEl.classList.toggle("hidden", state.preRunStep !== "select");
@@ -4429,6 +4537,9 @@ Main tuning points:
     if (updateNoticeLaterBtn) {
       updateNoticeLaterBtn.classList.toggle("hidden", state.updateNoticeForce);
     }
+    if (!state.updateNoticeActive) {
+      maybeShowPlayerNamePromptIfMissing();
+    }
   }
 
   function setWhatsNewNoticeOpen(isOpen) {
@@ -4437,6 +4548,9 @@ Main tuning points:
       return;
     }
     whatsNewNoticeEl.classList.toggle("hidden", !state.whatsNewActive);
+    if (!state.whatsNewActive) {
+      maybeShowPlayerNamePromptIfMissing();
+    }
   }
 
   function setBadgeResetNoticeOpen(isOpen) {
@@ -4445,6 +4559,232 @@ Main tuning points:
       return;
     }
     badgeResetNoticeEl.classList.toggle("hidden", !state.badgeResetNoticeActive);
+  }
+
+  function syncPlayerNameUi() {
+    if (preRunPlayerNameBtn) {
+      preRunPlayerNameBtn.textContent = state.playerName ? "Name: " + state.playerName : "Set Name";
+    }
+    if (playerNameInputEl && playerNameNoticeEl && !playerNameNoticeEl.classList.contains("hidden")) {
+      playerNameInputEl.value = state.playerName || "";
+    }
+  }
+
+  function setPlayerNamePromptOpen(isOpen) {
+    state.playerNamePromptActive = Boolean(isOpen);
+    if (!playerNameNoticeEl) {
+      return;
+    }
+    playerNameNoticeEl.classList.toggle("hidden", !state.playerNamePromptActive);
+    if (playerNameErrorEl) {
+      playerNameErrorEl.classList.add("hidden");
+    }
+    if (state.playerNamePromptActive) {
+      syncPlayerNameUi();
+      if (playerNameTitleEl) {
+        playerNameTitleEl.textContent = state.playerName ? "Change Player Name" : "Choose Your Player Name";
+      }
+      if (playerNameCopyEl) {
+        playerNameCopyEl.textContent = state.playerName
+          ? "Update the name shown on the online leaderboard."
+          : "This name will be used for the online highscore leaderboard.";
+      }
+      if (playerNameInputEl) {
+        window.setTimeout(function () {
+          try {
+            playerNameInputEl.focus();
+            playerNameInputEl.select();
+          } catch (error) {}
+        }, 10);
+      }
+    }
+  }
+
+  function maybeShowPlayerNamePromptIfMissing() {
+    if (state.playerName || state.updateNoticeActive || state.whatsNewActive) {
+      return;
+    }
+    setPlayerNamePromptOpen(true);
+  }
+
+  function getOnlineLeaderboardModeKey() {
+    return (state.gameMode === 1 ? "full" : "jump") + "_" + (state.gameDifficulty === "hard" ? "hard" : "easy");
+  }
+
+  function getOnlineLeaderboardLabel() {
+    return (state.gameMode === 1 ? "Full" : "Jump") + " " + (state.gameDifficulty === "hard" ? "Hard" : "Easy");
+  }
+
+  function resetOnlineHighscoreUi(message) {
+    var localBestScore = readMaxScoreFromStorage(state.gameMode || 2, state.gameDifficulty || "easy");
+    state.onlineHighscore.loading = false;
+    state.onlineHighscore.message = typeof message === "string" ? message : "";
+    state.onlineHighscore.entries = [];
+    state.onlineHighscore.rank = null;
+    state.onlineHighscore.currentRunRank = null;
+    state.onlineHighscore.bestScore = Math.max(0, Math.floor(Number(localBestScore) || 0));
+    renderOnlineHighscoreUi();
+  }
+
+  function renderOnlineHighscoreUi() {
+    if (!finalOnlineHighscoreEl || !finalOnlineStatusEl || !finalOnlineListEl) {
+      return;
+    }
+    finalOnlineHighscoreEl.classList.toggle("hidden", false);
+    if (state.onlineHighscore.loading) {
+      finalOnlineStatusEl.textContent = "Loading " + getOnlineLeaderboardLabel() + " leaderboard...";
+    } else if (state.onlineHighscore.message) {
+      finalOnlineStatusEl.textContent = state.onlineHighscore.message;
+    } else {
+      finalOnlineStatusEl.textContent = getOnlineLeaderboardLabel() + " leaderboard";
+    }
+    var rows = state.onlineHighscore.entries.slice(0, 15).map(function (entry, index) {
+      return {
+        label: "#" + (index + 1) + " " + entry.name,
+        score: Number(entry.score || 0),
+        className: ""
+      };
+    });
+    var playerDisplayName = state.playerName || "You";
+    var bestScoreValue = Math.max(
+      0,
+      Math.floor(
+        Math.max(
+          Number(state.onlineHighscore.bestScore) || 0,
+          Number(readMaxScoreFromStorage(state.gameMode, state.gameDifficulty)) || 0
+        )
+      )
+    );
+    var bestRankPrefix = state.onlineHighscore.rank ? "#" + state.onlineHighscore.rank + " " : "#? ";
+    var currentRunRankPrefix = state.onlineHighscore.currentRunRank ? "#" + state.onlineHighscore.currentRunRank + " " : "#? ";
+    rows.push({
+      label: bestRankPrefix + playerDisplayName + " (Your Best)",
+      score: bestScoreValue,
+      className: "is-player-row"
+    });
+    rows.push({
+      label: currentRunRankPrefix + playerDisplayName + " (Current Run)",
+      score: Math.max(0, Math.floor(Number(state.score) || 0)),
+      className: "is-current-run-row"
+    });
+
+    finalOnlineListEl.innerHTML = rows.map(function (entry) {
+      var classAttribute = entry.className ? ' class="' + entry.className + '"' : "";
+      return (
+        "<li" +
+        classAttribute +
+        "><span>" +
+        entry.label +
+        "</span><strong>" +
+        entry.score.toLocaleString("en-US") +
+        "</strong></li>"
+      );
+    }).join("");
+  }
+
+  function applyOnlineHighscorePayload(data, requestId) {
+    if (state.onlineHighscore.requestId !== requestId) {
+      return;
+    }
+
+    var entries = Array.isArray(data && data.leaderboard)
+      ? data.leaderboard
+          .map(function (entry) {
+            return {
+              name: normalizePlayerName(entry && entry.name) || "Player",
+              score: Math.max(0, Math.floor(Number(entry && entry.score) || 0))
+            };
+          })
+          .filter(function (entry) {
+            return entry.score >= 0;
+          })
+      : [];
+
+    state.onlineHighscore.loading = false;
+    state.onlineHighscore.message = entries.length
+      ? ""
+      : "Be the first player to post a score in " + getOnlineLeaderboardLabel() + ".";
+    state.onlineHighscore.entries = entries;
+    state.onlineHighscore.rank = Number.isFinite(Number(data && data.rank))
+      ? Math.max(1, Math.floor(Number(data.rank)))
+      : null;
+    state.onlineHighscore.currentRunRank = Number.isFinite(Number(data && data.currentScoreRank))
+      ? Math.max(1, Math.floor(Number(data.currentScoreRank)))
+      : null;
+    state.onlineHighscore.bestScore = Math.max(
+      0,
+      Math.floor(
+        Math.max(
+          Number(data && data.bestScore) || 0,
+          Number(readMaxScoreFromStorage(state.gameMode, state.gameDifficulty)) || 0
+        )
+      )
+    );
+    renderOnlineHighscoreUi();
+  }
+
+  function loadOnlineHighscoreForCurrentBoard() {
+    if (typeof window.fetch !== "function") {
+      resetOnlineHighscoreUi("Online leaderboard is unavailable on this device.");
+      return;
+    }
+
+    state.onlineHighscore.requestId += 1;
+    var requestId = state.onlineHighscore.requestId;
+    state.onlineHighscore.loading = true;
+    state.onlineHighscore.message = "";
+    state.onlineHighscore.entries = [];
+    state.onlineHighscore.rank = null;
+    state.onlineHighscore.currentRunRank = null;
+    state.onlineHighscore.bestScore = Math.max(0, Math.floor(Number(readMaxScoreFromStorage(state.gameMode, state.gameDifficulty)) || 0));
+    renderOnlineHighscoreUi();
+
+    var board = getOnlineLeaderboardModeKey();
+    var scoreValue = Math.max(0, Math.floor(Number(state.score) || 0));
+    var requestUrl = ONLINE_HIGHSCORE_API_URL;
+    var requestOptions;
+
+    if (scoreValue > 0 && state.playerName && state.playerId) {
+      requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          board: board,
+          playerId: state.playerId,
+          name: state.playerName,
+          score: scoreValue
+        })
+      };
+    } else {
+      requestUrl +=
+        "?board=" +
+        encodeURIComponent(board) +
+        "&playerId=" +
+        encodeURIComponent(state.playerId || "");
+      requestOptions = {
+        method: "GET"
+      };
+    }
+
+    window
+      .fetch(requestUrl, requestOptions)
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("Leaderboard request failed.");
+        }
+        return response.json();
+      })
+      .then(function (data) {
+        applyOnlineHighscorePayload(data, requestId);
+      })
+      .catch(function () {
+        if (state.onlineHighscore.requestId !== requestId) {
+          return;
+        }
+        resetOnlineHighscoreUi("Online leaderboard is currently unavailable.");
+      });
   }
 
   function maybeShowWhatsNewNotice() {
@@ -4679,6 +5019,10 @@ Main tuning points:
     if (!state.preRunActive || state.preRunLaunchActive) {
       return;
     }
+    if (!state.playerName) {
+      setPlayerNamePromptOpen(true);
+      return;
+    }
     setAdminOpen(false);
     unlockAudioIfNeeded();
     state.preRunLaunchActive = true;
@@ -4715,13 +5059,14 @@ Main tuning points:
     }
     if (finalHighscoresEl) {
       finalHighscoresEl.innerHTML = [
-        "<h2>Stored High Scores</h2>",
-        "<p>Easy Jump: " + readMaxScoreFromStorage(2, "easy") + "</p>",
-        "<p>Easy Full: " + readMaxScoreFromStorage(1, "easy") + "</p>",
-        "<p>Hard Jump: " + readMaxScoreFromStorage(2, "hard") + "</p>",
-        "<p>Hard Full: " + readMaxScoreFromStorage(1, "hard") + "</p>"
+        "<h2>Your High Scores</h2>",
+        "<p>Jump Easy: " + readMaxScoreFromStorage(2, "easy").toLocaleString("en-US") + "</p>",
+        "<p>Jump Hard: " + readMaxScoreFromStorage(2, "hard").toLocaleString("en-US") + "</p>",
+        "<p>Full Easy: " + readMaxScoreFromStorage(1, "easy").toLocaleString("en-US") + "</p>",
+        "<p>Full Hard: " + readMaxScoreFromStorage(1, "hard").toLocaleString("en-US") + "</p>"
       ].join("");
     }
+    loadOnlineHighscoreForCurrentBoard();
   }
 
   function updateLevelFinishedSummary() {
@@ -4770,6 +5115,39 @@ Main tuning points:
         unlockAudioIfNeeded();
         playUiButtonSound();
         setBadgeResetNoticeOpen(false);
+      });
+    }
+    if (preRunPlayerNameBtn) {
+      preRunPlayerNameBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        setPlayerNamePromptOpen(true);
+      });
+    }
+    if (playerNameSaveBtn) {
+      playerNameSaveBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        var normalizedName = normalizePlayerName(playerNameInputEl ? playerNameInputEl.value : "");
+        if (!normalizedName) {
+          if (playerNameErrorEl) {
+            playerNameErrorEl.textContent = "Please enter a valid name.";
+            playerNameErrorEl.classList.remove("hidden");
+          }
+          return;
+        }
+        state.playerName = normalizedName;
+        state.playerId = ensurePlayerId();
+        writePlayerNameToStorage(normalizedName);
+        syncPlayerNameUi();
+        setPlayerNamePromptOpen(false);
+      });
+    }
+    if (playerNameInputEl) {
+      playerNameInputEl.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && playerNameSaveBtn) {
+          playerNameSaveBtn.click();
+        }
       });
     }
     if (preRunJumpBtn) {
@@ -5921,6 +6299,7 @@ Main tuning points:
 
   function restartGame(resetLives) {
     setAdminOpen(false);
+    resetOnlineHighscoreUi("");
     var carriedShieldCharges = resetLives ? 0 : state.shieldCharges;
     world.reset();
     var spawnX = 80;

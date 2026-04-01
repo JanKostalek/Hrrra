@@ -119,3 +119,47 @@ mi to rika pri pokusu nahrat. vypada, ze jsi nezvedl verzi kodu
 
 -------------------
 
+priprav novou vetev highscore a prepni do ni. budu ted cht�t pripravit mo�nost, aby se score ukladalo na online a bylo sd�len�
+
+-------------------
+
+ted bych rad do hry implementoval moznost, aby se highscore ukladal online a kazdy videl sv� um�sten� v porovn�n� se zbytkem hracu
+
+-------------------
+
+ja na vercel uz nejakou db pou��v�m. pou��val jsem ji pro projekt hl�dacka a hledacka - jsou to slozky ve slozce -_web_-. muzes se tam pod�vat, jak� a jak pou��v�me
+
+-------------------
+
+ten druhy projekt se jmenuje menu
+
+-------------------
+
+ano. stačí mi jednoducha. chtěl bych tam jen Jmeno - Score. A to podle toho, zda hral jump / full Easy / hard. To jméno jeste bude potreba asi zaimplementovat do hry. Treba pri prvním zpusteni ze se to zeptá na jméno, které se pak ulozí do local. a nebo jak bys to navrhoval?
+
+-------------------
+
+začni
+
+-------------------
+
+upravíme vzhled game over stranky. localne ulozené recordy posuneme do okna do leve casti obrazovky. bude to Your High Scores. Bude to ve formatu Jump Easy, Jump Hard, Full Easy, Full Hard. aktuální score posunes dolů doprostred obrazovky. a online high das do okna do prave casti obrazovky. Bude se tam zobrazovat 15 nejlepších v tom modu, který zrovna hráč hrál a šestnácté jméno bude jeho high score a sedmnacte bude aktuální score, který uhrál. cili sestnácté a sedmnácté jméno vzdy uvidí ten kráč který hraje - sebe. své nej score pro ten mode a obtíznost a aktuální score pro mode a obtížnost. Z aktuálního score můzes odmazat coins a bags collected. není to důlezite. nech jen score a time
+
+-------------------
+
+dve veci. a) game over screen. okna pretekaji. udelej stranku vic responzivní, at se prizpůsobuje velikosti b) totez u stasrt screen. at se prizpůsobuje a nepreteka
+
+-------------------
+
+tohle bylo zpravne rozmístení, jen to pretekalo tam jak jsem to oznacil. ted to je pod sebou a to není dobre, protoze se tam nevejde cost score pod sebou. udelej to jak to bylo predtim na stranach, jen ty okne udelej, aby nepretekala
+
+-------------------
+
+a) mozna to tam není jen protoze jeste není napojené online score, ale mělo by tam pak být pořadí před jménem. a b) naprovo to ukazuje top score 70000 a v pravo your best pise 0. melo by to být propojene
+
+-------------------
+
+zitra to zase budeme ladit. udelej commit do main local i online. tim by se to melo dostat na vercel a zacit score ukazovat je to tak?
+
+-------------------
+
