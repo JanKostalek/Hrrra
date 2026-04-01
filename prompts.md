@@ -111,3 +111,11 @@ ted udelej commit local, online a priprav aab
 
 -------------------
 
+urcite. kdyz reknu, ze mi mas pripravit aab, tak to proto, ze to chci nahravat, cili VZDY priprav vse co je potreba pro nahrani na store a jelikoz nechci aby pri kazdem zpusteni hra hlasila, ze je nova verze, i kdyz nova verze není, tak zvedej vse co je potreba. tohle si zapis jako pravidlo
+
+-------------------
+
+mi to rika pri pokusu nahrat. vypada, ze jsi nezvedl verzi kodu
+
+-------------------
+

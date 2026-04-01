@@ -632,6 +632,6 @@ Rules:
 - 2026-04-01: Refined the between-level compact pre-run screen by shrinking the `Back` / `Admin` buttons, keeping them tight beside the level title, and turning the central start prompt into a much larger wide-tracked `S T A R T` label to reduce accidental taps on navigation.
 - 2026-04-01: Added app lifecycle audio handling so music and SFX stop when the game is pushed into the background or another app takes focus, instead of continuing to play until the Android task is fully closed.
 - 2026-04-01: Boosted the Game Over loop asset by another 100% directly in the WAV file so the end-screen music is much more prominent without touching the global mixer.
-
-
 - 2026-04-01: Added a shared READY... / RUN! launch transition for both the main start briefing and between-level start screens. Starting a run now keeps only the existing briefing background visible for two seconds, shows a scaling READY... then RUN! callout, and fades the pre-run music to silence during the transition so the handoff into gameplay music is much smoother.
+- 2026-04-01: Added a standing release workflow rule that any request to prepare an `.aab` now means a Store-upload-ready Android build: bump required versioning, keep all in-game/update metadata aligned with the shipped build, and sync Android packaged public assets so the installed app never falsely claims a newer Store version exists right away.
+- 2026-04-01: Bumped Android/store versioning to `versionCode 10` / `versionName 1.0.9` as the corrected upload after the previous bundle was left on an already-used version code.

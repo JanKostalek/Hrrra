@@ -44,6 +44,12 @@ This file captures standing project workflow conventions so they do not get lost
   - `version.json`
   - `android/app/src/main/assets/public/version-info.js`
   - `android/app/src/main/assets/public/version.json`
+- When the user asks to prepare an `.aab`, treat that as a request for a Store-upload-ready build.
+- Always bump whatever release versioning is required for Play upload, including at minimum:
+  - `versionCode`
+  - `versionName` when appropriate
+  - in-game/update metadata that must match the shipped build
+- Always ensure the Android packaged public assets contain the same version/update files as the web root so the app does not falsely report that a newer Store version exists immediately after install/update.
 
 ## Commits
 
