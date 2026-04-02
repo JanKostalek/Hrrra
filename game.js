@@ -178,18 +178,23 @@ Main tuning points:
   var PLAYER_ID_STORAGE_KEY = "hrrra_player_id_v1";
   var BADGE_STATS_STORAGE_KEY = "hrrra_badge_stats_v1";
   var WHATS_NEW_SEEN_VERSION_STORAGE_KEY = "hrrra_whats_new_seen_version_v1";
-  var ONLINE_HIGHSCORE_API_URL = (function () {
-    var origin = typeof window !== "undefined" && window.location && /^https?:$/i.test(window.location.protocol)
-      ? window.location.origin
-      : "https://hrrra.vercel.app";
-    return origin.replace(/\/$/, "") + "/api/highscore";
-  })();
-  var ONLINE_AUTH_API_URL = (function () {
-    var origin = typeof window !== "undefined" && window.location && /^https?:$/i.test(window.location.protocol)
-      ? window.location.origin
-      : "https://hrrra.vercel.app";
-    return origin.replace(/\/$/, "") + "/api/auth";
-  })();
+  function getOnlineApiBaseOrigin() {
+    var fallbackOrigin = "https://hrrra.vercel.app";
+    if (typeof window === "undefined" || !window.location) {
+      return fallbackOrigin;
+    }
+    if (!/^https?:$/i.test(window.location.protocol)) {
+      return fallbackOrigin;
+    }
+    var hostname = String(window.location.hostname || "").toLowerCase();
+    if (!hostname || hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]") {
+      return fallbackOrigin;
+    }
+    return window.location.origin || fallbackOrigin;
+  }
+
+  var ONLINE_HIGHSCORE_API_URL = getOnlineApiBaseOrigin().replace(/\/$/, "") + "/api/highscore";
+  var ONLINE_AUTH_API_URL = getOnlineApiBaseOrigin().replace(/\/$/, "") + "/api/auth";
   var LEVEL_COUNT = 5;
   var BADGE_CATEGORY_ORDER = ["Single Run", "All Runs", "Skills", "Lifetime Legends", "Discovery"];
   var BADGE_CATEGORY_COPY = {
