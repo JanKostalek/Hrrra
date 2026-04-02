@@ -83,6 +83,7 @@ Main tuning points:
   var playerNameTitleEl = document.getElementById("player-name-title");
   var playerNameCopyEl = document.getElementById("player-name-copy");
   var playerNameInputEl = document.getElementById("player-name-input");
+  var playerPasswordInputEl = document.getElementById("player-password-input");
   var playerNameErrorEl = document.getElementById("player-name-error");
   var playerNameSaveBtn = document.getElementById("player-name-save");
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
@@ -181,6 +182,12 @@ Main tuning points:
       ? window.location.origin
       : "https://hrrra.vercel.app";
     return origin.replace(/\/$/, "") + "/api/highscore";
+  })();
+  var ONLINE_AUTH_API_URL = (function () {
+    var origin = typeof window !== "undefined" && window.location && /^https?:$/i.test(window.location.protocol)
+      ? window.location.origin
+      : "https://hrrra.vercel.app";
+    return origin.replace(/\/$/, "") + "/api/auth";
   })();
   var LEVEL_COUNT = 5;
   var BADGE_CATEGORY_ORDER = ["Single Run", "All Runs", "Skills", "Lifetime Legends", "Discovery"];
@@ -608,10 +615,8 @@ Main tuning points:
       .slice(0, 48);
   }
 
-  function createPlayerId() {
-    return normalizePlayerId(
-      "p_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 10)
-    );
+  function isAuthenticatedPlayerId(value) {
+    return /^a_[a-z0-9_]+$/i.test(String(value || ""));
   }
 
   function readPlayerNameFromStorage() {
@@ -656,15 +661,6 @@ Main tuning points:
     }
   }
 
-  function ensurePlayerId() {
-    var existingId = readPlayerIdFromStorage();
-    if (existingId) {
-      return existingId;
-    }
-    var nextId = createPlayerId();
-    writePlayerIdToStorage(nextId);
-    return nextId;
-  }
   var sceneArt = {
     backgroundSky: null,
     backgroundForeground: null,
@@ -3253,6 +3249,7 @@ Main tuning points:
     playerName: "",
     playerId: "",
     playerNamePromptActive: false,
+    playerAuthPending: false,
     currentLevel: 1,
     highestLevelReached: 1,
     hardModeOverride: "default",
@@ -3745,7 +3742,11 @@ Main tuning points:
     loadGlobalAdminConfig();
     loadPlayerSkinProgress();
     state.playerName = readPlayerNameFromStorage();
-    state.playerId = ensurePlayerId();
+    state.playerId = readPlayerIdFromStorage();
+    if (!isAuthenticatedPlayerId(state.playerId)) {
+      state.playerId = "";
+      writePlayerIdToStorage("");
+    }
     resetOnlineHighscoreUi("");
     applyVisualThemeToUi();
     sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
@@ -4565,10 +4566,24 @@ Main tuning points:
 
   function syncPlayerNameUi() {
     if (preRunPlayerNameBtn) {
-      preRunPlayerNameBtn.textContent = state.playerName ? "Name: " + state.playerName : "Set Name";
+      preRunPlayerNameBtn.textContent = state.playerName ? "Name: " + state.playerName : "Sign In";
     }
     if (playerNameInputEl && playerNameNoticeEl && !playerNameNoticeEl.classList.contains("hidden")) {
       playerNameInputEl.value = state.playerName || "";
+    }
+  }
+
+  function setPlayerAuthPending(isPending) {
+    state.playerAuthPending = Boolean(isPending);
+    if (playerNameSaveBtn) {
+      playerNameSaveBtn.disabled = state.playerAuthPending;
+      playerNameSaveBtn.textContent = state.playerAuthPending ? "Please wait..." : "Continue";
+    }
+    if (playerNameInputEl) {
+      playerNameInputEl.disabled = state.playerAuthPending;
+    }
+    if (playerPasswordInputEl) {
+      playerPasswordInputEl.disabled = state.playerAuthPending;
     }
   }
 
@@ -4581,15 +4596,17 @@ Main tuning points:
     if (playerNameErrorEl) {
       playerNameErrorEl.classList.add("hidden");
     }
+    setPlayerAuthPending(false);
     if (state.playerNamePromptActive) {
       syncPlayerNameUi();
       if (playerNameTitleEl) {
-        playerNameTitleEl.textContent = state.playerName ? "Change Player Name" : "Choose Your Player Name";
+        playerNameTitleEl.textContent = state.playerName ? "Change / Sign In" : "Sign In";
       }
       if (playerNameCopyEl) {
-        playerNameCopyEl.textContent = state.playerName
-          ? "Update the name shown on the online leaderboard."
-          : "This name will be used for the online highscore leaderboard.";
+        playerNameCopyEl.textContent = "Enter name + password. If the name does not exist yet, it will be created automatically.";
+      }
+      if (playerPasswordInputEl) {
+        playerPasswordInputEl.value = "";
       }
       if (playerNameInputEl) {
         window.setTimeout(function () {
@@ -4603,10 +4620,39 @@ Main tuning points:
   }
 
   function maybeShowPlayerNamePromptIfMissing() {
-    if (state.playerName || state.updateNoticeActive || state.whatsNewActive) {
+    if ((state.playerName && isAuthenticatedPlayerId(state.playerId)) || state.updateNoticeActive || state.whatsNewActive) {
       return;
     }
     setPlayerNamePromptOpen(true);
+  }
+
+  function authenticatePlayer(name, password) {
+    if (typeof window.fetch !== "function") {
+      return Promise.reject(new Error("Authentication is unavailable on this device."));
+    }
+    return window.fetch(ONLINE_AUTH_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: name,
+        password: password
+      })
+    }).then(function (response) {
+      return response.json().catch(function () {
+        return {};
+      }).then(function (payload) {
+        if (!response.ok || !payload || !payload.ok) {
+          var message = payload && payload.error ? String(payload.error) : "Sign in failed.";
+          var code = payload && payload.code ? String(payload.code) : "";
+          var error = new Error(message);
+          error.code = code;
+          throw error;
+        }
+        return payload;
+      });
+    });
   }
 
   function getOnlineLeaderboardModeKey() {
@@ -4794,7 +4840,7 @@ Main tuning points:
     var requestUrl = ONLINE_HIGHSCORE_API_URL;
     var requestOptions;
 
-    if (scoreValue > 0 && state.playerName && state.playerId) {
+    if (scoreValue > 0 && state.playerName && isAuthenticatedPlayerId(state.playerId)) {
       requestOptions = {
         method: "POST",
         headers: {
@@ -5164,6 +5210,7 @@ Main tuning points:
         unlockAudioIfNeeded();
         playUiButtonSound();
         var normalizedName = normalizePlayerName(playerNameInputEl ? playerNameInputEl.value : "");
+        var rawPassword = String(playerPasswordInputEl ? playerPasswordInputEl.value : "").trim();
         if (!normalizedName) {
           if (playerNameErrorEl) {
             playerNameErrorEl.textContent = "Please enter a valid name.";
@@ -5171,15 +5218,58 @@ Main tuning points:
           }
           return;
         }
-        state.playerName = normalizedName;
-        state.playerId = ensurePlayerId();
-        writePlayerNameToStorage(normalizedName);
-        syncPlayerNameUi();
-        setPlayerNamePromptOpen(false);
+        if (!rawPassword) {
+          if (playerNameErrorEl) {
+            playerNameErrorEl.textContent = "Please enter a password.";
+            playerNameErrorEl.classList.remove("hidden");
+          }
+          return;
+        }
+        if (rawPassword.length < 4) {
+          if (playerNameErrorEl) {
+            playerNameErrorEl.textContent = "Password must have at least 4 characters.";
+            playerNameErrorEl.classList.remove("hidden");
+          }
+          return;
+        }
+        setPlayerAuthPending(true);
+        authenticatePlayer(normalizedName, rawPassword)
+          .then(function (payload) {
+            var accountId = normalizePlayerId(payload && payload.playerId);
+            if (!accountId) {
+              throw new Error("Invalid authentication response.");
+            }
+            state.playerName = normalizedName;
+            state.playerId = accountId;
+            writePlayerNameToStorage(normalizedName);
+            writePlayerIdToStorage(accountId);
+            syncPlayerNameUi();
+            setPlayerNamePromptOpen(false);
+          })
+          .catch(function (error) {
+            if (playerNameErrorEl) {
+              if (error && error.code === "WRONG_PASSWORD") {
+                playerNameErrorEl.textContent = "This player name already exists, but the password does not match. If this name is not yours, create a new one.";
+              } else {
+                playerNameErrorEl.textContent = (error && error.message) ? String(error.message) : "Sign in failed.";
+              }
+              playerNameErrorEl.classList.remove("hidden");
+            }
+          })
+          .finally(function () {
+            setPlayerAuthPending(false);
+          });
       });
     }
     if (playerNameInputEl) {
       playerNameInputEl.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" && playerNameSaveBtn) {
+          playerNameSaveBtn.click();
+        }
+      });
+    }
+    if (playerPasswordInputEl) {
+      playerPasswordInputEl.addEventListener("keydown", function (event) {
         if (event.key === "Enter" && playerNameSaveBtn) {
           playerNameSaveBtn.click();
         }

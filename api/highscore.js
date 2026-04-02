@@ -48,6 +48,10 @@ function getPlayerMetaKey(playerId) {
   return `hrrra:leaderboard:player:${playerId}`;
 }
 
+function getAuthAccountKey(playerId) {
+  return `hrrra:auth:account:${playerId}`;
+}
+
 function normalizeZsetEntries(raw) {
   if (!Array.isArray(raw) || !raw.length) {
     return [];
@@ -209,9 +213,21 @@ async function submitScore(board, playerId, name, score) {
   const topScoresKey = getBoardTopScoresKey(board);
   const metaKey = getPlayerMetaKey(playerId);
   const currentBest = normalizeScore(await kv.zscore(topPlayersKey, playerId));
+  let finalName = normalizePlayerName(name);
+
+  if (!finalName) {
+    try {
+      finalName = normalizePlayerName(await kv.hget(getAuthAccountKey(playerId), "name"));
+    } catch (error) {
+      finalName = "";
+    }
+  }
+  if (!finalName) {
+    finalName = "Player";
+  }
 
   await kv.hset(metaKey, {
-    name,
+    name: finalName,
     updatedAt: String(Date.now()),
   });
 
@@ -273,7 +289,7 @@ module.exports = async function handler(req, res) {
       const name = normalizePlayerName(body.name);
       const score = normalizeScore(body.score);
 
-      if (!board || !playerId || !name) {
+      if (!board || !playerId) {
         return res.status(400).json({ error: "Invalid payload." });
       }
 

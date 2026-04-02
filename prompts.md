@@ -180,3 +180,99 @@ takto to necham?
 
 
 dve veci. Tady je videt, ze moje score se propíse do top players v porádku. je tam jmené a score, ale v top scores se uloží místo jména jen "player".  a zároven v tom okne prohod your best a current run. srovnej font v top players a scores - to jump easy je pokazde jinak. Udelej ho mensí a vycentruj na rádek. a nadpisy tech oken "Online Top Scores" a "Online Top Players" b) ready run stránka má nevím proc možnost scrollovat, i kdyz tam nic není. Udelej maximální velikost podle toho pozadí. tam kde se zacne opakovat, tam to zasekni - znázorneno carou . Pokud bude potreba mensí, tak at je responzivní, ale at se nezvetšuje do té míry, že tam budou posouvace
+
+-------------------
+
+
+tak implementuj, jak jsme psali. jen bez rate limit na pokusy a lockout
+
+-------------------
+
+
+bezepecne
+
+-------------------
+
+
+ono to bude v souboru s promptama
+
+-------------------
+
+
+cili mužu zkusit?
+
+-------------------
+
+
+Jen odpovídej. Funguje. super. ted mne napada, kdyz nový hrác zpustí hru, zeptá se ho to na jméno, vybere si už nejaké, které je - hra to nijak predpokládám vuci online scores neoveruje, tak dva ruzní hráci mužou mít stejné jména a budou se plést jejich score? Vidím, že kdyz si v pubehu hry zmením jméno, tak se zmení jnéno i u všech online score a overil jsem si to - ale jen na online (web vercel - nikoliv android a o ten mi hlavne jde. protože vercel nebude verejny. ten mam jen na testovaní) Kdyz si ja na svém google uctu vyberu jmené a jiný tester na svém si vybere stejné. tak se to bude tlouct v online scores, je to tak?
+
+-------------------
+
+
+Jde udelat, aby dva hráci nemohli mít stejné jméno? nejaké overení, že už v databázi není?
+
+-------------------
+
+
+pokud se nepletu, nikdo jiný si ho vzít nemuže, protože ve chvíli kdy uz se jednou zapíse do databáze, tak mu ho to nedovolí si vzít. ale kdyz budu na jiném zarízení, které mne vyzve ke jménu, tak ani já si svoje uz vzít nemužu, protože jsem si ho zabral na jiném zarízení
+
+-------------------
+
+
+ta varianta tag se mi nelíbí. Lidi mají rády svá jména a ten tag je zošklivý. jak složitý je prihlášení pres google ID jako overení identity? Pak by si to pamatovalo moje jméno z jiného zarízení a mohl bych si ho i dal menit..
+
+-------------------
+
+
+myslim ze hashovat ano, aby nesly odchytit uplne jednoduse, ale pro android neni https nutny (tusím), webova verze není treba uplne resit - andorid bude primar. Rate limit na pokusy taky není treba rešit. nemyslím, že to nekdo bude hackovat. lockout neni nutny.  a k tomu UX jmeno neexistuje -> rovnou vytvorit. nic nenabízet. proces bude vzdy stejny vyzve ke Jménu, vyzve k heslu. a pak bude to rozdelení. neexistuje jméno automaticky vytvorí. ty ostatní varianty jsou jak pises. je to takto ok?
+
+-------------------
+
+
+Ok, tak tedy musíme i https, je to tak?
+
+-------------------
+
+
+Ok. vytvor ted commit do main, a pak branch authtentisation
+
+-------------------
+
+
+jen odpoved - dokážeš z databáze vymazat soucasné score? abychom zacali s cistým listem?
+
+-------------------
+
+
+bezepecne
+
+-------------------
+
+
+co k tomu potrebujes a kde to zjistim? pripadne nedokazes si to nejak zjistit sam?
+
+-------------------
+
+
+kde? co?
+
+-------------------
+
+
+[REDACTED_KV_URL] ; [REDACTED_KV_TOKEN] ; prípadne je nekam ulož, nekam, co se neposílá do online. Pomocný soubor?
+
+-------------------
+
+
+ono to bude v souboru s promptama
+
+-------------------
+
+
+cili mužu zkusit?
+
+-------------------
+
+
+jen odpovídej. dokážeš z databáze vymazat soucasné score? abychom zacali s cistým listem?
+

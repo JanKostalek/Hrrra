@@ -40,17 +40,21 @@
         </div>
       </div>
     </div>
-    <div id="player-name-notice" class="update-notice hidden" aria-label="Choose player name">
+    <div id="player-name-notice" class="update-notice hidden" aria-label="Sign in">
       <div class="update-notice-card player-name-card">
-        <h3 id="player-name-title">Choose Your Player Name</h3>
-        <p id="player-name-copy">This name will be used for the online highscore leaderboard.</p>
+        <h3 id="player-name-title">Sign In</h3>
+        <p id="player-name-copy">Enter your player name and password. New names are created automatically.</p>
         <label class="player-name-field" for="player-name-input">
           <span>Player Name</span>
           <input id="player-name-input" type="text" maxlength="16" autocomplete="nickname" />
         </label>
+        <label class="player-name-field" for="player-password-input">
+          <span>Password</span>
+          <input id="player-password-input" type="password" maxlength="64" autocomplete="current-password" />
+        </label>
         <p id="player-name-error" class="player-name-error hidden">Please enter a valid name.</p>
         <div class="update-notice-actions">
-          <button id="player-name-save" type="button">Save Name</button>
+          <button id="player-name-save" type="button">Continue</button>
         </div>
       </div>
     </div>
@@ -125,7 +129,7 @@
                 <span id="pre-run-hard-lock" class="pre-run-lock-note hidden"></span>
               </button>
               <button id="pre-run-badges-btn" class="pre-run-badges-btn" aria-label="Open badges overview">Badges</button>
-              <button id="pre-run-player-name-btn" class="pre-run-player-name-btn" aria-label="Set player name">Set Name</button>
+              <button id="pre-run-player-name-btn" class="pre-run-player-name-btn" aria-label="Open sign in">Sign In</button>
             </div>
             <button id="pre-run-full-btn" class="pre-run-mode-card" aria-label="Choose Full Mode">
               <span class="pre-run-mode-title">Full Mode</span>
