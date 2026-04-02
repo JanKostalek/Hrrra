@@ -50,9 +50,9 @@ Main tuning points:
   var gameOverEl = document.getElementById("game-over");
   var finalScoreEl = document.getElementById("final-score");
   var finalRuntimeEl = document.getElementById("final-runtime");
-  var finalCoinsEl = document.getElementById("final-coins");
-  var finalBagsEl = document.getElementById("final-bags");
   var finalHighscoresEl = document.getElementById("final-highscores");
+  var finalTopScoresStatusEl = document.getElementById("final-top-scores-status");
+  var finalTopScoresListEl = document.getElementById("final-top-scores-list");
   var finalOnlineHighscoreEl = document.getElementById("final-online-highscore");
   var finalOnlineStatusEl = document.getElementById("final-online-status");
   var finalOnlineListEl = document.getElementById("final-online-list");
@@ -3310,8 +3310,10 @@ Main tuning points:
     onlineHighscore: {
       loading: false,
       message: "",
-      entries: [],
-      rank: null,
+      topScores: [],
+      topPlayers: [],
+      bestPlayerRank: null,
+      bestScoreRank: null,
       currentRunRank: null,
       bestScore: 0,
       requestId: 0
@@ -4619,26 +4621,41 @@ Main tuning points:
     var localBestScore = readMaxScoreFromStorage(state.gameMode || 2, state.gameDifficulty || "easy");
     state.onlineHighscore.loading = false;
     state.onlineHighscore.message = typeof message === "string" ? message : "";
-    state.onlineHighscore.entries = [];
-    state.onlineHighscore.rank = null;
+    state.onlineHighscore.topScores = [];
+    state.onlineHighscore.topPlayers = [];
+    state.onlineHighscore.bestPlayerRank = null;
+    state.onlineHighscore.bestScoreRank = null;
     state.onlineHighscore.currentRunRank = null;
     state.onlineHighscore.bestScore = Math.max(0, Math.floor(Number(localBestScore) || 0));
     renderOnlineHighscoreUi();
   }
 
   function renderOnlineHighscoreUi() {
-    if (!finalOnlineHighscoreEl || !finalOnlineStatusEl || !finalOnlineListEl) {
+    if (
+      !finalHighscoresEl ||
+      !finalTopScoresStatusEl ||
+      !finalTopScoresListEl ||
+      !finalOnlineHighscoreEl ||
+      !finalOnlineStatusEl ||
+      !finalOnlineListEl
+    ) {
       return;
     }
+    finalHighscoresEl.classList.toggle("hidden", false);
     finalOnlineHighscoreEl.classList.toggle("hidden", false);
+    var boardLabel = getOnlineLeaderboardLabel();
     if (state.onlineHighscore.loading) {
-      finalOnlineStatusEl.textContent = "Loading " + getOnlineLeaderboardLabel() + " leaderboard...";
+      finalTopScoresStatusEl.textContent = "Loading " + boardLabel + " top scores...";
+      finalOnlineStatusEl.textContent = "Loading " + boardLabel + " top players...";
     } else if (state.onlineHighscore.message) {
+      finalTopScoresStatusEl.textContent = state.onlineHighscore.message;
       finalOnlineStatusEl.textContent = state.onlineHighscore.message;
     } else {
-      finalOnlineStatusEl.textContent = getOnlineLeaderboardLabel() + " leaderboard";
+      finalTopScoresStatusEl.textContent = boardLabel;
+      finalOnlineStatusEl.textContent = boardLabel;
     }
-    var rows = state.onlineHighscore.entries.slice(0, 15).map(function (entry, index) {
+
+    var topScoreRows = state.onlineHighscore.topScores.slice(0, 15).map(function (entry, index) {
       return {
         label: "#" + (index + 1) + " " + entry.name,
         score: Number(entry.score || 0),
@@ -4655,20 +4672,20 @@ Main tuning points:
         )
       )
     );
-    var bestRankPrefix = state.onlineHighscore.rank ? "#" + state.onlineHighscore.rank + " " : "#? ";
+    var bestRankPrefix = state.onlineHighscore.bestScoreRank ? "#" + state.onlineHighscore.bestScoreRank + " " : "#? ";
     var currentRunRankPrefix = state.onlineHighscore.currentRunRank ? "#" + state.onlineHighscore.currentRunRank + " " : "#? ";
-    rows.push({
+    topScoreRows.push({
       label: bestRankPrefix + playerDisplayName + " (Your Best)",
       score: bestScoreValue,
       className: "is-player-row"
     });
-    rows.push({
+    topScoreRows.push({
       label: currentRunRankPrefix + playerDisplayName + " (Current Run)",
       score: Math.max(0, Math.floor(Number(state.score) || 0)),
       className: "is-current-run-row"
     });
 
-    finalOnlineListEl.innerHTML = rows.map(function (entry) {
+    finalTopScoresListEl.innerHTML = topScoreRows.map(function (entry) {
       var classAttribute = entry.className ? ' class="' + entry.className + '"' : "";
       return (
         "<li" +
@@ -4680,6 +4697,21 @@ Main tuning points:
         "</strong></li>"
       );
     }).join("");
+
+    finalOnlineListEl.innerHTML = state.onlineHighscore.topPlayers.slice(0, 15).map(function (entry, index) {
+      var playerRowClass = state.playerName && entry.name === state.playerName ? ' class="is-player-row"' : "";
+      return (
+        "<li" +
+        playerRowClass +
+        "><span>#" +
+        (index + 1) +
+        " " +
+        entry.name +
+        "</span><strong>" +
+        Number(entry.score || 0).toLocaleString("en-US") +
+        "</strong></li>"
+      );
+    }).join("");
   }
 
   function applyOnlineHighscorePayload(data, requestId) {
@@ -4687,8 +4719,20 @@ Main tuning points:
       return;
     }
 
-    var entries = Array.isArray(data && data.leaderboard)
-      ? data.leaderboard
+    var topScores = Array.isArray(data && data.topScores)
+      ? data.topScores
+          .map(function (entry) {
+            return {
+              name: normalizePlayerName(entry && entry.name) || "Player",
+              score: Math.max(0, Math.floor(Number(entry && entry.score) || 0))
+            };
+          })
+          .filter(function (entry) {
+            return entry.score >= 0;
+          })
+      : [];
+    var topPlayers = Array.isArray(data && data.topPlayers)
+      ? data.topPlayers
           .map(function (entry) {
             return {
               name: normalizePlayerName(entry && entry.name) || "Player",
@@ -4701,12 +4745,16 @@ Main tuning points:
       : [];
 
     state.onlineHighscore.loading = false;
-    state.onlineHighscore.message = entries.length
+    state.onlineHighscore.message = topScores.length || topPlayers.length
       ? ""
       : "Be the first player to post a score in " + getOnlineLeaderboardLabel() + ".";
-    state.onlineHighscore.entries = entries;
-    state.onlineHighscore.rank = Number.isFinite(Number(data && data.rank))
-      ? Math.max(1, Math.floor(Number(data.rank)))
+    state.onlineHighscore.topScores = topScores;
+    state.onlineHighscore.topPlayers = topPlayers;
+    state.onlineHighscore.bestPlayerRank = Number.isFinite(Number(data && data.bestPlayerRank))
+      ? Math.max(1, Math.floor(Number(data.bestPlayerRank)))
+      : null;
+    state.onlineHighscore.bestScoreRank = Number.isFinite(Number(data && data.bestScoreRank))
+      ? Math.max(1, Math.floor(Number(data.bestScoreRank)))
       : null;
     state.onlineHighscore.currentRunRank = Number.isFinite(Number(data && data.currentScoreRank))
       ? Math.max(1, Math.floor(Number(data.currentScoreRank)))
@@ -4733,8 +4781,10 @@ Main tuning points:
     var requestId = state.onlineHighscore.requestId;
     state.onlineHighscore.loading = true;
     state.onlineHighscore.message = "";
-    state.onlineHighscore.entries = [];
-    state.onlineHighscore.rank = null;
+    state.onlineHighscore.topScores = [];
+    state.onlineHighscore.topPlayers = [];
+    state.onlineHighscore.bestPlayerRank = null;
+    state.onlineHighscore.bestScoreRank = null;
     state.onlineHighscore.currentRunRank = null;
     state.onlineHighscore.bestScore = Math.max(0, Math.floor(Number(readMaxScoreFromStorage(state.gameMode, state.gameDifficulty)) || 0));
     renderOnlineHighscoreUi();
@@ -5050,21 +5100,6 @@ Main tuning points:
     }
     if (finalRuntimeEl) {
       finalRuntimeEl.textContent = "Run Time: " + state.runTimeSeconds.toFixed(1) + "s";
-    }
-    if (finalCoinsEl) {
-      finalCoinsEl.textContent = "Coins collected: " + state.collectedCoins;
-    }
-    if (finalBagsEl) {
-      finalBagsEl.textContent = "Bags collected: " + state.collectedBags;
-    }
-    if (finalHighscoresEl) {
-      finalHighscoresEl.innerHTML = [
-        "<h2>Your High Scores</h2>",
-        "<p>Jump Easy: " + readMaxScoreFromStorage(2, "easy").toLocaleString("en-US") + "</p>",
-        "<p>Jump Hard: " + readMaxScoreFromStorage(2, "hard").toLocaleString("en-US") + "</p>",
-        "<p>Full Easy: " + readMaxScoreFromStorage(1, "easy").toLocaleString("en-US") + "</p>",
-        "<p>Full Hard: " + readMaxScoreFromStorage(1, "hard").toLocaleString("en-US") + "</p>"
-      ].join("");
     }
     loadOnlineHighscoreForCurrentBoard();
   }

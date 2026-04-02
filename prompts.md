@@ -163,3 +163,15 @@ zitra to zase budeme ladit. udelej commit do main local i online. tim by se to m
 
 -------------------
 
+pokračuj
+
+-------------------
+
+takto to necham? 
+
+-------------------
+
+[image-only prompt: Game Over target layout reference]
+
+-------------------
+

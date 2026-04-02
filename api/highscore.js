@@ -2,6 +2,7 @@ const { kv } = require("@vercel/kv");
 
 const ALLOWED_BOARDS = new Set(["jump_easy", "jump_hard", "full_easy", "full_hard"]);
 const LEADERBOARD_LIMIT = 15;
+const MAX_TOP_SCORE_RUNS = 2000;
 
 function setCorsHeaders(res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -37,6 +38,10 @@ function normalizeScore(value) {
 
 function getBoardScoresKey(board) {
   return `hrrra:leaderboard:${board}:scores`;
+}
+
+function getBoardTopScoresKey(board) {
+  return `hrrra:leaderboard:${board}:top-scores`;
 }
 
 function getPlayerMetaKey(playerId) {
@@ -81,50 +86,107 @@ function computeRankForScore(entries, score) {
   return higherCount + 1;
 }
 
+function getRunMemberPlayerId(member) {
+  const raw = String(member || "");
+  const firstSeparator = raw.indexOf("~");
+  const candidate = firstSeparator >= 0 ? raw.slice(0, firstSeparator) : raw;
+  return normalizePlayerId(candidate);
+}
+
+function createRunMember(playerId) {
+  const now = Date.now();
+  const random = Math.floor(Math.random() * 1000000000);
+  return `${playerId}~${now}~${random}`;
+}
+
+async function readNamesMap(playerIds) {
+  const uniqueIds = Array.from(
+    new Set(
+      (Array.isArray(playerIds) ? playerIds : [])
+        .map((id) => normalizePlayerId(id))
+        .filter(Boolean)
+    )
+  );
+  const names = new Map();
+  await Promise.all(
+    uniqueIds.map(async (id) => {
+      try {
+        const raw = await kv.hget(getPlayerMetaKey(id), "name");
+        names.set(id, normalizePlayerName(raw) || "Player");
+      } catch (error) {
+        names.set(id, "Player");
+      }
+    })
+  );
+  return names;
+}
+
 async function readLeaderboard(board, playerId, currentScore = 0) {
-  const scoresKey = getBoardScoresKey(board);
-  const rawEntries = await kv.zrange(scoresKey, 0, LEADERBOARD_LIMIT - 1, {
+  const topPlayersKey = getBoardScoresKey(board);
+  const topScoresKey = getBoardTopScoresKey(board);
+
+  const topPlayersRaw = await kv.zrange(topPlayersKey, 0, LEADERBOARD_LIMIT - 1, {
     rev: true,
     withScores: true,
   });
-  const parsedEntries = normalizeZsetEntries(rawEntries);
-  const allEntries = normalizeZsetEntries(
-    await kv.zrange(scoresKey, 0, -1, {
+  const topScoresRaw = await kv.zrange(topScoresKey, 0, LEADERBOARD_LIMIT - 1, {
+    rev: true,
+    withScores: true,
+  });
+  const allTopScoresRaw = normalizeZsetEntries(
+    await kv.zrange(topScoresKey, 0, -1, {
       rev: true,
       withScores: true,
     })
   );
 
-  const leaderboard = await Promise.all(
-    parsedEntries.map(async (entry) => {
-      let displayName = "";
-      try {
-        displayName = normalizePlayerName(await kv.hget(getPlayerMetaKey(entry.playerId), "name"));
-      } catch (error) {
-        displayName = "";
-      }
-      return {
-        name: displayName || "Player",
-        score: entry.score,
-      };
-    })
+  const topPlayersParsed = normalizeZsetEntries(topPlayersRaw);
+  const topScoresParsed = normalizeZsetEntries(topScoresRaw).map((entry) => ({
+    member: String(entry.playerId || ""),
+    playerId: getRunMemberPlayerId(entry.playerId),
+    score: normalizeScore(entry.score),
+  }));
+  const allTopScores = allTopScoresRaw.map((entry) => ({
+    member: String(entry.playerId || ""),
+    playerId: getRunMemberPlayerId(entry.playerId),
+    score: normalizeScore(entry.score),
+  }));
+
+  const namesMap = await readNamesMap(
+    topPlayersParsed
+      .map((entry) => entry.playerId)
+      .concat(topScoresParsed.map((entry) => entry.playerId))
+      .concat(playerId ? [playerId] : [])
   );
 
-  const rankIndex = playerId ? await kv.zrevrank(scoresKey, playerId) : null;
-  const bestScore = playerId ? normalizeScore(await kv.zscore(scoresKey, playerId)) : 0;
+  const topPlayers = topPlayersParsed.map((entry) => ({
+    name: namesMap.get(entry.playerId) || "Player",
+    score: entry.score,
+  }));
+
+  const topScores = topScoresParsed.map((entry) => ({
+    name: namesMap.get(entry.playerId) || "Player",
+    score: entry.score,
+  }));
+
+  const bestPlayerRankIndex = playerId ? await kv.zrevrank(topPlayersKey, playerId) : null;
+  const bestScore = playerId ? normalizeScore(await kv.zscore(topPlayersKey, playerId)) : 0;
 
   return {
-    leaderboard,
-    rank: typeof rankIndex === "number" ? rankIndex + 1 : null,
+    topScores,
+    topPlayers,
+    bestPlayerRank: typeof bestPlayerRankIndex === "number" ? bestPlayerRankIndex + 1 : null,
+    bestScoreRank: allTopScores.length ? computeRankForScore(allTopScores, bestScore) : null,
     bestScore,
-    currentScoreRank: computeRankForScore(allEntries, currentScore),
+    currentScoreRank: allTopScores.length ? computeRankForScore(allTopScores, currentScore) : null,
   };
 }
 
 async function submitScore(board, playerId, name, score) {
-  const scoresKey = getBoardScoresKey(board);
+  const topPlayersKey = getBoardScoresKey(board);
+  const topScoresKey = getBoardTopScoresKey(board);
   const metaKey = getPlayerMetaKey(playerId);
-  const currentBest = normalizeScore(await kv.zscore(scoresKey, playerId));
+  const currentBest = normalizeScore(await kv.zscore(topPlayersKey, playerId));
 
   await kv.hset(metaKey, {
     name,
@@ -132,10 +194,23 @@ async function submitScore(board, playerId, name, score) {
   });
 
   if (score > currentBest) {
-    await kv.zadd(scoresKey, {
+    await kv.zadd(topPlayersKey, {
       score,
       member: playerId,
     });
+  }
+
+  if (score > 0) {
+    await kv.zadd(topScoresKey, {
+      score,
+      member: createRunMember(playerId),
+    });
+    try {
+      const runCount = Number(await kv.zcard(topScoresKey)) || 0;
+      if (runCount > MAX_TOP_SCORE_RUNS) {
+        await kv.zremrangebyrank(topScoresKey, 0, runCount - MAX_TOP_SCORE_RUNS - 1);
+      }
+    } catch (error) {}
   }
 
   return readLeaderboard(board, playerId, score);
@@ -160,8 +235,10 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({
         ok: true,
         board,
-        leaderboard: result.leaderboard,
-        rank: result.rank,
+        topScores: result.topScores,
+        topPlayers: result.topPlayers,
+        bestPlayerRank: result.bestPlayerRank,
+        bestScoreRank: result.bestScoreRank,
         bestScore: result.bestScore,
         currentScoreRank: result.currentScoreRank,
       });
@@ -182,8 +259,10 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({
         ok: true,
         board,
-        leaderboard: result.leaderboard,
-        rank: result.rank,
+        topScores: result.topScores,
+        topPlayers: result.topPlayers,
+        bestPlayerRank: result.bestPlayerRank,
+        bestScoreRank: result.bestScoreRank,
         bestScore: result.bestScore,
         currentScoreRank: result.currentScoreRank,
       });

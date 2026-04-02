@@ -1226,3 +1226,8 @@ Every gameplay-related change must be added here with date and short reason.
 - version tag (increment patch: `v0.1.x`)
 - what changed
 - why (1 sentence max)
+
+### v0.1.197 - Split online leaderboard into Top Scores vs Top Players (2026-04-02)
+- `Game Over` now reads two online datasets for the active board: `Top Scores` (best run entries, duplicate players allowed) and `Top Players` (one best score per player).
+- API now stores run-based entries in a dedicated board key and keeps per-player best values in the existing player leaderboard key, including separate `bestScoreRank` and `currentScoreRank` outputs.
+- Why: supports both competitive score-chasing and clear per-player standings without rank conflicts from mixed leaderboard semantics.
