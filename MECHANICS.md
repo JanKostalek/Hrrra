@@ -1107,7 +1107,9 @@ Every gameplay-related change must be added here with date and short reason.
 ### v0.1.179 - Added skin discovery and unlock progression (2026-03-25)
 - Players now start with only `Skin01` unlocked and can choose unlocked skins directly on the pre-run briefing screen instead of in admin.
 - Each new run randomly schedules one still-locked skin (`Skin02` or `Skin03`) to appear once in either `Level 3` or `Level 4` at a random score threshold inside that level's score range.
-- The skin pickup appears only on the lowest elevator, rides upward with it, and disappears for the rest of the run whether the player collects it or misses it.
+- The skin pickup appears on the right-edge platform that is currently entering the screen after its random score threshold is reached.
+- If the right screen edge is not currently on a platform, spawn waits until a platform appears there.
+- The pickup disappears for the rest of the run whether the player collects it or misses it.
 - Unlocking a skin makes it permanently selectable in later runs; locked skins are shown as silhouette/outline cards until found.
 - Why: turns extra skins into collectible progression rewards instead of pure out-of-game settings.
 

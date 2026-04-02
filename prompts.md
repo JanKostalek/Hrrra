@@ -1,42 +1,42 @@
 # Prompts
 
-připrav soubor, kam budes kopírovat všechny moje prompty. Neco jako prompts.md - vzdy budou oddeleny odřádkováním ------------------- a dalším odřádkováním
+připrav soubor, kam budeš kopírovat všechny moje prompty. Něco jako `prompts.md` - vždy budou odděleny odřádkováním `-------------------` a dalším odřádkováním
 
 -------------------
 
-souhlasím s doporucením na wav
+souhlasím s doporučením na wav
 
 -------------------
 
-souhlasím. dělej to tak aby to bylo co nejlepsí pro budoucí změny a pro testovaní
+souhlasím. dělej to tak, aby to bylo co nejlepší pro budoucí změny a pro testování
 
 -------------------
 
-jeste tuto změnu uloz do changes, aby bylo jasné, ře toto máš vždy když něco napíšu automaticky dělat. abys to věděl, až ukončíme a znovu začneme relaci
+ještě tuto změnu ulož do `changes`, aby bylo jasné, že toto máš vždy, když něco napíšu, automaticky dělat. Abys to věděl, až ukončíme a znovu začneme relaci
 
 -------------------
 
-Ted chci začít pracovat na zvukové strance. Budeme mít hudbu na pozadí pro každou úroven. bude to opakující se smyčka. Každá úroven bude mít vlastní hudební linku. V každé úrovni bude několik věcí, kdy se bude ozývat zvuk. třeba sebrání mince, coin bagu, mystery coin a vseho dalšího. Bude tam zvuk pro Jump, death. budou zvuky pro jednotlivé stranky. zvuk pro objevování se informace o získaném badge etc. Bude ideální v administraci udělat sekci sounds, kde se bude vše moc doladovat. bude klasicky kolapsable, jako ostatní sekce. V prvním kroku mi potvrd, ze rozumíš co chci, navrhni případně co si o tom myslíš a jako to udělat třeba i jinak nez navrhuju, ale nic zatím neimplementuj. to necháme na krok 2
+Teď chci začít pracovat na zvukové stránce. Budeme mít hudbu na pozadí pro každou úroveň. Bude to opakující se smyčka. Každá úroveň bude mít vlastní hudební linku. V každé úrovni bude několik věcí, kdy se bude ozývat zvuk. Třeba sebrání mince, coin bagu, mystery coin a všeho dalšího. Bude tam zvuk pro Jump, death. Budou zvuky pro jednotlivé stránky. Zvuk pro objevování se informace o získaném badge etc. Bude ideální v administraci udělat sekci sounds, kde se bude vše moct doladovat. Bude klasicky collapsable, jako ostatní sekce. V prvním kroku mi potvrď, že rozumíš co chci, navrhni případně co si o tom myslíš a jak to udělat třeba i jinak než navrhuju, ale nic zatím neimplementuj. To necháme na krok 2
 
 -------------------
 
-souhlasím s tím co říkás. v administraci bych v budoucnu ale chtěl, aby tam pro kazdou úroven byla sekce, kde bude videt, který zvůk se na kterou akci přehrává. čili každý level by měl mít svoji složku - neco jako assets/sound/levelxx nebo ve slozce levelxx pridat slozku sound. A to proto, abych v budoucnu mohl jednoduše ty zvuky zaměnovat. je to srozumitelné?
+souhlasím s tím co říkáš. V administraci bych v budoucnu ale chtěl, aby tam pro každou úroveň byla sekce, kde bude vidět, který zvuk se na kterou akci přehrává. Čili každý level by měl mít svoji složku - něco jako `assets/sound/levelxx` nebo ve složce `levelxx` přidat složku `sound`. A to proto, abych v budoucnu mohl jednoduše ty zvuky zaměňovat. Je to srozumitelné?
 
 -------------------
 
-naprosto se vsím souhlasím. ted ale udelej commit do main - local i online a pak vytvoř novou branch sfx ve které pak budeme pokračovat
+naprosto se vším souhlasím. Teď ale udělej commit do `main` - local i online a pak vytvoř novou branch `sfx`, ve které pak budeme pokračovat
 
 -------------------
 
-tak a ted můžeš začít s implementací tak jak jsi ji navrhoval. Pokud máš ještě nějaký dotaz a nebo návrh, tak mi ho řekni. Ještě mi navrhni, jmennou konvenci pro užívané zvuky. vytvoř rovnou potřebné složky a ideálně prázdné placeholder zvuky (v jakém budou formatu? wav? mp3) a já pak ty placeholder / prazdné soubory nahrazovat reálným obsahem. je to tak v pořádku? Abychom postupovali postupně a neutopili se v tom, navrhuji začít nejdřív pro Level1 a pak to můžeme multiplicovat pro ostatní
+tak a teď můžeš začít s implementací tak, jak jsi ji navrhoval. Pokud máš ještě nějaký dotaz anebo návrh, tak mi ho řekni. Ještě mi navrhni jmennou konvenci pro užívané zvuky. Vytvoř rovnou potřebné složky a ideálně prázdné placeholder zvuky. V jakém budou formátu? `wav`? `mp3`? A já pak ty placeholder / prázdné soubory nahrazovat reálným obsahem. Je to tak v pořádku? Abychom postupovali postupně a neutopili se v tom, navrhuji začít nejdřív pro `Level1` a pak to můžeme multiplikovat pro ostatní
 
 -------------------
 
-a) kdyz nyní pustím hru na lokale, měl bych slyšet nějaké placeholder zvuky nebo jsou zatim jen "prázdné" čili tiché a uslyším az je zaměním. plus přidej zvuk pro ztrátu štítu. a hudba na screeny před začátkem hry jsou? potom je potreba nějaký zvuk mezi úrovněmi. na obrazovce, která říká, že začne další level. a pak gameover obrazovka by měla mít nějaký vlastní zvuk loop
+a) když nyní pustím hru na lokale, měl bych slyšet nějaké placeholder zvuky nebo jsou zatím jen "prázdné", čili tiché a uslyším až je zaměním? Plus přidej zvuk pro ztrátu štítu. A hudba na screeny před začátkem hry jsou? Potom je potřeba nějaký zvuk mezi úrovněmi. Na obrazovce, která říká, že začne další level. A pak `Game Over` obrazovka by měla mít nějaký vlastní zvuk loop
 
 -------------------
 
-a jeste připrav soubor sound.md kam popíšeš, přikteré akci / události / menu je přehranýá který zvuk
+a ještě připrav soubor `sound.md`, kam popíšeš, při které akci / události / menu je přehrávaný který zvuk
 
 -------------------
 
@@ -44,98 +44,99 @@ máme připravený zvuk pro ztrátu jednoho života ve hře?
 
 -------------------
 
-ano,připrav to
+ano, připrav to
 
 -------------------
 
-Mužeš ověřit. nahral jsem vlastní jump a coin zvuky. a prijde mi, ze kdzy zkočím, tak zvuk začne o zlomek pozdeji nez postavička začne skákat. stejne tak při sebrání mince. mince zmizi, ale zvuk se ozve o chlup pozdeji. můžeš ověřit, zda to je v kodu a nebo zda ty zvuky mají prázdné místo na začátku, které to způsobují?
+Můžeš ověřit? Nahrál jsem vlastní jump a coin zvuky a přijde mi, že když zkočím, tak zvuk začne o zlomek později než postavička začne skákat. Stejně tak při sebrání mince. Mince zmizí, ale zvuk se ozve o chlup později. Můžeš ověřit, zda to je v kódu a nebo zda ty zvuky mají prázdné místo na začátku, které to způsobují?
 
 -------------------
 
-proved to. a nebude lepsi to udelat u vseho?
+proveď to. A nebude lepší to udělat u všeho?
 
 -------------------
 
-dve veci, kdyz postavička ztratí poslední život - objevuje se rip a prehrava se death zvuk, tak v okamzik, kdy prijdu o zivot, musí prestat hrát background b) nahral jsem badge reveal zvuk a game over loop ale kdyz jdu do sekce odznaků ani kdyz se objevi game over screen, tak se loopy neprhravaji. nejsem si jisty, zda tonení tím, ze jsem prejmenoval mp3 soubor na wav
+dvě věci, když postavička ztratí poslední život - objevuje se `RIP` a přehrává se death zvuk, tak v okamžiku, kdy přijdu o život, musí přestat hrát background. b) Nahrál jsem `badge reveal` zvuk a `game over loop`, ale když jdu do sekce odznaků ani když se objeví `Game Over` screen, tak se loopy nepřehrávají. Nejsem si jistý, zda to není tím, že jsem přejmenoval mp3 soubor na wav
 
 -------------------
 
-prejmenoval jsem soubor zpet na mp3 (ui-game-over-loop.mp3). dokážeš mi jej zkonvertovat na wav?
+přejmenoval jsem soubor zpět na mp3 (`ui-game-over-loop.mp3`). Dokážeš mi jej zkonvertovat na wav?
 
 -------------------
 
-ano, preved. protoze ted mi jeste ve hre nefunguje. 
+ano, převeď, protože teď mi ještě ve hře nefunguje
 
 -------------------
 
-u gameover jsem zjistil, proc jsem nic neslysel. byl neskutečně ztlumeny. je sam o sobe potichu. kdyz nastavim zvuk, aby byl prijemny, tak tento uz není vůbec slyšet. kdyz dam vse na plno, neda se standardní zvuky vydrzet, ale gameover je slyset. můžes gameover zvednout natvrdo hlasitost? v tom wav souboru? bez zasahu do kodu? nebo se tomusí dělat přímo ve hře? a badges stále neslysím - a není to hlasitostí a uz jsem zjistil problem. ja badge reveal hledal na stránce, která zobrazuje vsechny odznaky. a to je jiná stranka. můžeš prosím vytvořit ještě placeholder a možnost prehravat zvuk při otevření stranky badges?
+u `Game Over` jsem zjistil, proč jsem nic neslyšel. Byl neskutečně ztlumený. Je sám o sobě potichu. Když nastavím zvuk, aby byl příjemný, tak tento už není vůbec slyšet. Když dám vše na plno, nedá se standardní zvuky vydržet, ale `Game Over` je slyšet. Můžeš `Game Over` zvednout natvrdo hlasitost? V tom wav souboru? Bez zásahu do kódu? Nebo se to musí dělat přímo ve hře? A `badges` stále neslyším - a není to hlasitostí a už jsem zjistil problém. Já `badge reveal` hledal na stránce, která zobrazuje všechny odznaky. A to je jiná stránka. Můžeš prosím vytvořit ještě placeholder a možnost přehrávat zvuk při otevření stránky `Badges`?
 
 -------------------
 
-badges page zvuk jsem zaměnil a funguje. ale kdyz ze stranky odejdu, tak hraje porad dál. musí zkončit ve chvíli,kdy odejdu. protoze jinak pak začnu hrát hru a krome urovnové muziky hraje i badge page muzika
+`Badges` page zvuk jsem zaměnil a funguje. Ale když ze stránky odejdu, tak hraje pořád dál. Musí skončit ve chvíli, kdy odejdu. Protože jinak pak začnu hrát hru a kromě úrovňové muziky hraje i `Badges` page muzika
 
 -------------------
 
-badges page zvuk jsem zaměnil a funguje. ale kdyz ze stranky odejdu, tak hraje porad dál. musí zkončit ve chvíli,kdy odejdu. protoze jinak pak začnu hrát hru a krome urovnové muziky hraje i badge page muzika
-
--------------------
-mam dva chyby a) kdyz otevru badges, vidim first run objeveny. jdu do administrace, udelam reset , vypnu administraci a pokracuju ve hre... ale badge zustane odemcen�. pokud udel�m tot� a ze startovac� stranky dam back, tam otevru badges, tak najednou je first run zase zamceny. b) badge reveal zvuk se neprehrava ac jsem ho tam nahral
+`Badges` page zvuk jsem zaměnil a funguje. Ale když ze stránky odejdu, tak hraje pořád dál. Musí skončit ve chvíli, kdy odejdu. Protože jinak pak začnu hrát hru a kromě úrovňové muziky hraje i `Badges` page muzika
 
 -------------------
 
-ten reset badges se neumenil. pokud mam odemceny first run, hraju, jdu do administrace a resetnu, nezamkne se. kdyz umru, stale si mysli, ze ho mam. teprve kdyz zacnu novou hru, tak se objevi, ze jsem ho ziskal. pokud mam badge edemknut�, jdu na start screen do admin, resetnu a zacnu hru, je stale odemceny. kdyz zacnu dal�� run, je stale odemcen�, kdyz jdu do badges - po tom prvn�m ci druh�m runnu, je stale odemceny. kdyz na start screen resetnu badge a jdu zpet  a pak na badges, tak se zamkne
+mám dva chyby. a) Když otevřu `Badges`, vidím `First Run` objevený. Jdu do administrace, udělám reset, vypnu administraci a pokračuju ve hře, ale badge zůstane odemčený. Pokud udělám totéž a ze startovací stránky dám `Back`, tam otevřu `Badges`, tak najednou je `First Run` zase zamčený. b) `badge reveal` zvuk se nepřehrává, ač jsem ho tam nahrál
 
 -------------------
 
-jak se na�v� tato obrazovka a m� prirazeny nejak� zvuk? ten druh� obrazek je prerun, je to tak? uz asi rozum�m. oni jsou obe obrazovky prerun a maj� ten prerun zvuk. ale pri zpusten� hry se na te prvn� obrazovce zvuk neprehr�v�, dokud nekliknu... je to tak? protoze kdyz otevru badges a vratim se, uz hraje. ono to nejde udelat, aby zacala rovnou hrat?
+ten `Reset Badges` se neuměnil. Pokud mám odemčený `First Run`, hraju, jdu do administrace a resetnu, nezamkne se. Když umřu, stále si myslí, že ho mám. Teprve když začnu novou hru, tak se objeví, že jsem ho získal. Pokud mám badge odemknutý, jdu na start screen do admin, resetnu a začnu hru, je stále odemčený. Když začnu další run, je stále odemčený, když jdu do `Badges` - po tom prvním či druhém runu, je stále odemčený. Když na start screen resetnu badge a jdu zpět a pak na `Badges`, tak se zamkne
 
 -------------------
 
-jdi na branch sfx a tam potom uprav ve hre devault hodnoty podle obr�zku pro sounds z�roven ty cesty ke zvukum  mu�e� schovat. nen� potreba aby byly v administraci videt 
+jak se nazývá tato obrazovka a má přiřazený nějaký zvuk? Ten druhý obrázek je `prerun`, je to tak? Už asi rozumím. Oni jsou obě obrazovky `prerun` a mají ten `prerun` zvuk. Ale při spuštění hry se na té první obrazovce zvuk nepřehrává, dokud nekliknu. Je to tak? Protože když otevřu `Badges` a vrátím se, už hraje. Ono to nejde udělat, aby začala rovnou hrát?
 
 -------------------
 
-zvedni natvrdo zvuk v gameover screen o 100%
+jdi na branch `sfx` a tam potom uprav ve hře default hodnoty podle obrázku pro sounds. Zároveň ty cesty ke zvukům můžeš schovat. Není potřeba, aby byly v administraci vidět
 
 -------------------
 
-mezi start obrazovkou a zac�tkem runnu, ale i start obrazovkou mezi levely trochu zmen�me. Kdyz se klikne na start, tak vezmi z t�to obrazovky jen pozad�, ve�kery ostatn� veci tam nebudou, objev� se na 1s zvet�uj�c� se (z mal�ho na hodne velky) "READY..." a pak na 1s "RUN!".Kdyz na t� start obrazovce klikneme na start, tak po dobu tech dvou S co bude obrazovka ready-go, tak muzika z start screen bude fade to silience. nechci aby pri prechodu ze start screen do run byl ostry lom mezi hudbami
+zvedni natvrdo zvuk v `Game Over` screen o 100%
 
 -------------------
 
-kolik r�dku kodu uz m� nas projekt?
+mezi start obrazovkou a začátkem runu, ale i start obrazovkou mezi levely trochu změnime. Když se klikne na start, tak vezmi z této obrazovky jen pozadí, veškeré ostatní věci tam nebudou, objeví se na 1s zvětšující se (z malého na hodně velké) `READY...` a pak na 1s `RUN!`. Když na té start obrazovce klikneme na start, tak po dobu těch dvou sekund, co bude obrazovka `READY / RUN`, tak muzika ze start screen bude `fade to silence`. Nechci, aby při přechodu ze start screen do runu byl ostrý lom mezi hudbami
 
 -------------------
 
-ted udelej commit local, online a priprav aab
+kolik řádků kódu už má náš projekt?
 
 -------------------
 
-urcite. kdyz reknu, ze mi mas pripravit aab, tak to proto, ze to chci nahravat, cili VZDY priprav vse co je potreba pro nahrani na store a jelikoz nechci aby pri kazdem zpusteni hra hlasila, ze je nova verze, i kdyz nova verze nen�, tak zvedej vse co je potreba. tohle si zapis jako pravidlo
+teď udělej commit local, online a připrav `aab`
 
 -------------------
 
-mi to rika pri pokusu nahrat. vypada, ze jsi nezvedl verzi kodu
+určitě. Když řeknu, že mi máš připravit `aab`, tak to proto, že to chci nahrávat, čili VŽDY připrav vše co je potřeba pro nahrání na store a jelikož nechci, aby při každém spuštění hra hlásila, že je nová verze, i když nová verze není, tak zvedej vše co je potřeba. Tohle si zapiš jako pravidlo
 
 -------------------
 
-priprav novou vetev highscore a prepni do ni. budu ted cht�t pripravit mo�nost, aby se score ukladalo na online a bylo sd�len�
+mi to říká při pokusu nahrát. Vypadá, že jsi nezvedl verzi kódu
 
 -------------------
 
-ted bych rad do hry implementoval moznost, aby se highscore ukladal online a kazdy videl sv� um�sten� v porovn�n� se zbytkem hracu
+připrav novou větev `highscore` a přepni do ní. Budu teď chtít připravit možnost, aby se score ukládalo online a bylo sdílené
 
 -------------------
 
-ja na vercel uz nejakou db pou��v�m. pou��val jsem ji pro projekt hl�dacka a hledacka - jsou to slozky ve slozce -_web_-. muzes se tam pod�vat, jak� a jak pou��v�me
+teď bych rád do hry implementoval možnost, aby se highscore ukládal online a každý viděl své umístění v porovnání se zbytkem hráčů
 
 -------------------
 
-ten druhy projekt se jmenuje menu
+já na Vercelu už nějakou DB používám. Používal jsem ji pro projekt `hlídačka` a `hledačka` - jsou to složky ve složce `-_web_-`. Můžeš se tam podívat, jaká a jak používáme
 
 -------------------
 
-ano. stačí mi jednoducha. chtěl bych tam jen Jmeno - Score. A to podle toho, zda hral jump / full Easy / hard. To jméno jeste bude potreba asi zaimplementovat do hry. Treba pri prvním zpusteni ze se to zeptá na jméno, které se pak ulozí do local. a nebo jak bys to navrhoval?
+ten druhý projekt se jmenuje `menu`
+
+-------------------
+
+ano. Stačí mi jednoduchá. Chtěl bych tam jen `Jméno - Score`. A to podle toho, zda hrál `Jump / Full`, `Easy / Hard`. To jméno ještě bude potřeba asi zaimplementovat do hry. Třeba při prvním spuštění, že se to zeptá na jméno, které se pak uloží do local. A nebo jak bys to navrhoval?
 
 -------------------
 
@@ -143,23 +144,23 @@ začni
 
 -------------------
 
-upravíme vzhled game over stranky. localne ulozené recordy posuneme do okna do leve casti obrazovky. bude to Your High Scores. Bude to ve formatu Jump Easy, Jump Hard, Full Easy, Full Hard. aktuální score posunes dolů doprostred obrazovky. a online high das do okna do prave casti obrazovky. Bude se tam zobrazovat 15 nejlepších v tom modu, který zrovna hráč hrál a šestnácté jméno bude jeho high score a sedmnacte bude aktuální score, který uhrál. cili sestnácté a sedmnácté jméno vzdy uvidí ten kráč který hraje - sebe. své nej score pro ten mode a obtíznost a aktuální score pro mode a obtížnost. Z aktuálního score můzes odmazat coins a bags collected. není to důlezite. nech jen score a time
+upravíme vzhled `Game Over` stránky. Lokálně uložené rekordy posuneme do okna do levé části obrazovky. Bude to `Your High Scores`. Bude to ve formátu `Jump Easy`, `Jump Hard`, `Full Easy`, `Full Hard`. Aktuální score posuneš dolů doprostřed obrazovky. A `online high` dáš do okna do pravé části obrazovky. Bude se tam zobrazovat 15 nejlepších v tom modu, který zrovna hráč hrál, a šestnácté jméno bude jeho high score a sedmnácté bude aktuální score, které uhrál. Čili šestnácté a sedmnácté jméno vždy uvidí ten hráč, který hraje - sebe. Své nej score pro ten mode a obtížnost a aktuální score pro mode a obtížnost. Z aktuálního score můžeš odmazat `coins` a `bags collected`. Není to důležité. Nech jen score a time
 
 -------------------
 
-dve veci. a) game over screen. okna pretekaji. udelej stranku vic responzivní, at se prizpůsobuje velikosti b) totez u stasrt screen. at se prizpůsobuje a nepreteka
+dvě věci. a) `Game Over` screen. Okna přetékají. Udělej stránku víc responzivní, ať se přizpůsobuje velikosti. b) Totéž u start screen. Ať se přizpůsobuje a nepřetéká
 
 -------------------
 
-tohle bylo zpravne rozmístení, jen to pretekalo tam jak jsem to oznacil. ted to je pod sebou a to není dobre, protoze se tam nevejde cost score pod sebou. udelej to jak to bylo predtim na stranach, jen ty okne udelej, aby nepretekala
+tohle bylo správné rozmístění, jen to přetékalo tam, jak jsem to označil. Teď to je pod sebou a to není dobře, protože se tam nevejde cost score pod sebou. Udělej to jak to bylo předtím na stranách, jen ty okna udělej, aby nepřetékala
 
 -------------------
 
-a) mozna to tam není jen protoze jeste není napojené online score, ale mělo by tam pak být pořadí před jménem. a b) naprovo to ukazuje top score 70000 a v pravo your best pise 0. melo by to být propojene
+a) možná to tam není jen proto, že ještě není napojené online score, ale mělo by tam pak být pořadí před jménem. a b) Napravo to ukazuje top score 70000 a vpravo `Your Best` píše 0. Mělo by to být propojené
 
 -------------------
 
-zitra to zase budeme ladit. udelej commit do main local i online. tim by se to melo dostat na vercel a zacit score ukazovat je to tak?
+zítra to zase budeme ladit. Udělej commit do `main` local i online. Tím by se to mělo dostat na Vercel a začít score ukazovat, je to tak?
 
 -------------------
 
@@ -167,7 +168,7 @@ pokračuj
 
 -------------------
 
-takto to necham? 
+takto to nechám?
 
 -------------------
 
@@ -175,124 +176,224 @@ takto to necham?
 
 -------------------
 
+[empty prompt captured in session]
 
 -------------------
 
-
-dve veci. Tady je videt, ze moje score se prop�se do top players v por�dku. je tam jmen� a score, ale v top scores se ulo�� m�sto jm�na jen "player".  a z�roven v tom okne prohod your best a current run. srovnej font v top players a scores - to jump easy je pokazde jinak. Udelej ho mens� a vycentruj na r�dek. a nadpisy tech oken "Online Top Scores" a "Online Top Players" b) ready run str�nka m� nev�m proc mo�nost scrollovat, i kdyz tam nic nen�. Udelej maxim�ln� velikost podle toho pozad�. tam kde se zacne opakovat, tam to zasekni - zn�zorneno carou . Pokud bude potreba mens�, tak at je responzivn�, ale at se nezvet�uje do t� m�ry, �e tam budou posouvace
-
--------------------
-
-
-tak implementuj, jak jsme psali. jen bez rate limit na pokusy a lockout
+dvě věci. Tady je vidět, že moje score se propíše do `Top Players` v pořádku. Je tam jméno a score, ale v `Top Scores` se uloží místo jména jen `Player`. A zároveň v tom okně prohoď `Your Best` a `Current Run`. Srovnej font v `Top Players` a `Top Scores` - to `Jump Easy` je pokaždé jinak. Udělej ho menší a vycentruj na řádek. A nadpisy těch oken `Online Top Scores` a `Online Top Players`. b) `READY / RUN` stránka má nevím proč možnost scrollovat, i když tam nic není. Udělej maximální velikost podle toho pozadí. Tam kde se začne opakovat, tam to zasekni - znázorněno čarou. Pokud bude potřeba menší, tak ať je responzivní, ale ať se nezvětšuje do té míry, že tam budou posuvníky
 
 -------------------
 
-
-bezepecne
+tak implementuj, jak jsme psali. Jen bez rate limit na pokusy a lockout
 
 -------------------
 
+bezpečně
+
+-------------------
 
 ono to bude v souboru s promptama
 
 -------------------
 
-
-cili mu�u zkusit?
-
--------------------
-
-
-Jen odpov�dej. Funguje. super. ted mne napada, kdyz nov� hr�c zpust� hru, zept� se ho to na jm�no, vybere si u� nejak�, kter� je - hra to nijak predpokl�d�m vuci online scores neoveruje, tak dva ruzn� hr�ci mu�ou m�t stejn� jm�na a budou se pl�st jejich score? Vid�m, �e kdyz si v pubehu hry zmen�m jm�no, tak se zmen� jn�no i u v�ech online score a overil jsem si to - ale jen na online (web vercel - nikoliv android a o ten mi hlavne jde. proto�e vercel nebude verejny. ten mam jen na testovan�) Kdyz si ja na sv�m google uctu vyberu jmen� a jin� tester na sv�m si vybere stejn�. tak se to bude tlouct v online scores, je to tak?
+čili můžu zkusit?
 
 -------------------
 
-
-Jde udelat, aby dva hr�ci nemohli m�t stejn� jm�no? nejak� overen�, �e u� v datab�zi nen�?
-
--------------------
-
-
-pokud se nepletu, nikdo jin� si ho vz�t nemu�e, proto�e ve chv�li kdy uz se jednou zap�se do datab�ze, tak mu ho to nedovol� si vz�t. ale kdyz budu na jin�m zar�zen�, kter� mne vyzve ke jm�nu, tak ani j� si svoje uz vz�t nemu�u, proto�e jsem si ho zabral na jin�m zar�zen�
+Jen odpovídej. Funguje, super. Teď mne napadá, když nový hráč spustí hru, zeptá se ho to na jméno, vybere si už nějaké, které je - hra to nijak předpokládám vůči online scores neověřuje, tak dva různí hráči můžou mít stejná jména a budou se plést jejich score? Vidím, že když si v průběhu hry změním jméno, tak se změní jméno i u všech online score a ověřil jsem si to - ale jen na online (web Vercel - nikoliv Android a o ten mi hlavně jde. Protože Vercel nebude veřejný. Ten mám jen na testování). Když si já na svém Google účtu vyberu jméno a jiný tester na svém si vybere stejné, tak se to bude tlouct v online scores, je to tak?
 
 -------------------
 
-
-ta varianta tag se mi nel�b�. Lidi maj� r�dy sv� jm�na a ten tag je zo�kliv�. jak slo�it� je prihl�en� pres google ID jako overen� identity? Pak by si to pamatovalo moje jm�no z jin�ho zar�zen� a mohl bych si ho i dal menit..
-
--------------------
-
-
-myslim ze hashovat ano, aby nesly odchytit uplne jednoduse, ale pro android neni https nutny (tus�m), webova verze nen� treba uplne resit - andorid bude primar. Rate limit na pokusy taky nen� treba re�it. nemysl�m, �e to nekdo bude hackovat. lockout neni nutny.  a k tomu UX jmeno neexistuje -> rovnou vytvorit. nic nenab�zet. proces bude vzdy stejny vyzve ke Jm�nu, vyzve k heslu. a pak bude to rozdelen�. neexistuje jm�no automaticky vytvor�. ty ostatn� varianty jsou jak pises. je to takto ok?
+jde udělat, aby dva hráči nemohli mít stejné jméno? Nějaké ověření, že už v databázi není?
 
 -------------------
 
-
-Ok, tak tedy mus�me i https, je to tak?
-
--------------------
-
-
-Ok. vytvor ted commit do main, a pak branch authtentisation
+pokud se nepletu, nikdo jiný si ho vzít nemůže, protože ve chvíli kdy už se jednou zapíše do databáze, tak mu ho to nedovolí si vzít. Ale když budu na jiném zařízení, které mne vyzve ke jménu, tak ani já si svoje už vzít nemůžu, protože jsem si ho zabral na jiném zařízení
 
 -------------------
 
-
-jen odpoved - dok�e� z datab�ze vymazat soucasn� score? abychom zacali s cist�m listem?
-
--------------------
-
-
-bezepecne
+ta varianta `tag` se mi nelíbí. Lidi mají rády svá jména a ten tag je ošklivý. Jak složité je přihlášení přes Google ID jako ověření identity? Pak by si to pamatovalo moje jméno z jiného zařízení a mohl bych si ho i dál měnit
 
 -------------------
 
-
-co k tomu potrebujes a kde to zjistim? pripadne nedokazes si to nejak zjistit sam?
+myslím že hashovat ano, aby nešly odchytit úplně jednoduše, ale pro Android není HTTPS nutný (tuším), webová verze není třeba úplně řešit - Android bude primár. Rate limit na pokusy taky není třeba řešit. Nemyslím, že to někdo bude hackovat. Lockout není nutný. A k tomu UX: jméno neexistuje -> rovnou vytvořit. Nic nenabízet. Proces bude vždy stejný: vyzve ke jménu, vyzve k heslu. A pak bude to rozdělení. Neexistuje jméno automaticky vytvoří. Ty ostatní varianty jsou jak píšeš. Je to takto ok?
 
 -------------------
 
+ok, tak tedy musíme i HTTPS, je to tak?
+
+-------------------
+
+ok. Vytvoř teď commit do `main`, a pak branch `authtentisation`
+
+-------------------
+
+jen odpověď - dokážeš z databáze vymazat současné score? Abychom začali s čistým listem?
+
+-------------------
+
+bezpečně
+
+-------------------
+
+co k tomu potřebuješ a kde to zjistím? Případně nedokážeš si to nějak zjistit sám?
+
+-------------------
 
 kde? co?
 
 -------------------
 
-
-[REDACTED_KV_URL] ; [REDACTED_KV_TOKEN] ; pr�padne je nekam ulo�, nekam, co se nepos�l� do online. Pomocn� soubor?
+[REDACTED_KV_URL] ; [REDACTED_KV_TOKEN] ; případně je někam ulož, někam, co se neposílá do online. Pomocný soubor?
 
 -------------------
-
 
 ono to bude v souboru s promptama
 
 -------------------
 
-
-cili mu�u zkusit?
-
--------------------
-
-
-jen odpov�dej. dok�e� z datab�ze vymazat soucasn� score? abychom zacali s cist�m listem?
-
+čili můžu zkusit?
 
 -------------------
 
-
-ted udel�me jednu kosmetickou zmenu. zmen barvu p�sma hrrra na zelenou. Vycentruj Jmup Mode a Full Mode a zmen barvu p�sme, kde oznamuje, ze je locked a co mus�s dos�hnout na cervene
-
--------------------
-
-
-dals� kosmeticka. z tbulek smaz to Jump Easy a dej to b�lou barvou pod Game over (vycentrovan�) a men��m (o 50%) p�smem. z�roven udelej, aby obe tabulky byly stejne velk�. vzdy se budou zarovn�vat podle t� vet�� s t�m, �e ta pr�zdnej�� proste bude m�t prazdn� m�sto ve spodn� c�sti. cili hodnoty budou zarovn�vny od shora. je to srozumiteln� co chci s tabulkama online scores?
+jen odpovídej. Dokážeš z databáze vymazat současné score? Abychom začali s čistým listem?
 
 -------------------
 
-
-texty stale nejsou cerven�
+teď uděláme jednu kosmetickou změnu. Změň barvu písma `HRRRA` na zelenou. Vycentruj `Jump Mode` a `Full Mode` a změň barvu písma, kde oznamuje, že je locked a co musíš dosáhnout, na červené
 
 -------------------
 
-ted uz mu�e� prov�st commit, push a aab
+další kosmetika. Z tabulek smaž to `Jump Easy` a dej to bílou barvou pod `Game Over` (vycentrované) a menším (o 50%) písmem. Zároveň udělej, aby obě tabulky byly stejně velké. Vždy se budou zarovnávat podle té větší s tím, že ta prázdnější prostě bude mít prázdné místo ve spodní části. Čili hodnoty budou zarovnávané odshora. Je to srozumitelné co chci s tabulkama online scores?
 
+-------------------
+
+texty stále nejsou červené
+
+-------------------
+
+teď už můžeš provést commit, push a `aab`
+
+-------------------
+
+teď ještě jednou vymaž databázi `Top Scores + Players`
+
+-------------------
+
+když jsem si pustil Android verzi, tak sice mi to píše, že je nová verze, ale to okno o stažení je schované za přihlašovací obrazovkou, která ještě nefunguje. Čili nemůžu se přes toto dostat. Mělo by tedy i na tom přihlašovacím být `Guest`, kde se nebude nic ukládat online, ale jen to pustí dál
+
+-------------------
+
+udělej
+
+-------------------
+
+a) na `Game Over` screen posuň obě okna s online score skoro až nahoru obrazovky. b) Když dohraju hru a dostanu badge, tak se neobjeví stránka `Game Over` a tudíž nevidím online score. A nebo jen tak rychle problikne, že ji nevidím, a nebo tím, že tapnu na badge screen, tak překliknu i `Game Over` screen
+
+-------------------
+
+zkouším to na lokale a obě online score obrazovky jsou stále na stejném místě
+
+-------------------
+
+zarovnej to na horní okraj nápisu `Game Over` viz obrázek
+
+-------------------
+
+commitni to do `main` local i online
+
+-------------------
+
+je to i na online? Vercel?
+
+-------------------
+
+Zatím jen odpovídej - změň mechaniku objevování se unlocků nových postaviček. Jak nyní zní pravidlo, kde se můžou a kdy objevit?
+
+-------------------
+
+změň tedy mechaniku a přepis to i v pravidlech, že se postavička nebude objevovat na nejnižším výtahu, ale vždy se objeví na pravém kraji obrazovky na plošině - rozumíš co chci? Nejdřív odpověď a pak případně budeš implementovat
+
+-------------------
+
+implementuj
+
+-------------------
+
+zapisuješ stále do souboru `prompts` vše co píšu?
+
+-------------------
+
+převeď
+
+-------------------
+
+oprav čitelnost a doplň chybějící prompty z této relace
+
+-------------------
+
+do budoucna - Python tu je, jen si ho musíš najít
+
+-------------------
+
+zapiš si pro budoucnost, kde je Python, do pravidel
+
+-------------------
+
+Změníme nyní tuto stránku. Potřebuji si tam uvolnit místo, abychom mohli přidat tlačítko, které otevře stránku s online top scores, kde budou čtyři tabulky `Jump Easy`, `Jump Hard`, `Full Easy` a `Full Hard` a v každé budou vypsaní online top 15 players (nikoliv scores tabulka)
+
+-------------------
+
+ještě nedělej
+
+-------------------
+
+pošlu to, jak upravit
+
+-------------------
+
+zatím nic nedělej, jen mi řekni, zda to chápeš: na tom obrázku je, jak by to mělo vypadat. Základní stav bude oválné tlačítko, které bude rozděleno - vlevo dvě třetiny, vpravo jedna třetina. V levé části bude napsáno `Easy` a v pravé (menší) `Hard`. `Easy` část bude zelená, `Hard` šedivá. V tom stavu bude nastavený `Easy`. Když na tlačítko klikneme, tak se ideálně nějakým `flip` effectem otočí o 180 stupňů a bude pravá část větší a levá menší. Levá bude zašedlá a pravá (`Hard`) bude zelená. V tu chvíli bude aktivovaný `Hard` level. Pokud nebude ještě `Hard` odemknutý, tak při "přepnutí" na `Hard` tam bude onen nápis přes celé tlačítko, `unlock...`
+
+-------------------
+
+tak implementuj
+
+-------------------
+
+nezapomínej všechny moje prompty zapisovat! Je to na dobré cestě, ale není to úplně ono. Podle mého obrázku se musí vejít celé slovo `Easy` (větším písmem), když je vybrané do těch 2/3 tlačítka, a menší `Hard` se musí v malém písmu vejít celé do té 1/3 tlačítka. Teď tam není vůbec text vidět a čitelný, protože font je neúměrně veliký
+
+-------------------
+
+zapisuješ moje prompty dle pravidla??
+
+-------------------
+
+doplň
+
+-------------------
+
+vyčisti a uprav
+
+-------------------
+
+zapisuj prompty!!!!
+
+-------------------
+
+font je lepsi, ale myslím, ze musí být jeste o 50% mensi. možná bude potreba i vic. potrebuji abys opticky overil, ze se do tech menších a větší části veje celý vetší a mensí text
+
+-------------------
+
+tenpredchozí prompt o 50% zmensení jsi taky nezapsal. zapamatuj si, ze cokoliv napisu, tak ty nejdriv propises do prompts.md a teprve pak budes na to reagovat. tohle zapis jako pravidlo
+
+-------------------
+
+ted je to v poradku. ted mezi badges a name vloz nové tlačítko Scores. otevre stranku, podobne jako badges, kde budou  čtyři sekce. Jump easy, jump hard, full easy a full hard a vzdy vypsaných top 15 players a jejich score. Nikoliv top 15 scores. to znamená, ze kazdý player tam může být jen jednou. cili bude to stejná tabulka, jako je v gameover screen napravo. jen pro vsechny čtyri mody
+
+-------------------
+
+super. jen můžeš odstranit ten text a nadpis změn na "Top Score" a vycentruj to doprostred
+
+-------------------
+
+udelej commit a push a priprav mi aab

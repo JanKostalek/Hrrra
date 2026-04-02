@@ -203,7 +203,7 @@ Na začátku je dostupný jen:
 - Nabízí se jen skin, který hráč ještě nemá odemčený.
 - Skin pickup se objeví jen jednou za run.
 - Pokud se v tom runu už objevil, znovu se neobjeví, i když ho hráč nesebere.
-- Skin pickup se objevuje na nejspodnějším výtahu.
+- Skin pickup se objevuje na plošině na pravém kraji obrazovky.
 - V briefing obrazovce je vidět, který skin se v tom runu může objevit.
 
 ### Skin výběr před runem

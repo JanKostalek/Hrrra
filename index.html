@@ -122,14 +122,17 @@
               <span class="pre-run-mode-copy"><strong>Double Jump</strong> is always enabled</span>
             </button>
             <div class="pre-run-difficulty-column" aria-label="Difficulty selection">
-              <button id="pre-run-easy-btn" class="pre-run-difficulty-btn active" aria-label="Choose Easy difficulty">
-                <span class="pre-run-difficulty-title">Easy</span>
-              </button>
-              <button id="pre-run-hard-btn" class="pre-run-difficulty-btn" aria-label="Choose Hard difficulty">
-                <span class="pre-run-difficulty-title">Hard</span>
-                <span id="pre-run-hard-lock" class="pre-run-lock-note hidden"></span>
+              <button id="pre-run-difficulty-toggle" class="pre-run-difficulty-toggle easy-active" aria-label="Toggle difficulty">
+                <span class="pre-run-difficulty-side pre-run-difficulty-side-easy">
+                  <span class="pre-run-difficulty-side-label">Easy</span>
+                </span>
+                <span class="pre-run-difficulty-side pre-run-difficulty-side-hard">
+                  <span class="pre-run-difficulty-side-label">Hard</span>
+                </span>
+                <span id="pre-run-difficulty-lock" class="pre-run-difficulty-toggle-lock hidden"></span>
               </button>
               <button id="pre-run-badges-btn" class="pre-run-badges-btn" aria-label="Open badges overview">Badges</button>
+              <button id="pre-run-scores-btn" class="pre-run-scores-btn" aria-label="Open online top players">Scores</button>
               <button id="pre-run-player-name-btn" class="pre-run-player-name-btn" aria-label="Open sign in">Sign In</button>
             </div>
             <button id="pre-run-full-btn" class="pre-run-mode-card" aria-label="Choose Full Mode">
@@ -162,6 +165,17 @@
             </div>
           </div>
           <div id="pre-run-badges-groups" class="pre-run-badges-groups"></div>
+        </div>
+        <div id="pre-run-scores-screen" class="pre-run-stage hidden" aria-label="Online top players overview">
+          <div class="pre-run-scores-header">
+            <div class="pre-run-scores-topbar">
+              <button id="pre-run-scores-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
+              <div class="pre-run-scores-heading">
+                <h2>Top Score</h2>
+              </div>
+            </div>
+          </div>
+          <div id="pre-run-scores-grid" class="pre-run-scores-grid"></div>
         </div>
         <div id="pre-run-detail-screen" class="pre-run-stage hidden">
           <div id="pre-run-compact-shell" class="pre-run-compact-shell hidden">

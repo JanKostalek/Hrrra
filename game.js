@@ -90,19 +90,22 @@ Main tuning points:
   var playerNameSaveBtn = document.getElementById("player-name-save");
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
   var preRunBadgesScreenEl = document.getElementById("pre-run-badges-screen");
+  var preRunScoresScreenEl = document.getElementById("pre-run-scores-screen");
   var preRunDetailScreenEl = document.getElementById("pre-run-detail-screen");
   var preRunJumpBtn = document.getElementById("pre-run-jump-btn");
   var preRunFullBtn = document.getElementById("pre-run-full-btn");
-  var preRunEasyBtn = document.getElementById("pre-run-easy-btn");
-  var preRunHardBtn = document.getElementById("pre-run-hard-btn");
+  var preRunDifficultyToggleEl = document.getElementById("pre-run-difficulty-toggle");
   var preRunBadgesBtn = document.getElementById("pre-run-badges-btn");
+  var preRunScoresBtn = document.getElementById("pre-run-scores-btn");
   var preRunPlayerNameBtn = document.getElementById("pre-run-player-name-btn");
   var preRunBadgesBackBtn = document.getElementById("pre-run-badges-back-btn");
+  var preRunScoresBackBtn = document.getElementById("pre-run-scores-back-btn");
   var preRunBadgesGroupsEl = document.getElementById("pre-run-badges-groups");
+  var preRunScoresGridEl = document.getElementById("pre-run-scores-grid");
   var preRunBadgesTotalValueEl = document.getElementById("pre-run-badges-total-value");
   var preRunBadgesTotalLabelEl = document.getElementById("pre-run-badges-total-label");
   var preRunFullLockEl = document.getElementById("pre-run-full-lock");
-  var preRunHardLockEl = document.getElementById("pre-run-hard-lock");
+  var preRunDifficultyLockEl = document.getElementById("pre-run-difficulty-lock");
   var preRunBackBtn = document.getElementById("pre-run-back-btn");
   var preRunCompactBackBtn = document.getElementById("pre-run-compact-back-btn");
   var preRunCompactAdminBtn = document.getElementById("pre-run-compact-admin-btn");
@@ -3321,6 +3324,9 @@ Main tuning points:
     badgeRewardTimer: 0,
     badgeRewardShowRip: false,
     gameOverInputBlockUntil: 0,
+    preRunDifficultyLockNoticeActive: false,
+    preRunDifficultyFlipTimerId: 0,
+    preRunScores: createInitialPreRunScoresState(),
     onlineHighscore: {
       loading: false,
       message: "",
@@ -3484,6 +3490,9 @@ Main tuning points:
     },
     skinPickupIcon: {
       active: false,
+      x: 0,
+      y: 0,
+      platformId: -1,
       size: C.playerSize * 0.82,
       skinName: ""
     },
@@ -4325,6 +4334,9 @@ Main tuning points:
     if (preRunBadgesScreenEl) {
       preRunBadgesScreenEl.classList.toggle("hidden", state.preRunStep !== "badges");
     }
+    if (preRunScoresScreenEl) {
+      preRunScoresScreenEl.classList.toggle("hidden", state.preRunStep !== "scores");
+    }
     if (preRunDetailScreenEl) {
       preRunDetailScreenEl.classList.toggle("hidden", state.preRunStep !== "details");
     }
@@ -4337,19 +4349,23 @@ Main tuning points:
     if (preRunScreenEl) {
       preRunScreenEl.classList.toggle("is-launch-transition", state.preRunLaunchActive);
     }
-    if (preRunEasyBtn) {
-      preRunEasyBtn.classList.toggle("active", state.gameDifficulty === "easy");
+    if (preRunDifficultyToggleEl) {
+      var showHardVisualState = state.gameDifficulty === "hard" || state.preRunDifficultyLockNoticeActive;
+      preRunDifficultyToggleEl.classList.toggle("easy-active", !showHardVisualState);
+      preRunDifficultyToggleEl.classList.toggle("hard-active", showHardVisualState);
+      preRunDifficultyToggleEl.classList.toggle("show-lock-note", state.preRunDifficultyLockNoticeActive);
+      preRunDifficultyToggleEl.classList.toggle("locked", !hardUnlocked);
+      preRunDifficultyToggleEl.title = hardUnlocked ? "" : getHardDifficultyLockText();
+      preRunDifficultyToggleEl.setAttribute(
+        "aria-label",
+        state.gameDifficulty === "hard"
+          ? "Difficulty set to Hard"
+          : "Difficulty set to Easy"
+      );
     }
-    if (preRunHardBtn) {
-      preRunHardBtn.classList.toggle("active", state.gameDifficulty === "hard");
-      preRunHardBtn.classList.toggle("locked", !hardUnlocked);
-      preRunHardBtn.disabled = !hardUnlocked;
-      preRunHardBtn.title = hardUnlocked ? "" : getHardDifficultyLockText();
-      preRunHardBtn.setAttribute("aria-disabled", hardUnlocked ? "false" : "true");
-    }
-    if (preRunHardLockEl) {
-      preRunHardLockEl.classList.toggle("hidden", hardUnlocked);
-      preRunHardLockEl.textContent = getHardDifficultyLockText();
+    if (preRunDifficultyLockEl) {
+      preRunDifficultyLockEl.classList.toggle("hidden", !state.preRunDifficultyLockNoticeActive);
+      preRunDifficultyLockEl.textContent = getHardDifficultyLockText();
     }
     if (preRunFullBtn) {
       preRunFullBtn.classList.toggle("locked", !fullUnlocked);
@@ -4381,6 +4397,9 @@ Main tuning points:
     }
     if (state.preRunStep === "badges") {
       renderBadgesScreen();
+    }
+    if (state.preRunStep === "scores") {
+      renderPreRunScoresScreen();
     }
     stopBadgesPageMusicIfLeaving();
     refreshMusicPlayback();
@@ -4701,6 +4720,39 @@ Main tuning points:
     return (state.gameMode === 1 ? "Full" : "Jump") + " " + (state.gameDifficulty === "hard" ? "Hard" : "Easy");
   }
 
+  function getPreRunScoresBoardLabel(board) {
+    switch (String(board || "")) {
+      case "jump_hard":
+        return "Jump Hard";
+      case "full_easy":
+        return "Full Easy";
+      case "full_hard":
+        return "Full Hard";
+      default:
+        return "Jump Easy";
+    }
+  }
+
+  function createEmptyPreRunScoresBoardState() {
+    return {
+      loading: false,
+      message: "",
+      topPlayers: []
+    };
+  }
+
+  function createInitialPreRunScoresState() {
+    return {
+      requestId: 0,
+      boards: {
+        jump_easy: createEmptyPreRunScoresBoardState(),
+        jump_hard: createEmptyPreRunScoresBoardState(),
+        full_easy: createEmptyPreRunScoresBoardState(),
+        full_hard: createEmptyPreRunScoresBoardState()
+      }
+    };
+  }
+
   function resetOnlineHighscoreUi(message) {
     var localBestScore = readMaxScoreFromStorage(state.gameMode || 2, state.gameDifficulty || "easy");
     state.onlineHighscore.loading = false;
@@ -4801,6 +4853,136 @@ Main tuning points:
         "</strong></li>"
       );
     }).join("");
+  }
+
+  function renderPreRunScoresScreen() {
+    if (!preRunScoresGridEl) {
+      return;
+    }
+
+    var boardOrder = ["jump_easy", "jump_hard", "full_easy", "full_hard"];
+    preRunScoresGridEl.innerHTML = boardOrder.map(function (boardKey) {
+      var boardState = state.preRunScores && state.preRunScores.boards
+        ? state.preRunScores.boards[boardKey]
+        : null;
+      var rowsHtml = "";
+      if (boardState && Array.isArray(boardState.topPlayers) && boardState.topPlayers.length) {
+        rowsHtml = boardState.topPlayers.slice(0, 15).map(function (entry, index) {
+          return (
+            "<li><span>#" +
+            (index + 1) +
+            " " +
+            entry.name +
+            "</span><strong>" +
+            Number(entry.score || 0).toLocaleString("en-US") +
+            "</strong></li>"
+          );
+        }).join("");
+      }
+      var statusText = "";
+      if (boardState && boardState.loading) {
+        statusText = "Loading top players...";
+      } else if (boardState && boardState.message) {
+        statusText = boardState.message;
+      }
+      return [
+        '<section class="pre-run-scores-board">',
+        '<header class="pre-run-scores-board-header">',
+        "<h3>",
+        getPreRunScoresBoardLabel(boardKey),
+        "</h3>",
+        "</header>",
+        statusText ? '<p class="pre-run-scores-status">' + statusText + "</p>" : "",
+        '<ol class="pre-run-scores-list">',
+        rowsHtml,
+        "</ol>",
+        "</section>"
+      ].join("");
+    }).join("");
+  }
+
+  function resetPreRunScoresUi(message) {
+    state.preRunScores = createInitialPreRunScoresState();
+    if (message) {
+      ["jump_easy", "jump_hard", "full_easy", "full_hard"].forEach(function (boardKey) {
+        state.preRunScores.boards[boardKey].message = String(message);
+      });
+    }
+    renderPreRunScoresScreen();
+  }
+
+  function loadPreRunScoresBoards() {
+    if (typeof window.fetch !== "function") {
+      resetPreRunScoresUi("Online leaderboard is unavailable on this device.");
+      return;
+    }
+
+    state.preRunScores.requestId += 1;
+    var requestId = state.preRunScores.requestId;
+    var boardKeys = ["jump_easy", "jump_hard", "full_easy", "full_hard"];
+    boardKeys.forEach(function (boardKey) {
+      state.preRunScores.boards[boardKey] = {
+        loading: true,
+        message: "",
+        topPlayers: []
+      };
+    });
+    renderPreRunScoresScreen();
+
+    boardKeys.forEach(function (boardKey) {
+      var requestUrl =
+        ONLINE_HIGHSCORE_API_URL +
+        "?board=" +
+        encodeURIComponent(boardKey) +
+        "&playerId=" +
+        encodeURIComponent(state.playerId || "");
+
+      window.fetch(requestUrl, { method: "GET" })
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Leaderboard request failed.");
+          }
+          return response.json();
+        })
+        .then(function (data) {
+          if (!state.preRunScores || state.preRunScores.requestId !== requestId) {
+            return;
+          }
+          var topPlayers = Array.isArray(data && data.topPlayers)
+            ? data.topPlayers
+                .map(function (entry) {
+                  return {
+                    name: normalizePlayerName(entry && entry.name) || "Player",
+                    score: Math.max(0, Math.floor(Number(entry && entry.score) || 0))
+                  };
+                })
+                .filter(function (entry) {
+                  return entry.score >= 0;
+                })
+            : [];
+          state.preRunScores.boards[boardKey] = {
+            loading: false,
+            message: topPlayers.length ? "" : "Be the first player in " + getPreRunScoresBoardLabel(boardKey) + ".",
+            topPlayers: topPlayers
+          };
+          if (state.preRunStep === "scores") {
+            renderPreRunScoresScreen();
+          }
+        })
+        .catch(function () {
+          if (!state.preRunScores || state.preRunScores.requestId !== requestId) {
+            return;
+          }
+          state.preRunScores.boards[boardKey] = {
+            loading: false,
+            message: "Online leaderboard is currently unavailable.",
+            topPlayers: []
+          };
+          if (state.preRunStep === "scores") {
+            renderPreRunScoresScreen();
+          }
+        });
+    });
   }
 
   function applyOnlineHighscorePayload(data, requestId) {
@@ -5125,12 +5307,40 @@ Main tuning points:
     prepareRunSetup(mode, state.gameDifficulty);
   }
 
-  function setPreRunDifficulty(difficulty) {
-    if (difficulty === "hard" && !isHardDifficultyUnlocked()) {
-      renderPreRunScreen();
+  function clearPreRunDifficultyFlipAnimationSoon() {
+    if (!preRunDifficultyToggleEl) {
       return;
     }
+    if (state.preRunDifficultyFlipTimerId) {
+      window.clearTimeout(state.preRunDifficultyFlipTimerId);
+    }
+    preRunDifficultyToggleEl.classList.add("is-flipping");
+    state.preRunDifficultyFlipTimerId = window.setTimeout(function () {
+      if (preRunDifficultyToggleEl) {
+        preRunDifficultyToggleEl.classList.remove("is-flipping");
+      }
+      state.preRunDifficultyFlipTimerId = 0;
+    }, 540);
+  }
+
+  function showPreRunDifficultyLockNotice() {
+    state.preRunDifficultyLockNoticeActive = true;
+    clearPreRunDifficultyFlipAnimationSoon();
+    renderPreRunScreen();
+    window.setTimeout(function () {
+      state.preRunDifficultyLockNoticeActive = false;
+      renderPreRunScreen();
+    }, 1400);
+  }
+
+  function setPreRunDifficulty(difficulty) {
+    if (difficulty === "hard" && !isHardDifficultyUnlocked()) {
+      showPreRunDifficultyLockNotice();
+      return;
+    }
+    state.preRunDifficultyLockNoticeActive = false;
     state.gameDifficulty = difficulty === "hard" ? "hard" : "easy";
+    clearPreRunDifficultyFlipAnimationSoon();
     if (state.preRunStep === "details") {
       prepareRunSetup(state.gameMode, state.gameDifficulty);
     } else {
@@ -5341,18 +5551,11 @@ Main tuning points:
         openPreRunModeDetails(1);
       });
     }
-    if (preRunEasyBtn) {
-      preRunEasyBtn.addEventListener("click", function () {
+    if (preRunDifficultyToggleEl) {
+      preRunDifficultyToggleEl.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
-        setPreRunDifficulty("easy");
-      });
-    }
-    if (preRunHardBtn) {
-      preRunHardBtn.addEventListener("click", function () {
-        unlockAudioIfNeeded();
-        playUiButtonSound();
-        setPreRunDifficulty("hard");
+        setPreRunDifficulty(state.gameDifficulty === "hard" ? "easy" : "hard");
       });
     }
     if (preRunBadgesBtn) {
@@ -5363,8 +5566,25 @@ Main tuning points:
         renderPreRunScreen();
       });
     }
+    if (preRunScoresBtn) {
+      preRunScoresBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        state.preRunStep = "scores";
+        renderPreRunScreen();
+        loadPreRunScoresBoards();
+      });
+    }
     if (preRunBadgesBackBtn) {
       preRunBadgesBackBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        state.preRunStep = "select";
+        renderPreRunScreen();
+      });
+    }
+    if (preRunScoresBackBtn) {
+      preRunScoresBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
         state.preRunStep = "select";
@@ -6637,6 +6857,9 @@ Main tuning points:
     state.platformCoinIcon.y = 0;
     state.platformCoinIcon.platformId = -1;
     state.skinPickupIcon.active = false;
+    state.skinPickupIcon.x = 0;
+    state.skinPickupIcon.y = 0;
+    state.skinPickupIcon.platformId = -1;
     state.skinPickupIcon.size = C.playerSize * C.coinIconSizeRatio;
     state.skinPickupIcon.skinName = "";
     state.levelGoalReached = false;
@@ -7312,7 +7535,6 @@ Main tuning points:
       world.generateAhead(state.cameraX, C.canvasWidth);
     }
     world.cleanupBehind(state.cameraX);
-    syncSkinPickupStateFromWorld();
 
     var rawDistanceScore = Math.max(0, Math.floor((player.x - state.startX) * C.distanceScoreMultiplier));
     if (isCurseActive()) {
@@ -7674,7 +7896,6 @@ Main tuning points:
     world.elevators = world.elevators.filter(function (elevator) {
       return elevator.x + elevator.width <= teleportLeft;
     });
-    syncSkinPickupStateFromWorld();
 
     world.cursorX = Math.min(world.cursorX, teleportLeft);
 
@@ -7712,6 +7933,10 @@ Main tuning points:
     }
     if (state.platformCoinIcon.x >= teleportLeft) {
       state.platformCoinIcon.active = false;
+    }
+    if (state.skinPickupIcon.x >= teleportLeft) {
+      state.skinPickupIcon.active = false;
+      state.skinPickupIcon.skinName = "";
     }
     if (state.projectile.x >= teleportLeft) {
       state.projectile.active = false;
@@ -8623,6 +8848,7 @@ Main tuning points:
     pushIconRectIfActive(rects, state.shieldIcon);
     pushIconRectIfActive(rects, state.magnetIcon);
     pushIconRectIfActive(rects, state.platformCoinIcon);
+    pushIconRectIfActive(rects, state.skinPickupIcon);
     for (var blockerIndex = 0; blockerIndex < state.blockerIcons.length; blockerIndex += 1) {
       var blockerIcon = state.blockerIcons[blockerIndex];
       rects.push({
@@ -8673,28 +8899,36 @@ Main tuning points:
     return true;
   }
 
-  function findNearestBottomElevatorAhead() {
-    var best = null;
-    var bestDistance = Infinity;
-    for (var i = 0; i < world.elevators.length; i += 1) {
-      var elevator = world.elevators[i];
-      if (elevator.skinPickupActive) {
-        continue;
-      }
-      if (elevator.x + elevator.width < player.x + 12) {
-        continue;
-      }
-      var isAtBottom = elevator.wrappedThisFrame || elevator.y >= elevator.maxY - 8;
-      if (!isAtBottom) {
-        continue;
-      }
-      var distance = elevator.x - player.x;
-      if (distance < bestDistance) {
-        best = elevator;
-        bestDistance = distance;
-      }
+  function trySpawnSkinPickupOnRightEdgePlatform() {
+    var icon = state.skinPickupIcon;
+    if (icon.active) {
+      return false;
     }
-    return best;
+
+    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
+    var platform = findPlatformAtX(rightEdgeX);
+    if (!platform) {
+      return false;
+    }
+    if (platform.id === icon.platformId) {
+      return false;
+    }
+
+    var preferredX = rightEdgeX - icon.size - 8;
+    var minSpawnX = platform.x;
+    var maxSpawnX = platform.x + platform.width - icon.size;
+    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
+    var spawnY = platform.y - icon.size;
+    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+      return false;
+    }
+
+    icon.x = spawnX;
+    icon.y = spawnY;
+    icon.platformId = platform.id;
+    icon.skinName = state.skinDiscoveryPlan.skinName;
+    icon.active = true;
+    return true;
   }
 
   function tryAssignSkinDiscoveryPickup() {
@@ -8708,20 +8942,10 @@ Main tuning points:
       return false;
     }
 
-    var elevator = findNearestBottomElevatorAhead();
-    if (!elevator) {
+    if (!trySpawnSkinPickupOnRightEdgePlatform()) {
       return false;
     }
 
-    elevator.skinPickupActive = true;
-    elevator.skinPickupSkinName = state.skinDiscoveryPlan.skinName;
-    if (typeof elevator.consumeCoin === "function") {
-      elevator.consumeCoin();
-    } else {
-      elevator.coinActive = false;
-    }
-    state.skinPickupIcon.active = true;
-    state.skinPickupIcon.skinName = state.skinDiscoveryPlan.skinName;
     state.skinDiscoveryPlan.assigned = true;
     return true;
   }
@@ -8743,39 +8967,17 @@ Main tuning points:
     }
 
     var playerRect = { x: player.x, y: player.y, w: player.width, h: player.height };
-    var size = state.skinPickupIcon.size;
-    for (var i = 0; i < world.elevators.length; i += 1) {
-      var elevator = world.elevators[i];
-      if (!elevator.skinPickupActive) {
-        continue;
-      }
-      var iconX = elevator.x + elevator.width * 0.5 - size * 0.5;
-      var iconY = elevator.y - size;
-      var iconRect = { x: iconX, y: iconY, w: size, h: size };
-      if (!isRectIntersect(playerRect, iconRect)) {
-        continue;
-      }
-
-      unlockSkin(elevator.skinPickupSkinName);
-      elevator.skinPickupActive = false;
-      elevator.skinPickupSkinName = "";
-      state.skinPickupIcon.active = false;
-      state.skinPickupIcon.skinName = "";
-      return;
-    }
-  }
-
-  function syncSkinPickupStateFromWorld() {
-    if (!state.skinPickupIcon.active) {
+    var iconRect = {
+      x: state.skinPickupIcon.x,
+      y: state.skinPickupIcon.y,
+      w: state.skinPickupIcon.size,
+      h: state.skinPickupIcon.size
+    };
+    if (!isRectIntersect(playerRect, iconRect)) {
       return;
     }
 
-    for (var i = 0; i < world.elevators.length; i += 1) {
-      if (world.elevators[i].skinPickupActive) {
-        return;
-      }
-    }
-
+    unlockSkin(state.skinPickupIcon.skinName);
     state.skinPickupIcon.active = false;
     state.skinPickupIcon.skinName = "";
   }
@@ -8784,20 +8986,10 @@ Main tuning points:
     if (!state.skinPickupIcon.active) {
       return;
     }
-
-    for (var i = 0; i < world.elevators.length; i += 1) {
-      var elevator = world.elevators[i];
-      if (!elevator.skinPickupActive) {
-        continue;
-      }
-      if (!elevator.wrappedThisFrame) {
-        continue;
-      }
-      elevator.skinPickupActive = false;
-      elevator.skinPickupSkinName = "";
+    if (state.skinPickupIcon.x + state.skinPickupIcon.size < state.cameraX - 40) {
+      state.skinPickupIcon.active = false;
+      state.skinPickupIcon.skinName = "";
     }
-
-    syncSkinPickupStateFromWorld();
   }
 
   function checkDoubleJumpIconPickup() {
@@ -10360,17 +10552,12 @@ Main tuning points:
       return;
     }
 
-    var size = state.skinPickupIcon.size;
-    for (var i = 0; i < world.elevators.length; i += 1) {
-      var elevator = world.elevators[i];
-      if (!elevator.skinPickupActive) {
-        continue;
-      }
-
-      var x = worldToScreenX(elevator.x + elevator.width * 0.5 - size * 0.5);
-      var y = elevator.y - size;
-      drawSkinCoinSymbol(x, y, size, elevator.skinPickupSkinName);
-    }
+    drawSkinCoinSymbol(
+      worldToScreenX(state.skinPickupIcon.x),
+      state.skinPickupIcon.y,
+      state.skinPickupIcon.size,
+      state.skinPickupIcon.skinName
+    );
   }
 
   function drawPlatformCoinIcon() {

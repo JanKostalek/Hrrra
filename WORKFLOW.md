@@ -5,6 +5,7 @@ This file captures standing project workflow conventions so they do not get lost
 ## Prompt Logging
 
 - Every new user prompt should also be appended to `prompts.md`.
+- For every user message, first append it to `prompts.md`, and only after that respond, analyze, or implement anything else.
 - Each prompt entry should use this separator format:
 
 ```text
@@ -35,6 +36,13 @@ This file captures standing project workflow conventions so they do not get lost
 
 - After meaningful JavaScript changes, run syntax validation with `node --check`.
 - When Android public assets were mirrored, also validate the mirrored `game.js` copy.
+
+## Local Tooling
+
+- Python is available on this machine.
+- Prefer the Windows launcher `C:\\Windows\\py.exe` first.
+- Known direct Python path: `C:\\Program Files\\Python313\\python.exe`.
+- Do not assume `python` from `WindowsApps` will work; if plain `python` fails, use `py` or the direct path above.
 
 ## Releases
 
