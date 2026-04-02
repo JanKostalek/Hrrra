@@ -175,3 +175,8 @@ takto to necham?
 
 -------------------
 
+
+-------------------
+
+
+dve veci. Tady je videt, ze moje score se propíse do top players v porádku. je tam jmené a score, ale v top scores se uloží místo jména jen "player".  a zároven v tom okne prohod your best a current run. srovnej font v top players a scores - to jump easy je pokazde jinak. Udelej ho mensí a vycentruj na rádek. a nadpisy tech oken "Online Top Scores" a "Online Top Players" b) ready run stránka má nevím proc možnost scrollovat, i kdyz tam nic není. Udelej maximální velikost podle toho pozadí. tam kde se zacne opakovat, tam to zasekni - znázorneno carou . Pokud bude potreba mensí, tak at je responzivní, ale at se nezvetšuje do té míry, že tam budou posouvace

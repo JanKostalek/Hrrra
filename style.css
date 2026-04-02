@@ -453,16 +453,20 @@ body {
 
 #final-online-status {
   margin: 0 0 8px 0;
-  font-size: clamp(17px, 2vw, 22px);
+  font-size: clamp(14px, 1.6vw, 18px);
   color: #355161;
   text-shadow: none;
+  text-align: center;
+  line-height: 1.2;
 }
 
 #final-top-scores-status {
   margin: 0 0 8px 0;
-  font-size: clamp(17px, 2vw, 22px);
+  font-size: clamp(14px, 1.6vw, 18px);
   color: #355161;
   text-shadow: none;
+  text-align: center;
+  line-height: 1.2;
 }
 
 #final-top-scores-list,
@@ -526,6 +530,10 @@ body {
   display: none;
 }
 
+#pre-run-screen.is-launch-transition {
+  overflow: hidden;
+}
+
 .pre-run-card {
   position: relative;
   width: min(1020px, 94vw);
@@ -545,6 +553,12 @@ body {
 #pre-run-screen.is-launch-transition .pre-run-stage {
   opacity: 0;
   pointer-events: none;
+}
+
+#pre-run-screen.is-launch-transition .pre-run-card {
+  height: min(700px, calc(100dvh - 28px));
+  max-height: min(700px, calc(100dvh - 28px));
+  overflow: hidden;
 }
 
 .pre-run-launch-overlay {

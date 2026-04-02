@@ -4675,14 +4675,14 @@ Main tuning points:
     var bestRankPrefix = state.onlineHighscore.bestScoreRank ? "#" + state.onlineHighscore.bestScoreRank + " " : "#? ";
     var currentRunRankPrefix = state.onlineHighscore.currentRunRank ? "#" + state.onlineHighscore.currentRunRank + " " : "#? ";
     topScoreRows.push({
-      label: bestRankPrefix + playerDisplayName + " (Your Best)",
-      score: bestScoreValue,
-      className: "is-player-row"
-    });
-    topScoreRows.push({
       label: currentRunRankPrefix + playerDisplayName + " (Current Run)",
       score: Math.max(0, Math.floor(Number(state.score) || 0)),
       className: "is-current-run-row"
+    });
+    topScoreRows.push({
+      label: bestRankPrefix + playerDisplayName + " (Your Best)",
+      score: bestScoreValue,
+      className: "is-player-row"
     });
 
     finalTopScoresListEl.innerHTML = topScoreRows.map(function (entry) {

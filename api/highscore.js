@@ -86,6 +86,30 @@ function computeRankForScore(entries, score) {
   return higherCount + 1;
 }
 
+function normalizeRunZsetEntries(raw) {
+  if (!Array.isArray(raw) || !raw.length) {
+    return [];
+  }
+
+  if (typeof raw[0] === "object" && raw[0] !== null) {
+    return raw
+      .map((entry) => ({
+        member: String(entry.member || entry.value || entry.playerId || ""),
+        score: normalizeScore(entry.score),
+      }))
+      .filter((entry) => entry.member);
+  }
+
+  const entries = [];
+  for (let index = 0; index < raw.length; index += 2) {
+    entries.push({
+      member: String(raw[index] || ""),
+      score: normalizeScore(raw[index + 1]),
+    });
+  }
+  return entries.filter((entry) => entry.member);
+}
+
 function getRunMemberPlayerId(member) {
   const raw = String(member || "");
   const firstSeparator = raw.indexOf("~");
@@ -133,22 +157,20 @@ async function readLeaderboard(board, playerId, currentScore = 0) {
     rev: true,
     withScores: true,
   });
-  const allTopScoresRaw = normalizeZsetEntries(
-    await kv.zrange(topScoresKey, 0, -1, {
-      rev: true,
-      withScores: true,
-    })
-  );
+  const allTopScoresRaw = await kv.zrange(topScoresKey, 0, -1, {
+    rev: true,
+    withScores: true,
+  });
 
   const topPlayersParsed = normalizeZsetEntries(topPlayersRaw);
-  const topScoresParsed = normalizeZsetEntries(topScoresRaw).map((entry) => ({
-    member: String(entry.playerId || ""),
-    playerId: getRunMemberPlayerId(entry.playerId),
+  const topScoresParsed = normalizeRunZsetEntries(topScoresRaw).map((entry) => ({
+    member: String(entry.member || ""),
+    playerId: getRunMemberPlayerId(entry.member),
     score: normalizeScore(entry.score),
   }));
-  const allTopScores = allTopScoresRaw.map((entry) => ({
-    member: String(entry.playerId || ""),
-    playerId: getRunMemberPlayerId(entry.playerId),
+  const allTopScores = normalizeRunZsetEntries(allTopScoresRaw).map((entry) => ({
+    member: String(entry.member || ""),
+    playerId: getRunMemberPlayerId(entry.member),
     score: normalizeScore(entry.score),
   }));
 
