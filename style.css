@@ -44,11 +44,11 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
   z-index: 30;
   cursor: pointer;
-  padding: 16px;
+  padding: 10px 16px 16px;
   overflow-y: auto;
 }
 
@@ -342,7 +342,7 @@ body {
 }
 
 #game-over h1 {
-  margin: 0 0 18px 0;
+  margin: 0 0 10px 0;
   font-size: clamp(72px, 10vw, 108px);
   line-height: 1;
   text-shadow: none;
@@ -361,11 +361,11 @@ body {
   grid-template-columns: minmax(220px, 320px) minmax(260px, 1fr) minmax(240px, 360px);
   align-items: stretch;
   gap: clamp(18px, 3vw, 36px);
-  margin: 8px 0 18px;
+  margin: 0 0 18px;
 }
 
 #final-board-label {
-  margin: 0 0 6px 0 !important;
+  margin: 0 0 4px 0 !important;
   color: #ffffff;
   font-size: clamp(22px, 4.8vw, 50px) !important;
   font-weight: 700;
@@ -429,6 +429,7 @@ body {
   align-self: stretch;
   display: flex;
   flex-direction: column;
+  transform: translateY(-122px);
 }
 
 #final-highscores h2 {
@@ -457,6 +458,7 @@ body {
   align-self: stretch;
   display: flex;
   flex-direction: column;
+  transform: translateY(-122px);
 }
 
 #final-online-highscore h2 {
@@ -1919,6 +1921,7 @@ body.visual-theme-retro .brief-live::before {
     width: 100%;
     justify-self: stretch;
     padding: 10px 12px;
+    transform: translateY(-78px);
   }
 
   #final-highscores h2,
@@ -2036,6 +2039,7 @@ body.visual-theme-retro .brief-live::before {
   #final-highscores {
     width: min(100%, 100%);
     padding: 12px 14px;
+    transform: none;
   }
 
   #final-highscores h2 {
@@ -2049,6 +2053,7 @@ body.visual-theme-retro .brief-live::before {
   #final-online-highscore {
     width: min(100%, 100%);
     padding: 12px 14px;
+    transform: none;
   }
 
   #final-online-highscore h2 {

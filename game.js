@@ -2477,6 +2477,7 @@ Main tuning points:
 
   function finishBadgeRewardSequence() {
     resetBadgeRewardQueue();
+    state.gameOverInputBlockUntil = Date.now() + 350;
     updateGameOverSummary();
     gameOverEl.classList.remove("hidden");
     refreshMusicPlayback();
@@ -3319,6 +3320,7 @@ Main tuning points:
     badgeRewardPhase: "idle",
     badgeRewardTimer: 0,
     badgeRewardShowRip: false,
+    gameOverInputBlockUntil: 0,
     onlineHighscore: {
       loading: false,
       message: "",
@@ -7155,13 +7157,18 @@ Main tuning points:
     gameOverEl.addEventListener("click", function () {
       tryForceFullscreen();
       unlockAudioIfNeeded();
+      if (Date.now() < state.gameOverInputBlockUntil) {
+        return;
+      }
       if (!state.running && !state.projectileDeathAnimActive && !state.teleportFinishAnimActive && !state.questionCoinAnimActive) {
         openPreRunScreen();
       }
     });
 
     if (badgeRewardOverlayEl) {
-      badgeRewardOverlayEl.addEventListener("pointerdown", function () {
+      badgeRewardOverlayEl.addEventListener("pointerdown", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
         tryForceFullscreen();
         unlockAudioIfNeeded();
         advanceBadgeRewardSequence();

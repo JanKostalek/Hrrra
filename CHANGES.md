@@ -654,3 +654,4 @@ Rules:
 - 2026-04-02: Bumped Android/store versioning to `versionCode 12` / `versionName 1.0.11` and updated the shipped version metadata for a new Play upload containing the Android online login fix.
 - 2026-04-02: Added a `Guest` path to the sign-in popup so players can continue without online auth or online score submission, and gave update / What's New overlays priority over sign-in so the update prompt can no longer be trapped behind the login dialog on Android.
 - 2026-04-02: Bumped Android/store versioning to `versionCode 13` / `versionName 1.0.12` and updated shipped version metadata for a new Play upload containing the guest sign-in bypass and overlay-order fix.
+- 2026-04-02: Moved the `Game Over` online leaderboard panels closer to the top of the screen and fixed badge-reward-to-game-over input handoff so tapping through a badge can no longer immediately skip or hide the `Game Over` screen underneath.
