@@ -86,6 +86,7 @@ Main tuning points:
   var playerNameInputEl = document.getElementById("player-name-input");
   var playerPasswordInputEl = document.getElementById("player-password-input");
   var playerNameErrorEl = document.getElementById("player-name-error");
+  var playerNameGuestBtn = document.getElementById("player-name-guest");
   var playerNameSaveBtn = document.getElementById("player-name-save");
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
   var preRunBadgesScreenEl = document.getElementById("pre-run-badges-screen");
@@ -623,6 +624,14 @@ Main tuning points:
 
   function isAuthenticatedPlayerId(value) {
     return /^a_[a-z0-9_]+$/i.test(String(value || ""));
+  }
+
+  function isGuestPlayerId(value) {
+    return /^g_[a-z0-9_]+$/i.test(String(value || ""));
+  }
+
+  function createGuestPlayerId() {
+    return normalizePlayerId("g_" + Date.now().toString(36));
   }
 
   function readPlayerNameFromStorage() {
@@ -3749,7 +3758,7 @@ Main tuning points:
     loadPlayerSkinProgress();
     state.playerName = readPlayerNameFromStorage();
     state.playerId = readPlayerIdFromStorage();
-    if (!isAuthenticatedPlayerId(state.playerId)) {
+    if (!isAuthenticatedPlayerId(state.playerId) && !isGuestPlayerId(state.playerId)) {
       state.playerId = "";
       writePlayerIdToStorage("");
     }
@@ -4542,6 +4551,9 @@ Main tuning points:
     if (!updateNoticeEl) {
       return;
     }
+    if (state.updateNoticeActive && state.playerNamePromptActive) {
+      setPlayerNamePromptOpen(false);
+    }
     updateNoticeEl.classList.toggle("hidden", !state.updateNoticeActive);
     if (updateNoticeLaterBtn) {
       updateNoticeLaterBtn.classList.toggle("hidden", state.updateNoticeForce);
@@ -4555,6 +4567,9 @@ Main tuning points:
     state.whatsNewActive = Boolean(isOpen);
     if (!whatsNewNoticeEl) {
       return;
+    }
+    if (state.whatsNewActive && state.playerNamePromptActive) {
+      setPlayerNamePromptOpen(false);
     }
     whatsNewNoticeEl.classList.toggle("hidden", !state.whatsNewActive);
     if (!state.whatsNewActive) {
@@ -4585,6 +4600,9 @@ Main tuning points:
       playerNameSaveBtn.disabled = state.playerAuthPending;
       playerNameSaveBtn.textContent = state.playerAuthPending ? "Please wait..." : "Continue";
     }
+    if (playerNameGuestBtn) {
+      playerNameGuestBtn.disabled = state.playerAuthPending;
+    }
     if (playerNameInputEl) {
       playerNameInputEl.disabled = state.playerAuthPending;
     }
@@ -4594,6 +4612,9 @@ Main tuning points:
   }
 
   function setPlayerNamePromptOpen(isOpen) {
+    if (isOpen && (state.updateNoticeActive || state.whatsNewActive)) {
+      return;
+    }
     state.playerNamePromptActive = Boolean(isOpen);
     if (!playerNameNoticeEl) {
       return;
@@ -4626,10 +4647,19 @@ Main tuning points:
   }
 
   function maybeShowPlayerNamePromptIfMissing() {
-    if ((state.playerName && isAuthenticatedPlayerId(state.playerId)) || state.updateNoticeActive || state.whatsNewActive) {
+    if ((state.playerName && (isAuthenticatedPlayerId(state.playerId) || isGuestPlayerId(state.playerId))) || state.updateNoticeActive || state.whatsNewActive) {
       return;
     }
     setPlayerNamePromptOpen(true);
+  }
+
+  function continueAsGuest() {
+    state.playerName = "Guest";
+    state.playerId = createGuestPlayerId();
+    writePlayerNameToStorage(state.playerName);
+    writePlayerIdToStorage(state.playerId);
+    syncPlayerNameUi();
+    setPlayerNamePromptOpen(false);
   }
 
   function authenticatePlayer(name, password) {
@@ -5270,6 +5300,13 @@ Main tuning points:
           .finally(function () {
             setPlayerAuthPending(false);
           });
+      });
+    }
+    if (playerNameGuestBtn) {
+      playerNameGuestBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        continueAsGuest();
       });
     }
     if (playerNameInputEl) {
