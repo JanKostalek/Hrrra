@@ -359,9 +359,19 @@ body {
   width: min(1480px, 96vw);
   display: grid;
   grid-template-columns: minmax(220px, 320px) minmax(260px, 1fr) minmax(240px, 360px);
-  align-items: start;
+  align-items: stretch;
   gap: clamp(18px, 3vw, 36px);
   margin: 8px 0 18px;
+}
+
+#final-board-label {
+  margin: 0 0 6px 0 !important;
+  color: #ffffff;
+  font-size: clamp(22px, 4.8vw, 50px) !important;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.05;
+  text-shadow: none;
 }
 
 #final-current-run {
@@ -416,7 +426,9 @@ body {
   max-width: none;
   text-shadow: none;
   text-align: left;
-  align-self: center;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
 }
 
 #final-highscores h2 {
@@ -442,7 +454,9 @@ body {
   max-width: none;
   text-shadow: none;
   text-align: left;
-  align-self: center;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
 }
 
 #final-online-highscore h2 {
@@ -474,6 +488,7 @@ body {
   margin: 0;
   padding-left: 26px;
   text-align: left;
+  flex: 1 1 auto;
 }
 
 #final-top-scores-list li,
@@ -610,10 +625,10 @@ body {
   line-height: 1;
   font-weight: 900;
   letter-spacing: 0.08em;
-  color: #e11111;
+  color: #168a34;
   text-shadow:
     0 1px 0 rgba(255, 255, 255, 0.65),
-    0 10px 24px rgba(225, 17, 17, 0.16);
+    0 10px 24px rgba(22, 138, 52, 0.2);
   margin-bottom: 34px;
 }
 
@@ -679,6 +694,8 @@ body {
   display: block;
   font-size: clamp(30px, 4.2vw, 50px);
   line-height: 1;
+  text-align: center;
+  width: 100%;
 }
 
 .pre-run-mode-copy {
@@ -1073,12 +1090,12 @@ body {
   font-size: clamp(12px, 1.2vw, 16px);
   line-height: 1.2;
   font-weight: 700;
-  color: #4f5f69;
+  color: #b51616;
 }
 
 .pre-run-difficulty-btn.locked,
 .pre-run-mode-card.locked {
-  filter: grayscale(0.7) saturate(0.45);
+  filter: none;
   opacity: 0.82;
 }
 
@@ -1098,7 +1115,9 @@ body {
 
 .pre-run-difficulty-btn.locked .pre-run-lock-note,
 .pre-run-mode-card.locked .pre-run-lock-note {
-  color: #3c4e59;
+  color: #c81414 !important;
+  opacity: 1;
+  text-shadow: none;
 }
 
 #pre-run-hard-btn {

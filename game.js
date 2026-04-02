@@ -48,6 +48,7 @@ Main tuning points:
   var touchControls = document.getElementById("touch-controls");
   var ctx = canvas.getContext("2d");
   var gameOverEl = document.getElementById("game-over");
+  var finalBoardLabelEl = document.getElementById("final-board-label");
   var finalScoreEl = document.getElementById("final-score");
   var finalRuntimeEl = document.getElementById("final-runtime");
   var finalHighscoresEl = document.getElementById("final-highscores");
@@ -4679,6 +4680,7 @@ Main tuning points:
   function renderOnlineHighscoreUi() {
     if (
       !finalHighscoresEl ||
+      !finalBoardLabelEl ||
       !finalTopScoresStatusEl ||
       !finalTopScoresListEl ||
       !finalOnlineHighscoreEl ||
@@ -4690,16 +4692,20 @@ Main tuning points:
     finalHighscoresEl.classList.toggle("hidden", false);
     finalOnlineHighscoreEl.classList.toggle("hidden", false);
     var boardLabel = getOnlineLeaderboardLabel();
+    finalBoardLabelEl.textContent = boardLabel;
+    var topScoresStatusText = "";
+    var topPlayersStatusText = "";
     if (state.onlineHighscore.loading) {
-      finalTopScoresStatusEl.textContent = "Loading " + boardLabel + " top scores...";
-      finalOnlineStatusEl.textContent = "Loading " + boardLabel + " top players...";
+      topScoresStatusText = "Loading top scores...";
+      topPlayersStatusText = "Loading top players...";
     } else if (state.onlineHighscore.message) {
-      finalTopScoresStatusEl.textContent = state.onlineHighscore.message;
-      finalOnlineStatusEl.textContent = state.onlineHighscore.message;
-    } else {
-      finalTopScoresStatusEl.textContent = boardLabel;
-      finalOnlineStatusEl.textContent = boardLabel;
+      topScoresStatusText = state.onlineHighscore.message;
+      topPlayersStatusText = state.onlineHighscore.message;
     }
+    finalTopScoresStatusEl.textContent = topScoresStatusText;
+    finalOnlineStatusEl.textContent = topPlayersStatusText;
+    finalTopScoresStatusEl.classList.toggle("hidden", !topScoresStatusText);
+    finalOnlineStatusEl.classList.toggle("hidden", !topPlayersStatusText);
 
     var topScoreRows = state.onlineHighscore.topScores.slice(0, 15).map(function (entry, index) {
       return {

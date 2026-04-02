@@ -276,3 +276,23 @@ cili mužu zkusit?
 
 jen odpovídej. dokážeš z databáze vymazat soucasné score? abychom zacali s cistým listem?
 
+
+-------------------
+
+
+ted udeláme jednu kosmetickou zmenu. zmen barvu písma hrrra na zelenou. Vycentruj Jmup Mode a Full Mode a zmen barvu písme, kde oznamuje, ze je locked a co musís dosáhnout na cervene
+
+-------------------
+
+
+dalsí kosmeticka. z tbulek smaz to Jump Easy a dej to bílou barvou pod Game over (vycentrované) a menším (o 50%) písmem. zároven udelej, aby obe tabulky byly stejne velké. vzdy se budou zarovnávat podle té vetší s tím, že ta prázdnejší proste bude mít prazdné místo ve spodní cásti. cili hodnoty budou zarovnávny od shora. je to srozumitelné co chci s tabulkama online scores?
+
+-------------------
+
+
+texty stale nejsou cervené
+
+-------------------
+
+ted uz mužeš provést commit, push a aab
+

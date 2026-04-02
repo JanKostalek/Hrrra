@@ -251,10 +251,11 @@
     </div>
     <div id="game-over" class="hidden">
       <h1>Game Over</h1>
+      <p id="final-board-label" aria-label="Active leaderboard board">Jump Easy</p>
       <div id="game-over-layout">
         <div id="final-highscores" aria-label="Online top scores">
           <h2>Online Top Scores</h2>
-          <p id="final-top-scores-status">Loading top scores...</p>
+          <p id="final-top-scores-status" class="hidden">Loading top scores...</p>
           <ol id="final-top-scores-list"></ol>
         </div>
         <div id="final-current-run" aria-label="Current run result">
@@ -263,7 +264,7 @@
         </div>
         <div id="final-online-highscore" aria-label="Online top players">
           <h2>Online Top Players</h2>
-          <p id="final-online-status">Loading top players...</p>
+          <p id="final-online-status" class="hidden">Loading top players...</p>
           <ol id="final-online-list"></ol>
         </div>
       </div>
