@@ -29,7 +29,7 @@ Main tuning points:
 - Slow icon: slowUnlockSpeedPercent, slowDownByPercent, slowIconSizeRatio, slowRespawnMinSeconds, slowRespawnMaxSeconds
 - Money bag: scoreBagUnlockScore, scoreBagBonus, scoreBagIconSizeRatio, scoreBagRespawnMinSeconds, scoreBagRespawnMaxSeconds
 - Cracked coin: crackedCoinUnlockScore, crackedCoinPenaltyPercent, crackedCoinRespawnMinSeconds, crackedCoinRespawnMaxSeconds
-- Question coin: questionCoinUnlockScore, questionCoinRespawnMinSeconds, questionCoinRespawnMaxSeconds
+- Question coin: questionCoinUnlockScore, questionCoinWinPercent, questionCoinLosePercent, questionCoinRespawnMinSeconds, questionCoinRespawnMaxSeconds
 - Live: liveUnlockScore, liveRespawnMinSeconds, liveRespawnMaxSeconds
 - Shield: shieldUnlockScore, shieldRespawnMinSeconds, shieldRespawnMaxSeconds
 - Magnet: magnetUnlockScore, magnetEffectSeconds, magnetRespawnMinSeconds, magnetRespawnMaxSeconds
@@ -1692,13 +1692,8 @@ Main tuning points:
   }
 
   function getSkinDiscoveryScoreRange(level, mode, difficulty) {
-    var currentConfig = buildModeConfig(level, mode, difficulty);
-    var upperBound = Math.max(0, Math.floor(currentConfig.finishScore || 0));
-    var lowerBound = 0;
-    if (level > 1) {
-      var previousConfig = buildModeConfig(level - 1, mode, difficulty);
-      lowerBound = Math.max(0, Math.floor(previousConfig.finishScore || 0));
-    }
+    var upperBound = getConfiguredLevelGoalTargetScore(level, mode, difficulty);
+    var lowerBound = level > 1 ? getConfiguredLevelGoalTargetScore(level - 1, mode, difficulty) : 0;
     if (upperBound <= lowerBound + 1) {
       return null;
     }
@@ -3108,6 +3103,29 @@ Main tuning points:
     }
   }
 
+  function getLevelAudioPathOverrides(level) {
+    var normalizedLevel = Math.max(1, Math.min(LEVEL_COUNT, Math.floor(Number(level) || 1)));
+    var prefix = "l" + String(normalizedLevel);
+    var basePath = "assets/level" + String(normalizedLevel) + "/sound/" + prefix;
+    return {
+      levelMusicLoopPath: basePath + "-music-loop.wav",
+      levelJumpSoundPath: basePath + "-sfx-jump.wav",
+      levelCoinSoundPath: basePath + "-sfx-coin.wav",
+      levelBagSoundPath: basePath + "-sfx-bag.wav",
+      levelQuestionCoinSoundPath: basePath + "-sfx-question-coin.wav",
+      levelCrackedCoinSoundPath: basePath + "-sfx-cracked-coin.wav",
+      levelCurseSoundPath: basePath + "-sfx-curse.wav",
+      levelLifeSoundPath: basePath + "-sfx-life.wav",
+      levelLifeLossSoundPath: basePath + "-sfx-life-loss.wav",
+      levelShieldSoundPath: basePath + "-sfx-shield.wav",
+      levelShieldBreakSoundPath: basePath + "-sfx-shield-break.wav",
+      levelMagnetSoundPath: basePath + "-sfx-magnet.wav",
+      levelSlowSoundPath: basePath + "-sfx-slow.wav",
+      levelTeleportSoundPath: basePath + "-sfx-teleport.wav",
+      levelDeathSoundPath: basePath + "-sfx-death.wav"
+    };
+  }
+
   function sanitizeConfigValue(key, value) {
     if (!Number.isFinite(value)) {
       return value;
@@ -3123,6 +3141,10 @@ Main tuning points:
 
     if (key === "crackedCoinPenaltyPercent") {
       return Math.min(100, Math.max(0, Math.round(value)));
+    }
+
+    if (key === "questionCoinWinPercent" || key === "questionCoinLosePercent") {
+      return Math.max(0, Math.round(value));
     }
 
     return value;
@@ -3158,6 +3180,13 @@ Main tuning points:
       }
     }
 
+    var levelAudioOverrides = getLevelAudioPathOverrides(level);
+    for (key in levelAudioOverrides) {
+      if (Object.prototype.hasOwnProperty.call(levelAudioOverrides, key)) {
+        cfg[key] = levelAudioOverrides[key];
+      }
+    }
+
     var storageOverrides = readAdminStorageObject(level, mode, difficulty);
     for (key in storageOverrides) {
       if (Object.prototype.hasOwnProperty.call(storageOverrides, key)) {
@@ -3176,11 +3205,32 @@ Main tuning points:
     return "Level " + String(level);
   }
 
-  function getFinishScoreGoalText(finishScore) {
-    if (!Number.isFinite(finishScore) || finishScore <= 0) {
+  function getConfiguredLevelGoalTargetScore(level, mode, difficulty) {
+    var total = 0;
+    for (var currentLevel = 1; currentLevel <= level; currentLevel += 1) {
+      var cfg = buildModeConfig(currentLevel, mode, difficulty);
+      var required = Math.max(0, Math.floor(Number(cfg.finishScore) || 0));
+      if (required <= 0) {
+        return total;
+      }
+      total += required;
+    }
+    return total;
+  }
+
+  function getCurrentLevelGoalTargetScore() {
+    var required = Math.max(0, Math.floor(Number(C.finishScore) || 0));
+    if (required <= 0) {
+      return 0;
+    }
+    return Math.max(0, Math.floor(Number(state.scoreCarryOver) || 0)) + required;
+  }
+
+  function getFinishScoreGoalText(targetScore) {
+    if (!Number.isFinite(targetScore) || targetScore <= 0) {
       return "Final endless level. No finish teleport.";
     }
-    return "Finish Level with " + finishScore.toLocaleString("en-US") + " score.";
+    return "Finish Level with " + targetScore.toLocaleString("en-US") + " score.";
   }
 
   function isFieldVisibleForMode(mode, key) {
@@ -3561,7 +3611,7 @@ Main tuning points:
     {
       title: "Level Goal",
       fields: [
-        { key: "finishScore", label: "Finish score (0 = endless)", min: 0, step: 1 }
+        { key: "finishScore", label: "Level Goal Score (0 = endless)", min: 0, step: 1 }
       ]
     },
     {
@@ -3622,6 +3672,8 @@ Main tuning points:
       title: "Question Coin",
       fields: [
         { key: "questionCoinUnlockScore", label: "Unlock score" },
+        { key: "questionCoinWinPercent", label: "Win percent" },
+        { key: "questionCoinLosePercent", label: "Lose percent" },
         { key: "questionCoinRespawnMinSeconds", label: "Respawn min sec" },
         { key: "questionCoinRespawnMaxSeconds", label: "Respawn max sec" }
       ]
@@ -4289,11 +4341,12 @@ Main tuning points:
     if (preRunCompactLevelEl) {
       preRunCompactLevelEl.textContent = getLevelDisplayName(state.currentLevel);
     }
+    var currentLevelGoalTarget = getCurrentLevelGoalTargetScore();
     if (preRunLevelGoalCopyEl) {
-      preRunLevelGoalCopyEl.textContent = getFinishScoreGoalText(C.finishScore);
+      preRunLevelGoalCopyEl.textContent = getFinishScoreGoalText(currentLevelGoalTarget);
     }
     if (preRunCompactGoalCopyEl) {
-      preRunCompactGoalCopyEl.textContent = getFinishScoreGoalText(C.finishScore);
+      preRunCompactGoalCopyEl.textContent = getFinishScoreGoalText(currentLevelGoalTarget);
     }
     if (preRunStartBtn) {
       preRunStartBtn.textContent = state.currentLevel > 1 ? "Continue" : "Start Run";
@@ -7784,10 +7837,12 @@ Main tuning points:
     state.questionCoinAnimElapsed += dt;
     if (!state.questionCoinAnimApplied && state.questionCoinAnimElapsed >= randomizerDuration) {
       var stake = state.questionCoinAnimStakeScore;
+      var winPercent = Math.max(0, Number(C.questionCoinWinPercent) || 0);
+      var losePercent = Math.max(0, Number(C.questionCoinLosePercent) || 0);
       if (state.questionCoinAnimResult === "+") {
-        state.questionCoinAnimDelta = applyLevelScoreDelta(stake * 2);
+        state.questionCoinAnimDelta = applyLevelScoreDelta(Math.floor(stake * (winPercent / 100)));
       } else {
-        state.questionCoinAnimDelta = applyLevelScoreDelta(-Math.floor(stake * 0.5));
+        state.questionCoinAnimDelta = applyLevelScoreDelta(-Math.floor(stake * (losePercent / 100)));
       }
       state.questionCoinAnimApplied = true;
       recordQuestionCoinOutcome(state.questionCoinAnimResult);
@@ -7866,10 +7921,11 @@ Main tuning points:
     if (state.levelGoalReached) {
       return;
     }
-    if (!Number.isFinite(C.finishScore) || C.finishScore <= 0) {
+    var targetScore = getCurrentLevelGoalTargetScore();
+    if (!Number.isFinite(targetScore) || targetScore <= 0) {
       return;
     }
-    if (state.score < C.finishScore) {
+    if (state.score < targetScore) {
       return;
     }
 

@@ -160,6 +160,7 @@ Score může být také:
 - risk/reward mechanika
 - po sebrání se na chvíli zastaví hra
 - náhodně se rozhodne, zda hráč score získá nebo ztratí
+- velikost výhry i ztráty jde ladit v adminu přes `Win %` a `Lose %`
 
 ### Curse
 - na krátkou dobu zmrazí běžný score gain
@@ -255,3 +256,11 @@ Hra je stále ve vývoji. Grafika, balans, pravidla i rozmístění některých 
 - vyhrazená část = skok
 
 Zpětná vazba je cennější než "perfektní run". Zajímají nás i situace, kdy něco působí nejasně, nefér nebo vizuálně matoucím dojmem.
+----------------------------------
+
+## Level Goal Score
+- Administrace novÄ› pouÅ¾Ã­vÃ¡ `Level Goal Score` jako required score pro konkrÃ©tnÃ­ level.
+- Nejde uÅ¾ o absolutnÃ­ total-run target.
+- SkuteÄnÃ½ cÃ­l se poÄÃ­tÃ¡ jako `carried score na startu levelu + Level Goal Score`.
+- Briefing proto ukazuje `Finish Level with XXXX score.`, kde `XXXX` je aktuÃ¡lnÄ› vypoÄtenÃ½ target pro ten run.
+- `Question Coin` na konci levelu se normÃ¡lnÄ› zapoÄÃ­tÃ¡ do score a dalÅ¡Ã­ level pak zaÄÃ­nÃ¡ z tohoto novÃ©ho vÃ½sledku.

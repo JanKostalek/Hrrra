@@ -53,11 +53,25 @@ This file captures standing project workflow conventions so they do not get lost
   - `android/app/src/main/assets/public/version-info.js`
   - `android/app/src/main/assets/public/version.json`
 - When the user asks to prepare an `.aab`, treat that as a request for a Store-upload-ready build.
+- `Prepare aab` means the whole release flow, not only the local bundle build.
 - Always bump whatever release versioning is required for Play upload, including at minimum:
   - `versionCode`
   - `versionName` when appropriate
   - in-game/update metadata that must match the shipped build
 - Always ensure the Android packaged public assets contain the same version/update files as the web root so the app does not falsely report that a newer Store version exists immediately after install/update.
+- Unless the user explicitly says otherwise, `prepare aab` should include all of this:
+  - commit the intended release changes
+  - make sure the release commit is on local `main`
+  - push that release commit to `origin/main`
+  - verify the remote deployment picks up the new version metadata
+  - confirm `version.json` on the live site reports the new release version
+  - only treat the release as complete when the in-app update check can see the new version after launch
+  - then build the final `.aab`
+- The goal of `prepare aab` is a release state where:
+  - Google Play accepts the upload
+  - the bundled app reports the shipped version correctly
+  - the live `version.json` advertises the same newer version
+  - an older installed app can detect that update on startup
 
 ## Commits
 

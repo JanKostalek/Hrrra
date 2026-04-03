@@ -98,6 +98,30 @@ Short `SFX` are currently played through `Web Audio API` for lower latency. Long
 
 -------------------
 
+## Levels 2-5 Audio
+
+- `assets/level2/sound/`, `assets/level3/sound/`, `assets/level4/sound/`, and `assets/level5/sound/` now mirror the same file structure as `Level 1`.
+- Each level now has its own level-specific filenames (`l2-...`, `l3-...`, `l4-...`, `l5-...`) for:
+  - gameplay loop
+  - jump
+  - coin
+  - bag
+  - Question Coin
+  - Cracked Coin
+  - Curse
+  - life
+  - life loss
+  - shield
+  - shield break
+  - magnet
+  - slow
+  - teleport
+  - death
+- For now, Levels `2-5` use cloned copies of the current Level 1 sound files so routing is ready immediately.
+- This is only a structural placeholder step: the files can now be replaced gradually level by level without changing code or tuning paths again.
+
+-------------------
+
 ## Current Scope
 
 Implemented now:
@@ -105,8 +129,9 @@ Implemented now:
 - Global screen/UI sound path mapping
 - Per-level sound path mapping in admin
 - Level 1 gameplay music and core pickup / event SFX
+- Prepared separate sound folders and runtime routing for Levels `2-5`
 - Pre-run, between-level, and Game Over screen loops
 
 Not routed yet:
 - Separate sounds for blockers / projectiles / level-finish stinger / menu-specific edge cases beyond the current core set
-- Levels 2-5 dedicated sound sets
+- Unique dedicated sound design for Levels `2-5` beyond the current cloned placeholders

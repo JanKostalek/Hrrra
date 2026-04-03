@@ -397,3 +397,44 @@ super. jen můžeš odstranit ten text a nadpis změn na "Top Score" a vycentruj
 -------------------
 
 udelej commit a push a priprav mi aab
+
+-------------------
+
+poslední na store je 1.0.12!
+
+-------------------
+
+dve kosmetické veci. v game over screen není potreba mít dole ten text press space to continue. predpoklad, je, ze hra bezi cela na mobilu. dale vycentruj to score doprostred - doprostred polí pro score. b) start page. taky není potreba uz info o desktop. viz obrazek. zmen tam tedy text Tap To Jump. a obrazek telefonu vycentruj doprostred toho okna
+-------------------
+
+ov??, zda v p?edposledn? verzi - a asi i v posledn? co jsme commitnuly, pushnuly a pripravili pro android, zda je stale overen?, zda nen? nova verze na store. mam pocit, ze jsem pustil hru a neoznamila mi novou verzi. ale kdyz jsem sel do store, tak tam byl update
+-------------------
+
+zapsi jako pravidlo, abys vzdy udelal vse co je potreba, kdyz napisu "priprav aab". to znamena, (a dopln co je potrea a ja to nenapsal), ud?las commit do main na local i na online, pushnes novou verzi, upravis verzovani aab, pripravis aab a ud?l?s to co jsi delal ted, aby byla nov? verze "videt" pri pusten? hry.
+-------------------
+
+pridej ted do administrace - vsude kde jsou parametry question coint (vsechny mode / difficulty / level parametra Win a Loose a procent. to znamena, ze kdyz u Loose dam 50% ubere mi to 50% po?tu bodu o kter? hrajeme kdyz dam 50% u win, dostanu polovinu bod? o kter? hrajeme. je to srozumiteln?? nejdriv odpovedz nez budes pokracovat
+-------------------
+
+pokud se nepletu, tak nyn? je loose nastaveny na 50 a win na 200. zatim tak ty hodnoty zachovej pri vytv??en? administrace
+-------------------
+
+tak to implementuj
+-------------------
+
+Jen odpovez, zda to jde jednoduse udelat a pripadne navrhy jak to udelat jinak. zatim neimplementuj. Ted jeste jeden zasah. asi trochu vetsi. v tuto chvili v admin zadavame, kolik mus?s dosa?hnout celkov? skore, abys pokra?oval do dal??ho levelu. Je tam absolutn? hodnota. ale stane se, ze nekdy na konci levelu ziskame question coin, kter? da tolik bod?, ze mne posle rovnou pres pristi level nebo dokonce pres dva. ladenim question coin win se to da upravit, ale lepsi by bylo, kdybychom v administraci zad?vali, kolik bod? v tom levelu je potreba nasb?rat. viz obrazek - by pak ukazovalo dle modelu "aktu?ln? score + po?adovan? score na postup" = zobrazen? level goal. cili pred prvn?m levelem by to bylo 0+ zadan? hodnota. v dals?ch levelech by to vy?etlo skore kter? hr?? m? a pridalo po?adovanou hodnotu..
+-------------------
+
+proved to podle navrhu - toho roz???en?ho. pou?ij text Level Goal Score a v info pouzij Finish Level with xxxx score. question coin na konci se proste zapo??t? to aktu?ln?ho skore at je v?sledek jak?koliv. a dals? level proste bude ten v?sledek + required score. Implementuj a zapis zm?nu do ve?ker? dokumentace
+-------------------
+
+jen odpovez. nad question mark je hodnota o kteoru se hraje. jak tato hodnota vznika - je vypo??t?na?
+-------------------
+
+p?iprav strukturu zv?k? tak jak je pro level 1 i pro vsechny ostatn? levely. V tuto chv?li tam pou?ij soubory, kter? m?m na disku, cili tam budou uz i ty soubory, kter? jsem ja nahradil. T?m bude sice pro tuto chv?li vsude stejna hudba, ale ja ji budu postupne menit
+-------------------
+
+k ?emu slouzi music_loop-other?
+-------------------
+
+priprav aab

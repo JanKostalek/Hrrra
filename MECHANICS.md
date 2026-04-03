@@ -22,7 +22,8 @@ Every gameplay-related change must be added here with date and short reason.
 - Distance-based score is multiplied by configurable `distanceScoreMultiplier`.
 - Every 1000 score increases world scroll speed by 10% (stacking per threshold).
 - The run is now split into level progression from `Level 1` to `Level 5`.
-- `finishScore` defines the total run score required to finish the current level.
+- `finishScore` now acts as the per-level required score amount for the current level.
+- The real finish target is calculated as `score on level start + finishScore`.
 - `finishScore = 0` means the level is endless and does not spawn a finish teleport.
 
 ### Level Progression
@@ -31,13 +32,13 @@ Every gameplay-related change must be added here with date and short reason.
 - Score carries between finished levels.
 - Lives carry between finished levels.
 - Each level has independent full mechanic admin tuning for every mode+difficulty combination.
-- When current total score reaches the current level `finishScore`, a full-height teleport appears ahead.
+- When current total score reaches the current level start score plus that level's `finishScore`, a full-height teleport appears ahead.
 - After the finish teleport appears, no new world content is generated behind it anymore.
 - Existing platforms, elevators and hazards beyond the teleport are removed so the teleport is a true hard end of the level.
 - Touching the teleport finishes the current level.
 - Level finish opens a `Level Finished` status screen with level runtime, level coins and level bags.
 - `Continue` opens the next level briefing screen.
-- Briefing screen now shows current level and that level's finish target.
+- Briefing screen now shows current level and the computed finish target for that level.
 - `Level 5` is intended as the final endless level with `finishScore = 0`.
 
 ### Controls
@@ -1031,6 +1032,13 @@ Every gameplay-related change must be added here with date and short reason.
 - `Level 5` can be endless by setting `finishScore` to `0`.
 - Why: prepares the game for multi-level progression while keeping later per-level mechanic and art changes isolated.
 
+### v0.1.199 - Level goals now use per-level required score instead of absolute total score (2026-04-03)
+- Kept the stored admin key `finishScore`, but changed its gameplay meaning to `Level Goal Score`.
+- Each level goal is now resolved as `score at level start + configured level goal score`.
+- Briefing text still reads `Finish Level with XXXX score.`, but `XXXX` is now the computed total target for the current run state.
+- This means late `Question Coin` gains or losses still affect whether the current level finishes, but the next level target is always recalculated from the player's actual carried score plus that next level's required score.
+- Why: makes level balancing much easier and prevents one big end-of-level score swing from unintentionally trivializing multiple following levels.
+
 ### v0.1.165 - Tightened teleport finish collision to require real contact (2026-03-19)
 - Narrowed the active collision zone of the finish teleport so the player must enter its inner beam before the level completes.
 - Why: the previous hitbox ended the level too early, while the player sprite still looked visibly outside the portal.
@@ -1086,6 +1094,14 @@ Every gameplay-related change must be added here with date and short reason.
 - `+` adds `2x` the stored stake to the current level score.
 - `-` removes `50%` of the stored stake from the current level score, without touching carried score from previous levels.
 - Why: adds a clear risk/reward pickup that lets players gamble with level score instead of only avoiding hazards.
+
+### v0.1.198 - Question Coin win/lose percentages are now admin-tunable (2026-04-03)
+- Added per-level/mode/difficulty admin controls for `Question Coin` `Win percent` and `Lose percent`.
+- These values now scale the resolved stake directly:
+- `Win percent = 200` means the player gains `200%` of the stored stake.
+- `Lose percent = 50` means the player loses `50%` of the stored stake.
+- Default values were set to preserve previous behavior: `Win percent 200` and `Lose percent 50`.
+- Why: keeps the existing gamble feel by default, but makes Question Coin reward/risk balancing tunable anywhere in the admin.
 
 ### v0.1.176 - Extended Question Coin reveal timing and result copy (2026-03-20)
 - Question Coin randomizer now spins for `2` seconds and then shows the winning `+` or `-` result for `1` extra second.

@@ -1,11 +1,11 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 14,
-  versionName: "1.0.13",
+  versionCode: 15,
+  versionName: "1.0.14",
   whatsNew: [
-  "Added a new Scores page with online Top Players for Jump/Full and Easy/Hard.",
-  "Refined the Scores page header and pre-run difficulty selector layout.",
-  "Improved online leaderboard browsing before starting a run.",
-  "Guest mode and Android online login fixes remain included.",
-  "Level 1 sound test content is still experimental and incomplete."
+  "Added per-level Question Coin Win % and Lose % tuning in admin.",
+  "Level goals now use carried score plus Level Goal Score for cleaner progression.",
+  "Simplified the mobile pre-run and Game Over copy/layout.",
+  "Prepared Level 2-5 sound folders and routing with placeholder copies.",
+  "Scores page and earlier Android online/update fixes remain included."
 ]
 });

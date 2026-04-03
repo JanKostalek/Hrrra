@@ -94,6 +94,8 @@
     crackedCoinRespawnMinSeconds: 8,
     crackedCoinRespawnMaxSeconds: 18,
     questionCoinUnlockScore: 0,
+    questionCoinWinPercent: 200,
+    questionCoinLosePercent: 50,
     questionCoinIconSizeRatio: 0.82,
     questionCoinRespawnMinSeconds: 10,
     questionCoinRespawnMaxSeconds: 20,
