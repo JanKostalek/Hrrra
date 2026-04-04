@@ -161,6 +161,7 @@ Score může být také:
 - risk/reward mechanika
 - po sebrání se na chvíli zastaví hra
 - `+ / -` běží dál, dokud hráč netukne a tím výsledek nezastaví
+- pokud hráč netukne, po `5s` se výsledek zastaví automaticky
 - velikost výhry i ztráty jde ladit v adminu přes `Win %` a `Lose %`
 
 ### Curse

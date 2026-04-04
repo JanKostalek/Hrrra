@@ -489,3 +489,13 @@ nevim, zda to bude i v mobilni veri, ale na lokale se zobrazuje "start" spatne.
 -------------------
 připrav aab
 -------------------
+vyúis mi sem seznam vsek nazvu badges co ve hre jsou
+-------------------
+na androidu, kdyz je mistery coin, tak nejde tapnout a zastavit nahodu. a) najdi proc to nejde b) pripadne můzes udelat, ze kdyz do 5s není tap, tak se automaticky zastaví na náhohode
+-------------------
+obrazovky pretakaji. v settings jsou zbytecne velky okna dej to jako jednoduchy melé dva prepínače. a u badges, který zbárají informace pres vícero rannu, napríklad posíbrat 1 000 000 bodů , tak vzdy do závorky za to číslo napis, kolik je aktuální počet dosazeny. abychom vedeli, jak se blížíme a nebo neblížíme
+-------------------
+u toho wats new, jak to pretéka, udelej, aby to proste slo posunovat i mimo obrazovku. ted tam posuvník není
+-------------------
+priprav aab
+-------------------

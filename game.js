@@ -824,6 +824,7 @@ Main tuning points:
   };
   var FUTURE_SKIN_SLOT_COUNT = 2;
   var FUTURE_SKIN_ICON_PATH = "assets/hero-question-mark-icon.png";
+  var QUESTION_COIN_AUTO_STOP_SECONDS = 5;
   var SKIN_OPTIONS = [
     { value: "Skin01", label: "Zyro" },
     { value: "Skin02", label: "Vexi" },
@@ -2179,6 +2180,17 @@ Main tuning points:
     return String(safe);
   }
 
+  function shouldShowBadgeInlineProgress(series) {
+    return series && (series.category === "All Runs" || series.category === "Lifetime Legends");
+  }
+
+  function appendBadgeInlineProgress(baseText, series, tierIndex) {
+    if (!shouldShowBadgeInlineProgress(series)) {
+      return baseText;
+    }
+    return baseText + " (" + formatBadgeCollectedNumber(series, tierIndex) + ")";
+  }
+
   function formatBadgeGoalText(series, tierIndex) {
     var target = getBadgeTierTarget(series, tierIndex);
     switch (series.id) {
@@ -2186,20 +2198,20 @@ Main tuning points:
         return formatBadgeCompactNumber(target) + " points";
       case "coin_collector_single_run":
       case "coin_collector_all_runs":
-        return formatBadgeCompactNumber(target) + " coins";
+        return appendBadgeInlineProgress(formatBadgeCompactNumber(target) + " coins", series, tierIndex);
       case "bag_collector_single_run":
       case "bag_collector_all_runs":
-        return formatBadgeCompactNumber(target) + " money bags";
+        return appendBadgeInlineProgress(formatBadgeCompactNumber(target) + " money bags", series, tierIndex);
       case "lucky_single_run":
       case "fortunate_all_runs":
-        return formatBadgeCompactNumber(target) + " positive ? Coin wins";
+        return appendBadgeInlineProgress(formatBadgeCompactNumber(target) + " positive ? Coin wins", series, tierIndex);
       case "unlucky_single_run":
       case "doom_magnet_all_runs":
-        return formatBadgeCompactNumber(target) + " negative ? Coin results";
+        return appendBadgeInlineProgress(formatBadgeCompactNumber(target) + " negative ? Coin results", series, tierIndex);
       case "untouchable_single_run":
         return "Finish " + target + " levels clean";
       case "endless_greed_all_runs":
-        return formatBadgeCompactNumber(target) + " total score";
+        return appendBadgeInlineProgress(formatBadgeCompactNumber(target) + " total score", series, tierIndex);
       case "speed_demon_skills":
         return "Reach +" + target + "% speed";
       case "shield_teleporter_skills":
@@ -2217,21 +2229,21 @@ Main tuning points:
       case "purist_skills":
         return "Reach Level " + target + " clean";
       case "first_runner_legends":
-        return "Start " + target + " run";
+        return appendBadgeInlineProgress("Start " + target + " run", series, tierIndex);
       case "heart_hunter_legends":
-        return "Collect " + target + " lives";
+        return appendBadgeInlineProgress("Collect " + target + " lives", series, tierIndex);
       case "still_running_legends":
-        return "Lose " + target + " lives";
+        return appendBadgeInlineProgress("Lose " + target + " lives", series, tierIndex);
       case "teleporter_legends":
-        return "Use " + target + " teleports";
+        return appendBadgeInlineProgress("Use " + target + " teleports", series, tierIndex);
       case "bubble_saver_legends":
-        return "Trigger " + target + " shield saves";
+        return appendBadgeInlineProgress("Trigger " + target + " shield saves", series, tierIndex);
       case "cursed_legends":
-        return "Stay cursed for " + target + "s";
+        return appendBadgeInlineProgress("Stay cursed for " + target + "s", series, tierIndex);
       case "magneto_legends":
-        return "Pick up " + target + " magnets";
+        return appendBadgeInlineProgress("Pick up " + target + " magnets", series, tierIndex);
       case "starter_legends":
-        return "Start " + target + " runs";
+        return appendBadgeInlineProgress("Start " + target + " runs", series, tierIndex);
       case "unlocker_discovery":
         if (tierIndex === 0) {
           return "Unlock Hard";
@@ -7624,6 +7636,10 @@ Main tuning points:
       event.preventDefault();
       tryForceFullscreen();
       unlockAudioIfNeeded();
+      if (state.questionCoinAnimActive && !state.questionCoinAnimApplied) {
+        confirmQuestionCoinAnimation();
+        return;
+      }
       if (button.setPointerCapture) {
         button.setPointerCapture(event.pointerId);
       }
@@ -7987,6 +8003,9 @@ Main tuning points:
 
   function updateQuestionCoinAnimation(dt) {
     state.questionCoinAnimElapsed += dt;
+    if (!state.questionCoinAnimApplied && state.questionCoinAnimElapsed >= QUESTION_COIN_AUTO_STOP_SECONDS) {
+      confirmQuestionCoinAnimation();
+    }
     if (state.questionCoinAnimApplied && state.questionCoinAnimElapsed >= state.questionCoinAnimDuration) {
       state.questionCoinAnimActive = false;
       state.running = true;

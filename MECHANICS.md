@@ -1113,6 +1113,8 @@ Every gameplay-related change must be added here with date and short reason.
 - `Question Coin` no longer auto-resolves after a fixed randomizer duration.
 - The `+ / -` roll now keeps alternating until the player taps the screen (or presses `Space` / `Enter` during desktop testing).
 - The overlay now explicitly shows a `Tap to stop` prompt while the roll is active.
+- On mobile, taps on the fullscreen touch-control zones now also stop the roll correctly instead of swallowing the input above the canvas.
+- If the player does not tap within `5s`, the roll auto-stops on the currently shown symbol.
 - After the player stops it, the resolved result is shown briefly and then the run continues.
 - Why: this makes the gamble feel more interactive and gives the player direct control over when the result locks in.
 
