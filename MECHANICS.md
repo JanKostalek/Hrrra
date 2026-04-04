@@ -85,9 +85,10 @@ Every gameplay-related change must be added here with date and short reason.
 - Unlock condition: when current speed reaches at least `200%` over base.
 - First spawn appears on the nearest platform that appears after unlock.
 - Icon position is at 1/4 of platform length from its left edge.
-- On pickup, current speed is cut to 50% of its current value.
+- On pickup, current speed is reduced by the configured `Slow down by %`.
+- The slowdown lasts only for the configured `Duration sec`.
 - After first unlock spawn, icon respawns repeatedly every random 10-20 seconds.
-- Every additional pickup again halves current speed.
+- Picking up another `Slow` refreshes the timed effect instead of stacking permanent slowdown.
 
 ### Score Bag Icon
 - Spawns repeatedly every 5-20 seconds on a platform that is appearing at the right screen edge.
@@ -1108,6 +1109,13 @@ Every gameplay-related change must be added here with date and short reason.
 - The result phase now also displays `You won XXXX` or `You lost XXXX` with the resolved score amount.
 - Why: the gamble reads better when the roll and the final payout/loss are both visible long enough to register clearly.
 
+### v0.1.199 - Question Coin result is now player-stopped by tap (2026-04-04)
+- `Question Coin` no longer auto-resolves after a fixed randomizer duration.
+- The `+ / -` roll now keeps alternating until the player taps the screen (or presses `Space` / `Enter` during desktop testing).
+- The overlay now explicitly shows a `Tap to stop` prompt while the roll is active.
+- After the player stops it, the resolved result is shown briefly and then the run continues.
+- Why: this makes the gamble feel more interactive and gives the player direct control over when the result locks in.
+
 ### v0.1.177 - Shield now carries over to the next level (2026-03-20)
 - If the player finishes a level while holding Shield, that Shield charge now remains active at the start of the next level.
 - Starting a completely new run still clears Shield as before.
@@ -1167,6 +1175,14 @@ Every gameplay-related change must be added here with date and short reason.
 - `Slow` can no longer push the run below the base starting speed, even if collected repeatedly at low acceleration.
 - HUD speed still reports the final total speed relative to the original base speed.
 - Why: matches the intended tuning model where Slow trims acceleration without ever making the game slower than its normal starting pace.
+
+### v0.1.198 - Slow is now a timed effect with configurable duration (2026-04-04)
+- Added `Duration sec` to the `Slow` admin section for every level/mode/difficulty combination.
+- `Slow` no longer permanently trims the current bonus speed curve.
+- On pickup, the run speed is reduced by the configured `Slow down by %`, but only for the configured duration.
+- While the timed slow is active, normal score-based acceleration still continues in the background.
+- Picking up another `Slow` refreshes the timer instead of stacking the slowdown deeper and deeper.
+- Why: avoids runaway sluggish runs where repeated `Slow` pickups made the game drag more and more over time.
 
 ### v0.1.186 - Badges now track real gameplay stats for admin and progression counters (2026-03-30)
 - Badge progress now reads from real run and lifetime gameplay stats instead of placeholder text, including score, coins, bags, Question Coin results, lives collected/lost, teleports, shield saves, curse time, magnets, runs started, speed peaks, clean-level chains, and clean progression milestones.

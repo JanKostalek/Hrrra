@@ -438,3 +438,54 @@ k ?emu slouzi music_loop-other?
 -------------------
 
 priprav aab
+-------------------
+
+sice je vytvorena struktura pro zvuky na dalsich levelech, ale nehraje tam muzika ani nejsou slyset zvuky. myslim ze level dva a dalsi nemaji zvuky napojene...
+-------------------
+
+jen se zamysli a odpovez. nic neimplementuj, dokud ti nereknu. nejsem si jist?, jak? n?zev pou??t pro druh? mod. Jump je asi jasny, ale ten druh? jako full nen? dokonal?. a nebo mozn? zm?nit n?jak oba, aby bylo jasn?js? co se v nich deje. navrhy?
+-------------------
+
+jeste si rikam neco jako advanced
+-------------------
+
+pouzijeme Jumpa Classic a Jump Advanced. prejmenuj kde je full na advanced. uprav start ovrazovku, jak jsem poslal screen. Odstran i to "mobile". protoze vzdy vse je mobile. 
+-------------------
+
+budeme upravoat dal tu stranku. Postupne upravime UI(/UX, ale zacneme tím, ze tam pridamé dve tlačítka a k nim navázané stránky. na levo bude "Rules" - které bude říkat vsechny mechaniky - ty zakladní. ikonky co lze ve hre potkat, udělat, vyhnout se. tedy to c je na obrázku 2. s tím, že naopak pak to z té stranky může byt odebráno. a pak jeste pravé tlačítko, kde bude "settings" Tam budou nektere z mozností nastavení co jsou dneska v admin. pro začátek tam dáme Toggle Sound a Toggle Music. první vypne veškeré zvukové efekty (skok, sebrání micne atd) a druhé vypne hudbu. ve vsech obrazovkách.
+-------------------
+
+v rules napriklad chybí "slow"
+-------------------
+
+a jeste ikonka pro odemknuti postavicky
+-------------------
+
+ikonka v rules neodpovida te, ktera se objevuje ve hre
+-------------------
+
+slow
+-------------------
+
+ted jeste jeden button - mezi temito dvema novými. bude to "credits". bude tam zatím základní text "Most of everything done by Walhalla. Special thenks to TYNTYNfor provideing some graphics and to kajak for helping adding and tuning game mechanis. And thank you for all the testers for their input: kajak, TYNTYN, Sophia, Eliska, akmoznoh, Týpeček, Mates, Jiko
+-------------------
+
+uprav ten text, aby byl anglicky v pordku. co tam vidim za chyby a opravuju je.. ale klidne to dooprav "Most of everything done by Walhalla - even the bad stuff. Special thenks to TYNTYN for provideing some graphics and to kajak for helping adding and tuning game mechanis. And thank you to all the testers for their input: kajak, TYNTYN, Sophia, Eliska, akmoznoh, Týpeček, Mates, Jiko
+-------------------
+
+jeste jednou to uprav: Most of everything was done by Walhalla, including - and mostly -  the bad stuff. 
+
+Special thanks to TYNTYN for providing some graphics, and to kajak for helping to add and tune some of the game mechanics. 
+
+And thank you for all the testers for their input: kajak, TYNTYN, Sophia, Eliska, akmoznoh, Týpeček, Mates, Jiko
+-------------------
+
+chtěl bych změnit jeste chování v mechanice pri vzatí "slow". nyní je to tak, ze se rychlost sníží o polovinu. Respektive rychlostní navýšení oproti "standardu". jenze kdyz se to opakuje vicekrat hra je pak hodne pomala a zrychlení probíhá pomaleji a pomaleji, jak se pridávají body.  tak bych chtěl, aby se rychlost snížila na 50% ale jen na urcitou dobu. Rekneme 10s. A Chtěl bych pridat do administrace to, na jak dlouho a o kolik se sníží
+jeste jednu mechaniku chci změnit. u question coin ted pribáhá náhodny výběr co padne. chtěl bych, aby výběr byl navázaný na tap uživatele. cili aby probíhalo +/- dokud netukneme do obrazovky. měla by tam být na té obrazovce, kde to probíhá nějaká výzva, aby uživatel vedel, ze má tapnout
+-------------------
+jeste u toho vyberu není informace pro uzivatele, ze ma tapnout a navic se + prekrývá s textem. měl by být trochu níž
+-------------------
+nevim, zda to bude i v mobilni veri, ale na lokale se zobrazuje "start" spatne.
+-------------------
+připrav aab
+-------------------

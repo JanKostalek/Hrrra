@@ -61,12 +61,12 @@
     </div>
     <div id="mode-switch" aria-label="Game mode switch">
       <div id="mode-1-wrap" class="mode-slot">
-        <div id="mode-1-btn" class="mode-badge" aria-label="Full Mode active">Full Mode</div>
-        <div id="mode-1-lives" class="mode-lives" aria-label="Full Mode lives"></div>
+        <div id="mode-1-btn" class="mode-badge" aria-label="Jump Advanced active">Jump Advanced</div>
+        <div id="mode-1-lives" class="mode-lives" aria-label="Jump Advanced lives"></div>
       </div>
       <div id="mode-2-wrap" class="mode-slot">
-        <div id="mode-2-btn" class="mode-badge active" aria-label="Jump Mode active">Jump Mode</div>
-        <div id="mode-2-lives" class="mode-lives" aria-label="Jump Mode lives"></div>
+        <div id="mode-2-btn" class="mode-badge active" aria-label="Jump Classic active">Jump Classic</div>
+        <div id="mode-2-lives" class="mode-lives" aria-label="Jump Classic lives"></div>
       </div>
     </div>
     <div id="touch-controls">
@@ -111,11 +111,15 @@
     <div id="pre-run-screen" class="hidden" aria-label="Run instructions">
       <div class="pre-run-card">
         <div id="pre-run-select-screen" class="pre-run-stage">
+          <div class="pre-run-select-topbar">
+            <button id="pre-run-rules-btn" class="pre-run-side-btn pre-run-rules-btn" aria-label="Open rules overview">Rules</button>
+            <button id="pre-run-credits-btn" class="pre-run-side-btn pre-run-credits-btn" aria-label="Open credits">Credits</button>
+            <button id="pre-run-settings-btn" class="pre-run-side-btn pre-run-settings-btn" aria-label="Open settings">Settings</button>
+          </div>
           <div class="pre-run-brand">HRRRA</div>
           <div class="pre-run-select-layout">
-            <button id="pre-run-jump-btn" class="pre-run-mode-card" aria-label="Choose Jump Mode">
-              <span class="pre-run-mode-title">Jump Mode</span>
-              <span class="pre-run-mode-copy"><strong>Mobile:</strong></span>
+            <button id="pre-run-jump-btn" class="pre-run-mode-card" aria-label="Choose Jump Classic">
+              <span class="pre-run-mode-title">Jump Classic</span>
               <span class="pre-run-mode-copy">Tap To Jump</span>
               <span class="pre-run-mode-copy"><strong>Double Jump</strong> is always enabled</span>
             </button>
@@ -133,10 +137,9 @@
               <button id="pre-run-scores-btn" class="pre-run-scores-btn" aria-label="Open online top players">Scores</button>
               <button id="pre-run-player-name-btn" class="pre-run-player-name-btn" aria-label="Open sign in">Sign In</button>
             </div>
-            <button id="pre-run-full-btn" class="pre-run-mode-card" aria-label="Choose Full Mode">
-              <span class="pre-run-mode-title">Full Mode</span>
+            <button id="pre-run-full-btn" class="pre-run-mode-card" aria-label="Choose Jump Advanced">
+              <span class="pre-run-mode-title">Jump Advanced</span>
               <span id="pre-run-full-lock" class="pre-run-lock-note hidden"></span>
-              <span class="pre-run-mode-copy"><strong>Mobile:</strong></span>
               <span class="pre-run-phone-art" aria-hidden="true">
                 <img src="assets/start_phone.png" alt="" />
               </span>
@@ -172,6 +175,78 @@
           </div>
           <div id="pre-run-scores-grid" class="pre-run-scores-grid"></div>
         </div>
+        <div id="pre-run-rules-screen" class="pre-run-stage hidden" aria-label="Rules overview">
+          <div class="pre-run-scores-header">
+            <div class="pre-run-scores-topbar">
+              <button id="pre-run-rules-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
+              <div class="pre-run-scores-heading">
+                <h2>Rules</h2>
+              </div>
+            </div>
+          </div>
+          <div class="pre-run-detail-panel pre-run-rules-panel">
+            <div class="pre-run-brief-columns">
+              <div class="pre-run-brief-column">
+                <h3>Hazards & Bonuses</h3>
+                <p class="brief-row"><span class="brief-icon brief-money" aria-hidden="true"></span><strong>Money Bag</strong>: <span>+<span id="brief-money-bag">2000</span> score.</span></p>
+                <p class="brief-row"><span class="brief-icon brief-coin" aria-hidden="true"></span><strong>Coin</strong>: <span>+<span id="brief-coin">200</span> score.</span></p>
+                <p class="brief-row"><span class="brief-icon brief-live" aria-hidden="true"></span><strong>Live</strong>: restore 1 lost life up to max.</p>
+                <p class="brief-row"><span class="brief-icon brief-slow" aria-hidden="true"></span><strong>Slow</strong>: reduces current game speed for a short time.</p>
+                <p class="brief-row"><span class="brief-icon brief-blocker" aria-hidden="true"></span><strong>Blocker</strong>: do not touch, always jump over it.</p>
+                <p class="brief-row"><span class="brief-icon brief-projectile" aria-hidden="true"></span><strong>Projectile</strong>: do not touch.</p>
+              </div>
+              <div class="pre-run-brief-column">
+                <h3>Special Mechanics</h3>
+                <p class="brief-row"><span class="brief-icon brief-cracked-coin" aria-hidden="true"></span><strong>Cracked Coin</strong>: removes 33% of score earned in this level.</p>
+                <p class="brief-row"><span class="brief-icon brief-question-coin" aria-hidden="true"></span><strong>Question Coin</strong>: gamble for a big score win or loss.</p>
+                <p class="brief-row"><span class="brief-icon brief-curse" aria-hidden="true"></span><strong>Curse</strong>: normal score gain is frozen for a short time.</p>
+                <p class="brief-row"><span class="brief-icon brief-shield" aria-hidden="true"></span><strong>Shield</strong>: blocks one deadly hit and can save you from bottom death zone.</p>
+                <p class="brief-row"><span class="brief-icon brief-skin-pickup" aria-hidden="true"></span><strong>Skin Unlock</strong>: collect it to unlock a new character skin.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="pre-run-credits-screen" class="pre-run-stage hidden" aria-label="Credits overview">
+          <div class="pre-run-scores-header">
+            <div class="pre-run-scores-topbar">
+              <button id="pre-run-credits-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
+              <div class="pre-run-scores-heading">
+                <h2>Credits</h2>
+              </div>
+            </div>
+          </div>
+          <section class="pre-run-credits-card">
+            <p>Most of everything was done by Walhalla, including - and mostly - the bad stuff.</p>
+            <p>Special thanks to TYNTYN for providing some graphics, and to kajak for helping to add and tune some of the game mechanics.</p>
+            <p>And thank you for all the testers for their input: kajak, TYNTYN, Sophia, Eliska, akmoznoh, Týpeček, Mates, Jiko</p>
+          </section>
+        </div>
+        <div id="pre-run-settings-screen" class="pre-run-stage hidden" aria-label="Settings overview">
+          <div class="pre-run-scores-header">
+            <div class="pre-run-scores-topbar">
+              <button id="pre-run-settings-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
+              <div class="pre-run-scores-heading">
+                <h2>Settings</h2>
+              </div>
+            </div>
+          </div>
+          <div class="pre-run-settings-grid">
+            <section class="pre-run-settings-card" aria-label="Sound effects setting">
+              <div class="pre-run-settings-copy">
+                <h3>Toggle Sound</h3>
+                <p>Jump, pickups, impacts, badge reveals, taps, and all other sound effects.</p>
+              </div>
+              <button id="pre-run-toggle-sfx-btn" class="pre-run-settings-toggle" type="button" aria-pressed="true">ON</button>
+            </section>
+            <section class="pre-run-settings-card" aria-label="Music setting">
+              <div class="pre-run-settings-copy">
+                <h3>Toggle Music</h3>
+                <p>Pre-run loop, gameplay music, level finish, badge page, and game over music.</p>
+              </div>
+              <button id="pre-run-toggle-music-btn" class="pre-run-settings-toggle" type="button" aria-pressed="true">ON</button>
+            </section>
+          </div>
+        </div>
         <div id="pre-run-detail-screen" class="pre-run-stage hidden">
           <div id="pre-run-compact-shell" class="pre-run-compact-shell hidden">
             <div class="pre-run-compact-top">
@@ -186,7 +261,7 @@
               <button id="pre-run-compact-admin-btn" class="pre-run-compact-admin-btn" aria-label="Open mechanics admin">Admin</button>
             </div>
             <button id="pre-run-compact-start-btn" class="pre-run-compact-start-btn" aria-label="Start next level">
-              <span id="pre-run-compact-start-label" class="pre-run-compact-start-label">S T A R T</span>
+              <span id="pre-run-compact-start-label" class="pre-run-compact-start-label">START</span>
             </button>
           </div>
           <div id="pre-run-detail-full-content">
@@ -197,7 +272,7 @@
                 <button id="pre-run-start-btn" aria-label="Start run">Start Run</button>
               </div>
               <div class="pre-run-detail-heading">
-                <h2 id="pre-run-detail-title">Jump Mode</h2>
+                <h2 id="pre-run-detail-title">Jump Classic</h2>
                 <p id="pre-run-detail-subtitle">Easy briefing</p>
                 <p id="pre-run-detail-level">Level 1</p>
               </div>
@@ -233,25 +308,6 @@
                 <p id="pre-run-level-goal-copy">Finish Level with 50 000 score.</p>
               </div>
             </div>
-            <div class="pre-run-detail-panel pre-run-brief-panel">
-              <div class="pre-run-brief-columns">
-                <div class="pre-run-brief-column">
-                  <h3>Hazards & Bonuses</h3>
-                  <p class="brief-row"><span class="brief-icon brief-money" aria-hidden="true"></span><strong>Money Bag</strong>: <span>+<span id="brief-money-bag">2000</span> score.</span></p>
-                  <p class="brief-row"><span class="brief-icon brief-coin" aria-hidden="true"></span><strong>Coin</strong>: <span>+<span id="brief-coin">200</span> score.</span></p>
-                  <p class="brief-row"><span class="brief-icon brief-live" aria-hidden="true"></span><strong>Live</strong>: restore 1 lost life up to max.</p>
-                  <p class="brief-row"><span class="brief-icon brief-blocker" aria-hidden="true"></span><strong>Blocker</strong>: do not touch, always jump over it.</p>
-                  <p class="brief-row"><span class="brief-icon brief-projectile" aria-hidden="true"></span><strong>Projectile</strong>: do not touch.</p>
-                </div>
-                <div class="pre-run-brief-column">
-                  <h3>Special Mechanics</h3>
-                  <p class="brief-row"><span class="brief-icon brief-cracked-coin" aria-hidden="true"></span><strong>Cracked Coin</strong>: removes 33% of score earned in this level.</p>
-                  <p class="brief-row"><span class="brief-icon brief-question-coin" aria-hidden="true"></span><strong>Question Coin</strong>: gamble for a big score win or loss.</p>
-                  <p class="brief-row"><span class="brief-icon brief-curse" aria-hidden="true"></span><strong>Curse</strong>: normal score gain is frozen for a short time.</p>
-                  <p class="brief-row"><span class="brief-icon brief-shield" aria-hidden="true"></span><strong>Shield</strong>: blocks one deadly hit and can save you from bottom death zone.</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
         <div id="pre-run-launch-overlay" class="pre-run-launch-overlay hidden" aria-hidden="true">
@@ -261,7 +317,7 @@
     </div>
     <div id="game-over" class="hidden">
       <h1>Game Over</h1>
-      <p id="final-board-label" aria-label="Active leaderboard board">Jump Easy</p>
+      <p id="final-board-label" aria-label="Active leaderboard board">Jump Classic Easy</p>
       <div id="game-over-layout">
         <div id="final-highscores" aria-label="Online top scores">
           <h2>Online Top Scores</h2>

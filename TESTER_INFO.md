@@ -132,6 +132,7 @@ Score může být také:
 
 ### Slow
 - dočasně zpomalí hru o nastavené procento
+- délka efektu je nastavitelná v adminu
 - zrychlování hry ale dál na pozadí pokračuje
 
 ### Skin Pickup
@@ -159,7 +160,7 @@ Score může být také:
 ### Question Coin
 - risk/reward mechanika
 - po sebrání se na chvíli zastaví hra
-- náhodně se rozhodne, zda hráč score získá nebo ztratí
+- `+ / -` běží dál, dokud hráč netukne a tím výsledek nezastaví
 - velikost výhry i ztráty jde ladit v adminu přes `Win %` a `Lose %`
 
 ### Curse

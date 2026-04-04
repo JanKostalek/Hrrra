@@ -48,6 +48,7 @@
     // Slow icon
     slowUnlockSpeedPercent: 150,
     slowDownByPercent: 50,
+    slowEffectSeconds: 10,
     slowRespawnMinSeconds: 10,
     slowRespawnMaxSeconds: 20,
 

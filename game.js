@@ -91,17 +91,28 @@ Main tuning points:
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
   var preRunBadgesScreenEl = document.getElementById("pre-run-badges-screen");
   var preRunScoresScreenEl = document.getElementById("pre-run-scores-screen");
+  var preRunRulesScreenEl = document.getElementById("pre-run-rules-screen");
+  var preRunCreditsScreenEl = document.getElementById("pre-run-credits-screen");
+  var preRunSettingsScreenEl = document.getElementById("pre-run-settings-screen");
   var preRunDetailScreenEl = document.getElementById("pre-run-detail-screen");
   var preRunJumpBtn = document.getElementById("pre-run-jump-btn");
   var preRunFullBtn = document.getElementById("pre-run-full-btn");
   var preRunDifficultyToggleEl = document.getElementById("pre-run-difficulty-toggle");
+  var preRunRulesBtn = document.getElementById("pre-run-rules-btn");
+  var preRunCreditsBtn = document.getElementById("pre-run-credits-btn");
+  var preRunSettingsBtn = document.getElementById("pre-run-settings-btn");
   var preRunBadgesBtn = document.getElementById("pre-run-badges-btn");
   var preRunScoresBtn = document.getElementById("pre-run-scores-btn");
+  var preRunRulesBackBtn = document.getElementById("pre-run-rules-back-btn");
+  var preRunCreditsBackBtn = document.getElementById("pre-run-credits-back-btn");
+  var preRunSettingsBackBtn = document.getElementById("pre-run-settings-back-btn");
   var preRunPlayerNameBtn = document.getElementById("pre-run-player-name-btn");
   var preRunBadgesBackBtn = document.getElementById("pre-run-badges-back-btn");
   var preRunScoresBackBtn = document.getElementById("pre-run-scores-back-btn");
   var preRunBadgesGroupsEl = document.getElementById("pre-run-badges-groups");
   var preRunScoresGridEl = document.getElementById("pre-run-scores-grid");
+  var preRunToggleSfxBtn = document.getElementById("pre-run-toggle-sfx-btn");
+  var preRunToggleMusicBtn = document.getElementById("pre-run-toggle-music-btn");
   var preRunBadgesTotalValueEl = document.getElementById("pre-run-badges-total-value");
   var preRunBadgesTotalLabelEl = document.getElementById("pre-run-badges-total-label");
   var preRunFullLockEl = document.getElementById("pre-run-full-lock");
@@ -384,9 +395,9 @@ Main tuning points:
       name: "Survivor",
       description: "Reach the endgame without losing a life.",
       tiers: [
-        { tier: "Bronze", value: "Level 5 on Easy Jump", sprite: "bronze" },
-        { tier: "Silver", value: "Level 5 on Hard Jump", sprite: "silver" },
-        { tier: "Gold", value: "Level 5 on Hard Jump & Full", sprite: "gold" }
+        { tier: "Bronze", value: "Level 5 on Jump Classic Easy", sprite: "bronze" },
+        { tier: "Silver", value: "Level 5 on Jump Classic Hard", sprite: "silver" },
+        { tier: "Gold", value: "Level 5 on Jump Classic Hard & Jump Advanced", sprite: "gold" }
       ]
     },
     {
@@ -490,7 +501,7 @@ Main tuning points:
       description: "Open up the full game and complete the collection.",
       tiers: [
         { tier: "Bronze", value: "Unlock Hard", sprite: "bronze" },
-        { tier: "Silver", value: "Unlock Full", sprite: "silver" },
+        { tier: "Silver", value: "Unlock Jump Advanced", sprite: "silver" },
         { tier: "Gold", value: "Unlock all skins", sprite: "gold" }
       ]
     }
@@ -1307,6 +1318,34 @@ Main tuning points:
     }
   }
 
+  function applyGlobalAudioSetting(key, nextValue) {
+    var normalizedValue = Boolean(nextValue);
+    saveGlobalAdminField(key, normalizedValue);
+    C[key] = normalizedValue;
+    refreshSfxOutputGain();
+    warmCurrentSfxBuffers();
+    refreshMusicPlayback();
+  }
+
+  function renderPreRunSettingsScreen() {
+    if (preRunToggleSfxBtn) {
+      var sfxEnabled = Boolean(C.audioSfxEnabled);
+      preRunToggleSfxBtn.textContent = sfxEnabled ? "ON" : "OFF";
+      preRunToggleSfxBtn.classList.toggle("is-on", sfxEnabled);
+      preRunToggleSfxBtn.classList.toggle("is-off", !sfxEnabled);
+      preRunToggleSfxBtn.setAttribute("aria-pressed", sfxEnabled ? "true" : "false");
+      preRunToggleSfxBtn.setAttribute("aria-label", sfxEnabled ? "Sound effects on" : "Sound effects off");
+    }
+    if (preRunToggleMusicBtn) {
+      var musicEnabled = Boolean(C.audioMusicEnabled);
+      preRunToggleMusicBtn.textContent = musicEnabled ? "ON" : "OFF";
+      preRunToggleMusicBtn.classList.toggle("is-on", musicEnabled);
+      preRunToggleMusicBtn.classList.toggle("is-off", !musicEnabled);
+      preRunToggleMusicBtn.setAttribute("aria-pressed", musicEnabled ? "true" : "false");
+      preRunToggleMusicBtn.setAttribute("aria-label", musicEnabled ? "Music on" : "Music off");
+    }
+  }
+
   function playAudioPath(path, volume, cooldownKey, cooldownMs) {
     var normalizedPath = sanitizeAudioPathValue(path);
     if (!normalizedPath || !canPlaySfx()) {
@@ -1598,7 +1637,7 @@ Main tuning points:
   }
 
   function getFullModeLockText() {
-    return "Locked - Reach " + getFullModeUnlockJumpHardScore().toLocaleString("en-US") + " score in Jump Mode Hard.";
+    return "Locked - Reach " + getFullModeUnlockJumpHardScore().toLocaleString("en-US") + " score in Jump Classic Hard.";
   }
 
   function normalizeUnlockedPreRunSelection() {
@@ -2167,12 +2206,12 @@ Main tuning points:
         return "Teleport with shield " + target + "x";
       case "survivor_skills":
         if (tierIndex === 0) {
-          return "Level " + target + " on Easy Jump";
+          return "Level " + target + " on Jump Classic Easy";
         }
         if (tierIndex === 1) {
-          return "Level " + target + " on Hard Jump";
+          return "Level " + target + " on Jump Classic Hard";
         }
-        return "Level " + target + " on Hard Full";
+        return "Level " + target + " on Jump Advanced Hard";
       case "martyr_skills":
         return "Lose " + target + " lives in one run";
       case "purist_skills":
@@ -2198,7 +2237,7 @@ Main tuning points:
           return "Unlock Hard";
         }
         if (tierIndex === 1) {
-          return "Unlock Full";
+          return "Unlock Jump Advanced";
         }
         return "Unlock all skins";
       default:
@@ -2230,7 +2269,7 @@ Main tuning points:
       case "shield_teleporter_skills":
         return "shield teleports";
       case "survivor_skills":
-        return tierIndex === 0 ? "level on Easy Jump" : (tierIndex === 1 ? "level on Hard Jump" : "level on Hard Full");
+        return tierIndex === 0 ? "level on Jump Classic Easy" : (tierIndex === 1 ? "level on Jump Classic Hard" : "level on Jump Advanced Hard");
       case "martyr_skills":
         return "lives lost in one run";
       case "purist_skills":
@@ -2252,7 +2291,7 @@ Main tuning points:
       case "starter_legends":
         return "runs";
       case "unlocker_discovery":
-        return tierIndex === 0 ? "Hard unlock" : (tierIndex === 1 ? "Full unlock" : "all skins unlock");
+        return tierIndex === 0 ? "Hard unlock" : (tierIndex === 1 ? "Jump Advanced unlock" : "all skins unlock");
       default:
         return "";
     }
@@ -2844,7 +2883,15 @@ Main tuning points:
       } else if (typeof C[key] === "boolean" && typeof value === "boolean") {
         C[key] = value;
       } else if (typeof C[key] === "string" && typeof value === "string") {
-        C[key] = isAudioLevelFieldKey(key) ? sanitizeAudioPathValue(value) : value;
+        if (isAudioLevelFieldKey(key)) {
+          var normalizedAudioPath = sanitizeAudioPathValue(value);
+          if (!normalizedAudioPath) {
+            continue;
+          }
+          C[key] = normalizedAudioPath;
+        } else {
+          C[key] = value;
+        }
       }
     }
   }
@@ -3190,6 +3237,13 @@ Main tuning points:
     var storageOverrides = readAdminStorageObject(level, mode, difficulty);
     for (key in storageOverrides) {
       if (Object.prototype.hasOwnProperty.call(storageOverrides, key)) {
+        if (
+          isAudioLevelFieldKey(key) &&
+          typeof storageOverrides[key] === "string" &&
+          !sanitizeAudioPathValue(storageOverrides[key])
+        ) {
+          continue;
+        }
         cfg[key] = storageOverrides[key];
       }
     }
@@ -3198,7 +3252,7 @@ Main tuning points:
   }
 
   function getModeDisplayName(mode) {
-    return mode === 1 ? "Full Mode" : "Jump Mode";
+    return mode === 1 ? "Jump Advanced" : "Jump Classic";
   }
 
   function getLevelDisplayName(level) {
@@ -3394,6 +3448,7 @@ Main tuning points:
     speedPercent: 0,
     scrollSpeed: C.worldAutoRunSpeed,
     speedSlowMultiplier: 1,
+    slowTimeLeft: 0,
     cameraX: 0,
     startX: 0,
     doubleJumpTimeLeft: 0,
@@ -3518,7 +3573,7 @@ Main tuning points:
     teleportFinishAnimHeroCenterY: 0,
     questionCoinAnimActive: false,
     questionCoinAnimElapsed: 0,
-    questionCoinAnimDuration: 3,
+    questionCoinAnimDuration: 1,
     questionCoinAnimStakeScore: 0,
     questionCoinAnimResult: "",
     questionCoinAnimDelta: 0,
@@ -3584,9 +3639,9 @@ Main tuning points:
         { key: "modernVisualsEnabled", label: "Modern visuals", type: "checkbox" },
         { key: "selectedSkin", label: "Skin", type: "select", options: SKIN_OPTIONS },
         { key: "skinPickupLevels", label: "Skin Pickup Level", type: "skin-pickup-levels" },
-        { key: "hardModeUnlockLevel", label: "Jump Hard unlock at Level", type: "number", min: 1, max: LEVEL_COUNT, step: 1 },
+        { key: "hardModeUnlockLevel", label: "Jump Classic Hard unlock at Level", type: "number", min: 1, max: LEVEL_COUNT, step: 1 },
         { key: "hardModeOverrideControls", label: "", type: "hard-mode-override-controls" },
-        { key: "fullModeUnlockJumpHardScore", label: "Full Mode unlock on Jump Hard score", type: "number", min: 0, step: 1 },
+        { key: "fullModeUnlockJumpHardScore", label: "Jump Advanced unlock on Jump Classic Hard score", type: "number", min: 0, step: 1 },
         { key: "fullModeOverrideControls", label: "", type: "full-mode-override-controls" }
       ]
     },
@@ -3776,6 +3831,7 @@ Main tuning points:
       fields: [
         { key: "slowUnlockSpeedPercent", label: "Unlock speed %" },
         { key: "slowDownByPercent", label: "Slow down by %" },
+        { key: "slowEffectSeconds", label: "Duration sec" },
         { key: "slowRespawnMinSeconds", label: "Respawn min sec" },
         { key: "slowRespawnMaxSeconds", label: "Respawn max sec" }
       ]
@@ -4196,20 +4252,16 @@ Main tuning points:
   function getModeControlsHtml() {
     if (state.gameMode === 1) {
       return [
-        "<p><strong>Mobile:</strong></p>",
         "<div class=\"pre-run-fullmode-diagram\" aria-hidden=\"true\">",
         "<span class=\"diag-jump\">Jump</span>",
         "<span class=\"diag-right\">Right</span>",
         "<span class=\"diag-left\">Left</span>",
-        "</div>",
-        "<p><strong>Desktop:</strong> Left/Right Arrows (or A/D)</p>",
-        "<p>Space to jump</p>"
+        "</div>"
       ].join("");
     }
 
     return [
-      "<p><strong>Mobile:</strong> Whole touch area = Jump</p>",
-      "<p><strong>Desktop:</strong> Space = Jump</p>",
+      "<p>Tap To Jump</p>",
       "<p><strong>Double Jump</strong> is always enabled</p>"
     ].join("");
   }
@@ -4355,7 +4407,7 @@ Main tuning points:
       preRunCompactStartBtn.setAttribute("aria-label", state.currentLevel > 1 ? "Start next level" : "Start run");
     }
     if (preRunCompactStartLabelEl) {
-      preRunCompactStartLabelEl.textContent = "S T A R T";
+      preRunCompactStartLabelEl.textContent = "START";
     }
     if (preRunDetailLifeRulesEl) {
       preRunDetailLifeRulesEl.classList.toggle("hidden", false);
@@ -4389,6 +4441,15 @@ Main tuning points:
     }
     if (preRunScoresScreenEl) {
       preRunScoresScreenEl.classList.toggle("hidden", state.preRunStep !== "scores");
+    }
+    if (preRunRulesScreenEl) {
+      preRunRulesScreenEl.classList.toggle("hidden", state.preRunStep !== "rules");
+    }
+    if (preRunCreditsScreenEl) {
+      preRunCreditsScreenEl.classList.toggle("hidden", state.preRunStep !== "credits");
+    }
+    if (preRunSettingsScreenEl) {
+      preRunSettingsScreenEl.classList.toggle("hidden", state.preRunStep !== "settings");
     }
     if (preRunDetailScreenEl) {
       preRunDetailScreenEl.classList.toggle("hidden", state.preRunStep !== "details");
@@ -4453,6 +4514,9 @@ Main tuning points:
     }
     if (state.preRunStep === "scores") {
       renderPreRunScoresScreen();
+    }
+    if (state.preRunStep === "settings") {
+      renderPreRunSettingsScreen();
     }
     stopBadgesPageMusicIfLeaving();
     refreshMusicPlayback();
@@ -4770,19 +4834,19 @@ Main tuning points:
   }
 
   function getOnlineLeaderboardLabel() {
-    return (state.gameMode === 1 ? "Full" : "Jump") + " " + (state.gameDifficulty === "hard" ? "Hard" : "Easy");
+    return (state.gameMode === 1 ? "Jump Advanced" : "Jump Classic") + " " + (state.gameDifficulty === "hard" ? "Hard" : "Easy");
   }
 
   function getPreRunScoresBoardLabel(board) {
     switch (String(board || "")) {
       case "jump_hard":
-        return "Jump Hard";
+        return "Jump Classic Hard";
       case "full_easy":
-        return "Full Easy";
+        return "Jump Advanced Easy";
       case "full_hard":
-        return "Full Hard";
+        return "Jump Advanced Hard";
       default:
-        return "Jump Easy";
+        return "Jump Classic Easy";
     }
   }
 
@@ -5619,6 +5683,33 @@ Main tuning points:
         renderPreRunScreen();
       });
     }
+    if (preRunRulesBtn) {
+      preRunRulesBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
+        state.preRunStep = "rules";
+        renderPreRunScreen();
+      });
+    }
+    if (preRunSettingsBtn) {
+      preRunSettingsBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
+        state.preRunStep = "settings";
+        renderPreRunScreen();
+      });
+    }
+    if (preRunCreditsBtn) {
+      preRunCreditsBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
+        state.preRunStep = "credits";
+        renderPreRunScreen();
+      });
+    }
     if (preRunScoresBtn) {
       preRunScoresBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
@@ -5636,12 +5727,63 @@ Main tuning points:
         renderPreRunScreen();
       });
     }
+    if (preRunRulesBackBtn) {
+      preRunRulesBackBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
+        state.preRunStep = "select";
+        renderPreRunScreen();
+      });
+    }
+    if (preRunCreditsBackBtn) {
+      preRunCreditsBackBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
+        state.preRunStep = "select";
+        renderPreRunScreen();
+      });
+    }
+    if (preRunSettingsBackBtn) {
+      preRunSettingsBackBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
+        state.preRunStep = "select";
+        renderPreRunScreen();
+      });
+    }
     if (preRunScoresBackBtn) {
       preRunScoresBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
         state.preRunStep = "select";
         renderPreRunScreen();
+      });
+    }
+    if (preRunToggleSfxBtn) {
+      preRunToggleSfxBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        var nextValue = !C.audioSfxEnabled;
+        if (C.audioSfxEnabled) {
+          playUiButtonSound();
+        }
+        applyGlobalAudioSetting("audioSfxEnabled", nextValue);
+        if (nextValue) {
+          playUiButtonSound();
+        }
+        renderPreRunSettingsScreen();
+      });
+    }
+    if (preRunToggleMusicBtn) {
+      preRunToggleMusicBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        if (C.audioSfxEnabled) {
+          playUiButtonSound();
+        }
+        applyGlobalAudioSetting("audioMusicEnabled", !C.audioMusicEnabled);
+        renderPreRunSettingsScreen();
       });
     }
     if (preRunBackBtn) {
@@ -6178,10 +6320,10 @@ Main tuning points:
     maxScoreSectionEl.appendChild(maxScoreSectionTitle);
 
     var maxScoreActions = [
-      { mode: 2, difficulty: "easy", label: "Reset Easy Jump" },
-      { mode: 1, difficulty: "easy", label: "Reset Easy Full" },
-      { mode: 2, difficulty: "hard", label: "Reset Hard Jump" },
-      { mode: 1, difficulty: "hard", label: "Reset Hard Full" }
+      { mode: 2, difficulty: "easy", label: "Reset Jump Classic Easy" },
+      { mode: 1, difficulty: "easy", label: "Reset Jump Advanced Easy" },
+      { mode: 2, difficulty: "hard", label: "Reset Jump Classic Hard" },
+      { mode: 1, difficulty: "hard", label: "Reset Jump Advanced Hard" }
     ];
     var maxScoreSectionContent = document.createElement("div");
     maxScoreSectionContent.className = "admin-collapsible-content";
@@ -6783,6 +6925,7 @@ Main tuning points:
     state.speedPercent = 0;
     state.scrollSpeed = C.worldAutoRunSpeed;
     state.speedSlowMultiplier = 1;
+    state.slowTimeLeft = 0;
     state.startX = spawnX;
     state.cameraX = 0;
     state.doubleJumpTimeLeft = 0;
@@ -7366,6 +7509,11 @@ Main tuning points:
       unlockAudioIfNeeded();
       var key = event.key.toLowerCase();
 
+      if (state.questionCoinAnimActive && !state.questionCoinAnimApplied && (event.key === " " || event.key === "Enter")) {
+        confirmQuestionCoinAnimation();
+        return;
+      }
+
       if (state.badgeRewardActive) {
         if (event.key === " " || event.key === "Enter") {
           advanceBadgeRewardSequence();
@@ -7454,6 +7602,9 @@ Main tuning points:
     canvas.addEventListener("pointerdown", function () {
       tryForceFullscreen();
       unlockAudioIfNeeded();
+      if (state.questionCoinAnimActive && !state.questionCoinAnimApplied) {
+        confirmQuestionCoinAnimation();
+      }
     });
 
     if (levelFinishedEl) {
@@ -7557,12 +7708,14 @@ Main tuning points:
     }
     updateShieldBurstEffect(dt);
     updateDoubleJumpEffect(dt);
+    updateSlowEffect(dt);
     updateMagnetEffect(dt);
     updateCurseEffect(dt);
 
     world.updateElevators(dt);
     updateSkinPickupLifetime();
     var scoreMultiplier = getSpeedMultiplierFromScore(state.score);
+    state.speedSlowMultiplier = getCurrentSlowMultiplier();
     state.scrollSpeed = C.worldAutoRunSpeed * scoreMultiplier * state.speedSlowMultiplier;
     var wasGroundedBeforePhysics = player.isGrounded;
     var jumpsUsedBeforePhysics = player.jumpsUsed;
@@ -7833,22 +7986,8 @@ Main tuning points:
   }
 
   function updateQuestionCoinAnimation(dt) {
-    var randomizerDuration = 2;
     state.questionCoinAnimElapsed += dt;
-    if (!state.questionCoinAnimApplied && state.questionCoinAnimElapsed >= randomizerDuration) {
-      var stake = state.questionCoinAnimStakeScore;
-      var winPercent = Math.max(0, Number(C.questionCoinWinPercent) || 0);
-      var losePercent = Math.max(0, Number(C.questionCoinLosePercent) || 0);
-      if (state.questionCoinAnimResult === "+") {
-        state.questionCoinAnimDelta = applyLevelScoreDelta(Math.floor(stake * (winPercent / 100)));
-      } else {
-        state.questionCoinAnimDelta = applyLevelScoreDelta(-Math.floor(stake * (losePercent / 100)));
-      }
-      state.questionCoinAnimApplied = true;
-      recordQuestionCoinOutcome(state.questionCoinAnimResult);
-    }
-
-    if (state.questionCoinAnimElapsed >= state.questionCoinAnimDuration) {
+    if (state.questionCoinAnimApplied && state.questionCoinAnimElapsed >= state.questionCoinAnimDuration) {
       state.questionCoinAnimActive = false;
       state.running = true;
     }
@@ -8173,7 +8312,7 @@ Main tuning points:
     state.questionCoinAnimActive = true;
     state.questionCoinAnimElapsed = 0;
     state.questionCoinAnimStakeScore = Math.max(0, Math.floor(stakeScore));
-    state.questionCoinAnimResult = Math.random() < 0.5 ? "-" : "+";
+    state.questionCoinAnimResult = "";
     state.questionCoinAnimDelta = 0;
     state.questionCoinAnimApplied = false;
     player.velocityX = 0;
@@ -8184,6 +8323,30 @@ Main tuning points:
     input.right = false;
     input.jumpDown = false;
     input.jumpPressed = false;
+  }
+
+  function getQuestionCoinSpinSymbol() {
+    return Math.floor(state.questionCoinAnimElapsed * 14) % 2 === 0 ? "+" : "-";
+  }
+
+  function confirmQuestionCoinAnimation() {
+    if (!state.questionCoinAnimActive || state.questionCoinAnimApplied) {
+      return;
+    }
+
+    var stake = state.questionCoinAnimStakeScore;
+    var winPercent = Math.max(0, Number(C.questionCoinWinPercent) || 0);
+    var losePercent = Math.max(0, Number(C.questionCoinLosePercent) || 0);
+
+    state.questionCoinAnimResult = getQuestionCoinSpinSymbol();
+    if (state.questionCoinAnimResult === "+") {
+      state.questionCoinAnimDelta = applyLevelScoreDelta(Math.floor(stake * (winPercent / 100)));
+    } else {
+      state.questionCoinAnimDelta = applyLevelScoreDelta(-Math.floor(stake * (losePercent / 100)));
+    }
+    state.questionCoinAnimApplied = true;
+    state.questionCoinAnimElapsed = 0;
+    recordQuestionCoinOutcome(state.questionCoinAnimResult);
   }
 
   function scheduleNextQuestionCoinSpawn() {
@@ -9074,6 +9237,24 @@ Main tuning points:
     }
   }
 
+  function updateSlowEffect(dt) {
+    if (state.slowTimeLeft > 0) {
+      state.slowTimeLeft = Math.max(0, state.slowTimeLeft - dt);
+    }
+  }
+
+  function getCurrentSlowMultiplier() {
+    if (state.slowTimeLeft <= 0) {
+      return 1;
+    }
+    var slowDownPercent = Math.max(0, Number(C.slowDownByPercent) || 0);
+    return Math.max(0, 1 - (slowDownPercent / 100));
+  }
+
+  function getSlowEffectSeconds() {
+    return Math.max(0, Number(C.slowEffectSeconds) || 0);
+  }
+
   function checkSlowIconPickup() {
     var icon = state.slowIcon;
     if (!icon.active) {
@@ -9084,16 +9265,10 @@ Main tuning points:
     var iconRect = { x: icon.x, y: icon.y, w: icon.size, h: icon.size };
 
     if (isRectIntersect(playerRect, iconRect)) {
-      var slowDownPercent = Math.max(0, Number(C.slowDownByPercent) || 0);
-      var slowMultiplier = Math.max(0, 1 - (slowDownPercent / 100));
-      var baseSpeed = Math.max(1, C.worldAutoRunSpeed);
-      var scoreMultiplier = getSpeedMultiplierFromScore(state.score);
-      var currentTotalMultiplier = Math.max(1, state.scrollSpeed / baseSpeed);
-      var currentBonusMultiplier = Math.max(0, currentTotalMultiplier - 1);
-      var nextTotalMultiplier = 1 + (currentBonusMultiplier * slowMultiplier);
       icon.active = false;
-      state.speedSlowMultiplier = Math.max(1 / Math.max(1e-6, scoreMultiplier), nextTotalMultiplier / Math.max(1e-6, scoreMultiplier));
-      state.scrollSpeed = baseSpeed * scoreMultiplier * state.speedSlowMultiplier;
+      state.slowTimeLeft = getSlowEffectSeconds();
+      state.speedSlowMultiplier = getCurrentSlowMultiplier();
+      state.scrollSpeed = C.worldAutoRunSpeed * getSpeedMultiplierFromScore(state.score) * state.speedSlowMultiplier;
       playLevelSfx("levelSlowSoundPath", 100);
       scheduleNextSlowSpawn();
     }
@@ -10515,17 +10690,16 @@ Main tuning points:
       return;
     }
 
-    var randomizerDuration = 2;
     var w = Math.min(canvas.width * 0.46, 420);
     var h = Math.min(canvas.height * 0.28, 220);
     var x = canvas.width * 0.5 - w * 0.5;
     var y = canvas.height * 0.5 - h * 0.5;
     var stakeText = state.questionCoinAnimStakeScore.toLocaleString("en-US");
     var resultText = Math.abs(state.questionCoinAnimDelta).toLocaleString("en-US");
-    var revealPhase = state.questionCoinAnimElapsed >= randomizerDuration;
+    var revealPhase = state.questionCoinAnimApplied;
     var displaySymbol = revealPhase
       ? state.questionCoinAnimResult
-      : (Math.floor(state.questionCoinAnimElapsed * 14) % 2 === 0 ? "+" : "-");
+      : getQuestionCoinSpinSymbol();
 
     ctx.save();
     ctx.fillStyle = "rgba(4, 10, 24, 0.72)";
@@ -10550,9 +10724,14 @@ Main tuning points:
     } else {
       ctx.fillText("Playing for " + stakeText + " score", canvas.width * 0.5, y + 76);
     }
+    if (!revealPhase) {
+      ctx.fillStyle = "#173d7a";
+      ctx.font = "bold 18px Arial";
+      ctx.fillText("Tap to stop", canvas.width * 0.5, y + 110);
+    }
     ctx.font = "bold 92px Arial";
     ctx.fillStyle = displaySymbol === "+" ? "#1f9d55" : "#d64545";
-    ctx.fillText(displaySymbol, canvas.width * 0.5, y + h * 0.72);
+    ctx.fillText(displaySymbol, canvas.width * 0.5, y + h * 0.84);
     ctx.restore();
   }
 
