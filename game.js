@@ -366,6 +366,39 @@ Main tuning points:
       ]
     },
     {
+      id: "banger_all_runs",
+      category: "All Runs",
+      name: "Banger",
+      description: "Convert enough stored score into coins to become a real economy regular.",
+      tiers: [
+        { tier: "Bronze", value: "Exchange 10 coins", sprite: "bronze" },
+        { tier: "Silver", value: "Exchange 100 coins", sprite: "silver" },
+        { tier: "Gold", value: "Exchange 1000 coins", sprite: "gold" }
+      ]
+    },
+    {
+      id: "big_spender_all_runs",
+      category: "All Runs",
+      name: "Big Spender",
+      description: "Spend enough coins in the shop economy to earn a title for it.",
+      tiers: [
+        { tier: "Bronze", value: "Spend 50 coins", sprite: "bronze" },
+        { tier: "Silver", value: "Spend 250 coins", sprite: "silver" },
+        { tier: "Gold", value: "Spend 1000 coins", sprite: "gold" }
+      ]
+    },
+    {
+      id: "unkillable_custommer_all_runs",
+      category: "All Runs",
+      name: "Unkillable Custommer",
+      description: "Use continue often enough that the comeback itself becomes a badge.",
+      tiers: [
+        { tier: "Bronze", value: "Use continue 1 time", sprite: "bronze" },
+        { tier: "Silver", value: "Use continue 5 times", sprite: "silver" },
+        { tier: "Gold", value: "Use continue 25 times", sprite: "gold" }
+      ]
+    },
+    {
       id: "fortunate_all_runs",
       category: "All Runs",
       name: "Fortunate",
@@ -538,6 +571,8 @@ Main tuning points:
         totalScore: 0,
         totalCoins: 0,
         totalBags: 0,
+        exchangedCoins: 0,
+        continuesUsed: 0,
         questionPositive: 0,
         questionNegative: 0,
         livesCollected: 0,
@@ -1720,6 +1755,7 @@ Main tuning points:
       return false;
     }
     badgeStats.lifetime.totalScore = Math.max(0, getPersistentTotalScore() - totalScoreCost);
+    incrementBadgeLifetimeStat("exchangedCoins", safeCoinCount);
     addCoinsToWallet(safeCoinCount);
     writeBadgeStats();
     return true;
@@ -2246,6 +2282,12 @@ Main tuning points:
         return [1000, 5000, 10000][tierIndex] || 0;
       case "bag_collector_all_runs":
         return [500, 1000, 5000][tierIndex] || 0;
+      case "banger_all_runs":
+        return [10, 100, 1000][tierIndex] || 0;
+      case "big_spender_all_runs":
+        return [50, 250, 1000][tierIndex] || 0;
+      case "unkillable_custommer_all_runs":
+        return [1, 5, 25][tierIndex] || 0;
       case "fortunate_all_runs":
       case "doom_magnet_all_runs":
         return [50, 100, 200][tierIndex] || 0;
@@ -2357,10 +2399,14 @@ Main tuning points:
         return formatBadgeCompactNumber(target) + " points";
       case "coin_collector_single_run":
       case "coin_collector_all_runs":
+      case "banger_all_runs":
+      case "big_spender_all_runs":
         return appendBadgeInlineProgress(formatBadgeCompactNumber(target) + " coins", series, tierIndex);
       case "bag_collector_single_run":
       case "bag_collector_all_runs":
         return appendBadgeInlineProgress(formatBadgeCompactNumber(target) + " money bags", series, tierIndex);
+      case "unkillable_custommer_all_runs":
+        return appendBadgeInlineProgress("Use continue " + formatBadgeCompactNumber(target) + " times", series, tierIndex);
       case "lucky_single_run":
       case "fortunate_all_runs":
         return appendBadgeInlineProgress(formatBadgeCompactNumber(target) + " positive ? Coin wins", series, tierIndex);
@@ -2423,10 +2469,14 @@ Main tuning points:
         return "points";
       case "coin_collector_single_run":
       case "coin_collector_all_runs":
+      case "banger_all_runs":
+      case "big_spender_all_runs":
         return "coins";
       case "bag_collector_single_run":
       case "bag_collector_all_runs":
         return "money bags";
+      case "unkillable_custommer_all_runs":
+        return "continues";
       case "lucky_single_run":
       case "fortunate_all_runs":
         return "positive ? Coin wins";
@@ -2498,6 +2548,12 @@ Main tuning points:
         return badgeStats.lifetime.totalCoins;
       case "bag_collector_all_runs":
         return badgeStats.lifetime.totalBags;
+      case "banger_all_runs":
+        return badgeStats.lifetime.exchangedCoins;
+      case "big_spender_all_runs":
+        return Math.max(0, Math.floor(Number(economyStats.totalCoinsSpent) || 0));
+      case "unkillable_custommer_all_runs":
+        return badgeStats.lifetime.continuesUsed;
       case "fortunate_all_runs":
         return badgeStats.lifetime.questionPositive;
       case "doom_magnet_all_runs":
@@ -6165,6 +6221,7 @@ Main tuning points:
           renderAdminForm();
           return;
         }
+        incrementBadgeLifetimeStat("continuesUsed", 1);
         renderAdminForm();
         revivePlayerAfterContinue();
       });

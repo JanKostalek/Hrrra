@@ -343,14 +343,14 @@ body {
 
 #game-over h1 {
   margin: 0 0 10px 0;
-  font-size: clamp(72px, 10vw, 108px);
+  font-size: clamp(48px, 7.2vw, 96px);
   line-height: 1;
   text-shadow: none;
 }
 
 #game-over p {
   margin: 8px 0;
-  font-size: clamp(28px, 3.8vw, 40px);
+  font-size: clamp(18px, 2.5vw, 30px);
   text-shadow: none;
   max-width: min(92vw, 900px);
 }
@@ -367,7 +367,7 @@ body {
 #final-board-label {
   margin: 0 0 4px 0 !important;
   color: #ffffff;
-  font-size: clamp(22px, 4.8vw, 50px) !important;
+  font-size: clamp(20px, 4vw, 42px) !important;
   font-weight: 700;
   text-align: center;
   line-height: 1.05;
@@ -387,7 +387,7 @@ body {
 
 #final-current-run p {
   margin: 14px 0;
-  font-size: clamp(34px, 4.2vw, 64px);
+  font-size: clamp(22px, 3vw, 44px);
   font-weight: 700;
   line-height: 1.05;
   overflow-wrap: anywhere;
@@ -397,7 +397,7 @@ body {
 
 #final-current-run .final-economy-line {
   margin: 8px 0;
-  font-size: clamp(22px, 2.5vw, 34px);
+  font-size: clamp(17px, 2vw, 28px);
   line-height: 1.15;
 }
 
@@ -681,17 +681,17 @@ body {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 8px;
 }
 
 .pre-run-side-btn {
   width: 100%;
-  min-height: 42px;
-  padding: 8px 16px;
+  min-height: 38px;
+  padding: 6px 12px;
   border: 3px solid #08293a;
   border-radius: 999px;
-  font-size: clamp(14px, 1.5vw, 19px);
+  font-size: clamp(13px, 1.2vw, 17px);
   font-weight: 900;
   letter-spacing: 0.02em;
   cursor: pointer;
@@ -1131,15 +1131,15 @@ body {
 .pre-run-shop-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 16px;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
 .pre-run-shop-summary-card,
 .pre-run-shop-card {
   border: 3px solid rgba(8, 41, 58, 0.18);
   border-radius: 24px;
-  padding: 18px 20px;
+  padding: 14px 16px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.42)),
     url("assets/start%20screen%20bkg.png") center / cover no-repeat;
@@ -1152,34 +1152,34 @@ body {
 
 .pre-run-shop-summary-card strong {
   display: block;
-  font-size: clamp(26px, 3vw, 38px);
+  font-size: clamp(20px, 2.1vw, 32px);
   line-height: 1;
   color: #08293a;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .pre-run-shop-summary-card span {
   display: block;
-  font-size: clamp(14px, 1.3vw, 18px);
+  font-size: clamp(12px, 1vw, 16px);
   color: #375364;
 }
 
 .pre-run-shop-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 10px;
   align-items: stretch;
 }
 
 .pre-run-shop-card h3 {
   margin: 0 0 10px 0;
-  font-size: clamp(24px, 2.3vw, 30px);
+  font-size: clamp(18px, 1.8vw, 28px);
   color: #08293a;
 }
 
 .pre-run-shop-card p {
   margin: 0;
-  font-size: clamp(15px, 1.35vw, 18px);
+  font-size: clamp(12px, 0.95vw, 16px);
   line-height: 1.3;
   color: #375364;
 }
@@ -1187,20 +1187,20 @@ body {
 .pre-run-shop-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 16px 0 12px;
+  gap: 8px;
+  margin: 12px 0 10px;
 }
 
 .pre-run-shop-action-btn {
-  min-height: 48px;
-  padding: 8px 16px;
+  min-height: 42px;
+  padding: 7px 14px;
   border: 3px solid #08293a;
   border-radius: 999px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.12)),
     linear-gradient(180deg, #fff2be 0%, #f5c55f 100%);
   color: #5a3812;
-  font-size: clamp(16px, 1.5vw, 20px);
+  font-size: clamp(13px, 1vw, 17px);
   font-weight: 900;
   cursor: pointer;
   box-shadow:
@@ -1221,18 +1221,21 @@ body {
 
 .pre-run-shop-status {
   min-height: 2.6em;
+  font-size: clamp(12px, 0.95vw, 16px);
   font-weight: 700;
   color: #123c5d;
 }
 
 @media (max-width: 980px) {
   .pre-run-select-topbar {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
   }
 
-  .pre-run-shop-summary,
-  .pre-run-shop-grid {
-    grid-template-columns: 1fr;
+  .pre-run-side-btn {
+    min-height: 34px;
+    padding: 5px 8px;
+    font-size: clamp(11px, 1.8vw, 14px);
   }
 
   .pre-run-settings-list {
@@ -1244,15 +1247,60 @@ body {
     justify-items: start;
   }
 
-  .pre-run-side-btn {
-    min-height: 38px;
-    padding: 7px 14px;
+  .pre-run-shop-summary,
+  .pre-run-shop-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 760px) {
+  .pre-run-select-topbar {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .pre-run-side-btn {
+    min-height: 30px;
+    padding: 4px 6px;
+    font-size: clamp(10px, 2vw, 12px);
+    border-width: 2px;
+  }
+
   .pre-run-settings-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pre-run-shop-summary {
+    gap: 8px;
+  }
+
+  .pre-run-shop-summary-card,
+  .pre-run-shop-card {
+    padding: 10px 12px;
+    border-radius: 18px;
+  }
+
+  .pre-run-shop-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .pre-run-shop-card h3 {
+    font-size: clamp(15px, 2.3vw, 20px);
+    margin-bottom: 8px;
+  }
+
+  .pre-run-shop-card p,
+  .pre-run-shop-status {
+    font-size: clamp(11px, 1.6vw, 13px);
+    line-height: 1.25;
+  }
+
+  .pre-run-shop-action-btn {
+    min-height: 36px;
+    padding: 6px 10px;
+    font-size: clamp(11px, 1.5vw, 13px);
+    border-width: 2px;
   }
 }
 
@@ -2492,8 +2540,12 @@ body.visual-theme-retro .brief-live::before {
   }
 
   #final-current-run p {
-    font-size: clamp(20px, 3.8vh, 34px);
+    font-size: clamp(16px, 2.8vh, 28px);
     margin: 6px 0;
+  }
+
+  #final-current-run .final-economy-line {
+    font-size: clamp(14px, 2.15vh, 22px);
   }
 
   #final-highscores,
@@ -2524,6 +2576,11 @@ body.visual-theme-retro .brief-live::before {
   .pre-run-card {
     width: min(880px, 96vw);
     padding: 14px 16px;
+  }
+
+  .pre-run-select-topbar {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
   }
 
   .pre-run-select-layout {
@@ -2594,7 +2651,11 @@ body.visual-theme-retro .brief-live::before {
 
   #final-current-run p {
     margin: 6px 0;
-    font-size: clamp(28px, 8vw, 44px);
+    font-size: clamp(18px, 5.8vw, 30px);
+  }
+
+  #final-current-run .final-economy-line {
+    font-size: clamp(14px, 4.2vw, 22px);
   }
 
   #level-finished {
@@ -2604,12 +2665,12 @@ body.visual-theme-retro .brief-live::before {
 
   #game-over h1 {
     margin-bottom: 14px;
-    font-size: clamp(48px, 15vw, 76px);
+    font-size: clamp(34px, 10vw, 60px);
   }
 
   #game-over p {
     margin: 6px 0;
-    font-size: clamp(18px, 6vw, 28px);
+    font-size: clamp(14px, 4.4vw, 22px);
   }
 
   #level-finished h1 {
@@ -2707,8 +2768,8 @@ body.visual-theme-retro .brief-live::before {
   }
 
   .pre-run-brand {
-    margin-bottom: 18px;
-    font-size: clamp(38px, 14vw, 56px);
+    margin-bottom: 12px;
+    font-size: clamp(30px, 10vw, 48px);
   }
 
   .pre-run-select-layout {
@@ -2877,7 +2938,11 @@ body.visual-theme-retro .brief-live::before {
 
   #final-current-run p {
     margin: 4px 0;
-    font-size: clamp(22px, 5.4vh, 34px);
+    font-size: clamp(14px, 3.4vh, 24px);
+  }
+
+  #final-current-run .final-economy-line {
+    font-size: clamp(12px, 2.7vh, 18px);
   }
 
   #level-finished {
@@ -2887,14 +2952,18 @@ body.visual-theme-retro .brief-live::before {
 
   #game-over h1 {
     margin-bottom: 8px;
-    font-size: clamp(34px, 8vh, 54px);
+    font-size: clamp(26px, 5.2vh, 42px);
     text-shadow: none;
   }
 
   #game-over p {
     margin: 4px 0;
-    font-size: clamp(15px, 3.8vh, 22px);
+    font-size: clamp(11px, 2.4vh, 16px);
     text-shadow: none;
+  }
+
+  #final-board-label {
+    font-size: clamp(16px, 3vh, 24px) !important;
   }
 
   #level-finished h1 {
@@ -2962,8 +3031,21 @@ body.visual-theme-retro .brief-live::before {
   }
 
   .pre-run-brand {
-    margin-bottom: 10px;
-    font-size: clamp(28px, 8vh, 44px);
+    margin-bottom: 8px;
+    font-size: clamp(26px, 6vh, 40px);
+  }
+
+  .pre-run-select-topbar {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .pre-run-side-btn {
+    min-height: 28px;
+    padding: 3px 6px;
+    font-size: clamp(10px, 1.8vh, 12px);
+    border-width: 2px;
   }
 
   .pre-run-badges-btn {
@@ -3072,6 +3154,64 @@ body.visual-theme-retro .brief-live::before {
     min-height: 120px;
     padding: 16px 12px;
     font-size: clamp(28px, 8vh, 40px);
+  }
+
+  #final-continue-actions {
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  #final-continue-actions button {
+    min-height: 40px;
+    padding: 8px 14px;
+    font-size: clamp(13px, 2.4vh, 18px);
+  }
+
+  .pre-run-shop-summary {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .pre-run-shop-summary-card,
+  .pre-run-shop-card {
+    padding: 10px 12px;
+    border-radius: 18px;
+  }
+
+  .pre-run-shop-summary-card strong {
+    font-size: clamp(16px, 3vh, 24px);
+  }
+
+  .pre-run-shop-summary-card span {
+    font-size: clamp(10px, 1.8vh, 13px);
+  }
+
+  .pre-run-shop-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .pre-run-shop-card h3 {
+    font-size: clamp(14px, 2.6vh, 20px);
+    margin-bottom: 6px;
+  }
+
+  .pre-run-shop-card p,
+  .pre-run-shop-status {
+    font-size: clamp(10px, 1.9vh, 13px);
+    line-height: 1.2;
+  }
+
+  .pre-run-shop-actions {
+    gap: 6px;
+    margin: 8px 0 6px;
+  }
+
+  .pre-run-shop-action-btn {
+    min-height: 32px;
+    padding: 5px 8px;
+    border-width: 2px;
+    font-size: clamp(10px, 1.8vh, 12px);
   }
 
   .pre-run-detail-heading h2 {

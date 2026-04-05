@@ -539,3 +539,11 @@ po dosažení skore, kdy se mužou objevovat mince (a ostatní veci), tak se mince o
 -------------------
 priprav aab
 -------------------
+vymyšlím jeste badge za "continue". 3 tier. a další za utracení v shopu - a) jednak premena score na coins a jednak coins za postavicku, level, continue. zatim neimplementuj. jen navrh
+-------------------
+1) nazvy badge "Unkillable Custommer" a bude stejne jako ostantí bronze, silver a gold 2) nazvi badge Banger3) bude "Big Spender". hodnoty nech, jak je navrhujes. pridej je do administrace stejne, jako jsou pridané ostatní badges
+-------------------
+a) je videt, jak se text nevejde na obrazovku mobilu. ani do šírky, ani na výšku NEMEN okna se score. zmen jen velikost fontu - at jsou responzivní, at se dle velikosti okna vejdou - zmensi / zvetsí. b) start screen. udelej ty ctyri button nad názve hrrra, aby byly vedle sebe v jedné rade, tím se opet vse vejde na jednu obrazovku a nebude to pretekat dolu c) ty tri informacní okna taky udelej menší vedle sebe. stejne jako to je na lokale v pc. zmen text "score per coin" na "Score to spend" d) nakupní okna zkus taky responzivne zmensit, aby se vesla vedle sebe 
+-------------------
+udelej online commit na online vercel, abych to mohl zkusit na webove verzi pres mobil
+-------------------
