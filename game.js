@@ -2181,7 +2181,11 @@ Main tuning points:
   }
 
   function shouldShowBadgeInlineProgress(series) {
-    return series && (series.category === "All Runs" || series.category === "Lifetime Legends");
+    return series && (
+      series.category === "All Runs" ||
+      series.category === "Lifetime Legends" ||
+      series.id === "shield_teleporter_skills"
+    );
   }
 
   function appendBadgeInlineProgress(baseText, series, tierIndex) {
@@ -2215,7 +2219,7 @@ Main tuning points:
       case "speed_demon_skills":
         return "Reach +" + target + "% speed";
       case "shield_teleporter_skills":
-        return "Teleport with shield " + target + "x";
+        return appendBadgeInlineProgress("Teleport with shield " + target + "x", series, tierIndex);
       case "survivor_skills":
         if (tierIndex === 0) {
           return "Level " + target + " on Jump Classic Easy";
@@ -5338,9 +5342,10 @@ Main tuning points:
   }
 
   function loadCurrentLevelConfig() {
+    var persistedSelectedSkin = normalizeOwnedSkinName(C.selectedSkin);
     applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
     loadGlobalAdminConfig();
-    C.selectedSkin = normalizeOwnedSkinName(C.selectedSkin);
+    C.selectedSkin = normalizeOwnedSkinName(persistedSelectedSkin);
     sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
     warmCurrentSfxBuffers();
     refreshMusicPlayback();

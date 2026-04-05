@@ -505,3 +505,9 @@ hudba stale ve hre nehraje ve vyssích úrovních nez level 1. ani zvuky se nepr
 -------------------
 priprav aab
 -------------------
+kdyz si v level 1 vyberu postavu, dohraju level, začne druhý, tak tam je zase zakladní postavička. výběr se neprenáší mezi levely
+-------------------
+na strance badges shield teleporter nema v závorce počet kolikrat uz jsem teleportem se stitem prosel. ted jsem urcite v jednom runnu (na mobilu) prosel dvakrat a číslo se mi tam neobjevuje
+-------------------
+udelej ted commit do main a pak priprav novou vetem "nakupy"
+-------------------
