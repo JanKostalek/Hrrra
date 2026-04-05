@@ -511,3 +511,31 @@ na strance badges shield teleporter nema v závorce počet kolikrat uz jsem tele
 -------------------
 udelej ted commit do main a pak priprav novou vetem "nakupy"
 -------------------
+ted budeme vytvářet uplně novou mechaniku. zatím nic neimplementuj, jen to pojdme probrat. chci vytvořít systém nákupů. jako měna se budou používat mince. ty mince, které ve hře sbíráme. Zároven bude možné nasbírané body za mince jako měnu vyměnit. časem bude i systém reklam, který nám dá mince. Za mince bude možno nakoupit třeba postavičky, které jinak nepůjdou odemknout, nějakou speciální úroven, která se jinak nebude objevovat (něco jako úroven 4,5 - čtyřia půl) a nebo třeba continue, tedy kdyz umřeme, tak abycho mohli ještě dokoupit jeden nebo dva životy a dál hrát.
+-------------------
+tuto tvoji odpoved co jsi poslal, zapis, abychom se k ní mohli vrátit - udelej treba economy.md a k tomu návrhu jeste bude vzdy na gameover stránce napsáno kolik mincí hráč posíbral  akteré se přictou do penezenky
+-------------------
+Score za každý run se bude ukládat a načítat do jednoho velkého celku (to uz se deje nyní kvůli badge). a bude jej možno videt v administraci. A tam z tohoto celkového score - které se navysuje po každém runnu, bude možno provést změnu na coins. tím se celkové skore zmensí a navýší počet coins.. dál se ale každým dalším runnem bude score opet navysovat
+-------------------
+tak mi jeste jednou zopakuj, jak implementaci rozdelsí do jednotlivých kroků pro implementaci
+-------------------
+zapis tvůj navrh znovu do economy.md Ale myslím si, ze bod 7 lze delat v prvním kroku a směna score -> coins se bude nastavovat, v jakém poměru se bude dělat v administraci, ale samotný převod / koupě bude v shop page
+-------------------
+tak myslím, ze máme vse preddomluvené a můžeme začít s implementaci.
+-------------------
+ok, můžeš pokračovat dalším krokem. akorat zatím není připravená uroven, která půjde pridat, tak to tam neimplementuj. mozna udelej jen nejaky textovy placeholder, ze tady se bude kupovat úroven. a k odemknutí postavičky můžeš použít pro vyzkoušení zatím Kroba.
+-------------------
+tlac�tko na shop je dvakrat. odstran to v sloupci a ponech v horn� c�sti  a potom priprav bod 8 - continue system. bod 9 zat�m nedelej, ten nech�me na pozdeji
+-------------------
+Continue ale d� jen jeden �ivot nav�c. nikoliv vsech pet (nebo kolik je urceno v administraci pro ten kter� mod). a bude to mo�no jen jednou za run
+-------------------
+a do administrace pridat - kolik �ivotu prida (v admin to bude moc zmenit na v�c jak jednu). a taky kolik coins bude continue stat
+-------------------
+na gameover strance nevidim moznost continue kdyz nemam dost coins - pokud jich mam dost, tu moznost tam vidim . chtelo by to zmenit na neco "not enough coins to purchase a continue"... pokud jich nemam dost. a nechat zasedivel� tlac�tko continue a nechat tam aktivn� jen to end run
+-------------------
+kdyz se klikne na end run, tak se nacte druh� game over str�nka, znovu se nactou score etc. to je zbytecn�. po end run lze uz run definitivne ukoncit. na te predchoz� obrazovce je vse potrebne. shrnut�, top scores etc. nebo se pletu?
+-------------------
+po dosa�en� skore, kdy se mu�ou objevovat mince (a ostatn� veci), tak se mince objev� klidne uprostred obrazovky na plosine nebo v�tahu. at je to v�dy tak, �e po dosazen� score, kdy se veci mohou zac�t objevovat, at se vzdy objevuj� na prav�m kraji obrazovky. 
+-------------------
+priprav aab
+-------------------

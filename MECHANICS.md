@@ -1267,3 +1267,14 @@ Every gameplay-related change must be added here with date and short reason.
 - `Game Over` now reads two online datasets for the active board: `Top Scores` (best run entries, duplicate players allowed) and `Top Players` (one best score per player).
 - API now stores run-based entries in a dedicated board key and keeps per-player best values in the existing player leaderboard key, including separate `bestScoreRank` and `currentScoreRank` outputs.
 - Why: supports both competitive score-chasing and clear per-player standings without rank conflicts from mixed leaderboard semantics.
+
+### v0.1.198 - Added first continue economy flow (2026-04-05)
+- `Game Over` can now offer exactly one paid `Continue` per run when the player has enough coins in the shared wallet.
+- Admin controls both the continue coin price and how many lives the purchased continue restores.
+- Run-end persistent rewards (`total score`, wallet coins from collected run coins, and run-end badge evaluation) are now only committed when the player actually ends the run, so continuing does not duplicate score or coin rewards.
+- Why: adds the first run-rescue purchase without corrupting long-term economy totals.
+
+### v0.1.199 - Force newly unlocked pickups to enter from the right edge (2026-04-05)
+- When coins and other platform-based pickups become eligible after reaching their unlock threshold, they now start appearing on the right edge platform instead of abruptly popping onto already-visible mid-screen content.
+- Elevator coins that were already present inside the current viewport are cleared on first coin unlock, so the first visible post-unlock coin opportunities come from newly arriving right-side shafts instead.
+- Why: makes unlock thresholds feel fairer and more readable by introducing new pickups from incoming content instead of retroactively spawning them in the middle of the current screen.

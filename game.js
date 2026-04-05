@@ -51,6 +51,12 @@ Main tuning points:
   var finalBoardLabelEl = document.getElementById("final-board-label");
   var finalScoreEl = document.getElementById("final-score");
   var finalRuntimeEl = document.getElementById("final-runtime");
+  var finalCoinsEarnedEl = document.getElementById("final-coins-earned");
+  var finalWalletBalanceEl = document.getElementById("final-wallet-balance");
+  var finalContinueStatusEl = document.getElementById("final-continue-status");
+  var finalContinueActionsEl = document.getElementById("final-continue-actions");
+  var finalContinueBtn = document.getElementById("final-continue-btn");
+  var finalEndRunBtn = document.getElementById("final-end-run-btn");
   var finalHighscoresEl = document.getElementById("final-highscores");
   var finalTopScoresStatusEl = document.getElementById("final-top-scores-status");
   var finalTopScoresListEl = document.getElementById("final-top-scores-list");
@@ -93,6 +99,7 @@ Main tuning points:
   var preRunScoresScreenEl = document.getElementById("pre-run-scores-screen");
   var preRunRulesScreenEl = document.getElementById("pre-run-rules-screen");
   var preRunCreditsScreenEl = document.getElementById("pre-run-credits-screen");
+  var preRunShopScreenEl = document.getElementById("pre-run-shop-screen");
   var preRunSettingsScreenEl = document.getElementById("pre-run-settings-screen");
   var preRunDetailScreenEl = document.getElementById("pre-run-detail-screen");
   var preRunJumpBtn = document.getElementById("pre-run-jump-btn");
@@ -100,11 +107,13 @@ Main tuning points:
   var preRunDifficultyToggleEl = document.getElementById("pre-run-difficulty-toggle");
   var preRunRulesBtn = document.getElementById("pre-run-rules-btn");
   var preRunCreditsBtn = document.getElementById("pre-run-credits-btn");
+  var preRunShopBtn = document.getElementById("pre-run-shop-btn");
   var preRunSettingsBtn = document.getElementById("pre-run-settings-btn");
   var preRunBadgesBtn = document.getElementById("pre-run-badges-btn");
   var preRunScoresBtn = document.getElementById("pre-run-scores-btn");
   var preRunRulesBackBtn = document.getElementById("pre-run-rules-back-btn");
   var preRunCreditsBackBtn = document.getElementById("pre-run-credits-back-btn");
+  var preRunShopBackBtn = document.getElementById("pre-run-shop-back-btn");
   var preRunSettingsBackBtn = document.getElementById("pre-run-settings-back-btn");
   var preRunPlayerNameBtn = document.getElementById("pre-run-player-name-btn");
   var preRunBadgesBackBtn = document.getElementById("pre-run-badges-back-btn");
@@ -113,6 +122,16 @@ Main tuning points:
   var preRunScoresGridEl = document.getElementById("pre-run-scores-grid");
   var preRunToggleSfxBtn = document.getElementById("pre-run-toggle-sfx-btn");
   var preRunToggleMusicBtn = document.getElementById("pre-run-toggle-music-btn");
+  var preRunShopWalletEl = document.getElementById("pre-run-shop-wallet");
+  var preRunShopTotalScoreEl = document.getElementById("pre-run-shop-total-score");
+  var preRunShopRateEl = document.getElementById("pre-run-shop-rate");
+  var preRunShopExchangeCopyEl = document.getElementById("pre-run-shop-exchange-copy");
+  var preRunShopExchangeOneBtn = document.getElementById("pre-run-shop-exchange-one-btn");
+  var preRunShopExchangeTenBtn = document.getElementById("pre-run-shop-exchange-ten-btn");
+  var preRunShopExchangeStatusEl = document.getElementById("pre-run-shop-exchange-status");
+  var preRunShopBuyKrobBtn = document.getElementById("pre-run-shop-buy-krob-btn");
+  var preRunShopKrobStatusEl = document.getElementById("pre-run-shop-krob-status");
+  var preRunShopSpecialLevelStatusEl = document.getElementById("pre-run-shop-special-level-status");
   var preRunBadgesTotalValueEl = document.getElementById("pre-run-badges-total-value");
   var preRunBadgesTotalLabelEl = document.getElementById("pre-run-badges-total-label");
   var preRunFullLockEl = document.getElementById("pre-run-full-lock");
@@ -192,6 +211,7 @@ Main tuning points:
   var PLAYER_NAME_STORAGE_KEY = "hrrra_player_name_v1";
   var PLAYER_ID_STORAGE_KEY = "hrrra_player_id_v1";
   var BADGE_STATS_STORAGE_KEY = "hrrra_badge_stats_v1";
+  var ECONOMY_STORAGE_KEY = "hrrra_economy_v1";
   var WHATS_NEW_SEEN_VERSION_STORAGE_KEY = "hrrra_whats_new_seen_version_v1";
   function getOnlineApiBaseOrigin() {
     var fallbackOrigin = "https://hrrra.vercel.app";
@@ -602,6 +622,48 @@ Main tuning points:
   }
 
   var badgeStats = readBadgeStats();
+
+  function createDefaultEconomyStats() {
+    return {
+      coinsBalance: 0,
+      totalCoinsEarned: 0,
+      totalCoinsSpent: 0
+    };
+  }
+
+  function sanitizeEconomyStats(raw) {
+    var defaults = createDefaultEconomyStats();
+    var out = createDefaultEconomyStats();
+    if (!raw || typeof raw !== "object") {
+      return defaults;
+    }
+    out.coinsBalance = Number.isFinite(raw.coinsBalance) ? Math.max(0, Math.floor(Number(raw.coinsBalance))) : defaults.coinsBalance;
+    out.totalCoinsEarned = Number.isFinite(raw.totalCoinsEarned) ? Math.max(0, Math.floor(Number(raw.totalCoinsEarned))) : defaults.totalCoinsEarned;
+    out.totalCoinsSpent = Number.isFinite(raw.totalCoinsSpent) ? Math.max(0, Math.floor(Number(raw.totalCoinsSpent))) : defaults.totalCoinsSpent;
+    return out;
+  }
+
+  function readEconomyStats() {
+    try {
+      var raw = window.localStorage.getItem(ECONOMY_STORAGE_KEY);
+      if (!raw) {
+        return createDefaultEconomyStats();
+      }
+      return sanitizeEconomyStats(JSON.parse(raw));
+    } catch (error) {
+      return createDefaultEconomyStats();
+    }
+  }
+
+  function writeEconomyStats() {
+    try {
+      window.localStorage.setItem(ECONOMY_STORAGE_KEY, JSON.stringify(economyStats));
+    } catch (error) {
+      // ignore write failures
+    }
+  }
+
+  var economyStats = readEconomyStats();
 
   function readWhatsNewSeenVersionCode() {
     try {
@@ -1598,7 +1660,95 @@ Main tuning points:
     if (key === "fullModeUnlockJumpHardScore") {
       return Math.max(0, parsed);
     }
+    if (
+      key === "shopRewardedAdCoins" ||
+      key === "shopContinuePrice1" ||
+      key === "shopKrobPrice" ||
+      key === "shopSpecialLevelPrice"
+    ) {
+      return Math.max(0, parsed);
+    }
+    if (key === "shopScorePerCoin" || key === "shopContinueLivesGranted") {
+      return Math.max(1, parsed);
+    }
     return parsed;
+  }
+
+  function getPersistentTotalScore() {
+    return Math.max(0, Math.floor((badgeStats && badgeStats.lifetime && badgeStats.lifetime.totalScore) || 0));
+  }
+
+  function getCoinWalletBalance() {
+    return Math.max(0, Math.floor((economyStats && economyStats.coinsBalance) || 0));
+  }
+
+  function getContinueCoinPrice() {
+    return sanitizeGlobalAdminNumber("shopContinuePrice1", C.shopContinuePrice1);
+  }
+
+  function getContinueLivesGranted() {
+    return sanitizeGlobalAdminNumber("shopContinueLivesGranted", C.shopContinueLivesGranted);
+  }
+
+  function addCoinsToWallet(amount) {
+    var safeAmount = Math.max(0, Math.floor(Number(amount) || 0));
+    if (safeAmount <= 0) {
+      return 0;
+    }
+    economyStats.coinsBalance = getCoinWalletBalance() + safeAmount;
+    economyStats.totalCoinsEarned = Math.max(0, Math.floor(Number(economyStats.totalCoinsEarned) || 0) + safeAmount);
+    writeEconomyStats();
+    return safeAmount;
+  }
+
+  function spendCoinsFromWallet(amount) {
+    var safeAmount = Math.max(0, Math.floor(Number(amount) || 0));
+    if (safeAmount <= 0 || getCoinWalletBalance() < safeAmount) {
+      return false;
+    }
+    economyStats.coinsBalance = getCoinWalletBalance() - safeAmount;
+    economyStats.totalCoinsSpent = Math.max(0, Math.floor(Number(economyStats.totalCoinsSpent) || 0) + safeAmount);
+    writeEconomyStats();
+    return true;
+  }
+
+  function exchangePersistentScoreForCoins(coinCount) {
+    var safeCoinCount = Math.max(0, Math.floor(Number(coinCount) || 0));
+    var scorePerCoin = sanitizeGlobalAdminNumber("shopScorePerCoin", C.shopScorePerCoin);
+    var totalScoreCost = safeCoinCount * scorePerCoin;
+    if (safeCoinCount <= 0 || totalScoreCost <= 0 || getPersistentTotalScore() < totalScoreCost) {
+      return false;
+    }
+    badgeStats.lifetime.totalScore = Math.max(0, getPersistentTotalScore() - totalScoreCost);
+    addCoinsToWallet(safeCoinCount);
+    writeBadgeStats();
+    return true;
+  }
+
+  function finalizeCompletedRun() {
+    if (state.runFinalized) {
+      return;
+    }
+    incrementBadgeLifetimeStat("totalScore", state.score);
+    addCoinsToWallet(state.collectedCoins);
+    updateBadgeBestStat("singleRunScore", state.score);
+    updateSurvivorBadgeProgressForCurrentRun();
+    updatePuristBadgeProgressForCurrentRun();
+    flushBadgeStatsStorage(true, 0);
+    state.runFinalized = true;
+    renderAdminForm();
+  }
+
+  function shouldShowContinueForCurrentRun() {
+    return (
+      !state.runFinalized &&
+      state.continueUsesThisRun < 1 &&
+      getContinueLivesGranted() > 0
+    );
+  }
+
+  function canBuyContinueForCurrentRun() {
+    return shouldShowContinueForCurrentRun() && getCoinWalletBalance() >= getContinueCoinPrice();
   }
 
   function getHardModeUnlockLevel() {
@@ -1931,6 +2081,7 @@ Main tuning points:
           key === GLOBAL_ADMIN_STORAGE_KEY ||
           key === PLAYER_SKIN_PROGRESS_STORAGE_KEY ||
           key === BADGE_STATS_STORAGE_KEY ||
+          key === ECONOMY_STORAGE_KEY ||
           key === WHATS_NEW_SEEN_VERSION_STORAGE_KEY ||
           key.indexOf(ADMIN_STORAGE_KEY_PREFIX) === 0 ||
           key.indexOf(LEGACY_ADMIN_STORAGE_KEY_PREFIX) === 0 ||
@@ -1952,6 +2103,7 @@ Main tuning points:
     setAdminOpen(false);
     clearAllHrrraStorageData();
     badgeStats = createDefaultBadgeStats();
+    economyStats = createDefaultEconomyStats();
     state.gameMode = 2;
     state.gameDifficulty = "easy";
     state.currentLevel = 1;
@@ -2008,6 +2160,9 @@ Main tuning points:
       var section = globalAdminSections[sectionIndex];
       for (var fieldIndex = 0; fieldIndex < section.fields.length; fieldIndex += 1) {
         var field = section.fields[fieldIndex];
+        if (field.type === "shop-summary") {
+          continue;
+        }
         if (field.type === "skin-pickup-levels") {
           for (var skinOptionIndex = 0; skinOptionIndex < SKIN_OPTIONS.length; skinOptionIndex += 1) {
             for (var level = 1; level <= LEVEL_COUNT; level += 1) {
@@ -2531,9 +2686,32 @@ Main tuning points:
   function finishBadgeRewardSequence() {
     resetBadgeRewardQueue();
     state.gameOverInputBlockUntil = Date.now() + 350;
-    updateGameOverSummary();
+    updateGameOverSummary(false);
     gameOverEl.classList.remove("hidden");
     refreshMusicPlayback();
+  }
+
+  function showGameOverScreen() {
+    state.gameOverInputBlockUntil = Date.now() + 350;
+    updateGameOverSummary(false);
+    if (gameOverEl) {
+      gameOverEl.classList.remove("hidden");
+    }
+    refreshMusicPlayback();
+  }
+
+  function completeRunAndPresentGameOver(keepCurrentScreen) {
+    state.continueOfferActive = false;
+    finalizeCompletedRun();
+    if (!startBadgeRewardSequence(buildNewlyUnlockedBadgeQueueForRun())) {
+      if (keepCurrentScreen) {
+        state.gameOverInputBlockUntil = Date.now() + 350;
+        updateGameOverSummary(true);
+        refreshMusicPlayback();
+      } else {
+        showGameOverScreen();
+      }
+    }
   }
 
   function advanceBadgeRewardSequence() {
@@ -3445,6 +3623,9 @@ Main tuning points:
     badgeRewardTimer: 0,
     badgeRewardShowRip: false,
     gameOverInputBlockUntil: 0,
+    continueUsesThisRun: 0,
+    continueOfferActive: false,
+    runFinalized: false,
     preRunDifficultyLockNoticeActive: false,
     preRunDifficultyFlipTimerId: 0,
     preRunScores: createInitialPreRunScoresState(),
@@ -3595,6 +3776,7 @@ Main tuning points:
     questionCoinAnimResult: "",
     questionCoinAnimDelta: 0,
     questionCoinAnimApplied: false,
+    elevatorCoinsUnlocked: false,
     platformCoinTimer: C.platformCoinInitialDelaySeconds,
     lastPlatformCoinPlatformId: -1,
     platformCoinIcon: {
@@ -3666,6 +3848,18 @@ Main tuning points:
       title: "Badges",
       fields: [
         { key: "badgeConfig", label: "", type: "badges-config" }
+      ]
+    },
+    {
+      title: "Shop",
+      fields: [
+        { key: "shopSummary", label: "", type: "shop-summary" },
+        { key: "shopScorePerCoin", label: "Score Needed Per 1 Coin", type: "number", min: 1, step: 1 },
+        { key: "shopRewardedAdCoins", label: "Rewarded Ad Coin Reward", type: "number", min: 0, step: 1 },
+        { key: "shopContinuePrice1", label: "Continue Price", type: "number", min: 0, step: 1 },
+        { key: "shopContinueLivesGranted", label: "Continue Lives Granted", type: "number", min: 1, step: 1 },
+        { key: "shopKrobPrice", label: "Krob Price", type: "number", min: 0, step: 1 },
+        { key: "shopSpecialLevelPrice", label: "Special Level Placeholder Price", type: "number", min: 0, step: 1 }
       ]
     },
     {
@@ -4465,6 +4659,9 @@ Main tuning points:
     if (preRunCreditsScreenEl) {
       preRunCreditsScreenEl.classList.toggle("hidden", state.preRunStep !== "credits");
     }
+    if (preRunShopScreenEl) {
+      preRunShopScreenEl.classList.toggle("hidden", state.preRunStep !== "shop");
+    }
     if (preRunSettingsScreenEl) {
       preRunSettingsScreenEl.classList.toggle("hidden", state.preRunStep !== "settings");
     }
@@ -4531,6 +4728,9 @@ Main tuning points:
     }
     if (state.preRunStep === "scores") {
       renderPreRunScoresScreen();
+    }
+    if (state.preRunStep === "shop") {
+      renderPreRunShopScreen();
     }
     if (state.preRunStep === "settings") {
       renderPreRunSettingsScreen();
@@ -5369,6 +5569,9 @@ Main tuning points:
     state.runUnlockedBadgeKeysAtStart = getCollectedBadgeKeyMap();
     state.pendingFreshRunStart = true;
     state.badgeCursedSecondsAccumulator = 0;
+    state.continueUsesThisRun = 0;
+    state.continueOfferActive = false;
+    state.runFinalized = false;
     loadCurrentLevelConfig();
     restartGame(true);
     state.preRunActive = true;
@@ -5528,14 +5731,103 @@ Main tuning points:
     }
   }
 
-  function updateGameOverSummary() {
+  function updateGameOverSummary(skipOnlineReload) {
+    var walletBalance = getCoinWalletBalance();
+    var continuePrice = getContinueCoinPrice();
+    var continueLivesGranted = getContinueLivesGranted();
+    var canBuyContinue = canBuyContinueForCurrentRun();
+
     if (finalScoreEl) {
       finalScoreEl.textContent = "Score: " + state.score;
     }
     if (finalRuntimeEl) {
       finalRuntimeEl.textContent = "Run Time: " + state.runTimeSeconds.toFixed(1) + "s";
     }
-    loadOnlineHighscoreForCurrentBoard();
+    if (finalCoinsEarnedEl) {
+      finalCoinsEarnedEl.textContent = "Coins Collected: " + state.collectedCoins.toLocaleString("en-US");
+    }
+    if (finalWalletBalanceEl) {
+      finalWalletBalanceEl.textContent = state.runFinalized
+        ? "Wallet Balance: " + walletBalance.toLocaleString("en-US")
+        : "Wallet After Run: " + (walletBalance + state.collectedCoins).toLocaleString("en-US") + " (+" + state.collectedCoins.toLocaleString("en-US") + ")";
+    }
+    if (finalContinueStatusEl) {
+      finalContinueStatusEl.textContent = canBuyContinue
+        ? "Continue once for " +
+          continuePrice.toLocaleString("en-US") +
+          " coins and gain +" +
+          continueLivesGranted.toLocaleString("en-US") +
+          " life" +
+          (continueLivesGranted === 1 ? "" : "s") +
+          "."
+        : "Not enough coins to purchase a continue.";
+      finalContinueStatusEl.classList.toggle("hidden", !state.continueOfferActive);
+    }
+    if (finalContinueActionsEl) {
+      finalContinueActionsEl.classList.toggle("hidden", !state.continueOfferActive);
+    }
+    if (finalContinueBtn) {
+      finalContinueBtn.textContent = "Continue - " + continuePrice.toLocaleString("en-US") + " Coins";
+      finalContinueBtn.disabled = !canBuyContinue;
+    }
+    if (finalEndRunBtn) {
+      finalEndRunBtn.textContent = "End Run";
+      finalEndRunBtn.disabled = false;
+    }
+    if (!skipOnlineReload) {
+      loadOnlineHighscoreForCurrentBoard();
+    }
+  }
+
+  function renderPreRunShopScreen() {
+    var scorePerCoin = sanitizeGlobalAdminNumber("shopScorePerCoin", C.shopScorePerCoin);
+    var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
+    var specialLevelPrice = sanitizeGlobalAdminNumber("shopSpecialLevelPrice", C.shopSpecialLevelPrice);
+    var persistentScore = getPersistentTotalScore();
+    var walletBalance = getCoinWalletBalance();
+    var canBuyOneCoin = persistentScore >= scorePerCoin;
+    var canBuyTenCoins = persistentScore >= scorePerCoin * 10;
+    var krobOwned = isSkinUnlocked("Skin04");
+
+    if (preRunShopWalletEl) {
+      preRunShopWalletEl.textContent = walletBalance.toLocaleString("en-US");
+    }
+    if (preRunShopTotalScoreEl) {
+      preRunShopTotalScoreEl.textContent = persistentScore.toLocaleString("en-US");
+    }
+    if (preRunShopRateEl) {
+      preRunShopRateEl.textContent = scorePerCoin.toLocaleString("en-US") + " : 1";
+    }
+    if (preRunShopExchangeCopyEl) {
+      preRunShopExchangeCopyEl.textContent =
+        "Convert persistent total score into coins at " + scorePerCoin.toLocaleString("en-US") + " score per 1 coin.";
+    }
+    if (preRunShopExchangeOneBtn) {
+      preRunShopExchangeOneBtn.disabled = !canBuyOneCoin;
+    }
+    if (preRunShopExchangeTenBtn) {
+      preRunShopExchangeTenBtn.disabled = !canBuyTenCoins;
+    }
+    if (preRunShopExchangeStatusEl) {
+      preRunShopExchangeStatusEl.textContent =
+        "Available: " +
+        persistentScore.toLocaleString("en-US") +
+        " score. " +
+        (canBuyOneCoin ? "Ready to exchange." : "Not enough score yet.");
+    }
+    if (preRunShopBuyKrobBtn) {
+      preRunShopBuyKrobBtn.disabled = krobOwned || walletBalance < krobPrice;
+      preRunShopBuyKrobBtn.textContent = krobOwned ? "Owned" : "Buy Krob";
+    }
+    if (preRunShopKrobStatusEl) {
+      preRunShopKrobStatusEl.textContent = krobOwned
+        ? "Krob is already unlocked."
+        : "Price: " + krobPrice.toLocaleString("en-US") + " coins.";
+    }
+    if (preRunShopSpecialLevelStatusEl) {
+      preRunShopSpecialLevelStatusEl.textContent =
+        "Placeholder only. Future price: " + specialLevelPrice.toLocaleString("en-US") + " coins.";
+    }
   }
 
   function updateLevelFinishedSummary() {
@@ -5710,6 +6002,16 @@ Main tuning points:
         renderPreRunScreen();
       });
     }
+    function openPreRunShop() {
+      unlockAudioIfNeeded();
+      playUiButtonSound();
+      playUiPageOpenSound();
+      state.preRunStep = "shop";
+      renderPreRunScreen();
+    }
+    if (preRunShopBtn) {
+      preRunShopBtn.addEventListener("click", openPreRunShop);
+    }
     if (preRunSettingsBtn) {
       preRunSettingsBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
@@ -5763,6 +6065,15 @@ Main tuning points:
         renderPreRunScreen();
       });
     }
+    if (preRunShopBackBtn) {
+      preRunShopBackBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
+        state.preRunStep = "select";
+        renderPreRunScreen();
+      });
+    }
     if (preRunSettingsBackBtn) {
       preRunSettingsBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
@@ -5802,6 +6113,71 @@ Main tuning points:
         }
         applyGlobalAudioSetting("audioMusicEnabled", !C.audioMusicEnabled);
         renderPreRunSettingsScreen();
+      });
+    }
+    if (preRunShopExchangeOneBtn) {
+      preRunShopExchangeOneBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        exchangePersistentScoreForCoins(1);
+        renderPreRunShopScreen();
+        renderAdminForm();
+        if (state.preRunStep === "badges") {
+          renderBadgesScreen();
+        }
+      });
+    }
+    if (preRunShopExchangeTenBtn) {
+      preRunShopExchangeTenBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        exchangePersistentScoreForCoins(10);
+        renderPreRunShopScreen();
+        renderAdminForm();
+        if (state.preRunStep === "badges") {
+          renderBadgesScreen();
+        }
+      });
+    }
+    if (preRunShopBuyKrobBtn) {
+      preRunShopBuyKrobBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
+        if (!isSkinUnlocked("Skin04") && spendCoinsFromWallet(krobPrice)) {
+          unlockSkin("Skin04");
+          renderPreRunShopScreen();
+          refreshPreRunSkinSelection();
+          renderAdminForm();
+        }
+      });
+    }
+    if (finalContinueBtn) {
+      finalContinueBtn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        if (!state.continueOfferActive) {
+          return;
+        }
+        if (!spendCoinsFromWallet(getContinueCoinPrice())) {
+          updateGameOverSummary();
+          renderAdminForm();
+          return;
+        }
+        renderAdminForm();
+        revivePlayerAfterContinue();
+      });
+    }
+    if (finalEndRunBtn) {
+      finalEndRunBtn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        if (!state.continueOfferActive) {
+          return;
+        }
+        completeRunAndPresentGameOver(true);
       });
     }
     if (preRunBackBtn) {
@@ -6063,6 +6439,27 @@ Main tuning points:
           }
           globalInput.step = typeof globalField.step === "number" ? String(globalField.step) : "1";
           globalInput.value = String(sanitizeGlobalAdminNumber(globalField.key, C[globalField.key]));
+        } else if (globalField.type === "shop-summary") {
+          globalRow.classList.add("admin-field-stacked");
+          globalRow.classList.add("admin-field-no-label");
+          globalInput = document.createElement("div");
+          globalInput.className = "admin-inline-checkbox-wrap";
+
+          var shopSummaryList = document.createElement("div");
+          shopSummaryList.className = "admin-inline-checkbox-list";
+
+          function appendShopSummaryValue(label, value) {
+            var item = document.createElement("div");
+            item.className = "admin-inline-checkbox-caption";
+            item.textContent = label + ": " + value;
+            shopSummaryList.appendChild(item);
+          }
+
+          appendShopSummaryValue("Persistent Total Score", getPersistentTotalScore().toLocaleString("en-US"));
+          appendShopSummaryValue("Coin Wallet Balance", getCoinWalletBalance().toLocaleString("en-US"));
+          appendShopSummaryValue("Total Coins Earned", Math.max(0, Math.floor(Number(economyStats.totalCoinsEarned) || 0)).toLocaleString("en-US"));
+          appendShopSummaryValue("Total Coins Spent", Math.max(0, Math.floor(Number(economyStats.totalCoinsSpent) || 0)).toLocaleString("en-US"));
+          globalInput.appendChild(shopSummaryList);
         } else if (globalField.type === "skin-pickup-levels") {
           globalRow.classList.add("admin-field-stacked");
           globalInput = document.createElement("div");
@@ -6249,7 +6646,7 @@ Main tuning points:
           continue;
         }
 
-        if (globalField.type !== "skin-pickup-levels") {
+        if (globalField.type !== "skin-pickup-levels" && globalField.type !== "shop-summary") {
           globalInput.id = "admin-global-" + globalField.key;
           globalInput.dataset.key = globalField.key;
           globalInput.addEventListener("change", function (event) {
@@ -6925,6 +7322,9 @@ Main tuning points:
     state.levelCollectedBags = 0;
     if (resetLives || !state.runBadgeStats) {
       resetRunBadgeStats();
+      state.continueUsesThisRun = 0;
+      state.continueOfferActive = false;
+      state.runFinalized = false;
     } else {
       state.runBadgeStats.levelHadLifeLoss = false;
     }
@@ -7064,6 +7464,7 @@ Main tuning points:
     state.questionCoinAnimResult = "";
     state.questionCoinAnimDelta = 0;
     state.questionCoinAnimApplied = false;
+    state.elevatorCoinsUnlocked = false;
     state.platformCoinTimer = C.platformCoinInitialDelaySeconds;
     state.lastPlatformCoinPlatformId = -1;
     state.platformCoinIcon.active = false;
@@ -7346,6 +7747,41 @@ Main tuning points:
     return true;
   }
 
+  function revivePlayerAfterContinue() {
+    var grantedLives = Math.max(1, Math.min(state.maxLives, getContinueLivesGranted()));
+    state.continueUsesThisRun = 1;
+    state.continueOfferActive = false;
+    state.running = true;
+    state.projectileDeathAnimActive = false;
+    state.teleportFinishAnimActive = false;
+    state.questionCoinAnimActive = false;
+    state.lifeLossFlashTimeLeft = 0;
+    state.shieldBurstActive = false;
+    state.livesLeft = grantedLives;
+    input.left = false;
+    input.right = false;
+    input.jumpDown = false;
+    input.jumpPressed = false;
+
+    if (!rescuePlayerFromBottomDeathZone()) {
+      var fallback = resolveRespawnPoint();
+      player.x = fallback.x;
+      player.y = fallback.y;
+      player.velocityX = 0;
+      player.velocityY = 0;
+      player.isGrounded = false;
+      player.supportType = null;
+      player.supportRef = null;
+    }
+
+    updateLivesUi();
+    updateGameOverSummary();
+    if (gameOverEl) {
+      gameOverEl.classList.add("hidden");
+    }
+    refreshMusicPlayback();
+  }
+
   function consumeShield(cause) {
     if (state.shieldCharges <= 0 || !isShieldProtectableCause(cause)) {
       return false;
@@ -7561,6 +7997,9 @@ Main tuning points:
         !state.teleportFinishAnimActive &&
         !state.questionCoinAnimActive
       ) {
+        if (state.continueOfferActive) {
+          return;
+        }
         openPreRunScreen();
         return;
       }
@@ -7600,6 +8039,9 @@ Main tuning points:
       tryForceFullscreen();
       unlockAudioIfNeeded();
       if (Date.now() < state.gameOverInputBlockUntil) {
+        return;
+      }
+      if (state.continueOfferActive) {
         return;
       }
       if (!state.running && !state.projectileDeathAnimActive && !state.teleportFinishAnimActive && !state.questionCoinAnimActive) {
@@ -7893,16 +8335,12 @@ Main tuning points:
 
   function finishRunAndShowGameOver() {
     state.running = false;
-    incrementBadgeLifetimeStat("totalScore", state.score);
-    updateBadgeBestStat("singleRunScore", state.score);
-    updateSurvivorBadgeProgressForCurrentRun();
-    updatePuristBadgeProgressForCurrentRun();
-    flushBadgeStatsStorage(true, 0);
-    if (!startBadgeRewardSequence(buildNewlyUnlockedBadgeQueueForRun())) {
-      updateGameOverSummary();
-      gameOverEl.classList.remove("hidden");
-      refreshMusicPlayback();
+    if (shouldShowContinueForCurrentRun()) {
+      state.continueOfferActive = true;
+      showGameOverScreen();
+      return;
     }
+    completeRunAndPresentGameOver(false);
   }
 
   function finishCurrentLevel() {
@@ -8079,6 +8517,40 @@ Main tuning points:
       }
     }
     return nearest;
+  }
+
+  function getRightEdgePlatformSpawnPosition(size, padding, platformIdToAvoid) {
+    var safeSize = Math.max(0, Number(size) || 0);
+    var edgePadding = Number.isFinite(padding) ? padding : 8;
+    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
+    var platform = findPlatformAtX(rightEdgeX);
+    if (!platform) {
+      return null;
+    }
+    if (Number.isFinite(platformIdToAvoid) && platform.id === platformIdToAvoid) {
+      return null;
+    }
+
+    var preferredX = rightEdgeX - safeSize - edgePadding;
+    var minSpawnX = platform.x;
+    var maxSpawnX = platform.x + platform.width - safeSize;
+    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
+    var spawnY = platform.y - safeSize;
+    return {
+      platform: platform,
+      x: spawnX,
+      y: spawnY
+    };
+  }
+
+  function dropAlreadyVisibleElevatorCoins() {
+    var unlockEdgeX = state.cameraX + C.canvasWidth - 1;
+    for (var i = 0; i < world.elevators.length; i += 1) {
+      var elevator = world.elevators[i];
+      if (elevator.x + elevator.width < unlockEdgeX - 8) {
+        elevator.coinActive = false;
+      }
+    }
   }
 
   function updateLevelGoalTeleport() {
@@ -8267,20 +8739,17 @@ Main tuning points:
       return false;
     }
 
-    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
-    var platform = findNearestPlatformAhead(rightEdgeX);
-    if (!platform) {
+    var spawn = getRightEdgePlatformSpawnPosition(icon.size, 8);
+    if (!spawn) {
       return false;
     }
 
-    var spawnX = platform.x + platform.width * 0.25 - icon.size * 0.5;
-    var spawnY = platform.y - icon.size;
-    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+    if (!canSpawnMechanicIcon(spawn.x, spawn.y, icon.size)) {
       return false;
     }
 
-    icon.x = spawnX;
-    icon.y = spawnY;
+    icon.x = spawn.x;
+    icon.y = spawn.y;
     icon.active = true;
     return true;
   }
@@ -8571,23 +9040,17 @@ Main tuning points:
       return false;
     }
 
-    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
-    var platform = findPlatformAtX(rightEdgeX);
-    if (!platform) {
+    var spawn = getRightEdgePlatformSpawnPosition(icon.size, 8);
+    if (!spawn) {
       return false;
     }
 
-    var preferredX = rightEdgeX - icon.size - 8;
-    var minSpawnX = platform.x;
-    var maxSpawnX = platform.x + platform.width - icon.size;
-    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
-    var spawnY = platform.y - icon.size;
-    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+    if (!canSpawnMechanicIcon(spawn.x, spawn.y, icon.size)) {
       return false;
     }
 
-    icon.x = spawnX;
-    icon.y = spawnY;
+    icon.x = spawn.x;
+    icon.y = spawn.y;
     icon.active = true;
     return true;
   }
@@ -8598,23 +9061,17 @@ Main tuning points:
       return false;
     }
 
-    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
-    var platform = findPlatformAtX(rightEdgeX);
-    if (!platform) {
+    var spawn = getRightEdgePlatformSpawnPosition(icon.size, 8);
+    if (!spawn) {
       return false;
     }
 
-    var preferredX = rightEdgeX - icon.size - 8;
-    var minSpawnX = platform.x;
-    var maxSpawnX = platform.x + platform.width - icon.size;
-    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
-    var spawnY = platform.y - icon.size;
-    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+    if (!canSpawnMechanicIcon(spawn.x, spawn.y, icon.size)) {
       return false;
     }
 
-    icon.x = spawnX;
-    icon.y = spawnY;
+    icon.x = spawn.x;
+    icon.y = spawn.y;
     icon.active = true;
     return true;
   }
@@ -8626,23 +9083,17 @@ Main tuning points:
       return false;
     }
 
-    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
-    var platform = findPlatformAtX(rightEdgeX);
-    if (!platform) {
+    var spawn = getRightEdgePlatformSpawnPosition(icon.size, 8);
+    if (!spawn) {
       return false;
     }
 
-    var preferredX = rightEdgeX - icon.size - 8;
-    var minSpawnX = platform.x;
-    var maxSpawnX = platform.x + platform.width - icon.size;
-    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
-    var spawnY = platform.y - icon.size;
-    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+    if (!canSpawnMechanicIcon(spawn.x, spawn.y, icon.size)) {
       return false;
     }
 
-    icon.x = spawnX;
-    icon.y = spawnY;
+    icon.x = spawn.x;
+    icon.y = spawn.y;
     icon.active = true;
     icon.stakeScore = Math.floor(stakeScore);
     return true;
@@ -8654,23 +9105,17 @@ Main tuning points:
       return false;
     }
 
-    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
-    var platform = findPlatformAtX(rightEdgeX);
-    if (!platform) {
+    var spawn = getRightEdgePlatformSpawnPosition(icon.size, 8);
+    if (!spawn) {
       return false;
     }
 
-    var preferredX = rightEdgeX - icon.size - 8;
-    var minSpawnX = platform.x;
-    var maxSpawnX = platform.x + platform.width - icon.size;
-    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
-    var spawnY = platform.y - icon.size;
-    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+    if (!canSpawnMechanicIcon(spawn.x, spawn.y, icon.size)) {
       return false;
     }
 
-    icon.x = spawnX;
-    icon.y = spawnY;
+    icon.x = spawn.x;
+    icon.y = spawn.y;
     icon.active = true;
     return true;
   }
@@ -8681,23 +9126,17 @@ Main tuning points:
       return false;
     }
 
-    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
-    var platform = findPlatformAtX(rightEdgeX);
-    if (!platform) {
+    var spawn = getRightEdgePlatformSpawnPosition(icon.size, 8);
+    if (!spawn) {
       return false;
     }
 
-    var preferredX = rightEdgeX - icon.size - 8;
-    var minSpawnX = platform.x;
-    var maxSpawnX = platform.x + platform.width - icon.size;
-    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
-    var spawnY = platform.y - icon.size;
-    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+    if (!canSpawnMechanicIcon(spawn.x, spawn.y, icon.size)) {
       return false;
     }
 
-    icon.x = spawnX;
-    icon.y = spawnY;
+    icon.x = spawn.x;
+    icon.y = spawn.y;
     icon.active = true;
     return true;
   }
@@ -8708,23 +9147,17 @@ Main tuning points:
       return false;
     }
 
-    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
-    var platform = findPlatformAtX(rightEdgeX);
-    if (!platform) {
+    var spawn = getRightEdgePlatformSpawnPosition(icon.size, 8);
+    if (!spawn) {
       return false;
     }
 
-    var preferredX = rightEdgeX - icon.size - 8;
-    var minSpawnX = platform.x;
-    var maxSpawnX = platform.x + platform.width - icon.size;
-    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
-    var spawnY = platform.y - icon.size;
-    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+    if (!canSpawnMechanicIcon(spawn.x, spawn.y, icon.size)) {
       return false;
     }
 
-    icon.x = spawnX;
-    icon.y = spawnY;
+    icon.x = spawn.x;
+    icon.y = spawn.y;
     icon.active = true;
     return true;
   }
@@ -8735,23 +9168,17 @@ Main tuning points:
       return false;
     }
 
-    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
-    var platform = findPlatformAtX(rightEdgeX);
-    if (!platform) {
+    var spawn = getRightEdgePlatformSpawnPosition(icon.size, 8);
+    if (!spawn) {
       return false;
     }
 
-    var preferredX = rightEdgeX - icon.size - 8;
-    var minSpawnX = platform.x;
-    var maxSpawnX = platform.x + platform.width - icon.size;
-    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
-    var spawnY = platform.y - icon.size;
-    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+    if (!canSpawnMechanicIcon(spawn.x, spawn.y, icon.size)) {
       return false;
     }
 
-    icon.x = spawnX;
-    icon.y = spawnY;
+    icon.x = spawn.x;
+    icon.y = spawn.y;
     icon.active = true;
     return true;
   }
@@ -8980,39 +9407,36 @@ Main tuning points:
       return false;
     }
 
-    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
-    var platform = findPlatformAtX(rightEdgeX);
-    if (!platform) {
-      return false;
-    }
-    if (platform.id === state.lastPlatformCoinPlatformId) {
+    var spawn = getRightEdgePlatformSpawnPosition(coin.size, 6, state.lastPlatformCoinPlatformId);
+    if (!spawn) {
       return false;
     }
 
-    var preferredX = rightEdgeX - coin.size - 6;
-    var minX = platform.x;
-    var maxX = platform.x + platform.width - coin.size;
-    var spawnX = Math.min(Math.max(preferredX, minX), maxX);
-    var spawnY = platform.y - coin.size;
-    if (!canSpawnMechanicIcon(spawnX, spawnY, coin.size)) {
+    if (!canSpawnMechanicIcon(spawn.x, spawn.y, coin.size)) {
       return false;
     }
 
     coin.active = true;
-    coin.x = spawnX;
-    coin.y = spawnY;
-    coin.platformId = platform.id;
-    state.lastPlatformCoinPlatformId = platform.id;
+    coin.x = spawn.x;
+    coin.y = spawn.y;
+    coin.platformId = spawn.platform.id;
+    state.lastPlatformCoinPlatformId = spawn.platform.id;
     return true;
   }
 
   function updatePlatformCoinSpawner(dt) {
     var coin = state.platformCoinIcon;
     if (state.score < C.platformCoinUnlockScore) {
+      state.elevatorCoinsUnlocked = false;
       coin.active = false;
       state.platformCoinTimer = 0;
       state.lastPlatformCoinPlatformId = -1;
       return;
+    }
+
+    if (!state.elevatorCoinsUnlocked) {
+      state.elevatorCoinsUnlocked = true;
+      dropAlreadyVisibleElevatorCoins();
     }
 
     if (coin.active) {
@@ -9040,22 +9464,18 @@ Main tuning points:
       return false;
     }
 
-    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
-    var platform = findPlatformAtX(rightEdgeX);
-
-    if (!platform) {
+    var spawn = getRightEdgePlatformSpawnPosition(icon.size, 8);
+    if (!spawn) {
       return false;
     }
 
-    var spawnX = platform.x + platform.width * 0.5 - icon.size * 0.5;
-    var spawnY = platform.y - icon.size;
-    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+    if (!canSpawnMechanicIcon(spawn.x, spawn.y, icon.size)) {
       return false;
     }
 
     icon.active = true;
-    icon.x = spawnX;
-    icon.y = spawnY;
+    icon.x = spawn.x;
+    icon.y = spawn.y;
     return true;
   }
 
@@ -9103,7 +9523,7 @@ Main tuning points:
       });
     }
 
-    if (state.score >= C.platformCoinUnlockScore) {
+    if (state.score >= C.platformCoinUnlockScore && state.elevatorCoinsUnlocked) {
       var elevatorCoinSize = C.playerSize * C.coinIconSizeRatio;
       for (var i = 0; i < world.elevators.length; i += 1) {
         var elevator = world.elevators[i];
@@ -9149,27 +9569,18 @@ Main tuning points:
       return false;
     }
 
-    var rightEdgeX = state.cameraX + C.canvasWidth - 1;
-    var platform = findPlatformAtX(rightEdgeX);
-    if (!platform) {
-      return false;
-    }
-    if (platform.id === icon.platformId) {
+    var spawn = getRightEdgePlatformSpawnPosition(icon.size, 8, icon.platformId);
+    if (!spawn) {
       return false;
     }
 
-    var preferredX = rightEdgeX - icon.size - 8;
-    var minSpawnX = platform.x;
-    var maxSpawnX = platform.x + platform.width - icon.size;
-    var spawnX = Math.min(Math.max(preferredX, minSpawnX), maxSpawnX);
-    var spawnY = platform.y - icon.size;
-    if (!canSpawnMechanicIcon(spawnX, spawnY, icon.size)) {
+    if (!canSpawnMechanicIcon(spawn.x, spawn.y, icon.size)) {
       return false;
     }
 
-    icon.x = spawnX;
-    icon.y = spawnY;
-    icon.platformId = platform.id;
+    icon.x = spawn.x;
+    icon.y = spawn.y;
+    icon.platformId = spawn.platform.id;
     icon.skinName = state.skinDiscoveryPlan.skinName;
     icon.active = true;
     return true;
@@ -9646,7 +10057,7 @@ Main tuning points:
   }
 
   function checkElevatorCoinPickup() {
-    if (state.score < C.platformCoinUnlockScore) {
+    if (state.score < C.platformCoinUnlockScore || !state.elevatorCoinsUnlocked) {
       return;
     }
 
@@ -10855,7 +11266,7 @@ Main tuning points:
   }
 
   function drawElevatorCoins() {
-    if (state.score < C.platformCoinUnlockScore) {
+    if (state.score < C.platformCoinUnlockScore || !state.elevatorCoinsUnlocked) {
       return;
     }
 
