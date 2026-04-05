@@ -3367,6 +3367,7 @@ Main tuning points:
     applyObjectConfig(getModeFileOverrides(mode));
     applyObjectConfig(getDifficultyModeOverrides(difficulty, mode));
     applyObjectConfig(getLevelDifficultyModeOverrides(level, difficulty, mode));
+    applyObjectConfig(getLevelAudioPathOverrides(level));
     loadAdminConfigFromStorage(level, mode, difficulty);
   }
 

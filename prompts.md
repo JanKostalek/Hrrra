@@ -499,3 +499,9 @@ u toho wats new, jak to pretéka, udelej, aby to proste slo posunovat i mimo obr
 -------------------
 priprav aab
 -------------------
+stale se to nevejde na obrazovku. zmensi horni tlačítka o 33%
+-------------------
+hudba stale ve hre nehraje ve vyssích úrovních nez level 1. ani zvuky se neprehravají. a potom zmen v settings, aby ty okna nebyla pod sebou, ale vedle sebe.
+-------------------
+priprav aab
+-------------------

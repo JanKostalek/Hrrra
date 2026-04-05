@@ -1,11 +1,9 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 17,
-  versionName: "1.0.16",
+  versionCode: 18,
+  versionName: "1.0.17",
   whatsNew: [
-  "Fixed Android Question Coin stopping so fullscreen touch controls can stop the roll too.",
-  "Added a 5 second auto-stop fallback if no tap arrives on Question Coin.",
-  "Simplified Settings into two compact toggles for Sound and Music.",
-  "Long-term badges now show current collected progress in parentheses.",
-  "What's New now scrolls properly when the content is taller than the screen."
+  "Fixed gameplay audio loading so Level 2 to 5 now use their own music and sound effects during live runs.",
+  "Moved the compact Settings toggles into a side by side layout when there is enough space.",
+  "Reduced the top Rules, Credits, and Settings buttons so the pre-run hub fits shorter screens better."
 ]
 });
