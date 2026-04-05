@@ -2389,6 +2389,9 @@ Main tuning points:
     if (!shouldShowBadgeInlineProgress(series)) {
       return baseText;
     }
+    if (isBadgeTierCollected(series, tierIndex)) {
+      return baseText;
+    }
     return baseText + " (" + formatBadgeCollectedNumber(series, tierIndex) + ")";
   }
 

@@ -547,3 +547,9 @@ a) je videt, jak se text nevejde na obrazovku mobilu. ani do šírky, ani na výšku
 -------------------
 udelej online commit na online vercel, abych to mohl zkusit na webove verzi pres mobil
 -------------------
+na tom obrazku sice není videt uplne presne ta situace, ale je dobre, ze dokud nemam badge odemknutý, je v závorce hodnota kterou zatím mam. ale kdyz se odemkne, tak tam jiz ta závorka není potreba zobrazovat. cili, kdyz je potreba sebrat neceho 10 a já uz mám 12, tak se odemkne odznak, ale není potreba za tier, který jsem získal mít uz závorku s 12. Rozumís, jak to myslím?
+-------------------
+implementuj
+-------------------
+priprav aab
+-------------------

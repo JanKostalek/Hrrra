@@ -1,9 +1,9 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 19,
-  versionName: "1.0.18",
+  versionCode: 20,
+  versionName: "1.0.19",
   whatsNew: [
-  "Added the first Shop and shared coin wallet flow, including wallet totals on Game Over and score-to-coins exchange in the new Shop page.",
-  "Added the first paid Continue flow: one continue per run, admin-tunable coin cost and granted lives, plus clear disabled-state messaging when coins are missing.",
-  "Newly unlocked coins and other platform pickups now begin arriving from the right edge instead of popping into the middle of the current screen."
+  "Tightened the mobile layout on the pre-run hub, Shop, and Game Over screens so text scales down more cleanly on smaller displays.",
+  "Badge progress counters in parentheses now appear only for locked tiers; once a tier is unlocked, the extra current-value hint disappears.",
+  "Recent economy and continue systems remain included, along with the new Shop flow and right-edge pickup unlock presentation."
 ]
 });
