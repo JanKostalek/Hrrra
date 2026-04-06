@@ -850,7 +850,8 @@ body {
 .pre-run-gfx2-scene {
   position: relative;
   width: 100%;
-  min-height: clamp(420px, 67vh, 740px);
+  height: clamp(420px, 67vh, 740px);
+  max-height: min(70dvh, 740px);
   border-radius: 28px;
   overflow: hidden;
   background: linear-gradient(180deg, #8dbaf8 0%, #7eadf1 48%, #78a7eb 100%);
@@ -876,7 +877,7 @@ body {
 
 .pre-run-gfx2-foreground {
   z-index: 2;
-  background: url("assets/crossing-foreground.png") center 42% / 92% auto no-repeat;
+  background: url("assets/crossing-foreground.png") center center / 100% 100% no-repeat;
 }
 
 .pre-run-gfx2-path-debug {
@@ -1059,13 +1060,14 @@ body {
 
 @media (max-width: 980px) {
   .pre-run-gfx2-scene {
-    min-height: 56vh;
     border-radius: 22px;
+    height: clamp(340px, 56vh, 620px);
+    max-height: min(58dvh, 620px);
   }
 
   .pre-run-gfx2-foreground {
-    background-size: 96% auto;
-    background-position: center 39%;
+    background-size: 100% 100%;
+    background-position: center center;
   }
 
   .pre-run-gfx2-figure {
@@ -1101,13 +1103,14 @@ body {
 
 @media (max-width: 640px) {
   .pre-run-gfx2-scene {
-    min-height: 48vh;
     border-radius: 18px;
+    height: clamp(240px, 42vh, 420px);
+    max-height: min(42dvh, 420px);
   }
 
   .pre-run-gfx2-foreground {
-    background-size: 108% auto;
-    background-position: 54% 34%;
+    background-size: 100% 100%;
+    background-position: center center;
   }
 
   .pre-run-gfx2-figure {

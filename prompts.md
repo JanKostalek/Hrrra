@@ -731,3 +731,17 @@ tady mas presne cestu kudy postavicka musí jít. uprav to
 [image attached]
 
 -------------------
+
+-------------------
+
+uz vidim, ze se obrazek crossing nezmensuje podle okna. Je potreba, aby byl responzivni, stejne jako mraky a postavicka. Aby obrázek vždy vyplnoval celou obrazovku a kdyz se obrazovka / okno zmensi, aby se zmensoval i obrazek a nikoliv orezaval. 
+[image attached]
+
+-------------------
+
+-------------------
+
+uz se zmensuje, ale vzdy s pevným pomerem stran. je potreba, aby se obrázek prizpusoboval a vzdy se drzel obou rozmeru bez ohledu na pomer. to znamena, ze se obrázek muže trochu deformovat
+[image attached]
+
+-------------------
