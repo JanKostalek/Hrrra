@@ -266,3 +266,4 @@ Zpětná vazba je cennější než "perfektní run". Zajímají nás i situace, 
 - SkuteÄnÃ½ cÃ­l se poÄÃ­tÃ¡ jako `carried score na startu levelu + Level Goal Score`.
 - Briefing proto ukazuje `Finish Level with XXXX score.`, kde `XXXX` je aktuÃ¡lnÄ› vypoÄtenÃ½ target pro ten run.
 - `Question Coin` na konci levelu se normÃ¡lnÄ› zapoÄÃ­tÃ¡ do score a dalÅ¡Ã­ level pak zaÄÃ­nÃ¡ z tohoto novÃ©ho vÃ½sledku.
+- Life protection note: after losing one protected life to top death zone, projectile, or blocker, there is a 2-second grace period before those sources can remove another life again. Bottom death zone is still immediately fatal.

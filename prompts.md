@@ -560,3 +560,22 @@ uprav trochu m�sten� oken se score.  velikost je v poradku, vejde se tam akorat.
 - ano, nic nepredvyb�rat. a ano k cene. implementuj
 - implementuj
 - priprav aab
+- a) prohod continue a text, kter� r�ka cenu. b) kdyz hr�c prijde o zivot, udelej 2s ochranou lhutu, kdy nemu�e znovu prij�t o �ivot - krome death zone dole. ale kdyz se dotkne horni death zone, strely, blockeru, tak 2s mu dal�� strela, blocker horn� death zone �ivot nesebere. Nen� potreba toto ani nijak graficky ve hre zn�zornovat. jen do hern�ch pravidel to mu�e� nekam zapsat. respektive nakonec priprav�me "manual" nebo pravidla.. a tam to taky mus� b�t....
+- doka�e� pripravit kratkou animaci (gif/video/signle frames), kde vyu�ije� grafiku z toho obr�zku a udel�, aby postavicka ve�la v lev�m spodn�m rohu po ceste a do�la k rozcestn�ku?
+- c:\-_WeB_-\Hrrra\assets\temp\
+ty soubory tam nividim
+dokažeš obrázek Pixelová figurka na kamenné podložce.png ve slozce temp dopočítat jak by vypadal, kdyby se otačel o 360 stupnů v 9 frames? abychom meli pohled i na postavičku, jak jde doleva, doprava, nahoru a dolů? vím, že nevís, jak vypada zepredu, ale myslím že to vymyslís :-)
+pridal jsem jak vypada postavička zepredu
+
+Roztomilá pixelová figurka na podstavci k nam.png
+je to v temp
+to je figurka, kde levy a pravy jsou od sebe jen zrcadleny a prostrední, koukání od nás je dopočítáno. připrav mi stejne tri obrázky z figurka na podstavci k nam.png kde jeden bude zrcadleny a jeden bude dopočítané, že se figurka kouká smerem k nám. obrázky más v temp
+figurka od nas rotace.png
+trojice od nas.png trojice k nam.png jsou v temp - rozrezej, at máme postavičku do sesti směrů - čili šest obrazku
+můžeš tento obrázek upravit tak, aby šipka "scores" směřovala tím směrem co je naznačeno červenou šipkou? tedy podél té pravé spodní cesty?
+rozscestnik k uprave v temp
+rozscestnik k uprave v temp
+rozscestnik k uprave v temp
+jeste jednou se podivej do temp. uz tam je rozcestnik k uprave.png
+udelej ted commit do main - local i online a pak vytvoř novou vetev gfx2 - budeme vytvářet novou start stránku
+udelej ted commit do main - local i online a pak vytvoř novou vetev gfx2 - budeme vytvářet novou start stránku

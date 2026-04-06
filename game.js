@@ -929,6 +929,7 @@ Main tuning points:
   var FUTURE_SKIN_SLOT_COUNT = 2;
   var FUTURE_SKIN_ICON_PATH = "assets/hero-question-mark-icon.png";
   var QUESTION_COIN_AUTO_STOP_SECONDS = 5;
+  var LIFE_LOSS_INVULNERABILITY_SECONDS = 2;
   var SKIN_OPTIONS = [
     { value: "Skin01", label: "Zyro" },
     { value: "Skin02", label: "Vexi" },
@@ -3819,6 +3820,7 @@ Main tuning points:
     badgeRewardTimer: 0,
     badgeRewardShowRip: false,
     gameOverInputBlockUntil: 0,
+    lifeLossInvulnerabilityTimeLeft: 0,
     continueUsesThisRun: 0,
     continueOfferActive: false,
     continuePurchaseOverlayActive: false,
@@ -5773,6 +5775,7 @@ Main tuning points:
     state.continuePurchaseOverlayActive = false;
     state.continuePurchaseSelectedLives = 0;
     state.runFinalized = false;
+    state.lifeLossInvulnerabilityTimeLeft = 0;
     loadCurrentLevelConfig();
     restartGame(true);
     state.preRunActive = true;
@@ -7559,6 +7562,7 @@ Main tuning points:
       state.continuePurchaseSelectedLives = 0;
       state.runFinalized = false;
       state.pendingRunCoinSpend = 0;
+      state.lifeLossInvulnerabilityTimeLeft = 0;
     } else {
       state.runBadgeStats.levelHadLifeLoss = false;
     }
@@ -7801,6 +7805,34 @@ Main tuning points:
     return false;
   }
 
+  function isLifeLossProtectedCause(cause) {
+    return cause === "topDeathZone" || cause === "projectile" || cause === "blocker";
+  }
+
+  function isLifeLossInvulnerabilityActive() {
+    return Number(state.lifeLossInvulnerabilityTimeLeft) > 0;
+  }
+
+  function applyLifeLossInvulnerabilityResponse(cause) {
+    if (cause === "topDeathZone") {
+      player.y = C.topDeathLineY;
+      player.velocityX = 0;
+      player.velocityY = 0;
+      player.isGrounded = false;
+      player.supportType = null;
+      player.supportRef = null;
+      player.isJumpHolding = false;
+      player.jumpHoldTime = 0;
+      if (player.jumpsUsed < 1) {
+        player.jumpsUsed = 1;
+      }
+      input.jumpDown = false;
+      input.jumpPressed = false;
+      state.playerRotationLockedInAir = false;
+      state.playerAirSpinRemainingRad = 0;
+    }
+  }
+
   function updateRespawnPoint() {
     if (!player.isGrounded || !player.supportRef) {
       return;
@@ -7994,6 +8026,7 @@ Main tuning points:
     state.teleportFinishAnimActive = false;
     state.questionCoinAnimActive = false;
     state.lifeLossFlashTimeLeft = 0;
+    state.lifeLossInvulnerabilityTimeLeft = 0;
     state.shieldBurstActive = false;
     state.livesLeft = grantedLives;
     input.left = false;
@@ -8075,12 +8108,18 @@ Main tuning points:
       return true;
     }
 
+    if (isLifeLossProtectedCause(cause) && isLifeLossInvulnerabilityActive()) {
+      applyLifeLossInvulnerabilityResponse(cause);
+      return true;
+    }
+
     if (!shouldUseLivesForCause(cause)) {
       return false;
     }
 
     state.livesLeft = Math.max(1, state.livesLeft - 1);
     state.lifeLossFlashTimeLeft = 0.25;
+    state.lifeLossInvulnerabilityTimeLeft = LIFE_LOSS_INVULNERABILITY_SECONDS;
     recordLifeLost();
     playLevelSfx("levelLifeLossSoundPath", 100);
 
@@ -8404,6 +8443,9 @@ Main tuning points:
     state.levelRunTimeSeconds += dt;
     if (state.lifeLossFlashTimeLeft > 0) {
       state.lifeLossFlashTimeLeft = Math.max(0, state.lifeLossFlashTimeLeft - dt);
+    }
+    if (state.lifeLossInvulnerabilityTimeLeft > 0) {
+      state.lifeLossInvulnerabilityTimeLeft = Math.max(0, state.lifeLossInvulnerabilityTimeLeft - dt);
     }
     if (state.skinUnlockToastTimeLeft > 0) {
       state.skinUnlockToastTimeLeft = Math.max(0, state.skinUnlockToastTimeLeft - dt);
