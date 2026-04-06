@@ -525,43 +525,43 @@ tak myslÃ­m, ze mÃ¡me vse preddomluvenÃ© a mÅ¯Å¾eme zaÄÃ­t s implementaci.
 -------------------
 ok, mÅ¯Å¾eÅ¡ pokraÄovat dalÅ¡Ã­m krokem. akorat zatÃ­m nenÃ­ pÅ™ipravenÃ¡ uroven, kterÃ¡ pÅ¯jde pridat, tak to tam neimplementuj. mozna udelej jen nejaky textovy placeholder, ze tady se bude kupovat Ãºroven. a k odemknutÃ­ postaviÄky mÅ¯Å¾eÅ¡ pouÅ¾Ã­t pro vyzkouÅ¡enÃ­ zatÃ­m Kroba.
 -------------------
-tlacítko na shop je dvakrat. odstran to v sloupci a ponech v horní cásti  a potom priprav bod 8 - continue system. bod 9 zatím nedelej, ten necháme na pozdeji
+tlacï¿½tko na shop je dvakrat. odstran to v sloupci a ponech v hornï¿½ cï¿½sti  a potom priprav bod 8 - continue system. bod 9 zatï¿½m nedelej, ten nechï¿½me na pozdeji
 -------------------
-Continue ale dá jen jeden ivot navíc. nikoliv vsech pet (nebo kolik je urceno v administraci pro ten kterı mod). a bude to mono jen jednou za run
+Continue ale dï¿½ jen jeden ï¿½ivot navï¿½c. nikoliv vsech pet (nebo kolik je urceno v administraci pro ten kterï¿½ mod). a bude to moï¿½no jen jednou za run
 -------------------
-a do administrace pridat - kolik ivotu prida (v admin to bude moc zmenit na víc jak jednu). a taky kolik coins bude continue stat
+a do administrace pridat - kolik ï¿½ivotu prida (v admin to bude moc zmenit na vï¿½c jak jednu). a taky kolik coins bude continue stat
 -------------------
-na gameover strance nevidim moznost continue kdyz nemam dost coins - pokud jich mam dost, tu moznost tam vidim . chtelo by to zmenit na neco "not enough coins to purchase a continue"... pokud jich nemam dost. a nechat zasedivelé tlacítko continue a nechat tam aktivní jen to end run
+na gameover strance nevidim moznost continue kdyz nemam dost coins - pokud jich mam dost, tu moznost tam vidim . chtelo by to zmenit na neco "not enough coins to purchase a continue"... pokud jich nemam dost. a nechat zasedivelï¿½ tlacï¿½tko continue a nechat tam aktivnï¿½ jen to end run
 -------------------
-kdyz se klikne na end run, tak se nacte druhá game over stránka, znovu se nactou score etc. to je zbytecné. po end run lze uz run definitivne ukoncit. na te predchozí obrazovce je vse potrebne. shrnutí, top scores etc. nebo se pletu?
+kdyz se klikne na end run, tak se nacte druhï¿½ game over strï¿½nka, znovu se nactou score etc. to je zbytecnï¿½. po end run lze uz run definitivne ukoncit. na te predchozï¿½ obrazovce je vse potrebne. shrnutï¿½, top scores etc. nebo se pletu?
 -------------------
-po dosaení skore, kdy se muou objevovat mince (a ostatní veci), tak se mince objeví klidne uprostred obrazovky na plosine nebo vıtahu. at je to vdy tak, e po dosazení score, kdy se veci mohou zacít objevovat, at se vzdy objevují na pravém kraji obrazovky. 
+po dosaï¿½enï¿½ skore, kdy se muï¿½ou objevovat mince (a ostatnï¿½ veci), tak se mince objevï¿½ klidne uprostred obrazovky na plosine nebo vï¿½tahu. at je to vï¿½dy tak, ï¿½e po dosazenï¿½ score, kdy se veci mohou zacï¿½t objevovat, at se vzdy objevujï¿½ na pravï¿½m kraji obrazovky. 
 -------------------
 priprav aab
 -------------------
-vymyšlím jeste badge za "continue". 3 tier. a další za utracení v shopu - a) jednak premena score na coins a jednak coins za postavicku, level, continue. zatim neimplementuj. jen navrh
+vymyï¿½lï¿½m jeste badge za "continue". 3 tier. a dalï¿½ï¿½ za utracenï¿½ v shopu - a) jednak premena score na coins a jednak coins za postavicku, level, continue. zatim neimplementuj. jen navrh
 -------------------
-1) nazvy badge "Unkillable Custommer" a bude stejne jako ostantí bronze, silver a gold 2) nazvi badge Banger3) bude "Big Spender". hodnoty nech, jak je navrhujes. pridej je do administrace stejne, jako jsou pridané ostatní badges
+1) nazvy badge "Unkillable Custommer" a bude stejne jako ostantï¿½ bronze, silver a gold 2) nazvi badge Banger3) bude "Big Spender". hodnoty nech, jak je navrhujes. pridej je do administrace stejne, jako jsou pridanï¿½ ostatnï¿½ badges
 -------------------
-a) je videt, jak se text nevejde na obrazovku mobilu. ani do šírky, ani na vıšku NEMEN okna se score. zmen jen velikost fontu - at jsou responzivní, at se dle velikosti okna vejdou - zmensi / zvetsí. b) start screen. udelej ty ctyri button nad názve hrrra, aby byly vedle sebe v jedné rade, tím se opet vse vejde na jednu obrazovku a nebude to pretekat dolu c) ty tri informacní okna taky udelej menší vedle sebe. stejne jako to je na lokale v pc. zmen text "score per coin" na "Score to spend" d) nakupní okna zkus taky responzivne zmensit, aby se vesla vedle sebe 
+a) je videt, jak se text nevejde na obrazovku mobilu. ani do ï¿½ï¿½rky, ani na vï¿½ï¿½ku NEMEN okna se score. zmen jen velikost fontu - at jsou responzivnï¿½, at se dle velikosti okna vejdou - zmensi / zvetsï¿½. b) start screen. udelej ty ctyri button nad nï¿½zve hrrra, aby byly vedle sebe v jednï¿½ rade, tï¿½m se opet vse vejde na jednu obrazovku a nebude to pretekat dolu c) ty tri informacnï¿½ okna taky udelej menï¿½ï¿½ vedle sebe. stejne jako to je na lokale v pc. zmen text "score per coin" na "Score to spend" d) nakupnï¿½ okna zkus taky responzivne zmensit, aby se vesla vedle sebe 
 -------------------
 udelej online commit na online vercel, abych to mohl zkusit na webove verzi pres mobil
 -------------------
-na tom obrazku sice není videt uplne presne ta situace, ale je dobre, ze dokud nemam badge odemknutı, je v závorce hodnota kterou zatím mam. ale kdyz se odemkne, tak tam jiz ta závorka není potreba zobrazovat. cili, kdyz je potreba sebrat neceho 10 a já uz mám 12, tak se odemkne odznak, ale není potreba za tier, kterı jsem získal mít uz závorku s 12. Rozumís, jak to myslím?
+na tom obrazku sice nenï¿½ videt uplne presne ta situace, ale je dobre, ze dokud nemam badge odemknutï¿½, je v zï¿½vorce hodnota kterou zatï¿½m mam. ale kdyz se odemkne, tak tam jiz ta zï¿½vorka nenï¿½ potreba zobrazovat. cili, kdyz je potreba sebrat neceho 10 a jï¿½ uz mï¿½m 12, tak se odemkne odznak, ale nenï¿½ potreba za tier, kterï¿½ jsem zï¿½skal mï¿½t uz zï¿½vorku s 12. Rozumï¿½s, jak to myslï¿½m?
 -------------------
 implementuj
 -------------------
 priprav aab
 -------------------
-uprav trochu místení oken se score.  velikost je v poradku, vejde se tam akorat. jen je vycentruj na vısku, aby dole i nahore bylo stejne volného místa. samozrejme nadále zachovej aby se zvetsovala a zmensovala dle oken
+uprav trochu mï¿½stenï¿½ oken se score.  velikost je v poradku, vejde se tam akorat. jen je vycentruj na vï¿½sku, aby dole i nahore bylo stejne volnï¿½ho mï¿½sta. samozrejme nadï¿½le zachovej aby se zvetsovala a zmensovala dle oken
 -------------------
-- uprav trochu místení oken se score.  velikost je v poradku, vejde se tam akorat. jen je vycentruj na vısku, aby dole i nahore bylo stejne volného místa. samozrejme nadále zachovej aby se zvetsovala a zmensovala dle oken
-- po dokoncení runnu reší hra, kolik je v penezence PRED runnem (asi). protoze na obrázku vidim informaci, ze continuje stojí 100 a ze v penezence po runnu bude 137. ale nedovolí mi to kupovat. Uprav to tak, aby continue bylo mozno koupit za cástku, kterou ukazje ta infomrace wallet after run. A ted tech 137 se predpokládám skládá z tech 98 + to co tam bylo puvodne. takze tech 98 v závorce uz tam je duplicita. stací o rádek vıš, kolik jich bylo posbíráno a dole, kolik jich tedy nyní je celke a kdyz to císlo je vetsi nez cena pro continuje, tak jej to musí nabíjet. A jeste zvetsi tlacítko end run, aby bylo stejne velke jako to continue
-- ano, nic nepredvybírat. a ano k cene. implementuj
+- uprav trochu mï¿½stenï¿½ oken se score.  velikost je v poradku, vejde se tam akorat. jen je vycentruj na vï¿½sku, aby dole i nahore bylo stejne volnï¿½ho mï¿½sta. samozrejme nadï¿½le zachovej aby se zvetsovala a zmensovala dle oken
+- po dokoncenï¿½ runnu reï¿½ï¿½ hra, kolik je v penezence PRED runnem (asi). protoze na obrï¿½zku vidim informaci, ze continuje stojï¿½ 100 a ze v penezence po runnu bude 137. ale nedovolï¿½ mi to kupovat. Uprav to tak, aby continue bylo mozno koupit za cï¿½stku, kterou ukazje ta infomrace wallet after run. A ted tech 137 se predpoklï¿½dï¿½m sklï¿½dï¿½ z tech 98 + to co tam bylo puvodne. takze tech 98 v zï¿½vorce uz tam je duplicita. stacï¿½ o rï¿½dek vï¿½ï¿½, kolik jich bylo posbï¿½rï¿½no a dole, kolik jich tedy nynï¿½ je celke a kdyz to cï¿½slo je vetsi nez cena pro continuje, tak jej to musï¿½ nabï¿½jet. A jeste zvetsi tlacï¿½tko end run, aby bylo stejne velke jako to continue
+- ano, nic nepredvybï¿½rat. a ano k cene. implementuj
 - implementuj
 - priprav aab
-- a) prohod continue a text, kterı ríka cenu. b) kdyz hrác prijde o zivot, udelej 2s ochranou lhutu, kdy nemue znovu prijít o ivot - krome death zone dole. ale kdyz se dotkne horni death zone, strely, blockeru, tak 2s mu další strela, blocker horní death zone ivot nesebere. Není potreba toto ani nijak graficky ve hre znázornovat. jen do herních pravidel to mueš nekam zapsat. respektive nakonec pripravíme "manual" nebo pravidla.. a tam to taky musí bıt....
-- dokaeš pripravit kratkou animaci (gif/video/signle frames), kde vyuiješ grafiku z toho obrázku a udeláš, aby postavicka vešla v levém spodním rohu po ceste a došla k rozcestníku?
+- a) prohod continue a text, kterï¿½ rï¿½ka cenu. b) kdyz hrï¿½c prijde o zivot, udelej 2s ochranou lhutu, kdy nemuï¿½e znovu prijï¿½t o ï¿½ivot - krome death zone dole. ale kdyz se dotkne horni death zone, strely, blockeru, tak 2s mu dalï¿½ï¿½ strela, blocker hornï¿½ death zone ï¿½ivot nesebere. Nenï¿½ potreba toto ani nijak graficky ve hre znï¿½zornovat. jen do hernï¿½ch pravidel to muï¿½eï¿½ nekam zapsat. respektive nakonec pripravï¿½me "manual" nebo pravidla.. a tam to taky musï¿½ bï¿½t....
+- dokaï¿½eï¿½ pripravit kratkou animaci (gif/video/signle frames), kde vyuï¿½ijeï¿½ grafiku z toho obrï¿½zku a udelï¿½, aby postavicka veï¿½la v levï¿½m spodnï¿½m rohu po ceste a doï¿½la k rozcestnï¿½ku?
 - c:\-_WeB_-\Hrrra\assets\temp\
 ty soubory tam nividim
 dokaÅ¾eÅ¡ obrÃ¡zek PixelovÃ¡ figurka na kamennÃ© podloÅ¾ce.png ve slozce temp dopoÄÃ­tat jak by vypadal, kdyby se otaÄel o 360 stupnÅ¯ v 9 frames? abychom meli pohled i na postaviÄku, jak jde doleva, doprava, nahoru a dolÅ¯? vÃ­m, Å¾e nevÃ­s, jak vypada zepredu, ale myslÃ­m Å¾e to vymyslÃ­s :-)
@@ -579,3 +579,155 @@ rozscestnik k uprave v temp
 jeste jednou se podivej do temp. uz tam je rozcestnik k uprave.png
 udelej ted commit do main - local i online a pak vytvoÅ™ novou vetev gfx2 - budeme vytvÃ¡Å™et novou start strÃ¡nku
 udelej ted commit do main - local i online a pak vytvoÅ™ novou vetev gfx2 - budeme vytvÃ¡Å™et novou start strÃ¡nku
+ZatÃ­m nic nedelej, jen to chci promyslet a vymyslet. chci nahradit startovacÃ­ stranku (obr1) za novou, grafickoiu (ob2). jednotlivÃ© buttons pÅ™emapujeme z pÅ¯vodnÃ­ch na Å¡Ã­pky (rozcestnÃ­k a samotnÃ½ v pravo dole). Budou tam zatÃ­m nÄ›kterÃ©  vÄ›ci - jako shop chybÄ›t, ale to pak dopÅ™ipravÃ­me. ZÃ¡roven bych chtÄ›l, aby ta obrazovka byla "pohyblivÃ¡". to znamenÃ¡, chtÄ›l bych, aby se mraky na tom obrÃ¡zku pohybovaly - z leva do prava. ProtoÅ¾e to bude velkÃ¡ zmÄ›na, kde bude velky prostor po udÄ›lÃ¡nÃ­ chyb, tak pÅ™emÃ½Å¡lÃ­m, Å¾e bychom udÄ›laly novou verzi, ale tu starou zachovali - moÅ¾nost pÅ™epnout v administra ci (GFX1 vs GFX2 pro jednoduchost). a mohli bychom ladit tu novou strÃ¡nku, aby tam bylo vse co potrebujeme a zÃ¡roven mÄ›li zachovanou tu pÅ¯vodnÃ­.
+takze nÃ¡m chybÃ­ pÅ™epÃ­nÃ¡nÃ­ obtÃ­Å¾nosti a jmÃ©no. jÃ¡ chci pouÅ¾Ã­t postaviÄku, kterÃ¡ na zaÄÃ¡tku "pÅ™ijde" k rozcestnÃ­ku . po tÃ© cest z levÃ©ho spodnÃ­ho rohu. a na jejÃ­m podstavci mÅ¯Å¾e bÃ½t jmÃ©no. tÃ­m se to vyÅ™eÅ¡Ã­. to nechÃ¡me taky na pozdejsÃ­ kroky.  easy hard - napada mne, treba ze tam jeste pripravÃ­m na oblohu "slunÃ­Äko", kterÃ© bude easy. kdyz na nej klikneme, tak se posune na druhou stranu a tam bude hard. a po kliknuti se zase posune na druhou a bude easy... Ted mi popis, jak to tedy navrhujes celÃ© implementovat, rozdÄ›leno do krokÅ¯ podle tvÃ©ho nÃ¡vrhu. pak to zapÃ­seme do gfx2.md a pokud to bude vse v porÃ¡dku, potvrdÃ­m implementaci
+zapis a implementuj
+zmensi obrÃ¡zek "pozadÃ­", aby se ho vÃ­c veslo - aby tam bylo vÃ­c oblohy a vÃ­c se tam vesly sipky
+zmensi obrÃ¡zek "pozadÃ­", aby se ho vÃ­c veslo - aby tam bylo vÃ­c oblohy a vÃ­c se tam vesly sipky
+jakou velikost obrÃ¡zku potrebujes, aby byl presne na velikost nasÃ­ hry? ideÃ¡lnÄ› velikost vhodna pro android.
+KÅ™iÅ¾ovatka v hernÃ­m svÄ›tÄ›.png v temp - mÅ¯Å¾eÅ¡ jej upscale na idealnÃ­ velikost?
+tak nynÃ­ nahrad obrÃ¡zek co je ted ve hÅ™e. pÅ™Ã­padnÄ› jej nÄ›jak uprav, aby byl Å¡irÅ¡Ã­ ale niÅ¾Å¡Ã­. chci aby tam bylo vÃ­c oblohy
+ted jsem zjistil, ze jsme zmÄ›nili spatny obrÃ¡zek. je potreba crossing.png ten druhÃ½ mÃ¡ spatnÄ› Å¡ipky. potrebuji, aby na obrazovce bylo opravdu vÃ­c te oblohy. kdyztak udelej crop obrazku dle znÃ¡zornÃ©nÃ©ho na prilozenem obrazku
+ted nesedÃ­ dobÅ™e overlay buttons nad Å¡ipkami. mÅ¯Å¾es to srovnat? a dokÃ¡Å¾eÅ¡ udÄ›lat i Å¡ikmÃ© button tak jak jsou Å¡ikmo smÄ›Å™ovanÃ© Å¡ipky?
+obrazek crossing.png - oÄisti krajinu + rozcestnÃ­k od pozadÃ­. To pak nahradÃ­me modrÃ½m pozadÃ­m a pÅ™ipravÃ­me grafiku mrakÅ¯, kterÃ© se budou po obloze pohybovat.
+tady je detail obrÃ¡zku a overlay buttonu, kde je videt, ze nesedÃ­ presne. mÅ¯Å¾eÅ¡ podle obrÃ¡zku upravit?
+tady je dalsÃ­ detail k upresnenÃ­
+tady je dalsÃ­ detail k upresnenÃ­
+nejde o credits, ale o "badge" sipku
+mraky budeme delat az pozdeji
+badges chce jeste trochu upravit
+na obrazku jsem ted znÃ¡zornil jak overlay je a jak mÃ¡ bÃ½t
+davam dalsÃ­ detail, jak overlay je a jak by mel bÃ½t
+v temp jsem ulozil 3cloud.png. rozrezej to na tri jednotlivÃ© obrÃ¡zky / mraky. udelej prÅ¯hlednÃ© pozadÃ­. a umÃ­sti je na "oblohu" nad krajinu. zatim na pevnÃ© mÃ­sto a zÃ¡roven pres ne udelej overlay buttons, tak jak tam jsou nynÃ­.
+- 2026-04-06: v temp jsem ulozil 3cloud.png. rozrezej to na tri jednotlivÃ© obrÃ¡zky / mraky. udelej prÅ¯hlednÃ© pozadÃ­. a umÃ­sti je na "oblohu" nad krajinu. zatim na pevnÃ© mÃ­sto a zÃ¡roven pres ne udelej overlay buttons, tak jak tam jsou nynÃ­.
+- 2026-04-06: zmensi trochu ten mrak, posun ho do leva, jak ukazuje sipka a hlavne, musÃ­ bÃ½t na pozadÃ­ za rozcestnÃ­kem a ne pred nÃ­m.
+- 2026-04-06: posunutÃ½ je, ale nenÃ­ za rozcestnÃ­kem, ale pred nÃ­m. mraky musÃ­ bÃ½t zcela na pozadÃ­. nejdrÃ­v je layer krajina a rozcestnÃ­ky, pak je layer mraky a pak je layer obloha (modrÃ¡)
+- 2026-04-06: ted musÃ­m vypnout CScode a ty zapomenes vse. az te pustÃ­m, jakÃ½ prÃ­kaz ti mam dat, aby sis na co nejvic veci "vzpomne" (tedy abys je nedke vycetl)?
+
+-------------------
+
+ted na start screen - gfx2 - chci aby se postavicka z assets/figure 01xxxxx.png presunula behem 2 vterin z levé spodní strany po trase cervené šipky a zastavila se na puntíku, tam jak ted je. Uprav to velikostne tak, aby to sedelo
+[image attached]
+
+-------------------
+
+-------------------
+
+kdyz stránku file:///C:/-_WeB_-/Hrrra/index.html (cili lokal) pustím, prepnu na gfx2 tak tam zádnou postavicku ani pohyb nevidim
+
+-------------------
+
+-------------------
+
+a) pozadí tech obrázku musí bıt pruhledné b) sledovat tu cáru musí tím podstavcem na obrázku. nikoliv prostredkem toho obrázku c) nakonci se objeví frame 05xxxxx.png ten tam bıt nemá
+
+-------------------
+
+-------------------
+
+naznacil jsem na postavicce stred, kterım to ma sledovat. a cáru, po které.
+[image attached]
+
+-------------------
+
+-------------------
+
+ted se pohbuje po té tenké cáre, potrebuji, aby se pohyboval po té tlusší o kousek vedle
+
+-------------------
+
+-------------------
+
+prijde mi, ze se vubec nic nemení
+
+-------------------
+
+-------------------
+
+ted je videt, ze se to zmenilo, ale stale malo. udelej tu zmenu co jsi ted udelal jeste dvakrat vetsi...
+
+-------------------
+
+-------------------
+
+zkus podle toho obrazku, tam jak jsem udelal puntíky, udelej z toho referencní body, po kterıch se má pohybovat. soucasná cesta je stále prílis dole a nemá správnou krivku. rekl bych, ze tam je málo bodu
+
+-------------------
+
+-------------------
+
+je tam jak se pohybuje a cára s puntíky, kde má zacínat a kde koncit
+[image attached]
+
+-------------------
+
+-------------------
+
+zkus udelat rovnou úsecku z levého dolního rohu obrazovky do prostredka obrazovky
+[image attached]
+
+-------------------
+
+-------------------
+
+postavicka nevyrází z leveho spodního rohu. urcite ne z rohu okna. kdyz vemes referencní body levı spodní roh a na nem bude zacínat prostredek podstavce postavicky. a po prímce do prostred obrazovky
+
+-------------------
+
+-------------------
+
+pomo mi vymyslet, jak ti mam presneji oznacit souradnice, kudy se má pohybovat. mueš treba vytvorit obrázek crossing_x.png kde udeláš mrízku s koordinatama, abych mohl presne nadiktovat nebo nakreslit, kudy se má pohybovat postavicka a ty to nebudes muset hádat, ale vyctes z tech souradnic?
+
+-------------------
+
+-------------------
+
+ano
+
+-------------------
+
+-------------------
+
+tady ti jeste posílám obrázek figurky, abys vedel, kde má ona "stred", kterı se musí pohybovat po té krivce. jeste jednou to uprav
+[image attached]
+
+-------------------
+
+-------------------
+
+a ten puntík je relevantní k podstavci figurky a nikoliv k celému obrázku 
+
+-------------------
+
+-------------------
+
+muzes udelat jako debug to, ze nakreslís do toho obrázku pozadí - prímo ve hre - trasu po které se má postavicka pohybovat? abych az hru pustim jsem videl tu trasu
+
+-------------------
+
+-------------------
+
+trasa planovaná a reálna nejsou shodné.
+[image attached]
+
+-------------------
+
+-------------------
+
+tady mas jeste jednou referencni obrázek s mrízkou, vcetne puntíku na postavicce, tam kde má postavicka zacínat, trasu a konec. s tím, e poslední bod musí lícovat s bodem na postavicce
+[image attached]
+
+-------------------
+
+-------------------
+
+tady mas presne cestu kudy postavicka musí jít. uprav to
+[image attached]
+[image attached]
+[image attached]
+[image attached]
+[image attached]
+[image attached]
+[image attached]
+
+-------------------

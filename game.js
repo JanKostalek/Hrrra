@@ -102,6 +102,11 @@ Main tuning points:
   var playerNameGuestBtn = document.getElementById("player-name-guest");
   var playerNameSaveBtn = document.getElementById("player-name-save");
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
+  var preRunSelectGfx1El = document.getElementById("pre-run-select-gfx1");
+  var preRunSelectGfx2El = document.getElementById("pre-run-select-gfx2");
+  var preRunGfx2FigureEl = document.getElementById("pre-run-gfx2-figure");
+  var preRunGfx2FigureImgEl = document.getElementById("pre-run-gfx2-figure-img");
+  var preRunGfx2PathDebugEl = document.getElementById("pre-run-gfx2-path-debug");
   var preRunBadgesScreenEl = document.getElementById("pre-run-badges-screen");
   var preRunScoresScreenEl = document.getElementById("pre-run-scores-screen");
   var preRunRulesScreenEl = document.getElementById("pre-run-rules-screen");
@@ -118,6 +123,15 @@ Main tuning points:
   var preRunSettingsBtn = document.getElementById("pre-run-settings-btn");
   var preRunBadgesBtn = document.getElementById("pre-run-badges-btn");
   var preRunScoresBtn = document.getElementById("pre-run-scores-btn");
+  var preRunGfx2RulesBtn = document.getElementById("pre-run-gfx2-rules-btn");
+  var preRunGfx2CreditsBtn = document.getElementById("pre-run-gfx2-credits-btn");
+  var preRunGfx2ShopBtn = document.getElementById("pre-run-gfx2-shop-btn");
+  var preRunGfx2ClassicBtn = document.getElementById("pre-run-gfx2-classic-btn");
+  var preRunGfx2AdvancedBtn = document.getElementById("pre-run-gfx2-advanced-btn");
+  var preRunGfx2SettingsBtn = document.getElementById("pre-run-gfx2-settings-btn");
+  var preRunGfx2BadgesBtn = document.getElementById("pre-run-gfx2-badges-btn");
+  var preRunGfx2ScoresBtn = document.getElementById("pre-run-gfx2-scores-btn");
+  var preRunGfx2LockNoteEl = document.getElementById("pre-run-gfx2-lock-note");
   var preRunRulesBackBtn = document.getElementById("pre-run-rules-back-btn");
   var preRunCreditsBackBtn = document.getElementById("pre-run-credits-back-btn");
   var preRunShopBackBtn = document.getElementById("pre-run-shop-back-btn");
@@ -1971,6 +1985,28 @@ Main tuning points:
     }
   }
 
+  function getStartScreenStyle() {
+    return String(C.startScreenStyle || "gfx1").toLowerCase() === "gfx2" ? "gfx2" : "gfx1";
+  }
+
+  function isGfx2StartScreenEnabled() {
+    return getStartScreenStyle() === "gfx2";
+  }
+
+  var preRunGfx2FullLockNoticeTimeoutId = 0;
+
+  function showPreRunGfx2FullModeLockNotice() {
+    state.preRunGfx2FullLockNoticeActive = true;
+    renderPreRunScreen();
+    if (preRunGfx2FullLockNoticeTimeoutId) {
+      clearTimeout(preRunGfx2FullLockNoticeTimeoutId);
+    }
+    preRunGfx2FullLockNoticeTimeoutId = setTimeout(function () {
+      state.preRunGfx2FullLockNoticeActive = false;
+      renderPreRunScreen();
+    }, 2200);
+  }
+
   function setModeUnlockOverride(kind, value) {
     var normalized = value === "locked" || value === "unlocked" ? value : "default";
     if (kind === "hard") {
@@ -3756,6 +3792,7 @@ Main tuning points:
     adminPaused: false,
     preRunActive: false,
     preRunStep: "select",
+    preRunGfx2FullLockNoticeActive: false,
     preRunLaunchActive: false,
     preRunLaunchElapsed: 0,
     preRunLaunchDuration: 2,
@@ -3828,6 +3865,8 @@ Main tuning points:
     runFinalized: false,
     preRunDifficultyLockNoticeActive: false,
     preRunDifficultyFlipTimerId: 0,
+    preRunGfx2FigureAnimStarted: false,
+    preRunGfx2FigureAnimTime: 0,
     preRunScores: createInitialPreRunScoresState(),
     onlineHighscore: {
       loading: false,
@@ -4036,6 +4075,15 @@ Main tuning points:
       fields: [
         { key: "fullscreenAutoEnabled", label: "Auto fullscreen on mobile", type: "checkbox" },
         { key: "modernVisualsEnabled", label: "Modern visuals", type: "checkbox" },
+        {
+          key: "startScreenStyle",
+          label: "Start screen style",
+          type: "select",
+          options: [
+            { value: "gfx1", label: "GFX1" },
+            { value: "gfx2", label: "GFX2" }
+          ]
+        },
         { key: "selectedSkin", label: "Skin", type: "select", options: SKIN_OPTIONS },
         { key: "skinPickupLevels", label: "Skin Pickup Level", type: "skin-pickup-levels" },
         { key: "hardModeUnlockLevel", label: "Jump Classic Hard unlock at Level", type: "number", min: 1, max: LEVEL_COUNT, step: 1 },
@@ -4840,6 +4888,7 @@ Main tuning points:
     var hardUnlocked = isHardDifficultyUnlocked();
     var fullUnlocked = isFullModeUnlocked();
     var compactLevelBriefing = state.preRunStep === "details" && state.currentLevel > 1;
+    var useGfx2StartScreen = isGfx2StartScreenEnabled();
 
     normalizeUnlockedPreRunSelection();
     syncPlayerNameUi();
@@ -4847,6 +4896,13 @@ Main tuning points:
     if (preRunSelectScreenEl) {
       preRunSelectScreenEl.classList.toggle("hidden", state.preRunStep !== "select");
     }
+    if (preRunSelectGfx1El) {
+      preRunSelectGfx1El.classList.toggle("hidden", useGfx2StartScreen);
+    }
+    if (preRunSelectGfx2El) {
+      preRunSelectGfx2El.classList.toggle("hidden", !useGfx2StartScreen);
+    }
+    renderPreRunGfx2PathDebug();
     if (preRunBadgesScreenEl) {
       preRunBadgesScreenEl.classList.toggle("hidden", state.preRunStep !== "badges");
     }
@@ -4905,6 +4961,15 @@ Main tuning points:
       preRunFullLockEl.classList.toggle("hidden", fullUnlocked);
       preRunFullLockEl.textContent = getFullModeLockText();
     }
+    if (preRunGfx2AdvancedBtn) {
+      preRunGfx2AdvancedBtn.classList.toggle("locked", !fullUnlocked);
+      preRunGfx2AdvancedBtn.setAttribute("aria-disabled", fullUnlocked ? "false" : "true");
+      preRunGfx2AdvancedBtn.title = fullUnlocked ? "" : getFullModeLockText();
+    }
+    if (preRunGfx2LockNoteEl) {
+      preRunGfx2LockNoteEl.classList.toggle("hidden", !state.preRunGfx2FullLockNoticeActive);
+      preRunGfx2LockNoteEl.textContent = getFullModeLockText();
+    }
     if (preRunLaunchOverlayEl) {
       preRunLaunchOverlayEl.classList.toggle("hidden", !state.preRunLaunchActive);
       preRunLaunchOverlayEl.classList.toggle(
@@ -4936,7 +5001,166 @@ Main tuning points:
       renderPreRunSettingsScreen();
     }
     stopBadgesPageMusicIfLeaving();
+    updatePreRunGfx2FigureAnimation(0);
     refreshMusicPlayback();
+  }
+
+  function getPreRunGfx2FigureAnimationActive() {
+    return state.preRunActive &&
+      state.preRunStep === "select" &&
+      isGfx2StartScreenEnabled() &&
+      !state.preRunLaunchActive;
+  }
+
+  function getBezierPoint(t, p0, p1, p2, p3) {
+    var invT = 1 - t;
+    var invT2 = invT * invT;
+    var invT3 = invT2 * invT;
+    var t2 = t * t;
+    var t3 = t2 * t;
+    return {
+      x: invT3 * p0.x + 3 * invT2 * t * p1.x + 3 * invT * t2 * p2.x + t3 * p3.x,
+      y: invT3 * p0.y + 3 * invT2 * t * p1.y + 3 * invT * t2 * p2.y + t3 * p3.y
+    };
+  }
+
+  function getCatmullRomPoint(t, points) {
+    if (!Array.isArray(points) || !points.length) {
+      return { x: 0, y: 0 };
+    }
+    if (points.length === 1) {
+      return { x: points[0].x, y: points[0].y };
+    }
+    var clampedT = Math.max(0, Math.min(1, t));
+    var scaled = clampedT * (points.length - 1);
+    var segment = Math.min(points.length - 2, Math.floor(scaled));
+    var localT = scaled - segment;
+    var p0 = points[Math.max(0, segment - 1)];
+    var p1 = points[segment];
+    var p2 = points[Math.min(points.length - 1, segment + 1)];
+    var p3 = points[Math.min(points.length - 1, segment + 2)];
+    var tt = localT * localT;
+    var ttt = tt * localT;
+    return {
+      x: 0.5 * (
+        (2 * p1.x) +
+        (-p0.x + p2.x) * localT +
+        (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * tt +
+        (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * ttt
+      ),
+      y: 0.5 * (
+        (2 * p1.y) +
+        (-p0.y + p2.y) * localT +
+        (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * tt +
+        (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * ttt
+      )
+    };
+  }
+
+  function getPolylinePoint(t, points) {
+    if (!Array.isArray(points) || !points.length) {
+      return { x: 0, y: 0 };
+    }
+    if (points.length === 1) {
+      return { x: points[0].x, y: points[0].y };
+    }
+    var clampedT = Math.max(0, Math.min(1, t));
+    var segments = [];
+    var totalLength = 0;
+    var i;
+    for (i = 0; i < points.length - 1; i += 1) {
+      var dx = points[i + 1].x - points[i].x;
+      var dy = points[i + 1].y - points[i].y;
+      var length = Math.sqrt(dx * dx + dy * dy);
+      segments.push(length);
+      totalLength += length;
+    }
+    if (totalLength <= 0) {
+      return { x: points[0].x, y: points[0].y };
+    }
+    var targetLength = clampedT * totalLength;
+    var accumulated = 0;
+    for (i = 0; i < segments.length; i += 1) {
+      var segmentLength = segments[i];
+      if (targetLength <= accumulated + segmentLength || i === segments.length - 1) {
+        var localT = segmentLength > 0 ? (targetLength - accumulated) / segmentLength : 0;
+        return {
+          x: points[i].x + (points[i + 1].x - points[i].x) * localT,
+          y: points[i].y + (points[i + 1].y - points[i].y) * localT
+        };
+      }
+      accumulated += segmentLength;
+    }
+    return { x: points[points.length - 1].x, y: points[points.length - 1].y };
+  }
+
+  function getPreRunGfx2PathPoints() {
+    return [
+      { x: 0.055, y: 0.945 },
+      { x: 0.135, y: 0.895 },
+      { x: 0.205, y: 0.835 },
+      { x: 0.265, y: 0.775 },
+      { x: 0.315, y: 0.725 },
+      { x: 0.365, y: 0.680 },
+      { x: 0.410, y: 0.640 },
+      { x: 0.455, y: 0.615 },
+      { x: 0.500, y: 0.610 }
+    ];
+  }
+
+  function renderPreRunGfx2PathDebug() {
+    if (!preRunGfx2PathDebugEl) {
+      return;
+    }
+    var points = getPreRunGfx2PathPoints();
+    var polylinePoints = points.map(function (point) {
+      return (point.x * 100).toFixed(2) + "," + (point.y * 100).toFixed(2);
+    }).join(" ");
+    var circles = points.map(function (point, index) {
+      var cx = (point.x * 100).toFixed(2);
+      var cy = (point.y * 100).toFixed(2);
+      var labelY = Math.max(3, point.y * 100 - 2.8).toFixed(2);
+      return [
+        '<circle cx="', cx, '" cy="', cy, '" r="1.05" fill="rgba(255,40,40,0.95)" stroke="rgba(255,255,255,0.95)" stroke-width="0.35"></circle>',
+        '<text x="', cx, '" y="', labelY, '" text-anchor="middle" font-size="2.2" font-weight="700" fill="rgba(255,255,255,0.96)" stroke="rgba(125,0,0,0.72)" stroke-width="0.18" paint-order="stroke fill">', index + 1, '</text>'
+      ].join("");
+    }).join("");
+    preRunGfx2PathDebugEl.innerHTML = [
+      '<polyline points="', polylinePoints, '" fill="none" stroke="rgba(255,40,40,0.92)" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"></polyline>',
+      circles
+    ].join("");
+  }
+
+  function updatePreRunGfx2FigureAnimation(dt) {
+    if (!preRunGfx2FigureEl || !preRunGfx2FigureImgEl) {
+      return;
+    }
+
+    if (!getPreRunGfx2FigureAnimationActive()) {
+      state.preRunGfx2FigureAnimStarted = false;
+      state.preRunGfx2FigureAnimTime = 0;
+      preRunGfx2FigureEl.classList.add("hidden");
+      preRunGfx2FigureImgEl.src = "assets/Figure/01_od_nas_levy_sikmy.png";
+      return;
+    }
+
+    if (!state.preRunGfx2FigureAnimStarted) {
+      state.preRunGfx2FigureAnimStarted = true;
+      state.preRunGfx2FigureAnimTime = 0;
+    } else if (dt > 0) {
+      state.preRunGfx2FigureAnimTime = Math.min(2, state.preRunGfx2FigureAnimTime + dt);
+    }
+
+    var progress = Math.max(0, Math.min(1, state.preRunGfx2FigureAnimTime / 2));
+    var easedProgress = 1 - Math.pow(1 - progress, 3);
+    var point = getPolylinePoint(easedProgress, getPreRunGfx2PathPoints());
+    var scale = 1;
+
+    preRunGfx2FigureEl.classList.remove("hidden");
+    preRunGfx2FigureEl.style.left = (point.x * 100).toFixed(3) + "%";
+    preRunGfx2FigureEl.style.top = (point.y * 100).toFixed(3) + "%";
+    preRunGfx2FigureEl.style.transform = "translate(-42%, -90%) scale(" + scale.toFixed(3) + ")";
+    preRunGfx2FigureImgEl.src = "assets/Figure/01_od_nas_levy_sikmy.png";
   }
 
   function getTotalBadgeCount() {
@@ -6170,10 +6394,30 @@ Main tuning points:
         openPreRunModeDetails(2);
       });
     }
+    if (preRunGfx2ClassicBtn) {
+      preRunGfx2ClassicBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
+        openPreRunModeDetails(2);
+      });
+    }
     if (preRunFullBtn) {
       preRunFullBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
+        playUiPageOpenSound();
+        openPreRunModeDetails(1);
+      });
+    }
+    if (preRunGfx2AdvancedBtn) {
+      preRunGfx2AdvancedBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        if (!isFullModeUnlocked()) {
+          showPreRunGfx2FullModeLockNotice();
+          return;
+        }
         playUiPageOpenSound();
         openPreRunModeDetails(1);
       });
@@ -6193,8 +6437,25 @@ Main tuning points:
         renderPreRunScreen();
       });
     }
+    if (preRunGfx2BadgesBtn) {
+      preRunGfx2BadgesBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        state.preRunStep = "badges";
+        renderPreRunScreen();
+      });
+    }
     if (preRunRulesBtn) {
       preRunRulesBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
+        state.preRunStep = "rules";
+        renderPreRunScreen();
+      });
+    }
+    if (preRunGfx2RulesBtn) {
+      preRunGfx2RulesBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
         playUiPageOpenSound();
@@ -6212,8 +6473,20 @@ Main tuning points:
     if (preRunShopBtn) {
       preRunShopBtn.addEventListener("click", openPreRunShop);
     }
+    if (preRunGfx2ShopBtn) {
+      preRunGfx2ShopBtn.addEventListener("click", openPreRunShop);
+    }
     if (preRunSettingsBtn) {
       preRunSettingsBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
+        state.preRunStep = "settings";
+        renderPreRunScreen();
+      });
+    }
+    if (preRunGfx2SettingsBtn) {
+      preRunGfx2SettingsBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
         playUiPageOpenSound();
@@ -6230,8 +6503,26 @@ Main tuning points:
         renderPreRunScreen();
       });
     }
+    if (preRunGfx2CreditsBtn) {
+      preRunGfx2CreditsBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        playUiPageOpenSound();
+        state.preRunStep = "credits";
+        renderPreRunScreen();
+      });
+    }
     if (preRunScoresBtn) {
       preRunScoresBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        state.preRunStep = "scores";
+        renderPreRunScreen();
+        loadPreRunScoresBoards();
+      });
+    }
+    if (preRunGfx2ScoresBtn) {
+      preRunGfx2ScoresBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
         state.preRunStep = "scores";
@@ -6915,6 +7206,8 @@ Main tuning points:
               C.selectedSkin = normalizeSkinName(nextValue);
               refreshPreRunSkinSelection();
               renderAdminForm();
+            } else if (key === "startScreenStyle") {
+              renderPreRunScreen();
             } else if (key === "hardModeUnlockLevel" || key === "fullModeUnlockJumpHardScore") {
               normalizeUnlockedPreRunSelection();
               refreshPreRunBriefValues();
@@ -8420,6 +8713,8 @@ Main tuning points:
 
     if (state.preRunLaunchActive && !state.adminPaused) {
       updatePreRunLaunchTransition(dt);
+    } else if (state.preRunActive && !state.adminPaused) {
+      updatePreRunGfx2FigureAnimation(dt);
     } else if (state.running && !state.adminPaused && !state.preRunActive) {
       update(dt);
     } else if (state.questionCoinAnimActive && !state.adminPaused && !state.preRunActive) {

@@ -111,40 +111,65 @@
     <div id="pre-run-screen" class="hidden" aria-label="Run instructions">
       <div class="pre-run-card">
         <div id="pre-run-select-screen" class="pre-run-stage">
-          <div class="pre-run-select-topbar">
-            <button id="pre-run-rules-btn" class="pre-run-side-btn pre-run-rules-btn" aria-label="Open rules overview">Rules</button>
-            <button id="pre-run-credits-btn" class="pre-run-side-btn pre-run-credits-btn" aria-label="Open credits">Credits</button>
-            <button id="pre-run-shop-btn" class="pre-run-side-btn pre-run-shop-btn" aria-label="Open shop">Shop</button>
-            <button id="pre-run-settings-btn" class="pre-run-side-btn pre-run-settings-btn" aria-label="Open settings">Settings</button>
-          </div>
-          <div class="pre-run-brand">HRRRA</div>
-          <div class="pre-run-select-layout">
-            <button id="pre-run-jump-btn" class="pre-run-mode-card" aria-label="Choose Jump Classic">
-              <span class="pre-run-mode-title">Jump Classic</span>
-              <span class="pre-run-mode-copy">Tap To Jump</span>
-              <span class="pre-run-mode-copy"><strong>Double Jump</strong> is always enabled</span>
-            </button>
-            <div class="pre-run-difficulty-column" aria-label="Difficulty selection">
-              <button id="pre-run-difficulty-toggle" class="pre-run-difficulty-toggle easy-active" aria-label="Toggle difficulty">
-                <span class="pre-run-difficulty-side pre-run-difficulty-side-easy">
-                  <span class="pre-run-difficulty-side-label">Easy</span>
-                </span>
-                <span class="pre-run-difficulty-side pre-run-difficulty-side-hard">
-                  <span class="pre-run-difficulty-side-label">Hard</span>
-                </span>
-                <span id="pre-run-difficulty-lock" class="pre-run-difficulty-toggle-lock hidden"></span>
-              </button>
-              <button id="pre-run-badges-btn" class="pre-run-badges-btn" aria-label="Open badges overview">Badges</button>
-              <button id="pre-run-scores-btn" class="pre-run-scores-btn" aria-label="Open online top players">Scores</button>
-              <button id="pre-run-player-name-btn" class="pre-run-player-name-btn" aria-label="Open sign in">Sign In</button>
+          <div id="pre-run-select-gfx1" class="pre-run-select-variant">
+            <div class="pre-run-select-topbar">
+              <button id="pre-run-rules-btn" class="pre-run-side-btn pre-run-rules-btn" aria-label="Open rules overview">Rules</button>
+              <button id="pre-run-credits-btn" class="pre-run-side-btn pre-run-credits-btn" aria-label="Open credits">Credits</button>
+              <button id="pre-run-shop-btn" class="pre-run-side-btn pre-run-shop-btn" aria-label="Open shop">Shop</button>
+              <button id="pre-run-settings-btn" class="pre-run-side-btn pre-run-settings-btn" aria-label="Open settings">Settings</button>
             </div>
-            <button id="pre-run-full-btn" class="pre-run-mode-card" aria-label="Choose Jump Advanced">
-              <span class="pre-run-mode-title">Jump Advanced</span>
-              <span id="pre-run-full-lock" class="pre-run-lock-note hidden"></span>
-              <span class="pre-run-phone-art" aria-hidden="true">
-                <img src="assets/start_phone.png" alt="" />
-              </span>
-            </button>
+            <div class="pre-run-brand">HRRRA</div>
+            <div class="pre-run-select-layout">
+              <button id="pre-run-jump-btn" class="pre-run-mode-card" aria-label="Choose Jump Classic">
+                <span class="pre-run-mode-title">Jump Classic</span>
+                <span class="pre-run-mode-copy">Tap To Jump</span>
+                <span class="pre-run-mode-copy"><strong>Double Jump</strong> is always enabled</span>
+              </button>
+              <div class="pre-run-difficulty-column" aria-label="Difficulty selection">
+                <button id="pre-run-difficulty-toggle" class="pre-run-difficulty-toggle easy-active" aria-label="Toggle difficulty">
+                  <span class="pre-run-difficulty-side pre-run-difficulty-side-easy">
+                    <span class="pre-run-difficulty-side-label">Easy</span>
+                  </span>
+                  <span class="pre-run-difficulty-side pre-run-difficulty-side-hard">
+                    <span class="pre-run-difficulty-side-label">Hard</span>
+                  </span>
+                  <span id="pre-run-difficulty-lock" class="pre-run-difficulty-toggle-lock hidden"></span>
+                </button>
+                <button id="pre-run-badges-btn" class="pre-run-badges-btn" aria-label="Open badges overview">Badges</button>
+                <button id="pre-run-scores-btn" class="pre-run-scores-btn" aria-label="Open online top players">Scores</button>
+                <button id="pre-run-player-name-btn" class="pre-run-player-name-btn" aria-label="Open sign in">Sign In</button>
+              </div>
+              <button id="pre-run-full-btn" class="pre-run-mode-card" aria-label="Choose Jump Advanced">
+                <span class="pre-run-mode-title">Jump Advanced</span>
+                <span id="pre-run-full-lock" class="pre-run-lock-note hidden"></span>
+                <span class="pre-run-phone-art" aria-hidden="true">
+                  <img src="assets/start_phone.png" alt="" />
+                </span>
+              </button>
+            </div>
+          </div>
+          <div id="pre-run-select-gfx2" class="pre-run-select-variant hidden">
+            <div class="pre-run-gfx2-scene" aria-label="Crossroads start screen">
+              <div class="pre-run-gfx2-sky" aria-hidden="true"></div>
+              <button id="pre-run-gfx2-rules-btn" class="pre-run-gfx2-cloud pre-run-gfx2-cloud-rules" aria-label="Open rules overview">Rules</button>
+              <button id="pre-run-gfx2-credits-btn" class="pre-run-gfx2-cloud pre-run-gfx2-cloud-credits" aria-label="Open credits">Credits</button>
+              <button id="pre-run-gfx2-shop-btn" class="pre-run-gfx2-cloud pre-run-gfx2-cloud-shop" aria-label="Open shop">Shop</button>
+
+              <div id="pre-run-gfx2-figure" class="pre-run-gfx2-figure hidden" aria-hidden="true">
+                <img id="pre-run-gfx2-figure-img" src="assets/Figure/01_od_nas_levy_sikmy.png" alt="" />
+              </div>
+
+              <div class="pre-run-gfx2-foreground" aria-hidden="true"></div>
+              <svg id="pre-run-gfx2-path-debug" class="pre-run-gfx2-path-debug" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+
+              <button id="pre-run-gfx2-advanced-btn" class="pre-run-gfx2-hotspot pre-run-gfx2-hotspot-advanced" aria-label="Choose Jump Advanced"></button>
+              <button id="pre-run-gfx2-settings-btn" class="pre-run-gfx2-hotspot pre-run-gfx2-hotspot-settings" aria-label="Open settings"></button>
+              <button id="pre-run-gfx2-classic-btn" class="pre-run-gfx2-hotspot pre-run-gfx2-hotspot-classic" aria-label="Choose Jump Classic"></button>
+              <button id="pre-run-gfx2-badges-btn" class="pre-run-gfx2-hotspot pre-run-gfx2-hotspot-badges" aria-label="Open badges overview"></button>
+              <button id="pre-run-gfx2-scores-btn" class="pre-run-gfx2-hotspot pre-run-gfx2-hotspot-scores" aria-label="Open online top players"></button>
+
+              <div id="pre-run-gfx2-lock-note" class="pre-run-gfx2-lock-note hidden" aria-live="polite"></div>
+            </div>
           </div>
         </div>
         <div id="pre-run-badges-screen" class="pre-run-stage hidden" aria-label="Badges overview">

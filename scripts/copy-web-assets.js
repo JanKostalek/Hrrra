@@ -37,6 +37,11 @@ const assetFilesToCopy = [
   "assets/rocket01-clean.png",
   "assets/rocket02-clean.png",
   "assets/start screen bkg.png",
+  "assets/crossing.png",
+  "assets/crossing-foreground.png",
+  "assets/gfx2-cloud-rules.png",
+  "assets/gfx2-cloud-credits.png",
+  "assets/gfx2-cloud-shop.png",
   "assets/hero-question-mark-icon.png"
 ];
 const assetDirectoriesToCopy = [
