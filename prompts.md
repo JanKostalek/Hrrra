@@ -553,3 +553,10 @@ implementuj
 -------------------
 priprav aab
 -------------------
+uprav trochu místení oken se score.  velikost je v poradku, vejde se tam akorat. jen je vycentruj na výsku, aby dole i nahore bylo stejne volného místa. samozrejme nadále zachovej aby se zvetsovala a zmensovala dle oken
+-------------------
+- uprav trochu místení oken se score.  velikost je v poradku, vejde se tam akorat. jen je vycentruj na výsku, aby dole i nahore bylo stejne volného místa. samozrejme nadále zachovej aby se zvetsovala a zmensovala dle oken
+- po dokoncení runnu reší hra, kolik je v penezence PRED runnem (asi). protoze na obrázku vidim informaci, ze continuje stojí 100 a ze v penezence po runnu bude 137. ale nedovolí mi to kupovat. Uprav to tak, aby continue bylo mozno koupit za cástku, kterou ukazje ta infomrace wallet after run. A ted tech 137 se predpokládám skládá z tech 98 + to co tam bylo puvodne. takze tech 98 v závorce uz tam je duplicita. stací o rádek výš, kolik jich bylo posbíráno a dole, kolik jich tedy nyní je celke a kdyz to císlo je vetsi nez cena pro continuje, tak jej to musí nabíjet. A jeste zvetsi tlacítko end run, aby bylo stejne velke jako to continue
+- ano, nic nepredvybírat. a ano k cene. implementuj
+- implementuj
+- priprav aab

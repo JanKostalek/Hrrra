@@ -1,9 +1,9 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 20,
-  versionName: "1.0.19",
+  versionCode: 21,
+  versionName: "1.0.20",
   whatsNew: [
-  "Tightened the mobile layout on the pre-run hub, Shop, and Game Over screens so text scales down more cleanly on smaller displays.",
-  "Badge progress counters in parentheses now appear only for locked tiers; once a tier is unlocked, the extra current-value hint disappears.",
-  "Recent economy and continue systems remain included, along with the new Shop flow and right-edge pickup unlock presentation."
+  "Centered the Game Over leaderboard panels vertically and kept their responsive sizing intact.",
+  "Continue now uses Wallet After Run correctly and opens a life-purchase overlay with heart selection, total price, Buy, and Back.",
+  "The continue heart picker now uses clean heart-only visuals with outline vs filled states and supports incremental deselection."
 ]
 });

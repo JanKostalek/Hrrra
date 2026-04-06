@@ -57,6 +57,13 @@ Main tuning points:
   var finalContinueActionsEl = document.getElementById("final-continue-actions");
   var finalContinueBtn = document.getElementById("final-continue-btn");
   var finalEndRunBtn = document.getElementById("final-end-run-btn");
+  var continuePurchaseOverlayEl = document.getElementById("continue-purchase-overlay");
+  var continuePurchaseHeartsEl = document.getElementById("continue-purchase-hearts");
+  var continuePurchaseUnitPriceEl = document.getElementById("continue-purchase-unit-price");
+  var continuePurchaseTotalEl = document.getElementById("continue-purchase-total");
+  var continuePurchaseStatusEl = document.getElementById("continue-purchase-status");
+  var continuePurchaseBuyBtn = document.getElementById("continue-purchase-buy");
+  var continuePurchaseBackBtn = document.getElementById("continue-purchase-back");
   var finalHighscoresEl = document.getElementById("final-highscores");
   var finalTopScoresStatusEl = document.getElementById("final-top-scores-status");
   var finalTopScoresListEl = document.getElementById("final-top-scores-list");
@@ -1717,6 +1724,18 @@ Main tuning points:
     return Math.max(0, Math.floor((economyStats && economyStats.coinsBalance) || 0));
   }
 
+  function getPendingRunCoinSpend() {
+    return Math.max(0, Math.floor((state && state.pendingRunCoinSpend) || 0));
+  }
+
+  function getWalletBalanceAfterRunPreview() {
+    return Math.max(0, getCoinWalletBalance() + state.collectedCoins - getPendingRunCoinSpend());
+  }
+
+  function getContinueMaxPurchasableLives() {
+    return Math.max(1, Math.floor(Number(state.maxLives) || sanitizeConfigValue("livesCount", C.livesCount) || 1));
+  }
+
   function getContinueCoinPrice() {
     return sanitizeGlobalAdminNumber("shopContinuePrice1", C.shopContinuePrice1);
   }
@@ -1747,6 +1766,29 @@ Main tuning points:
     return true;
   }
 
+  function spendCoinsForContinueOffer(amount) {
+    var safeAmount = Math.max(0, Math.floor(Number(amount) || 0));
+    if (safeAmount <= 0) {
+      return false;
+    }
+    if (state.runFinalized) {
+      return spendCoinsFromWallet(safeAmount);
+    }
+    if (getWalletBalanceAfterRunPreview() < safeAmount) {
+      return false;
+    }
+    var walletDeduction = Math.min(getCoinWalletBalance(), safeAmount);
+    var pendingDeduction = safeAmount - walletDeduction;
+    economyStats.coinsBalance = getCoinWalletBalance() - walletDeduction;
+    economyStats.totalCoinsSpent = Math.max(
+      0,
+      Math.floor(Number(economyStats.totalCoinsSpent) || 0) + safeAmount
+    );
+    state.pendingRunCoinSpend = getPendingRunCoinSpend() + pendingDeduction;
+    writeEconomyStats();
+    return true;
+  }
+
   function exchangePersistentScoreForCoins(coinCount) {
     var safeCoinCount = Math.max(0, Math.floor(Number(coinCount) || 0));
     var scorePerCoin = sanitizeGlobalAdminNumber("shopScorePerCoin", C.shopScorePerCoin);
@@ -1766,7 +1808,7 @@ Main tuning points:
       return;
     }
     incrementBadgeLifetimeStat("totalScore", state.score);
-    addCoinsToWallet(state.collectedCoins);
+    addCoinsToWallet(Math.max(0, state.collectedCoins - getPendingRunCoinSpend()));
     updateBadgeBestStat("singleRunScore", state.score);
     updateSurvivorBadgeProgressForCurrentRun();
     updatePuristBadgeProgressForCurrentRun();
@@ -1779,12 +1821,104 @@ Main tuning points:
     return (
       !state.runFinalized &&
       state.continueUsesThisRun < 1 &&
-      getContinueLivesGranted() > 0
+      getContinueCoinPrice() > 0
     );
   }
 
   function canBuyContinueForCurrentRun() {
-    return shouldShowContinueForCurrentRun() && getCoinWalletBalance() >= getContinueCoinPrice();
+    return shouldShowContinueForCurrentRun() && getWalletBalanceAfterRunPreview() >= getContinueCoinPrice();
+  }
+
+  function getSelectedContinueLifeTotalPrice() {
+    return Math.max(0, state.continuePurchaseSelectedLives * getContinueCoinPrice());
+  }
+
+  function closeContinuePurchaseOverlay() {
+    state.continuePurchaseOverlayActive = false;
+    state.continuePurchaseSelectedLives = 0;
+    if (continuePurchaseOverlayEl) {
+      continuePurchaseOverlayEl.classList.add("hidden");
+    }
+  }
+
+  function renderContinuePurchaseOverlay() {
+    if (!continuePurchaseOverlayEl) {
+      return;
+    }
+    var lifePrice = getContinueCoinPrice();
+    var selectedLives = Math.max(0, Math.floor(Number(state.continuePurchaseSelectedLives) || 0));
+    var maxLives = getContinueMaxPurchasableLives();
+    var walletAfterRun = getWalletBalanceAfterRunPreview();
+    var totalPrice = selectedLives * lifePrice;
+    var canAffordSelection = selectedLives > 0 && walletAfterRun >= totalPrice;
+
+    continuePurchaseOverlayEl.classList.toggle("hidden", !state.continuePurchaseOverlayActive);
+    if (continuePurchaseUnitPriceEl) {
+      continuePurchaseUnitPriceEl.textContent =
+        "1 life costs " + lifePrice.toLocaleString("en-US") + " coins.";
+    }
+    if (continuePurchaseHeartsEl) {
+      continuePurchaseHeartsEl.innerHTML = "";
+      for (var lifeIndex = 1; lifeIndex <= maxLives; lifeIndex += 1) {
+        var heartBtn = document.createElement("button");
+        heartBtn.type = "button";
+        heartBtn.className =
+          "continue-life-heart" + (selectedLives >= lifeIndex ? " selected" : "");
+        heartBtn.textContent = "\u2665";
+        heartBtn.setAttribute("aria-label", "Buy " + lifeIndex + " " + (lifeIndex === 1 ? "life" : "lives"));
+        heartBtn.addEventListener("click", (function (count) {
+          return function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            unlockAudioIfNeeded();
+            playUiButtonSound();
+            if (selectedLives >= count) {
+              state.continuePurchaseSelectedLives = Math.max(0, count - 1);
+            } else {
+              state.continuePurchaseSelectedLives = count;
+            }
+            renderContinuePurchaseOverlay();
+          };
+        })(lifeIndex));
+        continuePurchaseHeartsEl.appendChild(heartBtn);
+      }
+    }
+    if (continuePurchaseTotalEl) {
+      continuePurchaseTotalEl.textContent =
+        selectedLives > 0
+          ? "Total price: " + totalPrice.toLocaleString("en-US") + " coins"
+          : "Total price: -";
+    }
+    if (continuePurchaseStatusEl) {
+      if (selectedLives <= 0) {
+        continuePurchaseStatusEl.textContent = "Select how many lives to buy.";
+      } else if (!canAffordSelection) {
+        continuePurchaseStatusEl.textContent =
+          "You do not have enough coins for " +
+          selectedLives.toLocaleString("en-US") +
+          " " +
+          (selectedLives === 1 ? "life." : "lives.");
+      } else {
+        continuePurchaseStatusEl.textContent =
+          "Wallet after purchase: " + (walletAfterRun - totalPrice).toLocaleString("en-US");
+      }
+    }
+    if (continuePurchaseBuyBtn) {
+      continuePurchaseBuyBtn.textContent =
+        selectedLives > 0
+          ? "Buy - " + totalPrice.toLocaleString("en-US") + " Coins"
+          : "Buy";
+      continuePurchaseBuyBtn.disabled = !canAffordSelection;
+    }
+  }
+
+  function openContinuePurchaseOverlay() {
+    if (!state.continueOfferActive || !canBuyContinueForCurrentRun()) {
+      return;
+    }
+    state.continuePurchaseSelectedLives = 0;
+    state.continuePurchaseOverlayActive = true;
+    renderContinuePurchaseOverlay();
   }
 
   function getHardModeUnlockLevel() {
@@ -2752,6 +2886,7 @@ Main tuning points:
 
   function showGameOverScreen() {
     state.gameOverInputBlockUntil = Date.now() + 350;
+    closeContinuePurchaseOverlay();
     updateGameOverSummary(false);
     if (gameOverEl) {
       gameOverEl.classList.remove("hidden");
@@ -2761,6 +2896,7 @@ Main tuning points:
 
   function completeRunAndPresentGameOver(keepCurrentScreen) {
     state.continueOfferActive = false;
+    closeContinuePurchaseOverlay();
     finalizeCompletedRun();
     if (!startBadgeRewardSequence(buildNewlyUnlockedBadgeQueueForRun())) {
       if (keepCurrentScreen) {
@@ -3659,6 +3795,7 @@ Main tuning points:
     runTimeSeconds: 0,
     levelRunTimeSeconds: 0,
     collectedCoins: 0,
+    pendingRunCoinSpend: 0,
     collectedBags: 0,
     levelCollectedCoins: 0,
     levelCollectedBags: 0,
@@ -3684,6 +3821,8 @@ Main tuning points:
     gameOverInputBlockUntil: 0,
     continueUsesThisRun: 0,
     continueOfferActive: false,
+    continuePurchaseOverlayActive: false,
+    continuePurchaseSelectedLives: 0,
     runFinalized: false,
     preRunDifficultyLockNoticeActive: false,
     preRunDifficultyFlipTimerId: 0,
@@ -5622,6 +5761,7 @@ Main tuning points:
     state.scoreCarryOver = 0;
     state.runTimeSeconds = 0;
     state.collectedCoins = 0;
+    state.pendingRunCoinSpend = 0;
     state.collectedBags = 0;
     resetRunBadgeStats();
     resetBadgeRewardQueue();
@@ -5630,6 +5770,8 @@ Main tuning points:
     state.badgeCursedSecondsAccumulator = 0;
     state.continueUsesThisRun = 0;
     state.continueOfferActive = false;
+    state.continuePurchaseOverlayActive = false;
+    state.continuePurchaseSelectedLives = 0;
     state.runFinalized = false;
     loadCurrentLevelConfig();
     restartGame(true);
@@ -5793,7 +5935,6 @@ Main tuning points:
   function updateGameOverSummary(skipOnlineReload) {
     var walletBalance = getCoinWalletBalance();
     var continuePrice = getContinueCoinPrice();
-    var continueLivesGranted = getContinueLivesGranted();
     var canBuyContinue = canBuyContinueForCurrentRun();
 
     if (finalScoreEl) {
@@ -5808,30 +5949,27 @@ Main tuning points:
     if (finalWalletBalanceEl) {
       finalWalletBalanceEl.textContent = state.runFinalized
         ? "Wallet Balance: " + walletBalance.toLocaleString("en-US")
-        : "Wallet After Run: " + (walletBalance + state.collectedCoins).toLocaleString("en-US") + " (+" + state.collectedCoins.toLocaleString("en-US") + ")";
+        : "Wallet After Run: " + getWalletBalanceAfterRunPreview().toLocaleString("en-US");
     }
     if (finalContinueStatusEl) {
       finalContinueStatusEl.textContent = canBuyContinue
-        ? "Continue once for " +
-          continuePrice.toLocaleString("en-US") +
-          " coins and gain +" +
-          continueLivesGranted.toLocaleString("en-US") +
-          " life" +
-          (continueLivesGranted === 1 ? "" : "s") +
-          "."
-        : "Not enough coins to purchase a continue.";
+        ? "Each life costs " + continuePrice.toLocaleString("en-US") + " coins. Tap Continue to choose how many lives to buy."
+        : "Not enough coins to purchase a continue. Each life costs " + continuePrice.toLocaleString("en-US") + " coins.";
       finalContinueStatusEl.classList.toggle("hidden", !state.continueOfferActive);
     }
     if (finalContinueActionsEl) {
       finalContinueActionsEl.classList.toggle("hidden", !state.continueOfferActive);
     }
     if (finalContinueBtn) {
-      finalContinueBtn.textContent = "Continue - " + continuePrice.toLocaleString("en-US") + " Coins";
+      finalContinueBtn.textContent = "Continue";
       finalContinueBtn.disabled = !canBuyContinue;
     }
     if (finalEndRunBtn) {
       finalEndRunBtn.textContent = "End Run";
       finalEndRunBtn.disabled = false;
+    }
+    if (state.continuePurchaseOverlayActive) {
+      renderContinuePurchaseOverlay();
     }
     if (!skipOnlineReload) {
       loadOnlineHighscoreForCurrentBoard();
@@ -6219,14 +6357,7 @@ Main tuning points:
         if (!state.continueOfferActive) {
           return;
         }
-        if (!spendCoinsFromWallet(getContinueCoinPrice())) {
-          updateGameOverSummary();
-          renderAdminForm();
-          return;
-        }
-        incrementBadgeLifetimeStat("continuesUsed", 1);
-        renderAdminForm();
-        revivePlayerAfterContinue();
+        openContinuePurchaseOverlay();
       });
     }
     if (finalEndRunBtn) {
@@ -6238,6 +6369,46 @@ Main tuning points:
           return;
         }
         completeRunAndPresentGameOver(true);
+      });
+    }
+    if (continuePurchaseBuyBtn) {
+      continuePurchaseBuyBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        if (!state.continuePurchaseOverlayActive) {
+          return;
+        }
+        var selectedLives = Math.max(0, Math.floor(Number(state.continuePurchaseSelectedLives) || 0));
+        var totalPrice = getSelectedContinueLifeTotalPrice();
+        if (selectedLives <= 0 || totalPrice <= 0 || getWalletBalanceAfterRunPreview() < totalPrice) {
+          renderContinuePurchaseOverlay();
+          return;
+        }
+        if (!spendCoinsForContinueOffer(totalPrice)) {
+          updateGameOverSummary();
+          renderContinuePurchaseOverlay();
+          renderAdminForm();
+          return;
+        }
+        incrementBadgeLifetimeStat("continuesUsed", 1);
+        renderAdminForm();
+        revivePlayerAfterContinue(selectedLives);
+      });
+    }
+    if (continuePurchaseBackBtn) {
+      continuePurchaseBackBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        closeContinuePurchaseOverlay();
+      });
+    }
+    if (continuePurchaseOverlayEl) {
+      continuePurchaseOverlayEl.addEventListener("click", function (event) {
+        event.stopPropagation();
       });
     }
     if (preRunBackBtn) {
@@ -7384,7 +7555,10 @@ Main tuning points:
       resetRunBadgeStats();
       state.continueUsesThisRun = 0;
       state.continueOfferActive = false;
+      state.continuePurchaseOverlayActive = false;
+      state.continuePurchaseSelectedLives = 0;
       state.runFinalized = false;
+      state.pendingRunCoinSpend = 0;
     } else {
       state.runBadgeStats.levelHadLifeLoss = false;
     }
@@ -7807,10 +7981,14 @@ Main tuning points:
     return true;
   }
 
-  function revivePlayerAfterContinue() {
-    var grantedLives = Math.max(1, Math.min(state.maxLives, getContinueLivesGranted()));
+  function revivePlayerAfterContinue(grantedLivesOverride) {
+    var grantedLives = Math.max(
+      1,
+      Math.min(getContinueMaxPurchasableLives(), Math.floor(Number(grantedLivesOverride) || 0) || 1)
+    );
     state.continueUsesThisRun = 1;
     state.continueOfferActive = false;
+    closeContinuePurchaseOverlay();
     state.running = true;
     state.projectileDeathAnimActive = false;
     state.teleportFinishAnimActive = false;
