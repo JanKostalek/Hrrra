@@ -1,6 +1,6 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 23,
-  versionName: "1.0.22",
+  versionCode: 24,
+  versionName: "1.0.23",
   whatsNew: [
   "GFX2 now includes baked transitions for Classic, Advanced, Scores, and Badges while GFX1 remains the default start screen for regular players.",
   "The mobile pre-run/start screen now behaves like a fullscreen overlay instead of a smaller window over the game HUD.",
