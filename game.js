@@ -109,6 +109,7 @@ Main tuning points:
   var preRunScoresScreenEl = document.getElementById("pre-run-scores-screen");
   var preRunRulesScreenEl = document.getElementById("pre-run-rules-screen");
   var preRunCreditsScreenEl = document.getElementById("pre-run-credits-screen");
+  var preRunCreditsVersionEl = document.getElementById("pre-run-credits-version");
   var preRunShopScreenEl = document.getElementById("pre-run-shop-screen");
   var preRunSettingsScreenEl = document.getElementById("pre-run-settings-screen");
   var preRunDetailScreenEl = document.getElementById("pre-run-detail-screen");
@@ -194,6 +195,63 @@ Main tuning points:
     "assets/gfx2/settings/frame-08.jpg",
     "assets/gfx2/settings/frame-09.jpg"
   ];
+  var PRE_RUN_GFX2_CLASSIC_BACK_FRAMES = [
+    "assets/gfx2/classic_back/Sn%C3%ADmek1.JPG",
+    "assets/gfx2/classic_back/Sn%C3%ADmek2.JPG",
+    "assets/gfx2/classic_back/Sn%C3%ADmek3.JPG",
+    "assets/gfx2/classic_back/Sn%C3%ADmek4.JPG",
+    "assets/gfx2/classic_back/Sn%C3%ADmek5.JPG",
+    "assets/gfx2/classic_back/Sn%C3%ADmek6.JPG",
+    "assets/gfx2/classic_back/Sn%C3%ADmek7.JPG",
+    "assets/gfx2/classic_back/Sn%C3%ADmek8.JPG"
+  ];
+  var PRE_RUN_GFX2_ADVANCE_BACK_FRAMES = [
+    "assets/gfx2/advance_back/Sn%C3%ADmek1.JPG",
+    "assets/gfx2/advance_back/Sn%C3%ADmek2.JPG",
+    "assets/gfx2/advance_back/Sn%C3%ADmek3.JPG",
+    "assets/gfx2/advance_back/Sn%C3%ADmek4.JPG",
+    "assets/gfx2/advance_back/Sn%C3%ADmek5.JPG",
+    "assets/gfx2/advance_back/Sn%C3%ADmek6.JPG",
+    "assets/gfx2/advance_back/Sn%C3%ADmek7.JPG"
+  ];
+  var PRE_RUN_GFX2_BADGES_BACK_FRAMES = [
+    "assets/gfx2/badges_back/Sn%C3%ADmek1.JPG",
+    "assets/gfx2/badges_back/Sn%C3%ADmek2.JPG",
+    "assets/gfx2/badges_back/Sn%C3%ADmek3.JPG",
+    "assets/gfx2/badges_back/Sn%C3%ADmek4.JPG",
+    "assets/gfx2/badges_back/Sn%C3%ADmek5.JPG",
+    "assets/gfx2/badges_back/Sn%C3%ADmek6.JPG",
+    "assets/gfx2/badges_back/Sn%C3%ADmek7.JPG",
+    "assets/gfx2/badges_back/Sn%C3%ADmek8.JPG"
+  ];
+  var PRE_RUN_GFX2_SHOP_BACK_FRAMES = [
+    "assets/gfx2/shop_back/Sn%C3%ADmek1.JPG",
+    "assets/gfx2/shop_back/Sn%C3%ADmek2.JPG",
+    "assets/gfx2/shop_back/Sn%C3%ADmek3.JPG",
+    "assets/gfx2/shop_back/Sn%C3%ADmek4.JPG",
+    "assets/gfx2/shop_back/Sn%C3%ADmek5.JPG",
+    "assets/gfx2/shop_back/Sn%C3%ADmek6.JPG",
+    "assets/gfx2/shop_back/Sn%C3%ADmek7.JPG"
+  ];
+  var PRE_RUN_GFX2_SETTINGS_BACK_FRAMES = [
+    "assets/gfx2/settings_back/Sn%C3%ADmek1.JPG",
+    "assets/gfx2/settings_back/Sn%C3%ADmek2.JPG",
+    "assets/gfx2/settings_back/Sn%C3%ADmek3.JPG",
+    "assets/gfx2/settings_back/Sn%C3%ADmek4.JPG",
+    "assets/gfx2/settings_back/Sn%C3%ADmek5.JPG",
+    "assets/gfx2/settings_back/Sn%C3%ADmek6.JPG",
+    "assets/gfx2/settings_back/Sn%C3%ADmek7.JPG",
+    "assets/gfx2/settings_back/Sn%C3%ADmek8.JPG",
+    "assets/gfx2/settings_back/Sn%C3%ADmek9.JPG"
+  ];
+  var PRE_RUN_GFX2_SCORES_BACK_FRAMES = [
+    "assets/gfx2/scores_back/Sn%C3%ADmek1.JPG",
+    "assets/gfx2/scores_back/Sn%C3%ADmek2.JPG",
+    "assets/gfx2/scores_back/Sn%C3%ADmek3.JPG",
+    "assets/gfx2/scores_back/Sn%C3%ADmek4.JPG",
+    "assets/gfx2/scores_back/Sn%C3%ADmek5.JPG",
+    "assets/gfx2/scores_back/Sn%C3%ADmek6.JPG"
+  ];
   var PRE_RUN_GFX2_ALL_FRAMES = Array.from(new Set(
     PRE_RUN_GFX2_ENTRANCE_FRAMES
       .concat(PRE_RUN_GFX2_CLASSIC_FRAMES)
@@ -202,6 +260,12 @@ Main tuning points:
       .concat(PRE_RUN_GFX2_BADGES_FRAMES)
       .concat(PRE_RUN_GFX2_SHOP_FRAMES)
       .concat(PRE_RUN_GFX2_SETTINGS_FRAMES)
+      .concat(PRE_RUN_GFX2_CLASSIC_BACK_FRAMES)
+      .concat(PRE_RUN_GFX2_ADVANCE_BACK_FRAMES)
+      .concat(PRE_RUN_GFX2_BADGES_BACK_FRAMES)
+      .concat(PRE_RUN_GFX2_SHOP_BACK_FRAMES)
+      .concat(PRE_RUN_GFX2_SETTINGS_BACK_FRAMES)
+      .concat(PRE_RUN_GFX2_SCORES_BACK_FRAMES)
   ));
   var preRunGfx2FrameCache = Object.create(null);
   var preRunGfx2PreloadPromise = null;
@@ -3046,6 +3110,11 @@ Main tuning points:
 
   function finishBadgeRewardSequence() {
     resetBadgeRewardQueue();
+    if (state.returnToPreRunAfterBadgeRewards) {
+      state.returnToPreRunAfterBadgeRewards = false;
+      openPreRunScreen();
+      return;
+    }
     state.gameOverInputBlockUntil = Date.now() + 350;
     updateGameOverSummary(false);
     gameOverEl.classList.remove("hidden");
@@ -3075,6 +3144,17 @@ Main tuning points:
         showGameOverScreen();
       }
     }
+  }
+
+  function completeRunAndReturnToPreRun() {
+    state.continueOfferActive = false;
+    closeContinuePurchaseOverlay();
+    finalizeCompletedRun();
+    if (!startBadgeRewardSequence(buildNewlyUnlockedBadgeQueueForRun())) {
+      openPreRunScreen();
+      return;
+    }
+    state.returnToPreRunAfterBadgeRewards = true;
   }
 
   function advanceBadgeRewardSequence() {
@@ -3987,6 +4067,7 @@ Main tuning points:
     badgeRewardPhase: "idle",
     badgeRewardTimer: 0,
     badgeRewardShowRip: false,
+    returnToPreRunAfterBadgeRewards: false,
     gameOverInputBlockUntil: 0,
     lifeLossInvulnerabilityTimeLeft: 0,
     continueUsesThisRun: 0,
@@ -3996,8 +4077,13 @@ Main tuning points:
     runFinalized: false,
     preRunDifficultyLockNoticeActive: false,
     preRunDifficultyFlipTimerId: 0,
+    preRunGfx2SelectFrames: PRE_RUN_GFX2_ENTRANCE_FRAMES,
+    preRunGfx2SelectAnimEnabled: true,
     preRunGfx2EntranceAnimStarted: false,
     preRunGfx2EntranceAnimTime: 0,
+    preRunGfx2BackActive: false,
+    preRunGfx2BackTime: 0,
+    preRunGfx2BackFrames: null,
     preRunGfx2ClassicExitActive: false,
     preRunGfx2ClassicExitTime: 0,
     preRunGfx2AdvanceExitActive: false,
@@ -5139,6 +5225,9 @@ Main tuning points:
     if (state.preRunStep === "shop") {
       renderPreRunShopScreen();
     }
+    if (preRunCreditsVersionEl) {
+      preRunCreditsVersionEl.textContent = "v" + String((APP_VERSION_INFO && APP_VERSION_INFO.versionName) || "0.0.0");
+    }
     if (state.preRunStep === "settings") {
       renderPreRunSettingsScreen();
     }
@@ -5151,6 +5240,7 @@ Main tuning points:
     return state.preRunActive &&
       state.preRunStep === "select" &&
       isGfx2StartScreenEnabled() &&
+      !state.preRunGfx2BackActive &&
       !state.preRunGfx2ClassicExitActive &&
       !state.preRunGfx2AdvanceExitActive &&
       !state.preRunGfx2ScoresExitActive &&
@@ -5158,6 +5248,50 @@ Main tuning points:
       !state.preRunGfx2ShopExitActive &&
       !state.preRunGfx2SettingsExitActive &&
       !state.preRunLaunchActive;
+  }
+
+  function getPreRunGfx2SelectFrames() {
+    return Array.isArray(state.preRunGfx2SelectFrames) && state.preRunGfx2SelectFrames.length
+      ? state.preRunGfx2SelectFrames
+      : PRE_RUN_GFX2_ENTRANCE_FRAMES;
+  }
+
+  function isPreRunGfx2SceneTransitionActive() {
+    return state.preRunGfx2BackActive ||
+      state.preRunGfx2ClassicExitActive ||
+      state.preRunGfx2AdvanceExitActive ||
+      state.preRunGfx2ScoresExitActive ||
+      state.preRunGfx2BadgesExitActive ||
+      state.preRunGfx2ShopExitActive ||
+      state.preRunGfx2SettingsExitActive;
+  }
+
+  function resetPreRunGfx2SelectScene() {
+    state.preRunGfx2SelectFrames = PRE_RUN_GFX2_ENTRANCE_FRAMES;
+    state.preRunGfx2SelectAnimEnabled = true;
+    state.preRunGfx2EntranceAnimStarted = false;
+    state.preRunGfx2EntranceAnimTime = 0;
+    state.preRunGfx2BackActive = false;
+    state.preRunGfx2BackTime = 0;
+    state.preRunGfx2BackFrames = null;
+  }
+
+  function startPreRunGfx2BackAnimation(frames) {
+    if (!Array.isArray(frames) || !frames.length) {
+      state.preRunStep = "select";
+      renderPreRunScreen();
+      return;
+    }
+    state.preRunStep = "select";
+    state.preRunGfx2BackActive = true;
+    state.preRunGfx2BackTime = 0;
+    state.preRunGfx2BackFrames = frames;
+    state.preRunGfx2SelectFrames = frames;
+    state.preRunGfx2SelectAnimEnabled = false;
+    state.preRunGfx2EntranceAnimStarted = false;
+    state.preRunGfx2EntranceAnimTime = 0;
+    setPreRunGfx2ForegroundFrame(0, frames);
+    renderPreRunScreen();
   }
 
   function setPreRunGfx2ForegroundFrame(frameIndex, frames) {
@@ -5174,18 +5308,23 @@ Main tuning points:
       return;
     }
 
+    var activeFrames = getPreRunGfx2SelectFrames();
+
     if (!getPreRunGfx2EntranceAnimationActive()) {
-      state.preRunGfx2EntranceAnimStarted = false;
-      state.preRunGfx2EntranceAnimTime = 0;
-      setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_ENTRANCE_FRAMES.length - 1);
+      setPreRunGfx2ForegroundFrame(activeFrames.length - 1, activeFrames);
       return;
     }
 
-    if (!arePreRunGfx2FramesReady(PRE_RUN_GFX2_ENTRANCE_FRAMES)) {
+    if (!state.preRunGfx2SelectAnimEnabled) {
+      setPreRunGfx2ForegroundFrame(activeFrames.length - 1, activeFrames);
+      return;
+    }
+
+    if (!arePreRunGfx2FramesReady(activeFrames)) {
       preloadPreRunGfx2EntranceFrames();
       state.preRunGfx2EntranceAnimStarted = false;
       state.preRunGfx2EntranceAnimTime = 0;
-      setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_ENTRANCE_FRAMES.length - 1);
+      setPreRunGfx2ForegroundFrame(activeFrames.length - 1, activeFrames);
       return;
     }
 
@@ -5198,10 +5337,52 @@ Main tuning points:
 
     var progress = Math.max(0, Math.min(1, state.preRunGfx2EntranceAnimTime / 1));
     var frameIndex = Math.min(
-      PRE_RUN_GFX2_ENTRANCE_FRAMES.length - 1,
-      Math.floor(progress * PRE_RUN_GFX2_ENTRANCE_FRAMES.length)
+      activeFrames.length - 1,
+      Math.floor(progress * activeFrames.length)
     );
-    setPreRunGfx2ForegroundFrame(frameIndex);
+    setPreRunGfx2ForegroundFrame(frameIndex, activeFrames);
+  }
+
+  function updatePreRunGfx2BackAnimation(dt) {
+    if (!preRunGfx2ForegroundEl) {
+      return;
+    }
+
+    if (!state.preRunGfx2BackActive) {
+      state.preRunGfx2BackTime = 0;
+      return;
+    }
+
+    var activeFrames = Array.isArray(state.preRunGfx2BackFrames) && state.preRunGfx2BackFrames.length
+      ? state.preRunGfx2BackFrames
+      : getPreRunGfx2SelectFrames();
+
+    if (!arePreRunGfx2FramesReady(activeFrames)) {
+      preloadPreRunGfx2EntranceFrames();
+      setPreRunGfx2ForegroundFrame(0, activeFrames);
+      return;
+    }
+
+    if (dt > 0) {
+      state.preRunGfx2BackTime = Math.min(1, state.preRunGfx2BackTime + dt);
+    }
+
+    var progress = Math.max(0, Math.min(1, state.preRunGfx2BackTime / 1));
+    var frameIndex = Math.min(
+      activeFrames.length - 1,
+      Math.floor(progress * activeFrames.length)
+    );
+    setPreRunGfx2ForegroundFrame(frameIndex, activeFrames);
+
+    if (progress >= 1) {
+      state.preRunGfx2BackActive = false;
+      state.preRunGfx2BackTime = 0;
+      state.preRunGfx2BackFrames = null;
+      state.preRunGfx2SelectFrames = activeFrames;
+      state.preRunGfx2SelectAnimEnabled = false;
+      playUiPageOpenSound();
+      renderPreRunScreen();
+    }
   }
 
   function updatePreRunGfx2ClassicExitAnimation(dt) {
@@ -6306,6 +6487,7 @@ Main tuning points:
   }
 
   function openPreRunScreen() {
+    resetPreRunGfx2SelectScene();
     state.preRunStep = "select";
     setAdminOpen(false);
     prepareRunSetup(state.gameMode, state.gameDifficulty);
@@ -6650,14 +6832,7 @@ Main tuning points:
     }
     if (preRunGfx2ClassicBtn) {
       preRunGfx2ClassicBtn.addEventListener("click", function () {
-        if (
-          state.preRunGfx2ClassicExitActive ||
-          state.preRunGfx2AdvanceExitActive ||
-          state.preRunGfx2ScoresExitActive ||
-          state.preRunGfx2BadgesExitActive ||
-          state.preRunGfx2ShopExitActive ||
-          state.preRunGfx2SettingsExitActive
-        ) {
+        if (isPreRunGfx2SceneTransitionActive()) {
           return;
         }
         unlockAudioIfNeeded();
@@ -6677,14 +6852,7 @@ Main tuning points:
     }
     if (preRunGfx2AdvancedBtn) {
       preRunGfx2AdvancedBtn.addEventListener("click", function () {
-        if (
-          state.preRunGfx2ClassicExitActive ||
-          state.preRunGfx2AdvanceExitActive ||
-          state.preRunGfx2ScoresExitActive ||
-          state.preRunGfx2BadgesExitActive ||
-          state.preRunGfx2ShopExitActive ||
-          state.preRunGfx2SettingsExitActive
-        ) {
+        if (isPreRunGfx2SceneTransitionActive()) {
           return;
         }
         unlockAudioIfNeeded();
@@ -6715,14 +6883,7 @@ Main tuning points:
     }
     if (preRunGfx2BadgesBtn) {
       preRunGfx2BadgesBtn.addEventListener("click", function () {
-        if (
-          state.preRunGfx2ClassicExitActive ||
-          state.preRunGfx2AdvanceExitActive ||
-          state.preRunGfx2ScoresExitActive ||
-          state.preRunGfx2BadgesExitActive ||
-          state.preRunGfx2ShopExitActive ||
-          state.preRunGfx2SettingsExitActive
-        ) {
+        if (isPreRunGfx2SceneTransitionActive()) {
           return;
         }
         unlockAudioIfNeeded();
@@ -6754,14 +6915,7 @@ Main tuning points:
       unlockAudioIfNeeded();
       playUiButtonSound();
       if (isGfx2StartScreenEnabled() && state.preRunStep === "select") {
-        if (
-          state.preRunGfx2ClassicExitActive ||
-          state.preRunGfx2AdvanceExitActive ||
-          state.preRunGfx2ScoresExitActive ||
-          state.preRunGfx2BadgesExitActive ||
-          state.preRunGfx2ShopExitActive ||
-          state.preRunGfx2SettingsExitActive
-        ) {
+        if (isPreRunGfx2SceneTransitionActive()) {
           return;
         }
         state.preRunGfx2ShopExitActive = true;
@@ -6790,14 +6944,7 @@ Main tuning points:
     }
     if (preRunGfx2SettingsBtn) {
       preRunGfx2SettingsBtn.addEventListener("click", function () {
-        if (
-          state.preRunGfx2ClassicExitActive ||
-          state.preRunGfx2AdvanceExitActive ||
-          state.preRunGfx2ScoresExitActive ||
-          state.preRunGfx2BadgesExitActive ||
-          state.preRunGfx2ShopExitActive ||
-          state.preRunGfx2SettingsExitActive
-        ) {
+        if (isPreRunGfx2SceneTransitionActive()) {
           return;
         }
         unlockAudioIfNeeded();
@@ -6842,14 +6989,7 @@ Main tuning points:
     }
     if (preRunGfx2ScoresBtn) {
       preRunGfx2ScoresBtn.addEventListener("click", function () {
-        if (
-          state.preRunGfx2ClassicExitActive ||
-          state.preRunGfx2AdvanceExitActive ||
-          state.preRunGfx2ScoresExitActive ||
-          state.preRunGfx2BadgesExitActive ||
-          state.preRunGfx2ShopExitActive ||
-          state.preRunGfx2SettingsExitActive
-        ) {
+        if (isPreRunGfx2SceneTransitionActive()) {
           return;
         }
         unlockAudioIfNeeded();
@@ -6863,6 +7003,10 @@ Main tuning points:
       preRunBadgesBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
+        if (isGfx2StartScreenEnabled()) {
+          startPreRunGfx2BackAnimation(PRE_RUN_GFX2_BADGES_BACK_FRAMES);
+          return;
+        }
         state.preRunStep = "select";
         renderPreRunScreen();
       });
@@ -6889,6 +7033,10 @@ Main tuning points:
       preRunShopBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
+        if (isGfx2StartScreenEnabled()) {
+          startPreRunGfx2BackAnimation(PRE_RUN_GFX2_SHOP_BACK_FRAMES);
+          return;
+        }
         playUiPageOpenSound();
         state.preRunStep = "select";
         renderPreRunScreen();
@@ -6898,6 +7046,10 @@ Main tuning points:
       preRunSettingsBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
+        if (isGfx2StartScreenEnabled()) {
+          startPreRunGfx2BackAnimation(PRE_RUN_GFX2_SETTINGS_BACK_FRAMES);
+          return;
+        }
         playUiPageOpenSound();
         state.preRunStep = "select";
         renderPreRunScreen();
@@ -6907,6 +7059,10 @@ Main tuning points:
       preRunScoresBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
+        if (isGfx2StartScreenEnabled()) {
+          startPreRunGfx2BackAnimation(PRE_RUN_GFX2_SCORES_BACK_FRAMES);
+          return;
+        }
         state.preRunStep = "select";
         renderPreRunScreen();
       });
@@ -6991,7 +7147,7 @@ Main tuning points:
         if (!state.continueOfferActive) {
           return;
         }
-        completeRunAndPresentGameOver(false);
+        completeRunAndReturnToPreRun();
       });
     }
     if (continuePurchaseBuyBtn) {
@@ -7038,11 +7194,18 @@ Main tuning points:
       preRunBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
-        playUiPageOpenSound();
         if (state.currentLevel > 1) {
+          playUiPageOpenSound();
           openPreRunScreen();
           return;
         }
+        if (isGfx2StartScreenEnabled()) {
+          startPreRunGfx2BackAnimation(
+            state.gameMode === 1 ? PRE_RUN_GFX2_ADVANCE_BACK_FRAMES : PRE_RUN_GFX2_CLASSIC_BACK_FRAMES
+          );
+          return;
+        }
+        playUiPageOpenSound();
         state.preRunStep = "select";
         renderPreRunScreen();
       });
@@ -9043,7 +9206,9 @@ Main tuning points:
     if (state.preRunLaunchActive && !state.adminPaused) {
       updatePreRunLaunchTransition(dt);
     } else if (state.preRunActive && !state.adminPaused) {
-      if (state.preRunGfx2ClassicExitActive) {
+      if (state.preRunGfx2BackActive) {
+        updatePreRunGfx2BackAnimation(dt);
+      } else if (state.preRunGfx2ClassicExitActive) {
         updatePreRunGfx2ClassicExitAnimation(dt);
       } else if (state.preRunGfx2AdvanceExitActive) {
         updatePreRunGfx2AdvanceExitAnimation(dt);

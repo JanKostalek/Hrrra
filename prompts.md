@@ -827,3 +827,14 @@ dobre. ted, kdyz se klikne na tlacítko klassic, tak vezmi ze složky c:\-_WeB_-\H
 2026-04-07: 'na šírku displej porad je jen do pulky obrazovky, kdyz je na výšku, tak je odshora az dolu....'
 2026-04-07: 'zda se, ze ted uz to sedí. zmen jeste jednu vec. na game over screen, kdyz klikneme na end run, tak zustane dal ta obrazovka, jen zmizi ty buttons. to je zbytecný. rovnou tu druhou mužeš preskocit'
 2026-04-07: 'kod verze 23 uz byl. je potreba povysit'
+2026-04-07: 'muzes do obrazovky Credits, do praveho horního rohu dát císlo verze? aktuální? jde to udelat nejak, aby nacítalo samo, nebo ho budes muset vzdy zvyšovat?'
+2026-04-07: 'na strance scores nejde scrolovat. ani na lokale ani na androidu.'
+2026-04-07: 'zkus nejdrív variantu dve, cili zmensit okraje. Zkus to jen u sekvence Badges a Shop. U jiných to nevadí'
+2026-04-07: 'použil jsi špatny obrázek domku. udelej to jeste jednou, ale použij shop.png z c:\-_WeB_-\Hrrra\assets\shop\. Je tam i celá stránka, abys i videl, kde presne je - obrazek shop_full.png. akorat musís zmenit pozadí na pruhledné. a urpav znovu frames na badges a shop, tak jak jsi upravoval predtim classic, advanced a ostatní'
+použil jsi špatny obrázek domku. udelej to jeste jednou, ale použij shop.png z c:\-_WeB_-\Hrrra\assets\shop\. Je tam i celá stránka, abys i videl, kde presne je - obrazek shop_full.png. akorat musís zmenit pozadí na pruhledné. a urpav znovu frames na badges a shop, tak jak jsi upravoval predtim classic, advanced a ostatní
+ted udeláme jednu vetsi zmenu. kdyz z jakékoliv stránky z úvodní (classic, advanced, score, badges, shop) dáme back, tak se opet prehraje entrance. Ted to pozmeníme. podle toho odkud se bude hrác vracet, tak se prehraje príslusná _back sekvence. Tedy pokud z puvodní obrazovky klikneme na classic, tak se prehraje classic a objeví se classic stranka. pokud tam klikneme na back, tak se prehraje classic_back animace - c:\-_WeB_-\Hrrra\assets\gfx2\classic_back\. Z advance se prehraje advance_back, z badges se prehraje badges_back, shop bude shop_back, stejne tak ze store to bude store_back. rozumíš co je potreba udelat? nejdríve odpoved, nez zacnes cokoliv implementovat
+jsem se preklepl. scores_back je zpravne. a vidim, ze mam spatne advance i advance_back. mam tam preklep. ale to je asi detail. at to nemusis prepisovat i v kodu. A jeste, do kazdeho frame ze vsech _back slozek je potreba pridat grafiku domecku, stejne jako jsi naposledy upravoval pro Shop a badges. Každá _back sekvence at trva taky jednu vterinu
+a nezapomínej vse zapisovat do prompts.md
+na stránkach classic, advanced, badges nejde scrolovat
+kdyz ztratím poslední život, objeví se obrazovka , kde mužu continue nebo end run. kdyz dám end run, tak se objeví jeste jednou gameover obrazovka se score a musím jeste jednou kliknout. to druhé uz je zbytecné. po "end run" tu druhou preskocit.
+priprav commit lokal, online, aab

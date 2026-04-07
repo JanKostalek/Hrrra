@@ -772,6 +772,34 @@ body {
   display: none;
 }
 
+#pre-run-scores-screen {
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+.pre-run-stage-scrollable,
+#pre-run-badges-screen,
+#pre-run-rules-screen,
+#pre-run-credits-screen,
+#pre-run-settings-screen,
+#pre-run-shop-screen,
+#pre-run-detail-screen {
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+.pre-run-scores-grid {
+  touch-action: pan-y;
+}
+
 .pre-run-brand {
   text-align: center;
   font-size: clamp(54px, 9vw, 72px);
@@ -1546,6 +1574,20 @@ body {
     linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.42)),
     url("assets/start%20screen%20bkg.png") center / cover no-repeat;
   box-shadow: 0 14px 26px rgba(8, 41, 58, 0.08);
+}
+
+.pre-run-credits-version {
+  justify-self: end;
+  align-self: start;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(8, 41, 58, 0.12);
+  color: #123c5d;
+  font-size: clamp(13px, 1.4vw, 18px);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .pre-run-credits-card p {
