@@ -45,6 +45,7 @@ const assetFilesToCopy = [
   "assets/hero-question-mark-icon.png"
 ];
 const assetDirectoriesToCopy = [
+  "assets/gfx2",
   "assets/ui-sound",
   "assets/skins",
   "assets/Bubble_burst",

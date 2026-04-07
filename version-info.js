@@ -1,9 +1,9 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 21,
-  versionName: "1.0.20",
+  versionCode: 22,
+  versionName: "1.0.21",
   whatsNew: [
-  "Centered the Game Over leaderboard panels vertically and kept their responsive sizing intact.",
-  "Continue now uses Wallet After Run correctly and opens a life-purchase overlay with heart selection, total price, Buy, and Back.",
-  "The continue heart picker now uses clean heart-only visuals with outline vs filled states and supports incremental deselection."
+  "Added the first GFX2 crossroads start screen behind the admin Start screen style toggle while keeping GFX1 as the default public view.",
+  "GFX2 now plays baked entrance, Classic, and Advanced scene transitions instead of the temporary debug path and moving figure overlay.",
+  "Improved GFX2 mobile responsiveness by stretching the scene to the viewport and retuning cloud placement, layering, and hotspot alignment."
 ]
 });

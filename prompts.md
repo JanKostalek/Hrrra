@@ -745,3 +745,52 @@ uz se zmensuje, ale vzdy s pevným pomerem stran. je potreba, aby se obrázek priz
 [image attached]
 
 -------------------
+
+ocisti assets/figure vsechny obrázky, aby dole u podstavce nebyly ty bílé fleky. Aby to slo lépe použít a pozadí bylo opravdu pryc/pruhledné
+
+-------------------
+
+stále tam vidím relativne velké bílé fleky. mužeš jeste doupravit?
+[image attached]
+[image attached]
+[image attached]
+
+-------------------
+
+ted je to horsi nez to bylo. znicilo to samotné postavicky. obliceje a tak. vrat to do puvodní verze. pokud mužeš
+
+-------------------
+
+zkus to pouze na obrazku 06xxxxx a pouze v zobrazenem vyrezu 
+[image attached]
+
+-------------------
+
+je to lepsi, ale stale tam vidim dole bílou barvu 
+[image attached]
+
+-------------------
+
+gde o tyto dve místa
+[image attached]
+
+-------------------
+
+ve složce c:\-_WeB_-\Hrrra\assets\temp\entrance\ je sekvence png obrázku. chtel bych, abys je použil pri oterení startovací obrazovky v gfx2. aby behem jedne vteriny probehla sekvence obrázku 01-08 a na tom posledním se pozadí zastavilo. Zároven odstran cervenou debug cáru, kterou jsme tam pripravili . stejne tak ted postavicka tak jak se pohybuje po obrazovce jiz není potreba. je natvrdo v tech frames pozadí
+[image attached]
+
+-------------------
+
+dobre. ted, kdyz se klikne na tlacítko klassic, tak vezmi ze složky c:\-_WeB_-\Hrrra\assets\temp\classic\ snímky 01-07 a behem jedné vteriny je prehraj. teprve po frame 07 prepní na obrazovku pro start classic
+
+-------------------
+
+2026-04-07: 'dobre. ted, kdyz se klikne na tlacítko klassic, tak vezmi ze složky c:\-_WeB_-\Hrrra\assets\temp\classic\ snímky 01-07 a behem jedné vteriny je prehraj. teprve po frame 07 prepní na obrazovku pro start classic'
+
+2026-04-07: 'ted totéž pro advanced. je to ve slotce c:\-_WeB_-\Hrrra\assets\temp\advance\. po kliknutí prehraj 01-06 frames a teprve po 06 prepní na advanced stránku'
+
+2026-04-07: 'kdyz se animace prehrává poprvé po nactení aplikace, tak tam problikávají v pozadí mraky s tlacítky, ale nejsou potom uz videt, ackoliv tam to tlacítko je'
+
+2026-04-07: 'Je potreba, aby se ty mraky taky zmenšovaly podle velikosti okna. nesmí zasahovat do krajny a rozcestníku. je to možné udelat? prípadne je natvrdo zmenšíme a ukotvíme tak, aby nezasahovaly. každopádne bych mrak credits posunul trochu doleva  vcetne overlay tlacítka, aby se ani tlacítka neprekrývala Credits / advanced'
+
+2026-04-07: 'je potreba jeste kousek. jeste zasahuje do rozcestníku'

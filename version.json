@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 21,
-  "latestVersionName": "1.0.20",
+  "latestVersionCode": 22,
+  "latestVersionName": "1.0.21",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra test build is available. Update now to get the latest fixes and improvements.",
+  "message": "A new Hrrra test build is available. Update now to get the latest GFX2 and mobile layout improvements.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

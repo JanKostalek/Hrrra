@@ -104,9 +104,7 @@ Main tuning points:
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
   var preRunSelectGfx1El = document.getElementById("pre-run-select-gfx1");
   var preRunSelectGfx2El = document.getElementById("pre-run-select-gfx2");
-  var preRunGfx2FigureEl = document.getElementById("pre-run-gfx2-figure");
-  var preRunGfx2FigureImgEl = document.getElementById("pre-run-gfx2-figure-img");
-  var preRunGfx2PathDebugEl = document.getElementById("pre-run-gfx2-path-debug");
+  var preRunGfx2ForegroundEl = document.getElementById("pre-run-gfx2-foreground");
   var preRunBadgesScreenEl = document.getElementById("pre-run-badges-screen");
   var preRunScoresScreenEl = document.getElementById("pre-run-scores-screen");
   var preRunRulesScreenEl = document.getElementById("pre-run-rules-screen");
@@ -132,6 +130,33 @@ Main tuning points:
   var preRunGfx2BadgesBtn = document.getElementById("pre-run-gfx2-badges-btn");
   var preRunGfx2ScoresBtn = document.getElementById("pre-run-gfx2-scores-btn");
   var preRunGfx2LockNoteEl = document.getElementById("pre-run-gfx2-lock-note");
+  var PRE_RUN_GFX2_ENTRANCE_FRAMES = [
+    "assets/gfx2/entrance/frame-01.png",
+    "assets/gfx2/entrance/frame-02.png",
+    "assets/gfx2/entrance/frame-03.png",
+    "assets/gfx2/entrance/frame-04.png",
+    "assets/gfx2/entrance/frame-05.png",
+    "assets/gfx2/entrance/frame-06.png",
+    "assets/gfx2/entrance/frame-07.png",
+    "assets/gfx2/entrance/frame-08.png"
+  ];
+  var PRE_RUN_GFX2_CLASSIC_FRAMES = [
+    "assets/gfx2/classic/frame-01.png",
+    "assets/gfx2/classic/frame-02.png",
+    "assets/gfx2/classic/frame-03.png",
+    "assets/gfx2/classic/frame-04.png",
+    "assets/gfx2/classic/frame-05.png",
+    "assets/gfx2/classic/frame-06.png",
+    "assets/gfx2/classic/frame-07.png"
+  ];
+  var PRE_RUN_GFX2_ADVANCE_FRAMES = [
+    "assets/gfx2/advance/frame-01.png",
+    "assets/gfx2/advance/frame-02.png",
+    "assets/gfx2/advance/frame-03.png",
+    "assets/gfx2/advance/frame-04.png",
+    "assets/gfx2/advance/frame-05.png",
+    "assets/gfx2/advance/frame-06.png"
+  ];
   var preRunRulesBackBtn = document.getElementById("pre-run-rules-back-btn");
   var preRunCreditsBackBtn = document.getElementById("pre-run-credits-back-btn");
   var preRunShopBackBtn = document.getElementById("pre-run-shop-back-btn");
@@ -1991,6 +2016,21 @@ Main tuning points:
 
   function isGfx2StartScreenEnabled() {
     return getStartScreenStyle() === "gfx2";
+  }
+
+  function preloadPreRunGfx2EntranceFrames() {
+    PRE_RUN_GFX2_ENTRANCE_FRAMES.forEach(function (src) {
+      var image = new Image();
+      image.src = src;
+    });
+    PRE_RUN_GFX2_CLASSIC_FRAMES.forEach(function (src) {
+      var image = new Image();
+      image.src = src;
+    });
+    PRE_RUN_GFX2_ADVANCE_FRAMES.forEach(function (src) {
+      var image = new Image();
+      image.src = src;
+    });
   }
 
   var preRunGfx2FullLockNoticeTimeoutId = 0;
@@ -3865,8 +3905,12 @@ Main tuning points:
     runFinalized: false,
     preRunDifficultyLockNoticeActive: false,
     preRunDifficultyFlipTimerId: 0,
-    preRunGfx2FigureAnimStarted: false,
-    preRunGfx2FigureAnimTime: 0,
+    preRunGfx2EntranceAnimStarted: false,
+    preRunGfx2EntranceAnimTime: 0,
+    preRunGfx2ClassicExitActive: false,
+    preRunGfx2ClassicExitTime: 0,
+    preRunGfx2AdvanceExitActive: false,
+    preRunGfx2AdvanceExitTime: 0,
     preRunScores: createInitialPreRunScoresState(),
     onlineHighscore: {
       loading: false,
@@ -4902,7 +4946,6 @@ Main tuning points:
     if (preRunSelectGfx2El) {
       preRunSelectGfx2El.classList.toggle("hidden", !useGfx2StartScreen);
     }
-    renderPreRunGfx2PathDebug();
     if (preRunBadgesScreenEl) {
       preRunBadgesScreenEl.classList.toggle("hidden", state.preRunStep !== "badges");
     }
@@ -5001,166 +5044,111 @@ Main tuning points:
       renderPreRunSettingsScreen();
     }
     stopBadgesPageMusicIfLeaving();
-    updatePreRunGfx2FigureAnimation(0);
+    updatePreRunGfx2EntranceAnimation(0);
     refreshMusicPlayback();
   }
 
-  function getPreRunGfx2FigureAnimationActive() {
+  function getPreRunGfx2EntranceAnimationActive() {
     return state.preRunActive &&
       state.preRunStep === "select" &&
       isGfx2StartScreenEnabled() &&
+      !state.preRunGfx2ClassicExitActive &&
+      !state.preRunGfx2AdvanceExitActive &&
       !state.preRunLaunchActive;
   }
 
-  function getBezierPoint(t, p0, p1, p2, p3) {
-    var invT = 1 - t;
-    var invT2 = invT * invT;
-    var invT3 = invT2 * invT;
-    var t2 = t * t;
-    var t3 = t2 * t;
-    return {
-      x: invT3 * p0.x + 3 * invT2 * t * p1.x + 3 * invT * t2 * p2.x + t3 * p3.x,
-      y: invT3 * p0.y + 3 * invT2 * t * p1.y + 3 * invT * t2 * p2.y + t3 * p3.y
-    };
-  }
-
-  function getCatmullRomPoint(t, points) {
-    if (!Array.isArray(points) || !points.length) {
-      return { x: 0, y: 0 };
-    }
-    if (points.length === 1) {
-      return { x: points[0].x, y: points[0].y };
-    }
-    var clampedT = Math.max(0, Math.min(1, t));
-    var scaled = clampedT * (points.length - 1);
-    var segment = Math.min(points.length - 2, Math.floor(scaled));
-    var localT = scaled - segment;
-    var p0 = points[Math.max(0, segment - 1)];
-    var p1 = points[segment];
-    var p2 = points[Math.min(points.length - 1, segment + 1)];
-    var p3 = points[Math.min(points.length - 1, segment + 2)];
-    var tt = localT * localT;
-    var ttt = tt * localT;
-    return {
-      x: 0.5 * (
-        (2 * p1.x) +
-        (-p0.x + p2.x) * localT +
-        (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * tt +
-        (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * ttt
-      ),
-      y: 0.5 * (
-        (2 * p1.y) +
-        (-p0.y + p2.y) * localT +
-        (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * tt +
-        (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * ttt
-      )
-    };
-  }
-
-  function getPolylinePoint(t, points) {
-    if (!Array.isArray(points) || !points.length) {
-      return { x: 0, y: 0 };
-    }
-    if (points.length === 1) {
-      return { x: points[0].x, y: points[0].y };
-    }
-    var clampedT = Math.max(0, Math.min(1, t));
-    var segments = [];
-    var totalLength = 0;
-    var i;
-    for (i = 0; i < points.length - 1; i += 1) {
-      var dx = points[i + 1].x - points[i].x;
-      var dy = points[i + 1].y - points[i].y;
-      var length = Math.sqrt(dx * dx + dy * dy);
-      segments.push(length);
-      totalLength += length;
-    }
-    if (totalLength <= 0) {
-      return { x: points[0].x, y: points[0].y };
-    }
-    var targetLength = clampedT * totalLength;
-    var accumulated = 0;
-    for (i = 0; i < segments.length; i += 1) {
-      var segmentLength = segments[i];
-      if (targetLength <= accumulated + segmentLength || i === segments.length - 1) {
-        var localT = segmentLength > 0 ? (targetLength - accumulated) / segmentLength : 0;
-        return {
-          x: points[i].x + (points[i + 1].x - points[i].x) * localT,
-          y: points[i].y + (points[i + 1].y - points[i].y) * localT
-        };
-      }
-      accumulated += segmentLength;
-    }
-    return { x: points[points.length - 1].x, y: points[points.length - 1].y };
-  }
-
-  function getPreRunGfx2PathPoints() {
-    return [
-      { x: 0.055, y: 0.945 },
-      { x: 0.135, y: 0.895 },
-      { x: 0.205, y: 0.835 },
-      { x: 0.265, y: 0.775 },
-      { x: 0.315, y: 0.725 },
-      { x: 0.365, y: 0.680 },
-      { x: 0.410, y: 0.640 },
-      { x: 0.455, y: 0.615 },
-      { x: 0.500, y: 0.610 }
-    ];
-  }
-
-  function renderPreRunGfx2PathDebug() {
-    if (!preRunGfx2PathDebugEl) {
+  function setPreRunGfx2ForegroundFrame(frameIndex, frames) {
+    if (!preRunGfx2ForegroundEl) {
       return;
     }
-    var points = getPreRunGfx2PathPoints();
-    var polylinePoints = points.map(function (point) {
-      return (point.x * 100).toFixed(2) + "," + (point.y * 100).toFixed(2);
-    }).join(" ");
-    var circles = points.map(function (point, index) {
-      var cx = (point.x * 100).toFixed(2);
-      var cy = (point.y * 100).toFixed(2);
-      var labelY = Math.max(3, point.y * 100 - 2.8).toFixed(2);
-      return [
-        '<circle cx="', cx, '" cy="', cy, '" r="1.05" fill="rgba(255,40,40,0.95)" stroke="rgba(255,255,255,0.95)" stroke-width="0.35"></circle>',
-        '<text x="', cx, '" y="', labelY, '" text-anchor="middle" font-size="2.2" font-weight="700" fill="rgba(255,255,255,0.96)" stroke="rgba(125,0,0,0.72)" stroke-width="0.18" paint-order="stroke fill">', index + 1, '</text>'
-      ].join("");
-    }).join("");
-    preRunGfx2PathDebugEl.innerHTML = [
-      '<polyline points="', polylinePoints, '" fill="none" stroke="rgba(255,40,40,0.92)" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"></polyline>',
-      circles
-    ].join("");
+    var activeFrames = Array.isArray(frames) && frames.length ? frames : PRE_RUN_GFX2_ENTRANCE_FRAMES;
+    var clampedIndex = Math.max(0, Math.min(activeFrames.length - 1, frameIndex));
+    preRunGfx2ForegroundEl.style.backgroundImage = 'url("' + activeFrames[clampedIndex] + '")';
   }
 
-  function updatePreRunGfx2FigureAnimation(dt) {
-    if (!preRunGfx2FigureEl || !preRunGfx2FigureImgEl) {
+  function updatePreRunGfx2EntranceAnimation(dt) {
+    if (!preRunGfx2ForegroundEl) {
       return;
     }
 
-    if (!getPreRunGfx2FigureAnimationActive()) {
-      state.preRunGfx2FigureAnimStarted = false;
-      state.preRunGfx2FigureAnimTime = 0;
-      preRunGfx2FigureEl.classList.add("hidden");
-      preRunGfx2FigureImgEl.src = "assets/Figure/01_od_nas_levy_sikmy.png";
+    if (!getPreRunGfx2EntranceAnimationActive()) {
+      state.preRunGfx2EntranceAnimStarted = false;
+      state.preRunGfx2EntranceAnimTime = 0;
+      setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_ENTRANCE_FRAMES.length - 1);
       return;
     }
 
-    if (!state.preRunGfx2FigureAnimStarted) {
-      state.preRunGfx2FigureAnimStarted = true;
-      state.preRunGfx2FigureAnimTime = 0;
+    if (!state.preRunGfx2EntranceAnimStarted) {
+      state.preRunGfx2EntranceAnimStarted = true;
+      state.preRunGfx2EntranceAnimTime = 0;
     } else if (dt > 0) {
-      state.preRunGfx2FigureAnimTime = Math.min(2, state.preRunGfx2FigureAnimTime + dt);
+      state.preRunGfx2EntranceAnimTime = Math.min(1, state.preRunGfx2EntranceAnimTime + dt);
     }
 
-    var progress = Math.max(0, Math.min(1, state.preRunGfx2FigureAnimTime / 2));
-    var easedProgress = 1 - Math.pow(1 - progress, 3);
-    var point = getPolylinePoint(easedProgress, getPreRunGfx2PathPoints());
-    var scale = 1;
+    var progress = Math.max(0, Math.min(1, state.preRunGfx2EntranceAnimTime / 1));
+    var frameIndex = Math.min(
+      PRE_RUN_GFX2_ENTRANCE_FRAMES.length - 1,
+      Math.floor(progress * PRE_RUN_GFX2_ENTRANCE_FRAMES.length)
+    );
+    setPreRunGfx2ForegroundFrame(frameIndex);
+  }
 
-    preRunGfx2FigureEl.classList.remove("hidden");
-    preRunGfx2FigureEl.style.left = (point.x * 100).toFixed(3) + "%";
-    preRunGfx2FigureEl.style.top = (point.y * 100).toFixed(3) + "%";
-    preRunGfx2FigureEl.style.transform = "translate(-42%, -90%) scale(" + scale.toFixed(3) + ")";
-    preRunGfx2FigureImgEl.src = "assets/Figure/01_od_nas_levy_sikmy.png";
+  function updatePreRunGfx2ClassicExitAnimation(dt) {
+    if (!preRunGfx2ForegroundEl) {
+      return;
+    }
+
+    if (!state.preRunGfx2ClassicExitActive) {
+      state.preRunGfx2ClassicExitTime = 0;
+      return;
+    }
+
+    if (dt > 0) {
+      state.preRunGfx2ClassicExitTime = Math.min(1, state.preRunGfx2ClassicExitTime + dt);
+    }
+
+    var progress = Math.max(0, Math.min(1, state.preRunGfx2ClassicExitTime / 1));
+    var frameIndex = Math.min(
+      PRE_RUN_GFX2_CLASSIC_FRAMES.length - 1,
+      Math.floor(progress * PRE_RUN_GFX2_CLASSIC_FRAMES.length)
+    );
+    setPreRunGfx2ForegroundFrame(frameIndex, PRE_RUN_GFX2_CLASSIC_FRAMES);
+
+    if (progress >= 1) {
+      state.preRunGfx2ClassicExitActive = false;
+      state.preRunGfx2ClassicExitTime = 0;
+      playUiPageOpenSound();
+      openPreRunModeDetails(2);
+    }
+  }
+
+  function updatePreRunGfx2AdvanceExitAnimation(dt) {
+    if (!preRunGfx2ForegroundEl) {
+      return;
+    }
+
+    if (!state.preRunGfx2AdvanceExitActive) {
+      state.preRunGfx2AdvanceExitTime = 0;
+      return;
+    }
+
+    if (dt > 0) {
+      state.preRunGfx2AdvanceExitTime = Math.min(1, state.preRunGfx2AdvanceExitTime + dt);
+    }
+
+    var progress = Math.max(0, Math.min(1, state.preRunGfx2AdvanceExitTime / 1));
+    var frameIndex = Math.min(
+      PRE_RUN_GFX2_ADVANCE_FRAMES.length - 1,
+      Math.floor(progress * PRE_RUN_GFX2_ADVANCE_FRAMES.length)
+    );
+    setPreRunGfx2ForegroundFrame(frameIndex, PRE_RUN_GFX2_ADVANCE_FRAMES);
+
+    if (progress >= 1) {
+      state.preRunGfx2AdvanceExitActive = false;
+      state.preRunGfx2AdvanceExitTime = 0;
+      playUiPageOpenSound();
+      openPreRunModeDetails(1);
+    }
   }
 
   function getTotalBadgeCount() {
@@ -6396,10 +6384,14 @@ Main tuning points:
     }
     if (preRunGfx2ClassicBtn) {
       preRunGfx2ClassicBtn.addEventListener("click", function () {
+        if (state.preRunGfx2ClassicExitActive) {
+          return;
+        }
         unlockAudioIfNeeded();
         playUiButtonSound();
-        playUiPageOpenSound();
-        openPreRunModeDetails(2);
+        state.preRunGfx2ClassicExitActive = true;
+        state.preRunGfx2ClassicExitTime = 0;
+        setPreRunGfx2ForegroundFrame(0, PRE_RUN_GFX2_CLASSIC_FRAMES);
       });
     }
     if (preRunFullBtn) {
@@ -6412,14 +6404,18 @@ Main tuning points:
     }
     if (preRunGfx2AdvancedBtn) {
       preRunGfx2AdvancedBtn.addEventListener("click", function () {
+        if (state.preRunGfx2ClassicExitActive || state.preRunGfx2AdvanceExitActive) {
+          return;
+        }
         unlockAudioIfNeeded();
         playUiButtonSound();
         if (!isFullModeUnlocked()) {
           showPreRunGfx2FullModeLockNotice();
           return;
         }
-        playUiPageOpenSound();
-        openPreRunModeDetails(1);
+        state.preRunGfx2AdvanceExitActive = true;
+        state.preRunGfx2AdvanceExitTime = 0;
+        setPreRunGfx2ForegroundFrame(0, PRE_RUN_GFX2_ADVANCE_FRAMES);
       });
     }
     if (preRunDifficultyToggleEl) {
@@ -8714,7 +8710,13 @@ Main tuning points:
     if (state.preRunLaunchActive && !state.adminPaused) {
       updatePreRunLaunchTransition(dt);
     } else if (state.preRunActive && !state.adminPaused) {
-      updatePreRunGfx2FigureAnimation(dt);
+      if (state.preRunGfx2ClassicExitActive) {
+        updatePreRunGfx2ClassicExitAnimation(dt);
+      } else if (state.preRunGfx2AdvanceExitActive) {
+        updatePreRunGfx2AdvanceExitAnimation(dt);
+      } else {
+        updatePreRunGfx2EntranceAnimation(dt);
+      }
     } else if (state.running && !state.adminPaused && !state.preRunActive) {
       update(dt);
     } else if (state.questionCoinAnimActive && !state.adminPaused && !state.preRunActive) {
@@ -8732,6 +8734,8 @@ Main tuning points:
     input.jumpPressed = false;
     requestAnimationFrame(loop);
   }
+
+  preloadPreRunGfx2EntranceFrames();
 
   function update(dt) {
     state.runTimeSeconds += dt;
