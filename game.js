@@ -174,6 +174,37 @@ Main tuning points:
     "assets/gfx2/badges/frame-07.jpg",
     "assets/gfx2/badges/frame-08.jpg"
   ];
+  var PRE_RUN_GFX2_SHOP_FRAMES = [
+    "assets/gfx2/shop/frame-01.jpg",
+    "assets/gfx2/shop/frame-02.jpg",
+    "assets/gfx2/shop/frame-03.jpg",
+    "assets/gfx2/shop/frame-04.jpg",
+    "assets/gfx2/shop/frame-05.jpg",
+    "assets/gfx2/shop/frame-06.jpg",
+    "assets/gfx2/shop/frame-07.jpg"
+  ];
+  var PRE_RUN_GFX2_SETTINGS_FRAMES = [
+    "assets/gfx2/settings/frame-01.jpg",
+    "assets/gfx2/settings/frame-02.jpg",
+    "assets/gfx2/settings/frame-03.jpg",
+    "assets/gfx2/settings/frame-04.jpg",
+    "assets/gfx2/settings/frame-05.jpg",
+    "assets/gfx2/settings/frame-06.jpg",
+    "assets/gfx2/settings/frame-07.jpg",
+    "assets/gfx2/settings/frame-08.jpg",
+    "assets/gfx2/settings/frame-09.jpg"
+  ];
+  var PRE_RUN_GFX2_ALL_FRAMES = Array.from(new Set(
+    PRE_RUN_GFX2_ENTRANCE_FRAMES
+      .concat(PRE_RUN_GFX2_CLASSIC_FRAMES)
+      .concat(PRE_RUN_GFX2_ADVANCE_FRAMES)
+      .concat(PRE_RUN_GFX2_SCORES_FRAMES)
+      .concat(PRE_RUN_GFX2_BADGES_FRAMES)
+      .concat(PRE_RUN_GFX2_SHOP_FRAMES)
+      .concat(PRE_RUN_GFX2_SETTINGS_FRAMES)
+  ));
+  var preRunGfx2FrameCache = Object.create(null);
+  var preRunGfx2PreloadPromise = null;
   var preRunRulesBackBtn = document.getElementById("pre-run-rules-back-btn");
   var preRunCreditsBackBtn = document.getElementById("pre-run-credits-back-btn");
   var preRunShopBackBtn = document.getElementById("pre-run-shop-back-btn");
@@ -2035,26 +2066,61 @@ Main tuning points:
     return getStartScreenStyle() === "gfx2";
   }
 
+  function loadPreRunGfx2Frame(src) {
+    var existing = preRunGfx2FrameCache[src];
+    if (existing && existing.promise) {
+      return existing.promise;
+    }
+
+    var image = new Image();
+    image.decoding = "async";
+    var entry = {
+      image: image,
+      loaded: false,
+      promise: null
+    };
+
+    function finalizeLoad(resolve) {
+      var decodePromise = typeof image.decode === "function"
+        ? image.decode().catch(function () {})
+        : Promise.resolve();
+      decodePromise.finally(function () {
+        entry.loaded = image.naturalWidth > 0 && image.naturalHeight > 0;
+        resolve(entry);
+      });
+    }
+
+    entry.promise = new Promise(function (resolve) {
+      image.addEventListener("load", function () {
+        finalizeLoad(resolve);
+      }, { once: true });
+      image.addEventListener("error", function () {
+        entry.loaded = false;
+        resolve(entry);
+      }, { once: true });
+      image.src = src;
+      if (image.complete && image.naturalWidth > 0) {
+        finalizeLoad(resolve);
+      }
+    });
+
+    preRunGfx2FrameCache[src] = entry;
+    return entry.promise;
+  }
+
   function preloadPreRunGfx2EntranceFrames() {
-    PRE_RUN_GFX2_ENTRANCE_FRAMES.forEach(function (src) {
-      var image = new Image();
-      image.src = src;
-    });
-    PRE_RUN_GFX2_CLASSIC_FRAMES.forEach(function (src) {
-      var image = new Image();
-      image.src = src;
-    });
-    PRE_RUN_GFX2_ADVANCE_FRAMES.forEach(function (src) {
-      var image = new Image();
-      image.src = src;
-    });
-    PRE_RUN_GFX2_SCORES_FRAMES.forEach(function (src) {
-      var image = new Image();
-      image.src = src;
-    });
-    PRE_RUN_GFX2_BADGES_FRAMES.forEach(function (src) {
-      var image = new Image();
-      image.src = src;
+    if (!preRunGfx2PreloadPromise) {
+      preRunGfx2PreloadPromise = Promise.all(PRE_RUN_GFX2_ALL_FRAMES.map(loadPreRunGfx2Frame));
+    }
+    return preRunGfx2PreloadPromise;
+  }
+
+  function arePreRunGfx2FramesReady(frames) {
+    if (!Array.isArray(frames) || !frames.length) {
+      return false;
+    }
+    return frames.every(function (src) {
+      return Boolean(preRunGfx2FrameCache[src] && preRunGfx2FrameCache[src].loaded);
     });
   }
 
@@ -3940,6 +4006,10 @@ Main tuning points:
     preRunGfx2ScoresExitTime: 0,
     preRunGfx2BadgesExitActive: false,
     preRunGfx2BadgesExitTime: 0,
+    preRunGfx2ShopExitActive: false,
+    preRunGfx2ShopExitTime: 0,
+    preRunGfx2SettingsExitActive: false,
+    preRunGfx2SettingsExitTime: 0,
     preRunScores: createInitialPreRunScoresState(),
     onlineHighscore: {
       loading: false,
@@ -5085,6 +5155,8 @@ Main tuning points:
       !state.preRunGfx2AdvanceExitActive &&
       !state.preRunGfx2ScoresExitActive &&
       !state.preRunGfx2BadgesExitActive &&
+      !state.preRunGfx2ShopExitActive &&
+      !state.preRunGfx2SettingsExitActive &&
       !state.preRunLaunchActive;
   }
 
@@ -5103,6 +5175,14 @@ Main tuning points:
     }
 
     if (!getPreRunGfx2EntranceAnimationActive()) {
+      state.preRunGfx2EntranceAnimStarted = false;
+      state.preRunGfx2EntranceAnimTime = 0;
+      setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_ENTRANCE_FRAMES.length - 1);
+      return;
+    }
+
+    if (!arePreRunGfx2FramesReady(PRE_RUN_GFX2_ENTRANCE_FRAMES)) {
+      preloadPreRunGfx2EntranceFrames();
       state.preRunGfx2EntranceAnimStarted = false;
       state.preRunGfx2EntranceAnimTime = 0;
       setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_ENTRANCE_FRAMES.length - 1);
@@ -5131,6 +5211,12 @@ Main tuning points:
 
     if (!state.preRunGfx2ClassicExitActive) {
       state.preRunGfx2ClassicExitTime = 0;
+      return;
+    }
+
+    if (!arePreRunGfx2FramesReady(PRE_RUN_GFX2_CLASSIC_FRAMES)) {
+      preloadPreRunGfx2EntranceFrames();
+      setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_CLASSIC_FRAMES.length - 1, PRE_RUN_GFX2_CLASSIC_FRAMES);
       return;
     }
 
@@ -5163,6 +5249,12 @@ Main tuning points:
       return;
     }
 
+    if (!arePreRunGfx2FramesReady(PRE_RUN_GFX2_ADVANCE_FRAMES)) {
+      preloadPreRunGfx2EntranceFrames();
+      setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_ADVANCE_FRAMES.length - 1, PRE_RUN_GFX2_ADVANCE_FRAMES);
+      return;
+    }
+
     if (dt > 0) {
       state.preRunGfx2AdvanceExitTime = Math.min(1, state.preRunGfx2AdvanceExitTime + dt);
     }
@@ -5189,6 +5281,12 @@ Main tuning points:
 
     if (!state.preRunGfx2ScoresExitActive) {
       state.preRunGfx2ScoresExitTime = 0;
+      return;
+    }
+
+    if (!arePreRunGfx2FramesReady(PRE_RUN_GFX2_SCORES_FRAMES)) {
+      preloadPreRunGfx2EntranceFrames();
+      setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_SCORES_FRAMES.length - 1, PRE_RUN_GFX2_SCORES_FRAMES);
       return;
     }
 
@@ -5222,6 +5320,12 @@ Main tuning points:
       return;
     }
 
+    if (!arePreRunGfx2FramesReady(PRE_RUN_GFX2_BADGES_FRAMES)) {
+      preloadPreRunGfx2EntranceFrames();
+      setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_BADGES_FRAMES.length - 1, PRE_RUN_GFX2_BADGES_FRAMES);
+      return;
+    }
+
     if (dt > 0) {
       state.preRunGfx2BadgesExitTime = Math.min(1, state.preRunGfx2BadgesExitTime + dt);
     }
@@ -5237,6 +5341,78 @@ Main tuning points:
       state.preRunGfx2BadgesExitActive = false;
       state.preRunGfx2BadgesExitTime = 0;
       state.preRunStep = "badges";
+      renderPreRunScreen();
+    }
+  }
+
+  function updatePreRunGfx2ShopExitAnimation(dt) {
+    if (!preRunGfx2ForegroundEl) {
+      return;
+    }
+
+    if (!state.preRunGfx2ShopExitActive) {
+      state.preRunGfx2ShopExitTime = 0;
+      return;
+    }
+
+    if (!arePreRunGfx2FramesReady(PRE_RUN_GFX2_SHOP_FRAMES)) {
+      preloadPreRunGfx2EntranceFrames();
+      setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_SHOP_FRAMES.length - 1, PRE_RUN_GFX2_SHOP_FRAMES);
+      return;
+    }
+
+    if (dt > 0) {
+      state.preRunGfx2ShopExitTime = Math.min(1, state.preRunGfx2ShopExitTime + dt);
+    }
+
+    var progress = Math.max(0, Math.min(1, state.preRunGfx2ShopExitTime / 1));
+    var frameIndex = Math.min(
+      PRE_RUN_GFX2_SHOP_FRAMES.length - 1,
+      Math.floor(progress * PRE_RUN_GFX2_SHOP_FRAMES.length)
+    );
+    setPreRunGfx2ForegroundFrame(frameIndex, PRE_RUN_GFX2_SHOP_FRAMES);
+
+    if (progress >= 1) {
+      state.preRunGfx2ShopExitActive = false;
+      state.preRunGfx2ShopExitTime = 0;
+      playUiPageOpenSound();
+      state.preRunStep = "shop";
+      renderPreRunScreen();
+    }
+  }
+
+  function updatePreRunGfx2SettingsExitAnimation(dt) {
+    if (!preRunGfx2ForegroundEl) {
+      return;
+    }
+
+    if (!state.preRunGfx2SettingsExitActive) {
+      state.preRunGfx2SettingsExitTime = 0;
+      return;
+    }
+
+    if (!arePreRunGfx2FramesReady(PRE_RUN_GFX2_SETTINGS_FRAMES)) {
+      preloadPreRunGfx2EntranceFrames();
+      setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_SETTINGS_FRAMES.length - 1, PRE_RUN_GFX2_SETTINGS_FRAMES);
+      return;
+    }
+
+    if (dt > 0) {
+      state.preRunGfx2SettingsExitTime = Math.min(1, state.preRunGfx2SettingsExitTime + dt);
+    }
+
+    var progress = Math.max(0, Math.min(1, state.preRunGfx2SettingsExitTime / 1));
+    var frameIndex = Math.min(
+      PRE_RUN_GFX2_SETTINGS_FRAMES.length - 1,
+      Math.floor(progress * PRE_RUN_GFX2_SETTINGS_FRAMES.length)
+    );
+    setPreRunGfx2ForegroundFrame(frameIndex, PRE_RUN_GFX2_SETTINGS_FRAMES);
+
+    if (progress >= 1) {
+      state.preRunGfx2SettingsExitActive = false;
+      state.preRunGfx2SettingsExitTime = 0;
+      playUiPageOpenSound();
+      state.preRunStep = "settings";
       renderPreRunScreen();
     }
   }
@@ -6474,7 +6650,14 @@ Main tuning points:
     }
     if (preRunGfx2ClassicBtn) {
       preRunGfx2ClassicBtn.addEventListener("click", function () {
-        if (state.preRunGfx2ClassicExitActive) {
+        if (
+          state.preRunGfx2ClassicExitActive ||
+          state.preRunGfx2AdvanceExitActive ||
+          state.preRunGfx2ScoresExitActive ||
+          state.preRunGfx2BadgesExitActive ||
+          state.preRunGfx2ShopExitActive ||
+          state.preRunGfx2SettingsExitActive
+        ) {
           return;
         }
         unlockAudioIfNeeded();
@@ -6494,7 +6677,14 @@ Main tuning points:
     }
     if (preRunGfx2AdvancedBtn) {
       preRunGfx2AdvancedBtn.addEventListener("click", function () {
-        if (state.preRunGfx2ClassicExitActive || state.preRunGfx2AdvanceExitActive) {
+        if (
+          state.preRunGfx2ClassicExitActive ||
+          state.preRunGfx2AdvanceExitActive ||
+          state.preRunGfx2ScoresExitActive ||
+          state.preRunGfx2BadgesExitActive ||
+          state.preRunGfx2ShopExitActive ||
+          state.preRunGfx2SettingsExitActive
+        ) {
           return;
         }
         unlockAudioIfNeeded();
@@ -6525,7 +6715,14 @@ Main tuning points:
     }
     if (preRunGfx2BadgesBtn) {
       preRunGfx2BadgesBtn.addEventListener("click", function () {
-        if (state.preRunGfx2ClassicExitActive || state.preRunGfx2AdvanceExitActive || state.preRunGfx2ScoresExitActive || state.preRunGfx2BadgesExitActive) {
+        if (
+          state.preRunGfx2ClassicExitActive ||
+          state.preRunGfx2AdvanceExitActive ||
+          state.preRunGfx2ScoresExitActive ||
+          state.preRunGfx2BadgesExitActive ||
+          state.preRunGfx2ShopExitActive ||
+          state.preRunGfx2SettingsExitActive
+        ) {
           return;
         }
         unlockAudioIfNeeded();
@@ -6556,6 +6753,22 @@ Main tuning points:
     function openPreRunShop() {
       unlockAudioIfNeeded();
       playUiButtonSound();
+      if (isGfx2StartScreenEnabled() && state.preRunStep === "select") {
+        if (
+          state.preRunGfx2ClassicExitActive ||
+          state.preRunGfx2AdvanceExitActive ||
+          state.preRunGfx2ScoresExitActive ||
+          state.preRunGfx2BadgesExitActive ||
+          state.preRunGfx2ShopExitActive ||
+          state.preRunGfx2SettingsExitActive
+        ) {
+          return;
+        }
+        state.preRunGfx2ShopExitActive = true;
+        state.preRunGfx2ShopExitTime = 0;
+        setPreRunGfx2ForegroundFrame(0, PRE_RUN_GFX2_SHOP_FRAMES);
+        return;
+      }
       playUiPageOpenSound();
       state.preRunStep = "shop";
       renderPreRunScreen();
@@ -6577,8 +6790,24 @@ Main tuning points:
     }
     if (preRunGfx2SettingsBtn) {
       preRunGfx2SettingsBtn.addEventListener("click", function () {
+        if (
+          state.preRunGfx2ClassicExitActive ||
+          state.preRunGfx2AdvanceExitActive ||
+          state.preRunGfx2ScoresExitActive ||
+          state.preRunGfx2BadgesExitActive ||
+          state.preRunGfx2ShopExitActive ||
+          state.preRunGfx2SettingsExitActive
+        ) {
+          return;
+        }
         unlockAudioIfNeeded();
         playUiButtonSound();
+        if (isGfx2StartScreenEnabled() && state.preRunStep === "select") {
+          state.preRunGfx2SettingsExitActive = true;
+          state.preRunGfx2SettingsExitTime = 0;
+          setPreRunGfx2ForegroundFrame(0, PRE_RUN_GFX2_SETTINGS_FRAMES);
+          return;
+        }
         playUiPageOpenSound();
         state.preRunStep = "settings";
         renderPreRunScreen();
@@ -6613,7 +6842,14 @@ Main tuning points:
     }
     if (preRunGfx2ScoresBtn) {
       preRunGfx2ScoresBtn.addEventListener("click", function () {
-        if (state.preRunGfx2ClassicExitActive || state.preRunGfx2AdvanceExitActive || state.preRunGfx2ScoresExitActive) {
+        if (
+          state.preRunGfx2ClassicExitActive ||
+          state.preRunGfx2AdvanceExitActive ||
+          state.preRunGfx2ScoresExitActive ||
+          state.preRunGfx2BadgesExitActive ||
+          state.preRunGfx2ShopExitActive ||
+          state.preRunGfx2SettingsExitActive
+        ) {
           return;
         }
         unlockAudioIfNeeded();
@@ -8815,6 +9051,10 @@ Main tuning points:
         updatePreRunGfx2ScoresExitAnimation(dt);
       } else if (state.preRunGfx2BadgesExitActive) {
         updatePreRunGfx2BadgesExitAnimation(dt);
+      } else if (state.preRunGfx2ShopExitActive) {
+        updatePreRunGfx2ShopExitAnimation(dt);
+      } else if (state.preRunGfx2SettingsExitActive) {
+        updatePreRunGfx2SettingsExitAnimation(dt);
       } else {
         updatePreRunGfx2EntranceAnimation(dt);
       }

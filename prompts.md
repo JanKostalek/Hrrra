@@ -804,3 +804,22 @@ dobre. ted, kdyz se klikne na tlacítko klassic, tak vezmi ze složky c:\-_WeB_-\H
 2026-04-07: 'uprav je do formatu JPG'
 
 2026-04-07: 'zkusím tedy nový release. priprav aab'
+
+2026-04-07: 'do temp/entrance jsem nahral soubor entrance_shop.jpg. Oproti standardním frames je v obrázk pridaný domek a nápis shop. dokážeš jej zkopírovat do vsech frames ve slozce gfx2/entrance - aby byl presne na stejném míste, stejne velký a konzistentní? je to ten domek zakroužkovaný. ten kroužek tam ale samozrejme nechci - lepsí si to vytáhnout z toho souboru jak jsem psal'
+
+2026-04-07: 'super, ted uplne stejným zpusobem na stejné místo dopln tu grafiku (domek a nápis) do gfx2/scores, classic, badges a advance'
+
+2026-04-07: 'a nyní jeste pro složku shop'
+
+2026-04-07: 'uz tam ta slozka je'
+
+2026-04-07: 'ted jeste jednou over, že starscreen gfx2 se preloaduje ci jinak nacachuje, aby nedocházelo k blikání ani na lokale ani na androidu. na lokale kde to ted zousim, tak to stale bliká. kdyz pak kliknu na back, tak uz nikoliv. android vyzkousim az za chvili'
+
+2026-04-07: 'ten posledí aab jsem neposílal do store. takže mi uprav nový, ale nemusís zvedat verzi, protoze tato na store jeste není.'
+
+2026-04-07: 'ten posledí aab jsem neposílal do store. takže mi uprav nový, ale nemusís zvedat verzi, protoze tato na store jeste není.'
+2026-04-07: 'Zapomnel jsem na jednu vec, kterou ješte chci udelat. Zmen tlacítko Shop z mraku na nový domek. Z mraku odstran nápis ""shop"". Mrak jako takový tam nech. Domek udelej overlay tlacítko. Nápis shop není potreba pridávat, protoze uz tam je. Zároven ješte udelej ze složky shop animaci po kliknutí na tlacítko shop. AAB ted jeste nedelej. overím na lokále a pak jej pripravíme'
+2026-04-07: 'ty jsi tam grafiku domku pridal. ale ona uz v tom obrázku je natvrdo. stacilo kolem ni udelat overlay button - tak jak je znázorneno na prilozeném obrázku. ten mensí domek co jsi pridal mužes odstranit.'
+2026-04-07: 'dve veci a) button toho domku zustal tam kde byl puvoden ten pridaný. je potreba jej posunout trochu víc doprava - az ke kraji a zároven jej zvetšit. b) dopln grafiku domku a napisu shop stejne jako drív i do slogky gfx settings a následne udelej prehrávání sekvence po kliknutí na settings'
+2026-04-07: 'tlacítko shop chce posunout jeste víc doleva. stále není nad grafikou domku'
+2026-04-07: 'hitbox je zcela mimo domek. je prílis vlevo a napravo není az na krají okna. na obrázku je znázorneno, jak má být'
