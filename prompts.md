@@ -823,3 +823,4 @@ dobre. ted, kdyz se klikne na tlacítko klassic, tak vezmi ze složky c:\-_WeB_-\H
 2026-04-07: 'dve veci a) button toho domku zustal tam kde byl puvoden ten pridaný. je potreba jej posunout trochu víc doprava - az ke kraji a zároven jej zvetšit. b) dopln grafiku domku a napisu shop stejne jako drív i do slogky gfx settings a následne udelej prehrávání sekvence po kliknutí na settings'
 2026-04-07: 'tlacítko shop chce posunout jeste víc doleva. stále není nad grafikou domku'
 2026-04-07: 'hitbox je zcela mimo domek. je prílis vlevo a napravo není az na krají okna. na obrázku je znázorneno, jak má být'
+2026-04-07: 'tak ano, uprav to hned a rovnou to commitni na online, abych se mohl zkusit podivat'
