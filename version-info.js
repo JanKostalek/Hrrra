@@ -1,9 +1,9 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 24,
-  versionName: "1.0.23",
+  versionCode: 25,
+  versionName: "1.0.24",
   whatsNew: [
-  "GFX2 now includes baked transitions for Classic, Advanced, Scores, and Badges while GFX1 remains the default start screen for regular players.",
-  "The mobile pre-run/start screen now behaves like a fullscreen overlay instead of a smaller window over the game HUD.",
-  "Compressed GFX2 frame sequences from PNG to JPG to reduce first-load flicker and improve caching on web and Android."
+  "GFX2 now includes dedicated back-transition animations for Classic, Advanced, Badges, Scores, Shop, and Settings instead of replaying the entrance every time.",
+  "Pre-run scrolling was restored on Classic, Advanced, Badges, and related fullscreen mobile overview screens.",
+  "End Run after the last-life continue offer now skips the redundant second Game Over step and returns directly to pre-run."
 ]
 });

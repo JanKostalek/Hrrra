@@ -58,6 +58,7 @@ This file captures standing project workflow conventions so they do not get lost
   - `versionCode`
   - `versionName` when appropriate
   - in-game/update metadata that must match the shipped build
+- Never reuse the previous release version when preparing a new `.aab`; every `.aab` preparation must bump the release version first.
 - Always ensure the Android packaged public assets contain the same version/update files as the web root so the app does not falsely report that a newer Store version exists immediately after install/update.
 - Unless the user explicitly says otherwise, `prepare aab` should include all of this:
   - commit the intended release changes

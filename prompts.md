@@ -838,3 +838,4 @@ a nezapomínej vse zapisovat do prompts.md
 na stránkach classic, advanced, badges nejde scrolovat
 kdyz ztratím poslední život, objeví se obrazovka , kde mužu continue nebo end run. kdyz dám end run, tak se objeví jeste jednou gameover obrazovka se score a musím jeste jednou kliknout. to druhé uz je zbytecné. po "end run" tu druhou preskocit.
 priprav commit lokal, online, aab
+urcite navys verzi. Delej to vzdy, kdyz pripravujes aab. to si zapis do pravidel!
