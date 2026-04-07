@@ -131,31 +131,48 @@ Main tuning points:
   var preRunGfx2ScoresBtn = document.getElementById("pre-run-gfx2-scores-btn");
   var preRunGfx2LockNoteEl = document.getElementById("pre-run-gfx2-lock-note");
   var PRE_RUN_GFX2_ENTRANCE_FRAMES = [
-    "assets/gfx2/entrance/frame-01.png",
-    "assets/gfx2/entrance/frame-02.png",
-    "assets/gfx2/entrance/frame-03.png",
-    "assets/gfx2/entrance/frame-04.png",
-    "assets/gfx2/entrance/frame-05.png",
-    "assets/gfx2/entrance/frame-06.png",
-    "assets/gfx2/entrance/frame-07.png",
-    "assets/gfx2/entrance/frame-08.png"
+    "assets/gfx2/entrance/frame-01.jpg",
+    "assets/gfx2/entrance/frame-02.jpg",
+    "assets/gfx2/entrance/frame-03.jpg",
+    "assets/gfx2/entrance/frame-04.jpg",
+    "assets/gfx2/entrance/frame-05.jpg",
+    "assets/gfx2/entrance/frame-06.jpg",
+    "assets/gfx2/entrance/frame-07.jpg",
+    "assets/gfx2/entrance/frame-08.jpg"
   ];
   var PRE_RUN_GFX2_CLASSIC_FRAMES = [
-    "assets/gfx2/classic/frame-01.png",
-    "assets/gfx2/classic/frame-02.png",
-    "assets/gfx2/classic/frame-03.png",
-    "assets/gfx2/classic/frame-04.png",
-    "assets/gfx2/classic/frame-05.png",
-    "assets/gfx2/classic/frame-06.png",
-    "assets/gfx2/classic/frame-07.png"
+    "assets/gfx2/classic/frame-01.jpg",
+    "assets/gfx2/classic/frame-02.jpg",
+    "assets/gfx2/classic/frame-03.jpg",
+    "assets/gfx2/classic/frame-04.jpg",
+    "assets/gfx2/classic/frame-05.jpg",
+    "assets/gfx2/classic/frame-06.jpg",
+    "assets/gfx2/classic/frame-07.jpg"
   ];
   var PRE_RUN_GFX2_ADVANCE_FRAMES = [
-    "assets/gfx2/advance/frame-01.png",
-    "assets/gfx2/advance/frame-02.png",
-    "assets/gfx2/advance/frame-03.png",
-    "assets/gfx2/advance/frame-04.png",
-    "assets/gfx2/advance/frame-05.png",
-    "assets/gfx2/advance/frame-06.png"
+    "assets/gfx2/advance/frame-01.jpg",
+    "assets/gfx2/advance/frame-02.jpg",
+    "assets/gfx2/advance/frame-03.jpg",
+    "assets/gfx2/advance/frame-04.jpg",
+    "assets/gfx2/advance/frame-05.jpg",
+    "assets/gfx2/advance/frame-06.jpg"
+  ];
+  var PRE_RUN_GFX2_SCORES_FRAMES = [
+    "assets/gfx2/scores/frame-01.jpg",
+    "assets/gfx2/scores/frame-02.jpg",
+    "assets/gfx2/scores/frame-03.jpg",
+    "assets/gfx2/scores/frame-04.jpg",
+    "assets/gfx2/scores/frame-05.jpg"
+  ];
+  var PRE_RUN_GFX2_BADGES_FRAMES = [
+    "assets/gfx2/badges/frame-01.jpg",
+    "assets/gfx2/badges/frame-02.jpg",
+    "assets/gfx2/badges/frame-03.jpg",
+    "assets/gfx2/badges/frame-04.jpg",
+    "assets/gfx2/badges/frame-05.jpg",
+    "assets/gfx2/badges/frame-06.jpg",
+    "assets/gfx2/badges/frame-07.jpg",
+    "assets/gfx2/badges/frame-08.jpg"
   ];
   var preRunRulesBackBtn = document.getElementById("pre-run-rules-back-btn");
   var preRunCreditsBackBtn = document.getElementById("pre-run-credits-back-btn");
@@ -2028,6 +2045,14 @@ Main tuning points:
       image.src = src;
     });
     PRE_RUN_GFX2_ADVANCE_FRAMES.forEach(function (src) {
+      var image = new Image();
+      image.src = src;
+    });
+    PRE_RUN_GFX2_SCORES_FRAMES.forEach(function (src) {
+      var image = new Image();
+      image.src = src;
+    });
+    PRE_RUN_GFX2_BADGES_FRAMES.forEach(function (src) {
       var image = new Image();
       image.src = src;
     });
@@ -3911,6 +3936,10 @@ Main tuning points:
     preRunGfx2ClassicExitTime: 0,
     preRunGfx2AdvanceExitActive: false,
     preRunGfx2AdvanceExitTime: 0,
+    preRunGfx2ScoresExitActive: false,
+    preRunGfx2ScoresExitTime: 0,
+    preRunGfx2BadgesExitActive: false,
+    preRunGfx2BadgesExitTime: 0,
     preRunScores: createInitialPreRunScoresState(),
     onlineHighscore: {
       loading: false,
@@ -5054,6 +5083,8 @@ Main tuning points:
       isGfx2StartScreenEnabled() &&
       !state.preRunGfx2ClassicExitActive &&
       !state.preRunGfx2AdvanceExitActive &&
+      !state.preRunGfx2ScoresExitActive &&
+      !state.preRunGfx2BadgesExitActive &&
       !state.preRunLaunchActive;
   }
 
@@ -5148,6 +5179,65 @@ Main tuning points:
       state.preRunGfx2AdvanceExitTime = 0;
       playUiPageOpenSound();
       openPreRunModeDetails(1);
+    }
+  }
+
+  function updatePreRunGfx2ScoresExitAnimation(dt) {
+    if (!preRunGfx2ForegroundEl) {
+      return;
+    }
+
+    if (!state.preRunGfx2ScoresExitActive) {
+      state.preRunGfx2ScoresExitTime = 0;
+      return;
+    }
+
+    if (dt > 0) {
+      state.preRunGfx2ScoresExitTime = Math.min(1, state.preRunGfx2ScoresExitTime + dt);
+    }
+
+    var progress = Math.max(0, Math.min(1, state.preRunGfx2ScoresExitTime / 1));
+    var frameIndex = Math.min(
+      PRE_RUN_GFX2_SCORES_FRAMES.length - 1,
+      Math.floor(progress * PRE_RUN_GFX2_SCORES_FRAMES.length)
+    );
+    setPreRunGfx2ForegroundFrame(frameIndex, PRE_RUN_GFX2_SCORES_FRAMES);
+
+    if (progress >= 1) {
+      state.preRunGfx2ScoresExitActive = false;
+      state.preRunGfx2ScoresExitTime = 0;
+      state.preRunStep = "scores";
+      renderPreRunScreen();
+      loadPreRunScoresBoards();
+    }
+  }
+
+  function updatePreRunGfx2BadgesExitAnimation(dt) {
+    if (!preRunGfx2ForegroundEl) {
+      return;
+    }
+
+    if (!state.preRunGfx2BadgesExitActive) {
+      state.preRunGfx2BadgesExitTime = 0;
+      return;
+    }
+
+    if (dt > 0) {
+      state.preRunGfx2BadgesExitTime = Math.min(1, state.preRunGfx2BadgesExitTime + dt);
+    }
+
+    var progress = Math.max(0, Math.min(1, state.preRunGfx2BadgesExitTime / 1));
+    var frameIndex = Math.min(
+      PRE_RUN_GFX2_BADGES_FRAMES.length - 1,
+      Math.floor(progress * PRE_RUN_GFX2_BADGES_FRAMES.length)
+    );
+    setPreRunGfx2ForegroundFrame(frameIndex, PRE_RUN_GFX2_BADGES_FRAMES);
+
+    if (progress >= 1) {
+      state.preRunGfx2BadgesExitActive = false;
+      state.preRunGfx2BadgesExitTime = 0;
+      state.preRunStep = "badges";
+      renderPreRunScreen();
     }
   }
 
@@ -6435,10 +6525,14 @@ Main tuning points:
     }
     if (preRunGfx2BadgesBtn) {
       preRunGfx2BadgesBtn.addEventListener("click", function () {
+        if (state.preRunGfx2ClassicExitActive || state.preRunGfx2AdvanceExitActive || state.preRunGfx2ScoresExitActive || state.preRunGfx2BadgesExitActive) {
+          return;
+        }
         unlockAudioIfNeeded();
         playUiButtonSound();
-        state.preRunStep = "badges";
-        renderPreRunScreen();
+        state.preRunGfx2BadgesExitActive = true;
+        state.preRunGfx2BadgesExitTime = 0;
+        setPreRunGfx2ForegroundFrame(0, PRE_RUN_GFX2_BADGES_FRAMES);
       });
     }
     if (preRunRulesBtn) {
@@ -6519,11 +6613,14 @@ Main tuning points:
     }
     if (preRunGfx2ScoresBtn) {
       preRunGfx2ScoresBtn.addEventListener("click", function () {
+        if (state.preRunGfx2ClassicExitActive || state.preRunGfx2AdvanceExitActive || state.preRunGfx2ScoresExitActive) {
+          return;
+        }
         unlockAudioIfNeeded();
         playUiButtonSound();
-        state.preRunStep = "scores";
-        renderPreRunScreen();
-        loadPreRunScoresBoards();
+        state.preRunGfx2ScoresExitActive = true;
+        state.preRunGfx2ScoresExitTime = 0;
+        setPreRunGfx2ForegroundFrame(0, PRE_RUN_GFX2_SCORES_FRAMES);
       });
     }
     if (preRunBadgesBackBtn) {
@@ -8714,6 +8811,10 @@ Main tuning points:
         updatePreRunGfx2ClassicExitAnimation(dt);
       } else if (state.preRunGfx2AdvanceExitActive) {
         updatePreRunGfx2AdvanceExitAnimation(dt);
+      } else if (state.preRunGfx2ScoresExitActive) {
+        updatePreRunGfx2ScoresExitAnimation(dt);
+      } else if (state.preRunGfx2BadgesExitActive) {
+        updatePreRunGfx2BadgesExitAnimation(dt);
       } else {
         updatePreRunGfx2EntranceAnimation(dt);
       }

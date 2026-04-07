@@ -794,3 +794,13 @@ dobre. ted, kdyz se klikne na tlacítko klassic, tak vezmi ze složky c:\-_WeB_-\H
 2026-04-07: 'Je potreba, aby se ty mraky taky zmenšovaly podle velikosti okna. nesmí zasahovat do krajny a rozcestníku. je to možné udelat? prípadne je natvrdo zmenšíme a ukotvíme tak, aby nezasahovaly. každopádne bych mrak credits posunul trochu doleva  vcetne overlay tlacítka, aby se ani tlacítka neprekrývala Credits / advanced'
 
 2026-04-07: 'je potreba jeste kousek. jeste zasahuje do rozcestníku'
+
+2026-04-07: 'pri kliknutí na scores použij frames z c:\-_WeB_-\Hrrra\assets\temp\scores\ ve stejné logice jako predtím'
+
+2026-04-07: 'c:\-_WeB_-\Hrrra\assets\temp\badges - totéž jeste pro badges tlacítko'
+
+2026-04-07: 'kdyz pustím hru na androidu, tak start screen je v okne, které je pres pozadí hry, která ale vubec jeste nebyla spustena. tím ze to je okno, tak to nevyužívá celou obrazovku. To okno, pokud to musí být v okne, by melo zabírat celou screen a nikoliv její výrez, protoze potom se tam nevejde co se vejít má. Navíc tam vidím i treba tlacítko admin, které ale je soucástí té nespustené hry a tudít stejne nefunguje. mužeš to roztahnout?  at je to responzivní, ale na celý screen?'
+
+2026-04-07: 'uprav je do formatu JPG'
+
+2026-04-07: 'zkusím tedy nový release. priprav aab'

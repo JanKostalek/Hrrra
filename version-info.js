@@ -1,9 +1,9 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 22,
-  versionName: "1.0.21",
+  versionCode: 23,
+  versionName: "1.0.22",
   whatsNew: [
-  "Added the first GFX2 crossroads start screen behind the admin Start screen style toggle while keeping GFX1 as the default public view.",
-  "GFX2 now plays baked entrance, Classic, and Advanced scene transitions instead of the temporary debug path and moving figure overlay.",
-  "Improved GFX2 mobile responsiveness by stretching the scene to the viewport and retuning cloud placement, layering, and hotspot alignment."
+  "GFX2 now includes baked transitions for Classic, Advanced, Scores, and Badges while GFX1 remains the default start screen for regular players.",
+  "The mobile pre-run/start screen now behaves like a fullscreen overlay instead of a smaller window over the game HUD.",
+  "Compressed GFX2 frame sequences from PNG to JPG to reduce first-load flicker and improve caching on web and Android."
 ]
 });
