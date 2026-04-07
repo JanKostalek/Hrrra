@@ -721,3 +721,4 @@ Rules:
 - 2026-04-07: Replaced the clickable GFX2 `Shop` cloud with a separate house overlay button that sits over the new shop marker, while leaving the cloud itself as background decoration without the text label. Clicking the house now plays the baked [`assets/gfx2/shop/`](c:/-_WeB_-/Hrrra/assets/gfx2/shop) transition frames before opening the shop screen.
 - 2026-04-07: Enlarged and nudged the invisible GFX2 shop-house hitbox further toward the right edge so it better covers the baked house marker already painted into the crossroads background frames.
 - 2026-04-07: Added the same Shop house/sign artwork to the baked [`assets/gfx2/settings/`](c:/-_WeB_-/Hrrra/assets/gfx2/settings/) frame sequence and wired `Settings` to play those frames over `1s` before opening the settings screen.
+- 2026-04-07: Simplified the Game Over `End Run` action so it now skips the redundant second Game Over state and jumps straight to the finalized end-of-run summary.

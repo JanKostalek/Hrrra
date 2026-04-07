@@ -825,3 +825,4 @@ dobre. ted, kdyz se klikne na tlacítko klassic, tak vezmi ze složky c:\-_WeB_-\H
 2026-04-07: 'hitbox je zcela mimo domek. je prílis vlevo a napravo není az na krají okna. na obrázku je znázorneno, jak má být'
 2026-04-07: 'tak ano, uprav to hned a rovnou to commitni na online, abych se mohl zkusit podivat'
 2026-04-07: 'na šírku displej porad je jen do pulky obrazovky, kdyz je na výšku, tak je odshora az dolu....'
+2026-04-07: 'zda se, ze ted uz to sedí. zmen jeste jednu vec. na game over screen, kdyz klikneme na end run, tak zustane dal ta obrazovka, jen zmizi ty buttons. to je zbytecný. rovnou tu druhou mužeš preskocit'

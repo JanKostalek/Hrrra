@@ -6991,7 +6991,7 @@ Main tuning points:
         if (!state.continueOfferActive) {
           return;
         }
-        completeRunAndPresentGameOver(true);
+        completeRunAndPresentGameOver(false);
       });
     }
     if (continuePurchaseBuyBtn) {
