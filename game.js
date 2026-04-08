@@ -290,6 +290,23 @@ Main tuning points:
   var preRunShopBuyKrobBtn = document.getElementById("pre-run-shop-buy-krob-btn");
   var preRunShopKrobStatusEl = document.getElementById("pre-run-shop-krob-status");
   var preRunShopSpecialLevelStatusEl = document.getElementById("pre-run-shop-special-level-status");
+  var preRunShopGfx1El = document.getElementById("pre-run-shop-gfx1");
+  var preRunShopGfx2El = document.getElementById("pre-run-shop-gfx2");
+  var preRunShopGfx2ExitBtn = document.getElementById("pre-run-shop-gfx2-exit-btn");
+  var preRunShopGfx2NewLevelBtn = document.getElementById("pre-run-shop-gfx2-new-level-btn");
+  var preRunShopGfx2SkinCatBtn = document.getElementById("pre-run-shop-gfx2-skin-cat-btn");
+  var preRunShopGfx2SkinGhostBtn = document.getElementById("pre-run-shop-gfx2-skin-ghost-btn");
+  var preRunShopGfx2SkinWizardBtn = document.getElementById("pre-run-shop-gfx2-skin-wizard-btn");
+  var preRunShopGfx2ChestBtn = document.getElementById("pre-run-shop-gfx2-chest-btn");
+  var preRunShopGfx2CoinOneBtn = document.getElementById("pre-run-shop-gfx2-coin-one-btn");
+  var preRunShopGfx2CoinTenBtn = document.getElementById("pre-run-shop-gfx2-coin-ten-btn");
+  var preRunShopGfx2TotalValueEl = document.getElementById("pre-run-shop-gfx2-total-value");
+  var preRunShopGfx2WalletValueEl = document.getElementById("pre-run-shop-gfx2-wallet-value");
+  var preRunShopGfx2SelectionLabelEl = document.getElementById("pre-run-shop-gfx2-selection-label");
+  var preRunShopGfx2SelectionValueEl = document.getElementById("pre-run-shop-gfx2-selection-value");
+  var preRunShopGfx2CostValueEl = document.getElementById("pre-run-shop-gfx2-cost-value");
+  var preRunShopGfx2StatusEl = document.getElementById("pre-run-shop-gfx2-status");
+  var preRunShopGfx2BuyBtn = document.getElementById("pre-run-shop-gfx2-buy-btn");
   var preRunBadgesTotalValueEl = document.getElementById("pre-run-badges-total-value");
   var preRunBadgesTotalLabelEl = document.getElementById("pre-run-badges-total-label");
   var preRunFullLockEl = document.getElementById("pre-run-full-lock");
@@ -4096,6 +4113,9 @@ Main tuning points:
     preRunGfx2ShopExitTime: 0,
     preRunGfx2SettingsExitActive: false,
     preRunGfx2SettingsExitTime: 0,
+    preRunGfx2ShopSelection: "coin-one",
+    preRunGfx2ShopStatus: "",
+    preRunGfx2ShopStatusTone: "info",
     preRunScores: createInitialPreRunScoresState(),
     onlineHighscore: {
       loading: false,
@@ -6639,6 +6659,120 @@ Main tuning points:
     }
   }
 
+  function getPreRunGfx2ShopItems() {
+    var scorePerCoin = sanitizeGlobalAdminNumber("shopScorePerCoin", C.shopScorePerCoin);
+    var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
+    var specialLevelPrice = sanitizeGlobalAdminNumber("shopSpecialLevelPrice", C.shopSpecialLevelPrice);
+
+    return {
+      "coin-one": {
+        key: "coin-one",
+        label: "Buy 1 Coin",
+        cost: scorePerCoin,
+        costUnit: "score",
+        type: "score-exchange",
+        amount: 1
+      },
+      "coin-ten": {
+        key: "coin-ten",
+        label: "Buy 10 Coins",
+        cost: scorePerCoin * 10,
+        costUnit: "score",
+        type: "score-exchange",
+        amount: 10
+      },
+      "new-level": {
+        key: "new-level",
+        label: "New Level (Placeholder)",
+        cost: specialLevelPrice,
+        costUnit: "coins",
+        type: "placeholder"
+      },
+      "skin-cat": {
+        key: "skin-cat",
+        label: "Cat Character (Placeholder)",
+        cost: krobPrice,
+        costUnit: "coins",
+        type: "placeholder"
+      },
+      "skin-ghost": {
+        key: "skin-ghost",
+        label: "Ghost Character (Placeholder)",
+        cost: krobPrice + 50,
+        costUnit: "coins",
+        type: "placeholder"
+      },
+      "skin-wizard": {
+        key: "skin-wizard",
+        label: "Wizard Character (Placeholder)",
+        cost: krobPrice + 100,
+        costUnit: "coins",
+        type: "placeholder"
+      },
+      chest: {
+        key: "chest",
+        label: "Chest Item (Placeholder)",
+        cost: specialLevelPrice,
+        costUnit: "coins",
+        type: "placeholder"
+      }
+    };
+  }
+
+  function formatPreRunGfx2ShopCost(item) {
+    if (!item) {
+      return "-";
+    }
+    var unitText = item.costUnit === "score" ? "score" : "coins";
+    return Math.max(0, Math.floor(Number(item.cost) || 0)).toLocaleString("en-US") + " " + unitText;
+  }
+
+  function selectPreRunGfx2ShopItem(itemKey) {
+    var items = getPreRunGfx2ShopItems();
+    if (!items[itemKey]) {
+      return;
+    }
+    state.preRunGfx2ShopSelection = itemKey;
+    state.preRunGfx2ShopStatus = "";
+    state.preRunGfx2ShopStatusTone = "info";
+    renderPreRunShopScreen();
+  }
+
+  function handlePreRunShopBackNavigation() {
+    if (isGfx2StartScreenEnabled()) {
+      startPreRunGfx2BackAnimation(PRE_RUN_GFX2_SHOP_BACK_FRAMES);
+      return;
+    }
+    playUiPageOpenSound();
+    state.preRunStep = "select";
+    renderPreRunScreen();
+  }
+
+  function handlePreRunGfx2ShopPurchase() {
+    var items = getPreRunGfx2ShopItems();
+    var selectedItem = items[state.preRunGfx2ShopSelection] || items["coin-one"];
+    if (!selectedItem) {
+      return;
+    }
+
+    if (selectedItem.type === "score-exchange") {
+      if (exchangePersistentScoreForCoins(selectedItem.amount)) {
+        state.preRunGfx2ShopStatus = "Purchased " + selectedItem.amount + " coin" + (selectedItem.amount === 1 ? "" : "s") + ".";
+        state.preRunGfx2ShopStatusTone = "success";
+        renderAdminForm();
+      } else {
+        state.preRunGfx2ShopStatus = "Not enough total points for this purchase.";
+        state.preRunGfx2ShopStatusTone = "error";
+      }
+      renderPreRunShopScreen();
+      return;
+    }
+
+    state.preRunGfx2ShopStatus = "Placeholder item. This purchase will be enabled later.";
+    state.preRunGfx2ShopStatusTone = "info";
+    renderPreRunShopScreen();
+  }
+
   function renderPreRunShopScreen() {
     var scorePerCoin = sanitizeGlobalAdminNumber("shopScorePerCoin", C.shopScorePerCoin);
     var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
@@ -6648,6 +6782,14 @@ Main tuning points:
     var canBuyOneCoin = persistentScore >= scorePerCoin;
     var canBuyTenCoins = persistentScore >= scorePerCoin * 10;
     var krobOwned = isSkinUnlocked("Skin04");
+    var useGfx2StartScreen = isGfx2StartScreenEnabled();
+
+    if (preRunShopGfx1El) {
+      preRunShopGfx1El.classList.toggle("hidden", useGfx2StartScreen);
+    }
+    if (preRunShopGfx2El) {
+      preRunShopGfx2El.classList.toggle("hidden", !useGfx2StartScreen);
+    }
 
     if (preRunShopWalletEl) {
       preRunShopWalletEl.textContent = walletBalance.toLocaleString("en-US");
@@ -6688,6 +6830,56 @@ Main tuning points:
       preRunShopSpecialLevelStatusEl.textContent =
         "Placeholder only. Future price: " + specialLevelPrice.toLocaleString("en-US") + " coins.";
     }
+
+    if (!useGfx2StartScreen) {
+      return;
+    }
+
+    var gfx2Items = getPreRunGfx2ShopItems();
+    if (!gfx2Items[state.preRunGfx2ShopSelection]) {
+      state.preRunGfx2ShopSelection = "coin-one";
+    }
+    var selectedItem = gfx2Items[state.preRunGfx2ShopSelection] || gfx2Items["coin-one"];
+
+    if (preRunShopGfx2TotalValueEl) {
+      preRunShopGfx2TotalValueEl.textContent = persistentScore.toLocaleString("en-US");
+    }
+    if (preRunShopGfx2WalletValueEl) {
+      preRunShopGfx2WalletValueEl.textContent = walletBalance.toLocaleString("en-US");
+    }
+    if (preRunShopGfx2SelectionLabelEl) {
+      preRunShopGfx2SelectionLabelEl.textContent = "Selected Item";
+    }
+    if (preRunShopGfx2SelectionValueEl) {
+      preRunShopGfx2SelectionValueEl.textContent = selectedItem ? selectedItem.label : "-";
+    }
+    if (preRunShopGfx2CostValueEl) {
+      preRunShopGfx2CostValueEl.textContent = formatPreRunGfx2ShopCost(selectedItem);
+    }
+    if (preRunShopGfx2StatusEl) {
+      var statusText = state.preRunGfx2ShopStatus || "Select an item and press Buy.";
+      preRunShopGfx2StatusEl.textContent = statusText;
+      preRunShopGfx2StatusEl.classList.toggle("is-error", state.preRunGfx2ShopStatusTone === "error");
+      preRunShopGfx2StatusEl.classList.toggle("is-success", state.preRunGfx2ShopStatusTone === "success");
+    }
+
+    var shopButtons = [
+      { button: preRunShopGfx2CoinOneBtn, key: "coin-one" },
+      { button: preRunShopGfx2CoinTenBtn, key: "coin-ten" },
+      { button: preRunShopGfx2NewLevelBtn, key: "new-level" },
+      { button: preRunShopGfx2SkinCatBtn, key: "skin-cat" },
+      { button: preRunShopGfx2SkinGhostBtn, key: "skin-ghost" },
+      { button: preRunShopGfx2SkinWizardBtn, key: "skin-wizard" },
+      { button: preRunShopGfx2ChestBtn, key: "chest" }
+    ];
+    shopButtons.forEach(function (entry) {
+      if (!entry.button) {
+        return;
+      }
+      var isSelected = state.preRunGfx2ShopSelection === entry.key;
+      entry.button.classList.toggle("is-selected", isSelected);
+      entry.button.setAttribute("aria-pressed", isSelected ? "true" : "false");
+    });
   }
 
   function updateLevelFinishedSummary() {
@@ -7033,13 +7225,7 @@ Main tuning points:
       preRunShopBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
-        if (isGfx2StartScreenEnabled()) {
-          startPreRunGfx2BackAnimation(PRE_RUN_GFX2_SHOP_BACK_FRAMES);
-          return;
-        }
-        playUiPageOpenSound();
-        state.preRunStep = "select";
-        renderPreRunScreen();
+        handlePreRunShopBackNavigation();
       });
     }
     if (preRunSettingsBackBtn) {
@@ -7126,6 +7312,69 @@ Main tuning points:
           refreshPreRunSkinSelection();
           renderAdminForm();
         }
+      });
+    }
+    if (preRunShopGfx2ExitBtn) {
+      preRunShopGfx2ExitBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        handlePreRunShopBackNavigation();
+      });
+    }
+    if (preRunShopGfx2CoinOneBtn) {
+      preRunShopGfx2CoinOneBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        selectPreRunGfx2ShopItem("coin-one");
+      });
+    }
+    if (preRunShopGfx2CoinTenBtn) {
+      preRunShopGfx2CoinTenBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        selectPreRunGfx2ShopItem("coin-ten");
+      });
+    }
+    if (preRunShopGfx2NewLevelBtn) {
+      preRunShopGfx2NewLevelBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        selectPreRunGfx2ShopItem("new-level");
+      });
+    }
+    if (preRunShopGfx2SkinCatBtn) {
+      preRunShopGfx2SkinCatBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        selectPreRunGfx2ShopItem("skin-cat");
+      });
+    }
+    if (preRunShopGfx2SkinGhostBtn) {
+      preRunShopGfx2SkinGhostBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        selectPreRunGfx2ShopItem("skin-ghost");
+      });
+    }
+    if (preRunShopGfx2SkinWizardBtn) {
+      preRunShopGfx2SkinWizardBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        selectPreRunGfx2ShopItem("skin-wizard");
+      });
+    }
+    if (preRunShopGfx2ChestBtn) {
+      preRunShopGfx2ChestBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        selectPreRunGfx2ShopItem("chest");
+      });
+    }
+    if (preRunShopGfx2BuyBtn) {
+      preRunShopGfx2BuyBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        handlePreRunGfx2ShopPurchase();
       });
     }
     if (finalContinueBtn) {

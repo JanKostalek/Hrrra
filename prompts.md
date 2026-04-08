@@ -839,3 +839,17 @@ na stránkach classic, advanced, badges nejde scrolovat
 kdyz ztratím poslední život, objeví se obrazovka , kde mužu continue nebo end run. kdyz dám end run, tak se objeví jeste jednou gameover obrazovka se score a musím jeste jednou kliknout. to druhé uz je zbytecné. po "end run" tu druhou preskocit.
 priprav commit lokal, online, aab
 urcite navys verzi. Delej to vzdy, kdyz pripravujes aab. to si zapis do pravidel!
+prava hromada bude deset, leva 1. new level i postavicky zatim udelej jako placeholder a muzes implementovat
+overlay button u postavicek muzes zmenist. uber spodni hranu, tak jak je to naznacene na obrazku. text na tabuli trohu zmensi pismo a posun nahoru. to zakrouzkovane presahuje mimo tabuli. vse musi byt na tabuli
+super. ted viz obrazek, posun jeste hitboxi pro nakup minci. jsou prilis dole. pak trohcu posun doprava texty - k naznacené cáre. tlacítko uy posun do pravého spodního rohu zelené plochy (tabule)
+overlay nad mistem k nakupu coins jeste posun trochu nahoru . viz obrazek. zaroven zmensi tlacitko Buy (asi o 50%) a posun ho trohu nahoru doprava, viz sipka
+tlacitka jeste trochu zmensit a posunout. Buy tlacitko taky. nahoru a doprava. viz obrazek
+overlay chce jeste trochu posunout. tenpravy z leva trochu ubrat. a u leveho overlay naopak posunout pravy okraj jeste vic doprava. buy tlacitko posunout nahoru
+jeste jednou totet. tlacitko buy uz nezmensuj, jen ho posun vys. asi dvojnasobek vysky samotneho tlacitka. tlacitka zmensi podle predchoziho navodu
+tlacitko buy jeste o vysku samtoného tlacitka nahoru
+jeste jednou posun tlacitko vys o vysku tlacitka
+jeste o 100 pixelu nahoru
+jeste o 100 pixelu nahoru
+posun buy jeste o kus vyse
+jsem presvedceny, ze tlacitko buy je stale na stejnem miste. posun ho ted nahoru o 500 px
+priprav aab
