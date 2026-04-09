@@ -884,3 +884,11 @@ Posouvas jen levy okraj a pravy asi nechavas zachovany na stejnem miste. Neposou
 - 2026-04-09: Ve shop obrazovce dej BUY i status text do popredí, aby se neschovávaly za prekrývající vrstvu/dekorace ani na Androidu.
 
 - 2026-04-09: Pushni i poslední úpravu shop vrstvy na online web / main.
+
+- 2026-04-09: Mezi levely v Classic neschovávej správne Easy/Hard a nepovol zmenu difficulty; pred prvním levelem dej Easy/Hard do prvního rádku a zmenši mezery. Ve shop screen posun BUY o 200 % výšky tlacítka dolu a status text vycentruj doprostred pod pokladnu do spodní cásti obrazovky.
+
+- 2026-04-09: V shop posun tlacítko Buy o 100 % šírky tlacítka doprava a pushni to na main / online web.
+
+- 2026-04-09: V shop posun tlacítko Buy o 100 % šírky tlacítka doprava a pak udelej push na main / online web.
+
+- 2026-04-09: Priprav AAB a nezapomen navýšit verzi.

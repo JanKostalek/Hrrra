@@ -5171,6 +5171,7 @@ Main tuning points:
   function renderPreRunGfx2ClassicInside() {
     var isActive = isPreRunGfx2ClassicInsideActive();
     var hardUnlocked = isHardDifficultyUnlocked();
+    var canChangeDifficulty = state.currentLevel <= 1;
 
     if (preRunClassicGfx2El) {
       preRunClassicGfx2El.classList.toggle("hidden", !isActive);
@@ -5200,16 +5201,21 @@ Main tuning points:
     if (preRunClassicGfx2EasyBtn) {
       preRunClassicGfx2EasyBtn.classList.toggle("selected", state.gameDifficulty !== "hard");
       preRunClassicGfx2EasyBtn.setAttribute("aria-pressed", state.gameDifficulty === "hard" ? "false" : "true");
+      preRunClassicGfx2EasyBtn.disabled = !canChangeDifficulty;
     }
     if (preRunClassicGfx2HardBtn) {
       preRunClassicGfx2HardBtn.classList.toggle("selected", state.gameDifficulty === "hard");
-      preRunClassicGfx2HardBtn.classList.toggle("locked", !hardUnlocked);
+      preRunClassicGfx2HardBtn.classList.toggle("locked", !hardUnlocked || !canChangeDifficulty);
       preRunClassicGfx2HardBtn.setAttribute("aria-pressed", state.gameDifficulty === "hard" ? "true" : "false");
-      preRunClassicGfx2HardBtn.title = hardUnlocked ? "" : getHardDifficultyLockText();
+      preRunClassicGfx2HardBtn.disabled = !canChangeDifficulty;
+      preRunClassicGfx2HardBtn.title = !canChangeDifficulty ? "Difficulty can only be changed before level 1" : hardUnlocked ? "" : getHardDifficultyLockText();
     }
     if (preRunClassicGfx2DifficultyNoteEl) {
-      preRunClassicGfx2DifficultyNoteEl.classList.toggle("hidden", !state.preRunDifficultyLockNoticeActive);
+      preRunClassicGfx2DifficultyNoteEl.classList.toggle("hidden", !canChangeDifficulty || !state.preRunDifficultyLockNoticeActive);
       preRunClassicGfx2DifficultyNoteEl.textContent = getHardDifficultyLockText();
+    }
+    if (preRunClassicGfx2BoardEl) {
+      preRunClassicGfx2BoardEl.classList.toggle("is-between-levels", !canChangeDifficulty);
     }
 
     getPreRunGfx2ClassicSkinButtons().forEach(function (entry) {
@@ -6684,6 +6690,10 @@ Main tuning points:
   }
 
   function setPreRunDifficulty(difficulty) {
+    if (state.currentLevel > 1) {
+      renderPreRunScreen();
+      return;
+    }
     if (difficulty === "hard" && !isHardDifficultyUnlocked()) {
       showPreRunDifficultyLockNotice();
       return;

@@ -732,3 +732,9 @@ Rules:
 - 2026-04-09: Refined the mobile/Android `GFX2` Shop layout so the shop scene now stretches to fill the fullscreen pre-run shell, the chalkboard text is aligned further inside the board, the selected item name is highlighted in red, and hotspot selection no longer leaves a persistent visible outline after tapping.
 - 2026-04-09: Further tuned the `GFX2` Shop chalkboard UI across desktop and mobile: desktop text sizing was reduced to stop local overflow, the mobile/web `Buy` button was enlarged, and the `Buy` control was repositioned higher so it sits beneath the cost/status area more consistently in web and Android layouts.
 - 2026-04-09: Replaced the `GFX2` Classic pre-run detail page with a dedicated [`assets/gfx2/Classic_inside.png`](c:/-_WeB_-/Hrrra/assets/gfx2/Classic_inside.png) interior scene. Classic now uses responsive hotspot overlays for `EXIT`, `ADMIN`, `START RUN`, and six character slots, plus a chalkboard panel showing level, difficulty toggle, lives, controls, and the current level goal without the old Tester Info / Future Release layout.
+
+- 2026-04-09: Locked GFX2 Classic difficulty changes after level 1, moved the Easy/Hard toggle to the first row before level 1, tightened between-level chalkboard spacing, and repositioned the GFX2 Shop status plus Buy controls into the lower overlay area beneath the register for mobile/web.
+
+- 2026-04-09: Shifted the GFX2 Shop `Buy` button one full button-width further right for mobile web alignment testing before the Android release build.
+
+- 2026-04-09: Bumped Android/store versioning to versionCode 29 / versionName 1.0.28 and refreshed shipped update metadata for a new AAB containing the latest GFX2 Classic difficulty lock plus Shop mobile overlay positioning fixes.
