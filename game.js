@@ -307,6 +307,24 @@ Main tuning points:
   var preRunShopGfx2CostValueEl = document.getElementById("pre-run-shop-gfx2-cost-value");
   var preRunShopGfx2StatusEl = document.getElementById("pre-run-shop-gfx2-status");
   var preRunShopGfx2BuyBtn = document.getElementById("pre-run-shop-gfx2-buy-btn");
+  var preRunClassicGfx2El = document.getElementById("pre-run-classic-gfx2");
+  var preRunClassicGfx2ExitBtn = document.getElementById("pre-run-classic-gfx2-exit-btn");
+  var preRunClassicGfx2AdminBtn = document.getElementById("pre-run-classic-gfx2-admin-btn");
+  var preRunClassicGfx2StartBtn = document.getElementById("pre-run-classic-gfx2-start-btn");
+  var preRunClassicGfx2Skin1Btn = document.getElementById("pre-run-classic-gfx2-skin-1-btn");
+  var preRunClassicGfx2Skin2Btn = document.getElementById("pre-run-classic-gfx2-skin-2-btn");
+  var preRunClassicGfx2Skin3Btn = document.getElementById("pre-run-classic-gfx2-skin-3-btn");
+  var preRunClassicGfx2Skin4Btn = document.getElementById("pre-run-classic-gfx2-skin-4-btn");
+  var preRunClassicGfx2SkinFuture1Btn = document.getElementById("pre-run-classic-gfx2-skin-future-1-btn");
+  var preRunClassicGfx2SkinFuture2Btn = document.getElementById("pre-run-classic-gfx2-skin-future-2-btn");
+  var preRunClassicGfx2BoardEl = preRunClassicGfx2El ? preRunClassicGfx2El.querySelector(".pre-run-classic-gfx2-board") : null;
+  var preRunClassicGfx2LevelValueEl = document.getElementById("pre-run-classic-gfx2-level-value");
+  var preRunClassicGfx2LivesValueEl = document.getElementById("pre-run-classic-gfx2-lives-value");
+  var preRunClassicGfx2ControlsCopyEl = document.getElementById("pre-run-classic-gfx2-controls-copy");
+  var preRunClassicGfx2GoalValueEl = document.getElementById("pre-run-classic-gfx2-goal-value");
+  var preRunClassicGfx2EasyBtn = document.getElementById("pre-run-classic-gfx2-easy-btn");
+  var preRunClassicGfx2HardBtn = document.getElementById("pre-run-classic-gfx2-hard-btn");
+  var preRunClassicGfx2DifficultyNoteEl = document.getElementById("pre-run-classic-gfx2-difficulty-note");
   var preRunBadgesTotalValueEl = document.getElementById("pre-run-badges-total-value");
   var preRunBadgesTotalLabelEl = document.getElementById("pre-run-badges-total-label");
   var preRunFullLockEl = document.getElementById("pre-run-full-lock");
@@ -2252,6 +2270,7 @@ Main tuning points:
     C.selectedSkin = nextSkin;
     writePlayerSkinProgress();
     refreshPreRunSkinSelection();
+    renderPreRunGfx2ClassicInside();
   }
 
   function getSkinUiConfig(skinName) {
@@ -2273,6 +2292,21 @@ Main tuning points:
 
   function getSkinPickupLevelSettingKey(skinName, level) {
     return "skinPickup" + normalizeSkinName(skinName) + "Level" + String(level) + "Enabled";
+  }
+
+  function getPreRunGfx2ClassicSkinButtons() {
+    return [
+      { button: preRunClassicGfx2Skin1Btn, skin: "Skin01" },
+      { button: preRunClassicGfx2Skin2Btn, skin: "Skin02" },
+      { button: preRunClassicGfx2Skin3Btn, skin: "Skin03" },
+      { button: preRunClassicGfx2Skin4Btn, skin: "Skin04" },
+      { button: preRunClassicGfx2SkinFuture1Btn, skin: "" },
+      { button: preRunClassicGfx2SkinFuture2Btn, skin: "" }
+    ];
+  }
+
+  function isPreRunGfx2ClassicInsideActive() {
+    return isGfx2StartScreenEnabled() && state.preRunStep === "details" && state.gameMode === 2;
   }
 
   function isSkinPickupLevelEnabled(skinName, level) {
@@ -5131,12 +5165,102 @@ Main tuning points:
       preRunBackBtn.textContent = compactLevelBriefing ? "Exit Run" : "Back";
       preRunBackBtn.setAttribute("aria-label", compactLevelBriefing ? "Exit run and go back" : "Back to mode selection");
     }
+    renderPreRunGfx2ClassicInside();
+  }
+
+  function renderPreRunGfx2ClassicInside() {
+    var isActive = isPreRunGfx2ClassicInsideActive();
+    var hardUnlocked = isHardDifficultyUnlocked();
+
+    if (preRunClassicGfx2El) {
+      preRunClassicGfx2El.classList.toggle("hidden", !isActive);
+    }
+    if (!isActive) {
+      return;
+    }
+
+    updatePreRunClassicGfx2BoardMetrics();
+
+    if (preRunClassicGfx2LevelValueEl) {
+      preRunClassicGfx2LevelValueEl.textContent = String(state.currentLevel);
+    }
+    if (preRunClassicGfx2LivesValueEl) {
+      preRunClassicGfx2LivesValueEl.textContent = getLivesSummaryText();
+    }
+    if (preRunClassicGfx2ControlsCopyEl) {
+      preRunClassicGfx2ControlsCopyEl.innerHTML = getModeControlsHtml();
+    }
+    if (preRunClassicGfx2GoalValueEl) {
+      preRunClassicGfx2GoalValueEl.textContent = getFinishScoreGoalText(getCurrentLevelGoalTargetScore());
+    }
+    if (preRunClassicGfx2StartBtn) {
+      preRunClassicGfx2StartBtn.setAttribute("aria-label", state.currentLevel > 1 ? "Continue run" : "Start run");
+      preRunClassicGfx2StartBtn.title = state.currentLevel > 1 ? "Continue" : "Start Run";
+    }
+    if (preRunClassicGfx2EasyBtn) {
+      preRunClassicGfx2EasyBtn.classList.toggle("selected", state.gameDifficulty !== "hard");
+      preRunClassicGfx2EasyBtn.setAttribute("aria-pressed", state.gameDifficulty === "hard" ? "false" : "true");
+    }
+    if (preRunClassicGfx2HardBtn) {
+      preRunClassicGfx2HardBtn.classList.toggle("selected", state.gameDifficulty === "hard");
+      preRunClassicGfx2HardBtn.classList.toggle("locked", !hardUnlocked);
+      preRunClassicGfx2HardBtn.setAttribute("aria-pressed", state.gameDifficulty === "hard" ? "true" : "false");
+      preRunClassicGfx2HardBtn.title = hardUnlocked ? "" : getHardDifficultyLockText();
+    }
+    if (preRunClassicGfx2DifficultyNoteEl) {
+      preRunClassicGfx2DifficultyNoteEl.classList.toggle("hidden", !state.preRunDifficultyLockNoticeActive);
+      preRunClassicGfx2DifficultyNoteEl.textContent = getHardDifficultyLockText();
+    }
+
+    getPreRunGfx2ClassicSkinButtons().forEach(function (entry) {
+      if (!entry.button) {
+        return;
+      }
+      var isFuture = !entry.skin;
+      var unlocked = !isFuture && isSkinUnlocked(entry.skin);
+      var selected = unlocked && C.selectedSkin === entry.skin;
+
+      entry.button.classList.toggle("selected", selected);
+      entry.button.classList.toggle("locked", !isFuture && !unlocked);
+      entry.button.classList.toggle("future", isFuture);
+      entry.button.disabled = isFuture || !unlocked;
+      entry.button.setAttribute("aria-pressed", selected ? "true" : "false");
+      if (!isFuture) {
+        entry.button.title = unlocked ? getSkinDisplayName(entry.skin) : getSkinDisplayName(entry.skin) + " locked";
+      }
+    });
+  }
+
+  function updatePreRunClassicGfx2BoardMetrics() {
+    if (!preRunClassicGfx2BoardEl) {
+      return;
+    }
+
+    var rect = preRunClassicGfx2BoardEl.getBoundingClientRect();
+    var width = rect.width || 0;
+    var height = rect.height || 0;
+    var scale = Math.min(width / 470, height / 280);
+
+    if (!width || !height) {
+      return;
+    }
+
+    scale = Math.max(0.72, Math.min(1.16, scale));
+
+    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-title-size", Math.round(Math.max(16, Math.min(25, 19 * scale))) + "px");
+    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-copy-size", Math.round(Math.max(14, Math.min(20, 16 * scale))) + "px");
+    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-note-size", Math.round(Math.max(11, Math.min(14, 12 * scale))) + "px");
+    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-gap", Math.round(Math.max(5, Math.min(11, 8 * scale))) + "px");
+    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-section-gap", Math.round(Math.max(4, Math.min(9, 6 * scale))) + "px");
+    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-divider-gap", Math.round(Math.max(2, Math.min(5, 3 * scale))) + "px");
+    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-row-gap", Math.round(Math.max(8, Math.min(16, 11 * scale))) + "px");
   }
 
   function renderPreRunScreen() {
     var hardUnlocked = isHardDifficultyUnlocked();
     var fullUnlocked = isFullModeUnlocked();
-    var compactLevelBriefing = state.preRunStep === "details" && state.currentLevel > 1;
+    var showClassicGfx2Inside = isPreRunGfx2ClassicInsideActive();
+    var compactLevelBriefing = state.preRunStep === "details" && state.currentLevel > 1 && !showClassicGfx2Inside;
     var useGfx2StartScreen = isGfx2StartScreenEnabled();
 
     normalizeUnlockedPreRunSelection();
@@ -5172,11 +5296,14 @@ Main tuning points:
     if (preRunDetailScreenEl) {
       preRunDetailScreenEl.classList.toggle("hidden", state.preRunStep !== "details");
     }
+    if (preRunClassicGfx2El) {
+      preRunClassicGfx2El.classList.toggle("hidden", !showClassicGfx2Inside);
+    }
     if (preRunCompactShellEl) {
       preRunCompactShellEl.classList.toggle("hidden", !compactLevelBriefing);
     }
     if (preRunDetailFullContentEl) {
-      preRunDetailFullContentEl.classList.toggle("hidden", compactLevelBriefing);
+      preRunDetailFullContentEl.classList.toggle("hidden", compactLevelBriefing || showClassicGfx2Inside);
     }
     if (preRunScreenEl) {
       preRunScreenEl.classList.toggle("is-launch-transition", state.preRunLaunchActive);
@@ -5251,6 +5378,7 @@ Main tuning points:
     if (state.preRunStep === "settings") {
       renderPreRunSettingsScreen();
     }
+    renderPreRunGfx2ClassicInside();
     stopBadgesPageMusicIfLeaving();
     updatePreRunGfx2EntranceAnimation(0);
     refreshMusicPlayback();
@@ -7458,6 +7586,13 @@ Main tuning points:
         renderPreRunScreen();
       });
     }
+    if (preRunClassicGfx2ExitBtn) {
+      preRunClassicGfx2ExitBtn.addEventListener("click", function () {
+        if (preRunBackBtn) {
+          preRunBackBtn.click();
+        }
+      });
+    }
     if (preRunCompactBackBtn) {
       preRunCompactBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
@@ -7471,6 +7606,13 @@ Main tuning points:
         unlockAudioIfNeeded();
         playUiButtonSound();
         setAdminOpen(true);
+      });
+    }
+    if (preRunClassicGfx2AdminBtn) {
+      preRunClassicGfx2AdminBtn.addEventListener("click", function () {
+        if (preRunDetailAdminBtn) {
+          preRunDetailAdminBtn.click();
+        }
       });
     }
     if (preRunTesterInfoBtn) {
@@ -7500,11 +7642,32 @@ Main tuning points:
         startPreRunLaunchTransition();
       });
     }
+    if (preRunClassicGfx2StartBtn) {
+      preRunClassicGfx2StartBtn.addEventListener("click", function () {
+        if (preRunStartBtn) {
+          preRunStartBtn.click();
+        }
+      });
+    }
     if (preRunCompactStartBtn) {
       preRunCompactStartBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
         startPreRunLaunchTransition();
+      });
+    }
+    if (preRunClassicGfx2EasyBtn) {
+      preRunClassicGfx2EasyBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        setPreRunDifficulty("easy");
+      });
+    }
+    if (preRunClassicGfx2HardBtn) {
+      preRunClassicGfx2HardBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        setPreRunDifficulty("hard");
       });
     }
     if (preRunSkinGridEl) {
@@ -7518,6 +7681,19 @@ Main tuning points:
         setSelectedSkinFromUi(skinBtn.dataset.skin);
       });
     }
+    getPreRunGfx2ClassicSkinButtons().forEach(function (entry) {
+      if (!entry.button || !entry.skin) {
+        return;
+      }
+      entry.button.addEventListener("click", function () {
+        if (entry.button.disabled) {
+          return;
+        }
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        setSelectedSkinFromUi(entry.skin);
+      });
+    });
   }
 
   function attachLevelFinishedScreen() {
@@ -8504,6 +8680,8 @@ Main tuning points:
   function applyResponsiveLayout() {
     var isMobile = detectMobileDevice();
 
+    updatePreRunClassicGfx2BoardMetrics();
+
     if (!isMobile) {
       document.body.style.overflow = "";
       gameShell.style.width = "";
@@ -8514,6 +8692,7 @@ Main tuning points:
         touchControls.style.display = "flex";
       }
       applyGameModeToUi();
+      updatePreRunClassicGfx2BoardMetrics();
       return;
     }
 
@@ -8530,6 +8709,7 @@ Main tuning points:
       touchControls.style.display = "flex";
     }
     applyGameModeToUi();
+    updatePreRunClassicGfx2BoardMetrics();
   }
 
   function tryForceFullscreen() {

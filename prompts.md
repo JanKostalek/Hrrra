@@ -862,3 +862,21 @@ v obrazovce shop, zvetsi pismo o 100% a tlacitko buy o 200%. zachovej zarovnavan
 na online - a tedy asi i na androidu je velikost pisma ok, ale na lokale je nesktecne velke
 posun tlacitko buy na uroven radku select.... tedy pod cenu jak na lokale, tak ve webove / mobilni verzi
 v online / android verzi mi prijde, ze tlacitko buy nebylo zvetseno
+implementuj
+na prvni pokus to vypada dobre. je potrebatlactka postavicek posunout doprava. vyskove jsou v poradku. text na tabuly je lepsi trochu zmensit a taky posunout doprava. Tlacitko nad start run je potreba posunout o 75% vysky tlacitka nahoru a o 33% sirky tlacitka posunout doprava.
+
+overlay u postavicek - horni pravou posun o 33% sirky button do prava, prostredni posun o 22% sirky buttonu do prava a tu prvni (levou) posun o 10% do prava. Texty posun o 20% doprava
+
+tlacitka jsou jiz v poradku, ale tabule se neposunula
+
+posun to jeste 2x tolik
+
+Posouvas jen levy okraj a pravy asi nechavas zachovany na stejnem miste. Neposouval jsi celou aktivni plochu. ty texty na tabuli jsou urizly v pravem okraji. Rozsir okno, kam se texty vpisuji o 50% soucasne velikosti toho sloupce
+
+- 2026-04-09: Druhou radu overlay buttonu pro postavicky posun pod tlacítka v horní rade. At jsou prímo pod sebou.
+
+- 2026-04-09: Zmenši trochu rozestupy mezi rádky textu na tabuli. Ideálne udelej ten text adaptivní, at se prizpusobuje velikosti tabule.
+
+- 2026-04-09: Na android verzi shop posun tlacítko Buy do pravého dolního rohu, zmenši ho o 33 % a informaci o koupi posun níž podle screenshotu.
+
+- 2026-04-09: Pushni to na online do main, abych se na to mohl podívat na mobilu ve web verzi.
