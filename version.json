@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 26,
-  "latestVersionName": "1.0.25",
+  "latestVersionCode": 27,
+  "latestVersionName": "1.0.26",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra test build is available. Update now to get the new GFX2 shop interior flow and latest mobile layout tuning.",
+  "message": "A new Hrrra test build is available. Update now to get the fullscreen GFX2 shop layout and latest mobile shop UI fixes.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

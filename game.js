@@ -6877,7 +6877,6 @@ Main tuning points:
         return;
       }
       var isSelected = state.preRunGfx2ShopSelection === entry.key;
-      entry.button.classList.toggle("is-selected", isSelected);
       entry.button.setAttribute("aria-pressed", isSelected ? "true" : "false");
     });
   }

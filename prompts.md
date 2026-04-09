@@ -853,3 +853,7 @@ jeste o 100 pixelu nahoru
 posun buy jeste o kus vyse
 jsem presvedceny, ze tlacitko buy je stale na stejnem miste. posun ho ted nahoru o 500 px
 priprav aab
+android verze shop obrazovky neni od kraje ke kraji. ma asi pevnou velikost a nebo pomer stran. chci aby se zvetsovala do vsech stran, aby zaplnila celou obrazovku
+ted jeste jedna vec. text na tabuli je prilis v levo a presahuje mimo prostor tabule. posun text vic do prava - jen ten levy sloupec textu. a druha vec, nazev te ktere vybrane polozky napis na tabuly cervene (buy 1 coin, wizard character a vse ostatni). a posledni vec, kdyz vyberu neco, zustane ohraniceni - viditelny button layout. na tomto screenu co jsem ti poslal je to videt kolem new level. zrus, aby to tam nezustalo viditelny
+posun i to select an item and press buy - aby to bylo pod zbytkem textu v levem sloupci. horni texty jsi posunul, ale toto zustalo
+priprav aab
