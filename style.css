@@ -1912,10 +1912,10 @@ body {
   flex-direction: column;
   gap: clamp(6px, 0.9vw, 12px);
   padding: clamp(12px, 1.7vw, 20px);
-  z-index: 1;
+  z-index: 3;
   color: #f2f9ff;
   text-shadow: 0 2px 2px rgba(5, 15, 22, 0.45);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .pre-run-shop-gfx2-row {
@@ -1953,6 +1953,8 @@ body {
 }
 
 .pre-run-shop-gfx2-status {
+  position: relative;
+  z-index: 5;
   margin: 0;
   margin-top: auto;
   min-height: 2.2em;
@@ -1973,6 +1975,8 @@ body {
 }
 
 .pre-run-shop-gfx2-buy-btn {
+  position: relative;
+  z-index: 6;
   margin-top: clamp(8px, 0.9vw, 14px);
   align-self: flex-end;
   min-width: clamp(96px, 9.5vw, 132px);
@@ -2384,8 +2388,12 @@ body {
     margin-top: auto;
     min-height: 2.2em;
     font-size: clamp(18px, 3vw, 22px);
-    padding-left: 12px;
-    max-width: 56%;
+    padding-left: 0;
+    padding-right: 8px;
+    align-self: flex-end;
+    text-align: left;
+    width: 48%;
+    max-width: 48%;
   }
 
   .pre-run-shop-gfx2-buy-btn {
@@ -2396,6 +2404,7 @@ body {
     font-size: clamp(15px, 2.1vw, 19px);
     margin-right: 0;
     margin-bottom: 0;
+    transform: translateY(-6px);
   }
 
   .pre-run-classic-gfx2-board {
@@ -4378,8 +4387,12 @@ body.visual-theme-retro .brief-live::before {
     margin-top: auto;
     min-height: 2.2em;
     font-size: clamp(18px, 3vh, 22px);
-    padding-left: 12px;
-    max-width: 56%;
+    padding-left: 0;
+    padding-right: 8px;
+    align-self: flex-end;
+    text-align: left;
+    width: 48%;
+    max-width: 48%;
   }
 
   .pre-run-shop-gfx2-buy-btn {
@@ -4390,6 +4403,7 @@ body.visual-theme-retro .brief-live::before {
     font-size: clamp(15px, 2vh, 19px);
     margin-right: 0;
     margin-bottom: 0;
+    transform: translateY(-6px);
   }
 
   .pre-run-detail-heading h2 {

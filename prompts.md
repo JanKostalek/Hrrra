@@ -880,3 +880,7 @@ Posouvas jen levy okraj a pravy asi nechavas zachovany na stejnem miste. Neposou
 - 2026-04-09: Na android verzi shop posun tlacítko Buy do pravého dolního rohu, zmenši ho o 33 % a informaci o koupi posun níž podle screenshotu.
 
 - 2026-04-09: Pushni to na online do main, abych se na to mohl podívat na mobilu ve web verzi.
+
+- 2026-04-09: Ve shop obrazovce dej BUY i status text do popredí, aby se neschovávaly za prekrývající vrstvu/dekorace ani na Androidu.
+
+- 2026-04-09: Pushni i poslední úpravu shop vrstvy na online web / main.
