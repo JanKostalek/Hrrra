@@ -1900,23 +1900,24 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 12px;
+  gap: clamp(16px, 1.4vw, 24px);
 }
 
 .pre-run-shop-gfx2-label {
-  font-size: clamp(14px, 1.65vw, 24px);
+  font-size: clamp(16px, 1.8vw, 28px);
   font-weight: 900;
   letter-spacing: 0.02em;
   line-height: 1.08;
   padding-left: clamp(18px, 1.8vw, 26px);
+  max-width: 44%;
 }
 
 .pre-run-shop-gfx2-value {
-  font-size: clamp(14px, 1.65vw, 24px);
+  font-size: clamp(16px, 1.8vw, 28px);
   font-weight: 900;
   line-height: 1.08;
   text-align: right;
-  max-width: 60%;
+  max-width: 54%;
   overflow-wrap: anywhere;
 }
 
@@ -1931,8 +1932,9 @@ body {
 
 .pre-run-shop-gfx2-status {
   margin: 0;
-  min-height: 1.4em;
-  font-size: clamp(12px, 1.2vw, 18px);
+  margin-top: clamp(12px, 1.2vw, 18px);
+  min-height: 2.2em;
+  font-size: clamp(13px, 1.25vw, 20px);
   font-weight: 800;
   color: #deefff;
   line-height: 1.1;
@@ -1950,18 +1952,18 @@ body {
 .pre-run-shop-gfx2-buy-btn {
   margin-top: auto;
   align-self: flex-end;
-  min-width: clamp(52px, 6.2vw, 84px);
-  min-height: clamp(18px, 2.6vw, 28px);
-  padding: 2px 9px;
+  min-width: clamp(96px, 9.5vw, 132px);
+  min-height: clamp(34px, 3.8vw, 46px);
+  padding: 4px 14px;
   margin-right: 2px;
-  margin-bottom: 760px;
+  margin-bottom: 860px;
   border: 3px solid #0a2e19;
   border-radius: 999px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.08)),
     linear-gradient(180deg, #d9ffd7 0%, #8fe18b 100%);
   color: #0f3517;
-  font-size: clamp(11px, 1.05vw, 15px);
+  font-size: clamp(14px, 1.25vw, 19px);
   font-weight: 900;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -2087,7 +2089,7 @@ body {
 
   .pre-run-shop-gfx2-label,
   .pre-run-shop-gfx2-value {
-    font-size: clamp(10px, 1.7vw, 13px);
+    font-size: clamp(20px, 3.4vw, 26px);
   }
 
   .pre-run-shop-gfx2-label {
@@ -2095,19 +2097,20 @@ body {
   }
 
   .pre-run-shop-gfx2-status {
-    min-height: 1.2em;
-    font-size: clamp(9px, 1.55vw, 11px);
+    margin-top: 10px;
+    min-height: 2.2em;
+    font-size: clamp(18px, 3vw, 22px);
     padding-left: 12px;
   }
 
   .pre-run-shop-gfx2-buy-btn {
-    min-width: 48px;
-    min-height: 16px;
-    padding: 2px 8px;
+    min-width: 192px;
+    min-height: 64px;
+    padding: 8px 26px;
     border-width: 2px;
-    font-size: clamp(9px, 1.2vw, 10px);
+    font-size: clamp(22px, 3vw, 28px);
     margin-right: 2px;
-    margin-bottom: 728px;
+    margin-bottom: 828px;
   }
 }
 
@@ -4053,7 +4056,7 @@ body.visual-theme-retro .brief-live::before {
 
   .pre-run-shop-gfx2-label,
   .pre-run-shop-gfx2-value {
-    font-size: clamp(10px, 1.75vh, 13px);
+    font-size: clamp(20px, 3.5vh, 26px);
   }
 
   .pre-run-shop-gfx2-label {
@@ -4061,19 +4064,20 @@ body.visual-theme-retro .brief-live::before {
   }
 
   .pre-run-shop-gfx2-status {
-    min-height: 1.2em;
-    font-size: clamp(9px, 1.5vh, 11px);
+    margin-top: 10px;
+    min-height: 2.2em;
+    font-size: clamp(18px, 3vh, 22px);
     padding-left: 12px;
   }
 
   .pre-run-shop-gfx2-buy-btn {
-    min-width: 46px;
-    min-height: 16px;
-    padding: 2px 7px;
+    min-width: 192px;
+    min-height: 64px;
+    padding: 8px 24px;
     border-width: 2px;
-    font-size: clamp(9px, 1.2vh, 10px);
+    font-size: clamp(22px, 2.8vh, 28px);
     margin-right: 2px;
-    margin-bottom: 728px;
+    margin-bottom: 828px;
   }
 
   .pre-run-detail-heading h2 {

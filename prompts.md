@@ -857,3 +857,8 @@ android verze shop obrazovky neni od kraje ke kraji. ma asi pevnou velikost a ne
 ted jeste jedna vec. text na tabuli je prilis v levo a presahuje mimo prostor tabule. posun text vic do prava - jen ten levy sloupec textu. a druha vec, nazev te ktere vybrane polozky napis na tabuly cervene (buy 1 coin, wizard character a vse ostatni). a posledni vec, kdyz vyberu neco, zustane ohraniceni - viditelny button layout. na tomto screenu co jsem ti poslal je to videt kolem new level. zrus, aby to tam nezustalo viditelny
 posun i to select an item and press buy - aby to bylo pod zbytkem textu v levem sloupci. horni texty jsi posunul, ale toto zustalo
 priprav aab
+
+v obrazovce shop, zvetsi pismo o 100% a tlacitko buy o 200%. zachovej zarovnavani, aby nepreteklo mimo tabuli. text buy.... purchased... oddel jednim radkem niz
+na online - a tedy asi i na androidu je velikost pisma ok, ale na lokale je nesktecne velke
+posun tlacitko buy na uroven radku select.... tedy pod cenu jak na lokale, tak ve webove / mobilni verzi
+v online / android verzi mi prijde, ze tlacitko buy nebylo zvetseno
