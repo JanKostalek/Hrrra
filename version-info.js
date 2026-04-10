@@ -1,9 +1,9 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 29,
-  versionName: "1.0.28",
+  versionCode: 30,
+  versionName: "1.0.29",
   whatsNew: [
-  "GFX2 Classic now locks difficulty changes after level 1 and tightens the between-level chalkboard layout.",
-  "GFX2 Shop moves the status and Buy controls into a lower overlay area for mobile and web alignment testing.",
-  "The new GFX2 Classic inside screen and recent shop layering fixes remain included in this build."
+  "GFX2 Scores now uses the new four-board chalkboard layout.",
+  "Classic and Advanced inside screens use blank artwork with live skin overlays.",
+  "Settings room off-state artwork has been refreshed."
 ]
 });

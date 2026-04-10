@@ -273,6 +273,11 @@ Main tuning points:
   var preRunCreditsBackBtn = document.getElementById("pre-run-credits-back-btn");
   var preRunShopBackBtn = document.getElementById("pre-run-shop-back-btn");
   var preRunSettingsBackBtn = document.getElementById("pre-run-settings-back-btn");
+  var preRunSettingsGfx1El = document.getElementById("pre-run-settings-gfx1");
+  var preRunSettingsGfx2El = document.getElementById("pre-run-settings-gfx2");
+  var preRunSettingsGfx2BackBtn = document.getElementById("pre-run-settings-gfx2-back-btn");
+  var preRunSettingsGfx2MusicBtn = document.getElementById("pre-run-settings-gfx2-music-btn");
+  var preRunSettingsGfx2SfxBtn = document.getElementById("pre-run-settings-gfx2-sfx-btn");
   var preRunPlayerNameBtn = document.getElementById("pre-run-player-name-btn");
   var preRunBadgesBackBtn = document.getElementById("pre-run-badges-back-btn");
   var preRunScoresBackBtn = document.getElementById("pre-run-scores-back-btn");
@@ -317,6 +322,12 @@ Main tuning points:
   var preRunClassicGfx2Skin4Btn = document.getElementById("pre-run-classic-gfx2-skin-4-btn");
   var preRunClassicGfx2SkinFuture1Btn = document.getElementById("pre-run-classic-gfx2-skin-future-1-btn");
   var preRunClassicGfx2SkinFuture2Btn = document.getElementById("pre-run-classic-gfx2-skin-future-2-btn");
+  var preRunClassicGfx2Skin1Img = document.getElementById("pre-run-classic-gfx2-skin-1-img");
+  var preRunClassicGfx2Skin2Img = document.getElementById("pre-run-classic-gfx2-skin-2-img");
+  var preRunClassicGfx2Skin3Img = document.getElementById("pre-run-classic-gfx2-skin-3-img");
+  var preRunClassicGfx2Skin4Img = document.getElementById("pre-run-classic-gfx2-skin-4-img");
+  var preRunClassicGfx2Skin5Img = document.getElementById("pre-run-classic-gfx2-skin-5-img");
+  var preRunClassicGfx2Skin6Img = document.getElementById("pre-run-classic-gfx2-skin-6-img");
   var preRunClassicGfx2BoardEl = preRunClassicGfx2El ? preRunClassicGfx2El.querySelector(".pre-run-classic-gfx2-board") : null;
   var preRunClassicGfx2LevelValueEl = document.getElementById("pre-run-classic-gfx2-level-value");
   var preRunClassicGfx2LivesValueEl = document.getElementById("pre-run-classic-gfx2-lives-value");
@@ -325,6 +336,30 @@ Main tuning points:
   var preRunClassicGfx2EasyBtn = document.getElementById("pre-run-classic-gfx2-easy-btn");
   var preRunClassicGfx2HardBtn = document.getElementById("pre-run-classic-gfx2-hard-btn");
   var preRunClassicGfx2DifficultyNoteEl = document.getElementById("pre-run-classic-gfx2-difficulty-note");
+  var preRunAdvancedGfx2El = document.getElementById("pre-run-advanced-gfx2");
+  var preRunAdvancedGfx2ExitBtn = document.getElementById("pre-run-advanced-gfx2-exit-btn");
+  var preRunAdvancedGfx2AdminBtn = document.getElementById("pre-run-advanced-gfx2-admin-btn");
+  var preRunAdvancedGfx2StartBtn = document.getElementById("pre-run-advanced-gfx2-start-btn");
+  var preRunAdvancedGfx2Skin1Btn = document.getElementById("pre-run-advanced-gfx2-skin-1-btn");
+  var preRunAdvancedGfx2Skin2Btn = document.getElementById("pre-run-advanced-gfx2-skin-2-btn");
+  var preRunAdvancedGfx2Skin3Btn = document.getElementById("pre-run-advanced-gfx2-skin-3-btn");
+  var preRunAdvancedGfx2Skin4Btn = document.getElementById("pre-run-advanced-gfx2-skin-4-btn");
+  var preRunAdvancedGfx2SkinFuture1Btn = document.getElementById("pre-run-advanced-gfx2-skin-future-1-btn");
+  var preRunAdvancedGfx2SkinFuture2Btn = document.getElementById("pre-run-advanced-gfx2-skin-future-2-btn");
+  var preRunAdvancedGfx2Skin1Img = document.getElementById("pre-run-advanced-gfx2-skin-1-img");
+  var preRunAdvancedGfx2Skin2Img = document.getElementById("pre-run-advanced-gfx2-skin-2-img");
+  var preRunAdvancedGfx2Skin3Img = document.getElementById("pre-run-advanced-gfx2-skin-3-img");
+  var preRunAdvancedGfx2Skin4Img = document.getElementById("pre-run-advanced-gfx2-skin-4-img");
+  var preRunAdvancedGfx2Skin5Img = document.getElementById("pre-run-advanced-gfx2-skin-5-img");
+  var preRunAdvancedGfx2Skin6Img = document.getElementById("pre-run-advanced-gfx2-skin-6-img");
+  var preRunAdvancedGfx2BoardEl = preRunAdvancedGfx2El ? preRunAdvancedGfx2El.querySelector(".pre-run-classic-gfx2-board") : null;
+  var preRunAdvancedGfx2LevelValueEl = document.getElementById("pre-run-advanced-gfx2-level-value");
+  var preRunAdvancedGfx2LivesValueEl = document.getElementById("pre-run-advanced-gfx2-lives-value");
+  var preRunAdvancedGfx2ControlsCopyEl = document.getElementById("pre-run-advanced-gfx2-controls-copy");
+  var preRunAdvancedGfx2GoalValueEl = document.getElementById("pre-run-advanced-gfx2-goal-value");
+  var preRunAdvancedGfx2EasyBtn = document.getElementById("pre-run-advanced-gfx2-easy-btn");
+  var preRunAdvancedGfx2HardBtn = document.getElementById("pre-run-advanced-gfx2-hard-btn");
+  var preRunAdvancedGfx2DifficultyNoteEl = document.getElementById("pre-run-advanced-gfx2-difficulty-note");
   var preRunBadgesTotalValueEl = document.getElementById("pre-run-badges-total-value");
   var preRunBadgesTotalLabelEl = document.getElementById("pre-run-badges-total-label");
   var preRunFullLockEl = document.getElementById("pre-run-full-lock");
@@ -1620,6 +1655,27 @@ Main tuning points:
   }
 
   function renderPreRunSettingsScreen() {
+    var useGfx2Settings = isGfx2StartScreenEnabled();
+    if (preRunSettingsGfx1El) {
+      preRunSettingsGfx1El.classList.toggle("hidden", useGfx2Settings);
+    }
+    if (preRunSettingsGfx2El) {
+      preRunSettingsGfx2El.classList.toggle("hidden", !useGfx2Settings);
+      preRunSettingsGfx2El.classList.toggle("is-music-off", !C.audioMusicEnabled);
+      preRunSettingsGfx2El.classList.toggle("is-sfx-off", !C.audioSfxEnabled);
+    }
+    if (preRunSettingsGfx2MusicBtn) {
+      var gfx2MusicEnabled = Boolean(C.audioMusicEnabled);
+      preRunSettingsGfx2MusicBtn.setAttribute("aria-pressed", gfx2MusicEnabled ? "true" : "false");
+      preRunSettingsGfx2MusicBtn.setAttribute("aria-label", gfx2MusicEnabled ? "Music on" : "Music off");
+      preRunSettingsGfx2MusicBtn.title = gfx2MusicEnabled ? "Music ON" : "Music OFF";
+    }
+    if (preRunSettingsGfx2SfxBtn) {
+      var gfx2SfxEnabled = Boolean(C.audioSfxEnabled);
+      preRunSettingsGfx2SfxBtn.setAttribute("aria-pressed", gfx2SfxEnabled ? "true" : "false");
+      preRunSettingsGfx2SfxBtn.setAttribute("aria-label", gfx2SfxEnabled ? "Sound effects on" : "Sound effects off");
+      preRunSettingsGfx2SfxBtn.title = gfx2SfxEnabled ? "Sound ON" : "Sound OFF";
+    }
     if (preRunToggleSfxBtn) {
       var sfxEnabled = Boolean(C.audioSfxEnabled);
       preRunToggleSfxBtn.textContent = sfxEnabled ? "ON" : "OFF";
@@ -1636,6 +1692,38 @@ Main tuning points:
       preRunToggleMusicBtn.setAttribute("aria-pressed", musicEnabled ? "true" : "false");
       preRunToggleMusicBtn.setAttribute("aria-label", musicEnabled ? "Music on" : "Music off");
     }
+  }
+
+  function handlePreRunSettingsBackNavigation() {
+    if (isGfx2StartScreenEnabled()) {
+      startPreRunGfx2BackAnimation(PRE_RUN_GFX2_SETTINGS_BACK_FRAMES);
+      return;
+    }
+    playUiPageOpenSound();
+    state.preRunStep = "select";
+    renderPreRunScreen();
+  }
+
+  function togglePreRunMusicSetting() {
+    unlockAudioIfNeeded();
+    if (C.audioSfxEnabled) {
+      playUiButtonSound();
+    }
+    applyGlobalAudioSetting("audioMusicEnabled", !C.audioMusicEnabled);
+    renderPreRunSettingsScreen();
+  }
+
+  function togglePreRunSfxSetting() {
+    unlockAudioIfNeeded();
+    var nextValue = !C.audioSfxEnabled;
+    if (C.audioSfxEnabled) {
+      playUiButtonSound();
+    }
+    applyGlobalAudioSetting("audioSfxEnabled", nextValue);
+    if (nextValue) {
+      playUiButtonSound();
+    }
+    renderPreRunSettingsScreen();
   }
 
   function playAudioPath(path, volume, cooldownKey, cooldownMs) {
@@ -2271,6 +2359,7 @@ Main tuning points:
     writePlayerSkinProgress();
     refreshPreRunSkinSelection();
     renderPreRunGfx2ClassicInside();
+    renderPreRunGfx2AdvancedInside();
   }
 
   function getSkinUiConfig(skinName) {
@@ -2305,8 +2394,55 @@ Main tuning points:
     ];
   }
 
+  function getPreRunGfx2ClassicSkinSlots() {
+    return [
+      { img: preRunClassicGfx2Skin1Img, skin: "Skin01", slotIndex: 1 },
+      { img: preRunClassicGfx2Skin2Img, skin: "Skin02", slotIndex: 2 },
+      { img: preRunClassicGfx2Skin3Img, skin: "Skin03", slotIndex: 3 },
+      { img: preRunClassicGfx2Skin4Img, skin: "Skin04", slotIndex: 4 },
+      { img: preRunClassicGfx2Skin5Img, skin: "", slotIndex: 5, isFuture: true },
+      { img: preRunClassicGfx2Skin6Img, skin: "", slotIndex: 6, isFuture: true }
+    ];
+  }
+
+  function getClassicGfx2SkinSlotAssetPath(slotIndex, variant) {
+    var slot = slotIndex < 10 ? "0" + String(slotIndex) : String(slotIndex);
+    return "assets/gfx2/classic/layout/skin" + slot + "_" + variant + ".png";
+  }
+
+  function getPreRunGfx2AdvancedSkinButtons() {
+    return [
+      { button: preRunAdvancedGfx2Skin1Btn, skin: "Skin01" },
+      { button: preRunAdvancedGfx2Skin2Btn, skin: "Skin02" },
+      { button: preRunAdvancedGfx2Skin3Btn, skin: "Skin03" },
+      { button: preRunAdvancedGfx2Skin4Btn, skin: "Skin04" },
+      { button: preRunAdvancedGfx2SkinFuture1Btn, skin: "" },
+      { button: preRunAdvancedGfx2SkinFuture2Btn, skin: "" }
+    ];
+  }
+
+  function getPreRunGfx2AdvancedSkinSlots() {
+    return [
+      { img: preRunAdvancedGfx2Skin1Img, skin: "Skin01", slotIndex: 1 },
+      { img: preRunAdvancedGfx2Skin2Img, skin: "Skin02", slotIndex: 2 },
+      { img: preRunAdvancedGfx2Skin3Img, skin: "Skin03", slotIndex: 3 },
+      { img: preRunAdvancedGfx2Skin4Img, skin: "Skin04", slotIndex: 4 },
+      { img: preRunAdvancedGfx2Skin5Img, skin: "", slotIndex: 5, isFuture: true },
+      { img: preRunAdvancedGfx2Skin6Img, skin: "", slotIndex: 6, isFuture: true }
+    ];
+  }
+
+  function getAdvancedGfx2SkinSlotAssetPath(slotIndex, variant) {
+    var slot = slotIndex < 10 ? "0" + String(slotIndex) : String(slotIndex);
+    return "assets/gfx2/advance/layout/skin" + slot + "_" + variant + ".png";
+  }
+
   function isPreRunGfx2ClassicInsideActive() {
     return isGfx2StartScreenEnabled() && state.preRunStep === "details" && state.gameMode === 2;
+  }
+
+  function isPreRunGfx2AdvancedInsideActive() {
+    return isGfx2StartScreenEnabled() && state.preRunStep === "details" && state.gameMode === 1;
   }
 
   function isSkinPickupLevelEnabled(skinName, level) {
@@ -4991,14 +5127,10 @@ Main tuning points:
     el.classList.toggle("brief-life-rule-instant", !isSafe);
   }
 
-  function getModeControlsHtml() {
-    if (state.gameMode === 1) {
+  function getModeControlsHtml(mode) {
+    if (mode === 1) {
       return [
-        "<div class=\"pre-run-fullmode-diagram\" aria-hidden=\"true\">",
-        "<span class=\"diag-jump\">Jump</span>",
-        "<span class=\"diag-right\">Right</span>",
-        "<span class=\"diag-left\">Left</span>",
-        "</div>"
+        "<p>Jump&nbsp;&nbsp;Left/Right</p>"
       ].join("");
     }
 
@@ -5158,7 +5290,7 @@ Main tuning points:
     applyLifeRuleUi(briefProjectilesRuleEl, C.livesApplyProjectiles);
     applyLifeRuleUi(briefBlockerRuleEl, C.livesApplyBlocker);
     if (preRunControlsCopyEl) {
-      preRunControlsCopyEl.innerHTML = getModeControlsHtml();
+      preRunControlsCopyEl.innerHTML = getModeControlsHtml(state.gameMode);
     }
     refreshPreRunSkinSelection();
     if (preRunBackBtn) {
@@ -5166,59 +5298,97 @@ Main tuning points:
       preRunBackBtn.setAttribute("aria-label", compactLevelBriefing ? "Exit run and go back" : "Back to mode selection");
     }
     renderPreRunGfx2ClassicInside();
+    renderPreRunGfx2AdvancedInside();
   }
 
   function renderPreRunGfx2ClassicInside() {
-    var isActive = isPreRunGfx2ClassicInsideActive();
+    renderPreRunGfx2Inside({
+      isActive: isPreRunGfx2ClassicInsideActive(),
+      rootEl: preRunClassicGfx2El,
+      boardEl: preRunClassicGfx2BoardEl,
+      levelValueEl: preRunClassicGfx2LevelValueEl,
+      livesValueEl: preRunClassicGfx2LivesValueEl,
+      controlsCopyEl: preRunClassicGfx2ControlsCopyEl,
+      goalValueEl: preRunClassicGfx2GoalValueEl,
+      startBtn: preRunClassicGfx2StartBtn,
+      easyBtn: preRunClassicGfx2EasyBtn,
+      hardBtn: preRunClassicGfx2HardBtn,
+      difficultyNoteEl: preRunClassicGfx2DifficultyNoteEl,
+      skinButtons: getPreRunGfx2ClassicSkinButtons(),
+      skinSlots: getPreRunGfx2ClassicSkinSlots(),
+      skinAssetPath: getClassicGfx2SkinSlotAssetPath
+    });
+  }
+
+  function renderPreRunGfx2AdvancedInside() {
+    renderPreRunGfx2Inside({
+      isActive: isPreRunGfx2AdvancedInsideActive(),
+      rootEl: preRunAdvancedGfx2El,
+      boardEl: preRunAdvancedGfx2BoardEl,
+      levelValueEl: preRunAdvancedGfx2LevelValueEl,
+      livesValueEl: preRunAdvancedGfx2LivesValueEl,
+      controlsCopyEl: preRunAdvancedGfx2ControlsCopyEl,
+      goalValueEl: preRunAdvancedGfx2GoalValueEl,
+      startBtn: preRunAdvancedGfx2StartBtn,
+      easyBtn: preRunAdvancedGfx2EasyBtn,
+      hardBtn: preRunAdvancedGfx2HardBtn,
+      difficultyNoteEl: preRunAdvancedGfx2DifficultyNoteEl,
+      skinButtons: getPreRunGfx2AdvancedSkinButtons(),
+      skinSlots: getPreRunGfx2AdvancedSkinSlots(),
+      skinAssetPath: getAdvancedGfx2SkinSlotAssetPath
+    });
+  }
+
+  function renderPreRunGfx2Inside(config) {
     var hardUnlocked = isHardDifficultyUnlocked();
     var canChangeDifficulty = state.currentLevel <= 1;
 
-    if (preRunClassicGfx2El) {
-      preRunClassicGfx2El.classList.toggle("hidden", !isActive);
+    if (config.rootEl) {
+      config.rootEl.classList.toggle("hidden", !config.isActive);
     }
-    if (!isActive) {
+    if (!config.isActive) {
       return;
     }
 
-    updatePreRunClassicGfx2BoardMetrics();
+    updatePreRunGfx2InsideBoardMetrics(config.boardEl);
 
-    if (preRunClassicGfx2LevelValueEl) {
-      preRunClassicGfx2LevelValueEl.textContent = String(state.currentLevel);
+    if (config.levelValueEl) {
+      config.levelValueEl.textContent = String(state.currentLevel);
     }
-    if (preRunClassicGfx2LivesValueEl) {
-      preRunClassicGfx2LivesValueEl.textContent = getLivesSummaryText();
+    if (config.livesValueEl) {
+      config.livesValueEl.textContent = getLivesSummaryText();
     }
-    if (preRunClassicGfx2ControlsCopyEl) {
-      preRunClassicGfx2ControlsCopyEl.innerHTML = getModeControlsHtml();
+    if (config.controlsCopyEl) {
+      config.controlsCopyEl.innerHTML = getModeControlsHtml(state.gameMode);
     }
-    if (preRunClassicGfx2GoalValueEl) {
-      preRunClassicGfx2GoalValueEl.textContent = getFinishScoreGoalText(getCurrentLevelGoalTargetScore());
+    if (config.goalValueEl) {
+      config.goalValueEl.textContent = getFinishScoreGoalText(getCurrentLevelGoalTargetScore());
     }
-    if (preRunClassicGfx2StartBtn) {
-      preRunClassicGfx2StartBtn.setAttribute("aria-label", state.currentLevel > 1 ? "Continue run" : "Start run");
-      preRunClassicGfx2StartBtn.title = state.currentLevel > 1 ? "Continue" : "Start Run";
+    if (config.startBtn) {
+      config.startBtn.setAttribute("aria-label", state.currentLevel > 1 ? "Continue run" : "Start run");
+      config.startBtn.title = state.currentLevel > 1 ? "Continue" : "Start Run";
     }
-    if (preRunClassicGfx2EasyBtn) {
-      preRunClassicGfx2EasyBtn.classList.toggle("selected", state.gameDifficulty !== "hard");
-      preRunClassicGfx2EasyBtn.setAttribute("aria-pressed", state.gameDifficulty === "hard" ? "false" : "true");
-      preRunClassicGfx2EasyBtn.disabled = !canChangeDifficulty;
+    if (config.easyBtn) {
+      config.easyBtn.classList.toggle("selected", state.gameDifficulty !== "hard");
+      config.easyBtn.setAttribute("aria-pressed", state.gameDifficulty === "hard" ? "false" : "true");
+      config.easyBtn.disabled = !canChangeDifficulty;
     }
-    if (preRunClassicGfx2HardBtn) {
-      preRunClassicGfx2HardBtn.classList.toggle("selected", state.gameDifficulty === "hard");
-      preRunClassicGfx2HardBtn.classList.toggle("locked", !hardUnlocked || !canChangeDifficulty);
-      preRunClassicGfx2HardBtn.setAttribute("aria-pressed", state.gameDifficulty === "hard" ? "true" : "false");
-      preRunClassicGfx2HardBtn.disabled = !canChangeDifficulty;
-      preRunClassicGfx2HardBtn.title = !canChangeDifficulty ? "Difficulty can only be changed before level 1" : hardUnlocked ? "" : getHardDifficultyLockText();
+    if (config.hardBtn) {
+      config.hardBtn.classList.toggle("selected", state.gameDifficulty === "hard");
+      config.hardBtn.classList.toggle("locked", !hardUnlocked || !canChangeDifficulty);
+      config.hardBtn.setAttribute("aria-pressed", state.gameDifficulty === "hard" ? "true" : "false");
+      config.hardBtn.disabled = !canChangeDifficulty;
+      config.hardBtn.title = !canChangeDifficulty ? "Difficulty can only be changed before level 1" : hardUnlocked ? "" : getHardDifficultyLockText();
     }
-    if (preRunClassicGfx2DifficultyNoteEl) {
-      preRunClassicGfx2DifficultyNoteEl.classList.toggle("hidden", !canChangeDifficulty || !state.preRunDifficultyLockNoticeActive);
-      preRunClassicGfx2DifficultyNoteEl.textContent = getHardDifficultyLockText();
+    if (config.difficultyNoteEl) {
+      config.difficultyNoteEl.classList.toggle("hidden", !canChangeDifficulty || !state.preRunDifficultyLockNoticeActive);
+      config.difficultyNoteEl.textContent = getHardDifficultyLockText();
     }
-    if (preRunClassicGfx2BoardEl) {
-      preRunClassicGfx2BoardEl.classList.toggle("is-between-levels", !canChangeDifficulty);
+    if (config.boardEl) {
+      config.boardEl.classList.toggle("is-between-levels", !canChangeDifficulty);
     }
 
-    getPreRunGfx2ClassicSkinButtons().forEach(function (entry) {
+    config.skinButtons.forEach(function (entry) {
       if (!entry.button) {
         return;
       }
@@ -5235,14 +5405,37 @@ Main tuning points:
         entry.button.title = unlocked ? getSkinDisplayName(entry.skin) : getSkinDisplayName(entry.skin) + " locked";
       }
     });
+
+    if (config.skinSlots && config.skinSlots.length) {
+      config.skinSlots.forEach(function (entry) {
+        if (!entry.img) {
+          return;
+        }
+        var isFuture = Boolean(entry.isFuture);
+        var unlocked = !isFuture && entry.skin ? isSkinUnlocked(entry.skin) : false;
+        var selected = unlocked && entry.skin && C.selectedSkin === entry.skin;
+        var variant = isFuture || !unlocked ? "locked" : selected ? "selected" : "unselected";
+        if (entry.slotIndex === 1 && variant === "locked") {
+          variant = "unselected";
+        }
+        var assetPath = typeof config.skinAssetPath === "function"
+          ? config.skinAssetPath(entry.slotIndex, variant)
+          : getAdvancedGfx2SkinSlotAssetPath(entry.slotIndex, variant);
+        entry.img.src = assetPath;
+      });
+    }
   }
 
   function updatePreRunClassicGfx2BoardMetrics() {
-    if (!preRunClassicGfx2BoardEl) {
+    updatePreRunGfx2InsideBoardMetrics(preRunClassicGfx2BoardEl);
+  }
+
+  function updatePreRunGfx2InsideBoardMetrics(boardEl) {
+    if (!boardEl) {
       return;
     }
 
-    var rect = preRunClassicGfx2BoardEl.getBoundingClientRect();
+    var rect = boardEl.getBoundingClientRect();
     var width = rect.width || 0;
     var height = rect.height || 0;
     var scale = Math.min(width / 470, height / 280);
@@ -5253,20 +5446,22 @@ Main tuning points:
 
     scale = Math.max(0.72, Math.min(1.16, scale));
 
-    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-title-size", Math.round(Math.max(16, Math.min(25, 19 * scale))) + "px");
-    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-copy-size", Math.round(Math.max(14, Math.min(20, 16 * scale))) + "px");
-    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-note-size", Math.round(Math.max(11, Math.min(14, 12 * scale))) + "px");
-    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-gap", Math.round(Math.max(5, Math.min(11, 8 * scale))) + "px");
-    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-section-gap", Math.round(Math.max(4, Math.min(9, 6 * scale))) + "px");
-    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-divider-gap", Math.round(Math.max(2, Math.min(5, 3 * scale))) + "px");
-    preRunClassicGfx2BoardEl.style.setProperty("--classic-board-row-gap", Math.round(Math.max(8, Math.min(16, 11 * scale))) + "px");
+    boardEl.style.setProperty("--classic-board-title-size", Math.max(16, Math.min(25, 19 * scale)).toFixed(2) + "px");
+    boardEl.style.setProperty("--classic-board-copy-size", Math.max(14, Math.min(20, 16 * scale)).toFixed(2) + "px");
+    boardEl.style.setProperty("--classic-board-note-size", Math.max(11, Math.min(14, 12 * scale)).toFixed(2) + "px");
+    boardEl.style.setProperty("--classic-board-gap", Math.max(3, Math.min(7, 5 * scale)).toFixed(2) + "px");
+    boardEl.style.setProperty("--classic-board-section-gap", Math.max(2, Math.min(6, 4 * scale)).toFixed(2) + "px");
+    boardEl.style.setProperty("--classic-board-divider-gap", Math.max(0, Math.min(3, 1.5 * scale)).toFixed(2) + "px");
+    boardEl.style.setProperty("--classic-board-row-gap", Math.max(6, Math.min(12, 8 * scale)).toFixed(2) + "px");
   }
 
   function renderPreRunScreen() {
     var hardUnlocked = isHardDifficultyUnlocked();
     var fullUnlocked = isFullModeUnlocked();
     var showClassicGfx2Inside = isPreRunGfx2ClassicInsideActive();
-    var compactLevelBriefing = state.preRunStep === "details" && state.currentLevel > 1 && !showClassicGfx2Inside;
+    var showAdvancedGfx2Inside = isPreRunGfx2AdvancedInsideActive();
+    var showGfx2Inside = showClassicGfx2Inside || showAdvancedGfx2Inside;
+    var compactLevelBriefing = state.preRunStep === "details" && state.currentLevel > 1 && !showGfx2Inside;
     var useGfx2StartScreen = isGfx2StartScreenEnabled();
 
     normalizeUnlockedPreRunSelection();
@@ -5305,11 +5500,14 @@ Main tuning points:
     if (preRunClassicGfx2El) {
       preRunClassicGfx2El.classList.toggle("hidden", !showClassicGfx2Inside);
     }
+    if (preRunAdvancedGfx2El) {
+      preRunAdvancedGfx2El.classList.toggle("hidden", !showAdvancedGfx2Inside);
+    }
     if (preRunCompactShellEl) {
       preRunCompactShellEl.classList.toggle("hidden", !compactLevelBriefing);
     }
     if (preRunDetailFullContentEl) {
-      preRunDetailFullContentEl.classList.toggle("hidden", compactLevelBriefing || showClassicGfx2Inside);
+      preRunDetailFullContentEl.classList.toggle("hidden", compactLevelBriefing || showGfx2Inside);
     }
     if (preRunScreenEl) {
       preRunScreenEl.classList.toggle("is-launch-transition", state.preRunLaunchActive);
@@ -5385,6 +5583,7 @@ Main tuning points:
       renderPreRunSettingsScreen();
     }
     renderPreRunGfx2ClassicInside();
+    renderPreRunGfx2AdvancedInside();
     stopBadgesPageMusicIfLeaving();
     updatePreRunGfx2EntranceAnimation(0);
     refreshMusicPlayback();
@@ -6070,13 +6269,13 @@ Main tuning points:
   function getPreRunScoresBoardLabel(board) {
     switch (String(board || "")) {
       case "jump_hard":
-        return "Jump Classic Hard";
+        return "Classic Hard";
       case "full_easy":
-        return "Jump Advanced Easy";
+        return "Full Easy";
       case "full_hard":
-        return "Jump Advanced Hard";
+        return "Full Hard";
       default:
-        return "Jump Classic Easy";
+        return "Classic Easy";
     }
   }
 
@@ -6233,7 +6432,7 @@ Main tuning points:
         statusText = boardState.message;
       }
       return [
-        '<section class="pre-run-scores-board">',
+        '<section class="pre-run-scores-board pre-run-scores-board-' + boardKey + '">',
         '<header class="pre-run-scores-board-header">',
         "<h3>",
         getPreRunScoresBoardLabel(boardKey),
@@ -7369,13 +7568,14 @@ Main tuning points:
       preRunSettingsBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
-        if (isGfx2StartScreenEnabled()) {
-          startPreRunGfx2BackAnimation(PRE_RUN_GFX2_SETTINGS_BACK_FRAMES);
-          return;
-        }
-        playUiPageOpenSound();
-        state.preRunStep = "select";
-        renderPreRunScreen();
+        handlePreRunSettingsBackNavigation();
+      });
+    }
+    if (preRunSettingsGfx2BackBtn) {
+      preRunSettingsGfx2BackBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        handlePreRunSettingsBackNavigation();
       });
     }
     if (preRunScoresBackBtn) {
@@ -7392,26 +7592,22 @@ Main tuning points:
     }
     if (preRunToggleSfxBtn) {
       preRunToggleSfxBtn.addEventListener("click", function () {
-        unlockAudioIfNeeded();
-        var nextValue = !C.audioSfxEnabled;
-        if (C.audioSfxEnabled) {
-          playUiButtonSound();
-        }
-        applyGlobalAudioSetting("audioSfxEnabled", nextValue);
-        if (nextValue) {
-          playUiButtonSound();
-        }
-        renderPreRunSettingsScreen();
+        togglePreRunSfxSetting();
       });
     }
     if (preRunToggleMusicBtn) {
       preRunToggleMusicBtn.addEventListener("click", function () {
-        unlockAudioIfNeeded();
-        if (C.audioSfxEnabled) {
-          playUiButtonSound();
-        }
-        applyGlobalAudioSetting("audioMusicEnabled", !C.audioMusicEnabled);
-        renderPreRunSettingsScreen();
+        togglePreRunMusicSetting();
+      });
+    }
+    if (preRunSettingsGfx2MusicBtn) {
+      preRunSettingsGfx2MusicBtn.addEventListener("click", function () {
+        togglePreRunMusicSetting();
+      });
+    }
+    if (preRunSettingsGfx2SfxBtn) {
+      preRunSettingsGfx2SfxBtn.addEventListener("click", function () {
+        togglePreRunSfxSetting();
       });
     }
     if (preRunShopExchangeOneBtn) {
@@ -7603,6 +7799,13 @@ Main tuning points:
         }
       });
     }
+    if (preRunAdvancedGfx2ExitBtn) {
+      preRunAdvancedGfx2ExitBtn.addEventListener("click", function () {
+        if (preRunBackBtn) {
+          preRunBackBtn.click();
+        }
+      });
+    }
     if (preRunCompactBackBtn) {
       preRunCompactBackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
@@ -7620,6 +7823,13 @@ Main tuning points:
     }
     if (preRunClassicGfx2AdminBtn) {
       preRunClassicGfx2AdminBtn.addEventListener("click", function () {
+        if (preRunDetailAdminBtn) {
+          preRunDetailAdminBtn.click();
+        }
+      });
+    }
+    if (preRunAdvancedGfx2AdminBtn) {
+      preRunAdvancedGfx2AdminBtn.addEventListener("click", function () {
         if (preRunDetailAdminBtn) {
           preRunDetailAdminBtn.click();
         }
@@ -7659,6 +7869,13 @@ Main tuning points:
         }
       });
     }
+    if (preRunAdvancedGfx2StartBtn) {
+      preRunAdvancedGfx2StartBtn.addEventListener("click", function () {
+        if (preRunStartBtn) {
+          preRunStartBtn.click();
+        }
+      });
+    }
     if (preRunCompactStartBtn) {
       preRunCompactStartBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
@@ -7673,8 +7890,22 @@ Main tuning points:
         setPreRunDifficulty("easy");
       });
     }
+    if (preRunAdvancedGfx2EasyBtn) {
+      preRunAdvancedGfx2EasyBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        setPreRunDifficulty("easy");
+      });
+    }
     if (preRunClassicGfx2HardBtn) {
       preRunClassicGfx2HardBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        setPreRunDifficulty("hard");
+      });
+    }
+    if (preRunAdvancedGfx2HardBtn) {
+      preRunAdvancedGfx2HardBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
         setPreRunDifficulty("hard");
@@ -7692,6 +7923,19 @@ Main tuning points:
       });
     }
     getPreRunGfx2ClassicSkinButtons().forEach(function (entry) {
+      if (!entry.button || !entry.skin) {
+        return;
+      }
+      entry.button.addEventListener("click", function () {
+        if (entry.button.disabled) {
+          return;
+        }
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        setSelectedSkinFromUi(entry.skin);
+      });
+    });
+    getPreRunGfx2AdvancedSkinButtons().forEach(function (entry) {
       if (!entry.button || !entry.skin) {
         return;
       }
@@ -8691,6 +8935,7 @@ Main tuning points:
     var isMobile = detectMobileDevice();
 
     updatePreRunClassicGfx2BoardMetrics();
+    updatePreRunGfx2InsideBoardMetrics(preRunAdvancedGfx2BoardEl);
 
     if (!isMobile) {
       document.body.style.overflow = "";
@@ -8703,6 +8948,7 @@ Main tuning points:
       }
       applyGameModeToUi();
       updatePreRunClassicGfx2BoardMetrics();
+      updatePreRunGfx2InsideBoardMetrics(preRunAdvancedGfx2BoardEl);
       return;
     }
 
@@ -8720,6 +8966,7 @@ Main tuning points:
     }
     applyGameModeToUi();
     updatePreRunClassicGfx2BoardMetrics();
+    updatePreRunGfx2InsideBoardMetrics(preRunAdvancedGfx2BoardEl);
   }
 
   function tryForceFullscreen() {

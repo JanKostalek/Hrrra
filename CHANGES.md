@@ -733,8 +733,20 @@ Rules:
 - 2026-04-09: Further tuned the `GFX2` Shop chalkboard UI across desktop and mobile: desktop text sizing was reduced to stop local overflow, the mobile/web `Buy` button was enlarged, and the `Buy` control was repositioned higher so it sits beneath the cost/status area more consistently in web and Android layouts.
 - 2026-04-09: Replaced the `GFX2` Classic pre-run detail page with a dedicated [`assets/gfx2/Classic_inside.png`](c:/-_WeB_-/Hrrra/assets/gfx2/Classic_inside.png) interior scene. Classic now uses responsive hotspot overlays for `EXIT`, `ADMIN`, `START RUN`, and six character slots, plus a chalkboard panel showing level, difficulty toggle, lives, controls, and the current level goal without the old Tester Info / Future Release layout.
 
+- 2026-04-09: Added a matching `GFX2` Advanced pre-run detail page using the same responsive inside-screen layout, hotspot overlays, character selection, difficulty lock behavior, and chalkboard briefing as the Classic inside screen, with the Advanced-specific background asset.
+
+- 2026-04-09: Tightened the shared `GFX2` Classic/Advanced inside chalkboard spacing and made the Easy/Hard buttons wider but shorter so the briefing text fits inside the board.
+
+- 2026-04-09: Reworked the `GFX2` Settings page to use the new [`assets/gfx2/settings_inside.png`](c:/-_WeB_-/Hrrra/assets/gfx2/settings_inside.png) background with hotspot controls for Music and Sound, including grayscale off-state overlays sourced from [`assets/gfx2/settings_inside_off.png`](c:/-_WeB_-/Hrrra/assets/gfx2/settings_inside_off.png).
+
 - 2026-04-09: Locked GFX2 Classic difficulty changes after level 1, moved the Easy/Hard toggle to the first row before level 1, tightened between-level chalkboard spacing, and repositioned the GFX2 Shop status plus Buy controls into the lower overlay area beneath the register for mobile/web.
 
 - 2026-04-09: Shifted the GFX2 Shop `Buy` button one full button-width further right for mobile web alignment testing before the Android release build.
 
 - 2026-04-09: Bumped Android/store versioning to versionCode 29 / versionName 1.0.28 and refreshed shipped update metadata for a new AAB containing the latest GFX2 Classic difficulty lock plus Shop mobile overlay positioning fixes.
+
+- 2026-04-10: Cropped the GFX2 Advanced skin-slot artwork from `advanced_iside.png` (using your red-guide overlay) into 256x256 state assets for `skin01`–`skin06` plus `template_` variants under `assets/gfx2/advance/layout` for future selectable/locked UI testing.
+- 2026-04-10: Swapped the GFX2 Advanced background to the blank `advanced_iside_blank.png` so the overlaid skin-slot art scales cleanly without baked-in characters fighting the responsive layout.
+- 2026-04-10: Applied the same GFX2 skin-slot overlay system to the Classic screen using `Classic_inside_blank.png`, and duplicated the slot layout assets to `assets/gfx2/classic/layout` so Classic/Advanced stay visually consistent.
+- 2026-04-10: Refreshed `assets/gfx2/settings_inside_off.png` from the updated off-state artwork so the GFX2 Settings overlay uses the latest gray icon variants.
+- 2026-04-10: Re-applied the latest Settings room artwork updates by refreshing `assets/gfx2/settings_inside.png` and `assets/gfx2/settings_inside_off.png` from the new temp sources.

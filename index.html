@@ -187,15 +187,10 @@
           <div id="pre-run-badges-groups" class="pre-run-badges-groups"></div>
         </div>
         <div id="pre-run-scores-screen" class="pre-run-stage hidden" aria-label="Online top players overview">
-          <div class="pre-run-scores-header">
-            <div class="pre-run-scores-topbar">
-              <button id="pre-run-scores-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
-              <div class="pre-run-scores-heading">
-                <h2>Top Score</h2>
-              </div>
-            </div>
+          <div class="pre-run-scores-gfx2-scene" aria-label="Top players overview">
+            <button id="pre-run-scores-back-btn" class="pre-run-scores-gfx2-back" aria-label="Back to mode selection"></button>
+            <div id="pre-run-scores-grid" class="pre-run-scores-grid pre-run-scores-grid-gfx2"></div>
           </div>
-          <div id="pre-run-scores-grid" class="pre-run-scores-grid"></div>
         </div>
         <div id="pre-run-rules-screen" class="pre-run-stage hidden" aria-label="Rules overview">
           <div class="pre-run-scores-header">
@@ -245,29 +240,40 @@
           </section>
         </div>
         <div id="pre-run-settings-screen" class="pre-run-stage hidden" aria-label="Settings overview">
-          <div class="pre-run-scores-header">
-            <div class="pre-run-scores-topbar">
-              <button id="pre-run-settings-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
-              <div class="pre-run-scores-heading">
-                <h2>Settings</h2>
-              </div>
+          <div id="pre-run-settings-gfx2" class="pre-run-settings-gfx2 hidden">
+            <div class="pre-run-settings-gfx2-scene" aria-label="GFX2 settings">
+              <div class="pre-run-settings-gfx2-off-layer pre-run-settings-gfx2-off-music" aria-hidden="true"></div>
+              <div class="pre-run-settings-gfx2-off-layer pre-run-settings-gfx2-off-sfx" aria-hidden="true"></div>
+              <button id="pre-run-settings-gfx2-back-btn" class="pre-run-settings-gfx2-hitbox pre-run-settings-gfx2-hitbox-exit" aria-label="Back to mode selection"></button>
+              <button id="pre-run-settings-gfx2-music-btn" class="pre-run-settings-gfx2-hitbox pre-run-settings-gfx2-hitbox-music" type="button" aria-pressed="true" aria-label="Music on"></button>
+              <button id="pre-run-settings-gfx2-sfx-btn" class="pre-run-settings-gfx2-hitbox pre-run-settings-gfx2-hitbox-sfx" type="button" aria-pressed="true" aria-label="Sound effects on"></button>
             </div>
           </div>
-          <div class="pre-run-settings-list">
-            <section class="pre-run-settings-row" aria-label="Sound effects setting">
-              <div class="pre-run-settings-copy">
-                <h3>Sound</h3>
-                <p>All sound effects</p>
+          <div id="pre-run-settings-gfx1" class="pre-run-settings-gfx1">
+            <div class="pre-run-scores-header">
+              <div class="pre-run-scores-topbar">
+                <button id="pre-run-settings-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
+                <div class="pre-run-scores-heading">
+                  <h2>Settings</h2>
+                </div>
               </div>
-              <button id="pre-run-toggle-sfx-btn" class="pre-run-settings-toggle" type="button" aria-pressed="true">ON</button>
-            </section>
-            <section class="pre-run-settings-row" aria-label="Music setting">
-              <div class="pre-run-settings-copy">
-                <h3>Music</h3>
-                <p>All music loops</p>
-              </div>
-              <button id="pre-run-toggle-music-btn" class="pre-run-settings-toggle" type="button" aria-pressed="true">ON</button>
-            </section>
+            </div>
+            <div class="pre-run-settings-list">
+              <section class="pre-run-settings-row" aria-label="Sound effects setting">
+                <div class="pre-run-settings-copy">
+                  <h3>Sound</h3>
+                  <p>All sound effects</p>
+                </div>
+                <button id="pre-run-toggle-sfx-btn" class="pre-run-settings-toggle" type="button" aria-pressed="true">ON</button>
+              </section>
+              <section class="pre-run-settings-row" aria-label="Music setting">
+                <div class="pre-run-settings-copy">
+                  <h3>Music</h3>
+                  <p>All music loops</p>
+                </div>
+                <button id="pre-run-toggle-music-btn" class="pre-run-settings-toggle" type="button" aria-pressed="true">ON</button>
+              </section>
+            </div>
           </div>
         </div>
         <div id="pre-run-shop-screen" class="pre-run-stage hidden" aria-label="Shop overview">
@@ -360,6 +366,12 @@
         <div id="pre-run-detail-screen" class="pre-run-stage hidden">
           <div id="pre-run-classic-gfx2" class="pre-run-classic-gfx2 hidden">
             <div class="pre-run-classic-gfx2-scene" aria-label="GFX2 classic level setup">
+              <img id="pre-run-classic-gfx2-skin-1-img" class="pre-run-classic-gfx2-skin-slot pre-run-classic-gfx2-skin-slot-1" alt="" aria-hidden="true" />
+              <img id="pre-run-classic-gfx2-skin-2-img" class="pre-run-classic-gfx2-skin-slot pre-run-classic-gfx2-skin-slot-2" alt="" aria-hidden="true" />
+              <img id="pre-run-classic-gfx2-skin-3-img" class="pre-run-classic-gfx2-skin-slot pre-run-classic-gfx2-skin-slot-3" alt="" aria-hidden="true" />
+              <img id="pre-run-classic-gfx2-skin-4-img" class="pre-run-classic-gfx2-skin-slot pre-run-classic-gfx2-skin-slot-4" alt="" aria-hidden="true" />
+              <img id="pre-run-classic-gfx2-skin-5-img" class="pre-run-classic-gfx2-skin-slot pre-run-classic-gfx2-skin-slot-5" alt="" aria-hidden="true" />
+              <img id="pre-run-classic-gfx2-skin-6-img" class="pre-run-classic-gfx2-skin-slot pre-run-classic-gfx2-skin-slot-6" alt="" aria-hidden="true" />
               <button id="pre-run-classic-gfx2-exit-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-exit" aria-label="Back to mode selection"></button>
               <button id="pre-run-classic-gfx2-admin-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-admin" aria-label="Open mechanics admin"></button>
               <button id="pre-run-classic-gfx2-start-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-start" aria-label="Start run"></button>
@@ -398,6 +410,56 @@
                 <div class="pre-run-classic-gfx2-section">
                   <p class="pre-run-classic-gfx2-heading">Goal:</p>
                   <p id="pre-run-classic-gfx2-goal-value" class="pre-run-classic-gfx2-goal-value">Finish level with 15,000 score</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="pre-run-advanced-gfx2" class="pre-run-classic-gfx2 pre-run-advanced-gfx2 hidden">
+            <div class="pre-run-classic-gfx2-scene pre-run-advanced-gfx2-scene" aria-label="GFX2 advanced level setup">
+              <img id="pre-run-advanced-gfx2-skin-1-img" class="pre-run-advanced-gfx2-skin-slot pre-run-advanced-gfx2-skin-slot-1" alt="" aria-hidden="true" />
+              <img id="pre-run-advanced-gfx2-skin-2-img" class="pre-run-advanced-gfx2-skin-slot pre-run-advanced-gfx2-skin-slot-2" alt="" aria-hidden="true" />
+              <img id="pre-run-advanced-gfx2-skin-3-img" class="pre-run-advanced-gfx2-skin-slot pre-run-advanced-gfx2-skin-slot-3" alt="" aria-hidden="true" />
+              <img id="pre-run-advanced-gfx2-skin-4-img" class="pre-run-advanced-gfx2-skin-slot pre-run-advanced-gfx2-skin-slot-4" alt="" aria-hidden="true" />
+              <img id="pre-run-advanced-gfx2-skin-5-img" class="pre-run-advanced-gfx2-skin-slot pre-run-advanced-gfx2-skin-slot-5" alt="" aria-hidden="true" />
+              <img id="pre-run-advanced-gfx2-skin-6-img" class="pre-run-advanced-gfx2-skin-slot pre-run-advanced-gfx2-skin-slot-6" alt="" aria-hidden="true" />
+              <button id="pre-run-advanced-gfx2-exit-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-exit" aria-label="Back to mode selection"></button>
+              <button id="pre-run-advanced-gfx2-admin-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-admin" aria-label="Open mechanics admin"></button>
+              <button id="pre-run-advanced-gfx2-start-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-start" aria-label="Start run"></button>
+              <button id="pre-run-advanced-gfx2-skin-1-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-skin-1" data-skin="Skin01" aria-label="Select Skin 01"></button>
+              <button id="pre-run-advanced-gfx2-skin-2-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-skin-2" data-skin="Skin02" aria-label="Select Skin 02"></button>
+              <button id="pre-run-advanced-gfx2-skin-3-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-skin-3" data-skin="Skin03" aria-label="Select Skin 03"></button>
+              <button id="pre-run-advanced-gfx2-skin-4-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-skin-4" data-skin="Skin04" aria-label="Select Skin 04"></button>
+              <button id="pre-run-advanced-gfx2-skin-future-1-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-skin-future-1" data-skin="future-1" aria-label="Future character slot" disabled></button>
+              <button id="pre-run-advanced-gfx2-skin-future-2-btn" class="pre-run-classic-gfx2-hitbox pre-run-classic-gfx2-hitbox-skin-future-2" data-skin="future-2" aria-label="Future character slot" disabled></button>
+
+              <div class="pre-run-classic-gfx2-board" aria-live="polite">
+                <div class="pre-run-classic-gfx2-board-top">
+                  <div class="pre-run-classic-gfx2-row pre-run-classic-gfx2-row-level">
+                    <span class="pre-run-classic-gfx2-label">Level:</span>
+                    <strong id="pre-run-advanced-gfx2-level-value" class="pre-run-classic-gfx2-value">1</strong>
+                  </div>
+                  <div class="pre-run-classic-gfx2-row pre-run-classic-gfx2-row-difficulty">
+                    <span class="pre-run-classic-gfx2-label">Difficulty:</span>
+                    <div class="pre-run-classic-gfx2-difficulty-buttons" role="group" aria-label="Advanced difficulty">
+                      <button id="pre-run-advanced-gfx2-easy-btn" class="pre-run-classic-gfx2-difficulty-btn" type="button">Easy</button>
+                      <button id="pre-run-advanced-gfx2-hard-btn" class="pre-run-classic-gfx2-difficulty-btn" type="button">Hard</button>
+                    </div>
+                  </div>
+                  <p id="pre-run-advanced-gfx2-difficulty-note" class="pre-run-classic-gfx2-note hidden">Hard unlocks later.</p>
+                  <div class="pre-run-classic-gfx2-row pre-run-classic-gfx2-row-lives">
+                    <span class="pre-run-classic-gfx2-label">Lives:</span>
+                    <strong id="pre-run-advanced-gfx2-lives-value" class="pre-run-classic-gfx2-value">5</strong>
+                  </div>
+                </div>
+                <div class="pre-run-classic-gfx2-divider"></div>
+                <div class="pre-run-classic-gfx2-section">
+                  <p class="pre-run-classic-gfx2-heading">Controls:</p>
+                  <div id="pre-run-advanced-gfx2-controls-copy" class="pre-run-classic-gfx2-controls"></div>
+                </div>
+                <div class="pre-run-classic-gfx2-divider"></div>
+                <div class="pre-run-classic-gfx2-section">
+                  <p class="pre-run-classic-gfx2-heading">Goal:</p>
+                  <p id="pre-run-advanced-gfx2-goal-value" class="pre-run-classic-gfx2-goal-value">Finish level with 15,000 score</p>
                 </div>
               </div>
             </div>
