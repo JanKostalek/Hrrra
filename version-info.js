@@ -1,6 +1,6 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 30,
-  versionName: "1.0.29",
+  versionCode: 31,
+  versionName: "1.0.30",
   whatsNew: [
   "GFX2 Scores now uses the new four-board chalkboard layout.",
   "Classic and Advanced inside screens use blank artwork with live skin overlays.",

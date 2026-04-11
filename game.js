@@ -280,6 +280,7 @@ Main tuning points:
   var preRunSettingsGfx2SfxBtn = document.getElementById("pre-run-settings-gfx2-sfx-btn");
   var preRunPlayerNameBtn = document.getElementById("pre-run-player-name-btn");
   var preRunBadgesBackBtn = document.getElementById("pre-run-badges-back-btn");
+  var preRunBadgesExitBtn = document.getElementById("pre-run-badges-exit-btn");
   var preRunScoresBackBtn = document.getElementById("pre-run-scores-back-btn");
   var preRunBadgesGroupsEl = document.getElementById("pre-run-badges-groups");
   var preRunScoresGridEl = document.getElementById("pre-run-scores-grid");
@@ -6021,87 +6022,42 @@ Main tuning points:
         }
       });
 
-      var cardsMarkup = seriesForCategory.map(function (series) {
-        var tiersMarkup = (series.tiers || []).map(function (tier) {
-          var tierIndex = series.tiers.indexOf(tier);
-          var isCollected = isBadgeTierCollected(series, tierIndex);
-          var unlockDate = isCollected ? getBadgeUnlockDate(series, tierIndex) : "";
-          return [
-            '<article class="pre-run-badge-tier ',
-            isCollected ? "is-unlocked" : "is-locked",
-            '" aria-label="',
-            tier.tier,
-            " ",
-            getBadgeSeriesName(series),
-            '">',
-            '<div class="pre-run-badge-medal-wrap">',
-            '<span class="pre-run-badge-medal ',
-            getBadgeSpriteClassName(tier.sprite),
-            '" aria-hidden="true"></span>',
-            "</div>",
-            '<div class="pre-run-badge-tier-copy">',
-            '<span class="pre-run-badge-tier-meta">',
-            '<span class="pre-run-badge-tier-label">',
-            tier.tier,
-            "</span>",
-            unlockDate ? '<span class="pre-run-badge-tier-date">' + unlockDate + "</span>" : "",
-            "</span>",
-            '<span class="pre-run-badge-tier-value">',
-            formatBadgeGoalText(series, tierIndex),
-            "</span>",
-            "</div>",
-            "</article>"
-          ].join("");
-        }).join("");
-
+      var rowsMarkup = seriesForCategory.map(function (series) {
         return [
-          '<section class="pre-run-badge-card">',
-          '<header class="pre-run-badge-card-header">',
-          "<h3>",
+          '<div class="pre-run-badges-gfx2-row">',
+          '<div class="pre-run-badges-gfx2-row-copy">',
+          "<h4>",
           getBadgeSeriesName(series),
-          "</h3>",
+          "</h4>",
           "<p>",
           series.description,
           "</p>",
-          "</header>",
-          '<div class="pre-run-badge-tier-grid">',
-          tiersMarkup,
           "</div>",
-          "</section>"
+          "</div>"
         ].join("");
       }).join("");
 
       return [
-        '<section class="pre-run-badge-group">',
-        '<div class="pre-run-badge-group-header">',
-        "<h3>",
+        '<section class="pre-run-badges-gfx2-category">',
+        '<div class="pre-run-badges-gfx2-category-header">',
+        '<span class="pre-run-badges-gfx2-category-title">',
         categoryName,
-        "</h3>",
-        "<p>",
-        BADGE_CATEGORY_COPY[categoryName] || "",
-        "</p>",
-        '<span class="pre-run-badge-group-count">',
+        "</span>",
+        '<span class="pre-run-badges-gfx2-category-count">',
         categoryCollectedCount,
         "/",
         categoryBadgeCount,
         " collected",
         "</span>",
         "</div>",
-        '<div class="pre-run-badge-card-grid">',
-        cardsMarkup,
+        '<div class="pre-run-badges-gfx2-rows">',
+        rowsMarkup,
         "</div>",
         "</section>"
       ].join("");
     }).join("");
 
-    preRunBadgesGroupsEl.innerHTML = [
-      '<div class="pre-run-badges-intro">',
-      "<p>",
-      "This first draft keeps every badge visible while live progress tracking feeds the counters.",
-      "</p>",
-      "</div>",
-      categoryMarkup
-    ].join("");
+    preRunBadgesGroupsEl.innerHTML = categoryMarkup;
   }
 
   function isNativeAndroidPlatform() {
@@ -7527,17 +7483,21 @@ Main tuning points:
         setPreRunGfx2ForegroundFrame(0, PRE_RUN_GFX2_SCORES_FRAMES);
       });
     }
+    var handlePreRunBadgesExit = function () {
+      unlockAudioIfNeeded();
+      playUiButtonSound();
+      if (isGfx2StartScreenEnabled()) {
+        startPreRunGfx2BackAnimation(PRE_RUN_GFX2_BADGES_BACK_FRAMES);
+        return;
+      }
+      state.preRunStep = "select";
+      renderPreRunScreen();
+    };
     if (preRunBadgesBackBtn) {
-      preRunBadgesBackBtn.addEventListener("click", function () {
-        unlockAudioIfNeeded();
-        playUiButtonSound();
-        if (isGfx2StartScreenEnabled()) {
-          startPreRunGfx2BackAnimation(PRE_RUN_GFX2_BADGES_BACK_FRAMES);
-          return;
-        }
-        state.preRunStep = "select";
-        renderPreRunScreen();
-      });
+      preRunBadgesBackBtn.addEventListener("click", handlePreRunBadgesExit);
+    }
+    if (preRunBadgesExitBtn) {
+      preRunBadgesExitBtn.addEventListener("click", handlePreRunBadgesExit);
     }
     if (preRunRulesBackBtn) {
       preRunRulesBackBtn.addEventListener("click", function () {

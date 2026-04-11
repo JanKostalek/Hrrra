@@ -892,3 +892,40 @@ Posouvas jen levy okraj a pravy asi nechavas zachovany na stejnem miste. Neposou
 - 2026-04-09: V shop posun tlacítko Buy o 100 % šírky tlacítka doprava a pak udelej push na main / online web.
 
 - 2026-04-09: Priprav AAB a nezapomen navýšit verzi.
+---------------------------------------
+rozširovat je nebudu. mysleno, ze vždy budou jen tri medaile bronze/silver/gold.  a otázce císlo jedna nerozumím. jak to myslís?
+---------------------------------------
+ano, udelej to takto. prípadne pak budeme zamenovat. tak mužeš zahájit implementaci
+Zatím nic nemen, jen povídej... Dokážeš mi pripravit... (badges gfx2 slicing)
+
+---------------------------------------
+ano, udelej to takto. pripadne pak budeme zamenovat. tak muzes zahajit implementaci
+---------------------------------------
+vzdyt tam mas soubor badges_inside_marked. na nem je presne videt, jak to ma vypadat
+
+---------------------------------------
+ano
+
+---------------------------------------
+uz je to skoro presne ono. ted jeste posun nadpis o 50% výšky toho textu nahoru
+
+---------------------------------------
+je to v poradku. ale na konci skrolovani je kus oken uriznutý a podle toho co je v gfx1 tam i kus - jedna kategorie - chybí
+
+---------------------------------------
+uz to není spatne zarizlý, ale chybí mi tam kagegorie discovery
+
+---------------------------------------
+je tam ted nadpis kategorie, ale neneí tam okno s badges
+
+---------------------------------------
+udelej celkovou velikost okna - skrolovaní - taky adaptivní. to znamená, aby byla tak velka, kolik je potreba podle poètu oken. aby, az tam neco dalsiho pridame, aby se to automaticky protahlo. pripadne, kdyz neco ubereme, aby se to zmensilo
+
+---------------------------------------
+ted koukam, ze v te badge strance není na EXIT (pravy horní roh) navazany back tlaèítko
+
+---------------------------------------
+priprav aab
+podivej se do pravidel. je tady nainstalovany android studio, cili i java
+
+-------------------

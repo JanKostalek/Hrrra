@@ -750,3 +750,20 @@ Rules:
 - 2026-04-10: Applied the same GFX2 skin-slot overlay system to the Classic screen using `Classic_inside_blank.png`, and duplicated the slot layout assets to `assets/gfx2/classic/layout` so Classic/Advanced stay visually consistent.
 - 2026-04-10: Refreshed `assets/gfx2/settings_inside_off.png` from the updated off-state artwork so the GFX2 Settings overlay uses the latest gray icon variants.
 - 2026-04-10: Re-applied the latest Settings room artwork updates by refreshing `assets/gfx2/settings_inside.png` and `assets/gfx2/settings_inside_off.png` from the new temp sources.
+\n- GFX2 badges screen: replaced layout with sliced header/row strips, added medal/icon assets, and rebuilt badge list rendering for the new single-column design.
+\n- GFX2 badges layout: repositioned row overlays with absolute percentages and full-width scroll to better match background alignment.
+\n- Switched GFX2 badges screen to wood background + top/total/category/single panels (gfx1-style stacking) and removed the previous sliced badges_inside layout.
+
+- 2026-04-12: Adjusted GFX2 badges single-card text frame to fill the panel so titles sit at the top strip and descriptions anchor to the bottom.
+
+- 2026-04-12: Nudged the GFX2 badge title upward within the single-card header strip for tighter alignment.
+
+- 2026-04-12: Added extra bottom padding/scroll padding on the GFX2 badges scroll container so the final cards and categories are fully visible at the end.
+
+- 2026-04-12: Increased GFX2 badges scroll bottom padding so the final Discovery category is fully reachable.
+
+- 2026-04-12: Increased GFX2 badges bottom scroll padding again so the Discovery badge card content is visible below its header.
+
+- 2026-04-12: Made the GFX2 badges screen height auto-fit content by moving scrolling to the screen container and letting the inner list expand.
+
+- 2026-04-12: Added a right-side Exit hotspot on the GFX2 badges screen wired to the same back action as the left exit button.
