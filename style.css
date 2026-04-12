@@ -688,8 +688,64 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 35;
-  padding: 14px;
+  padding: 0;
   overflow-y: auto;
+}
+
+#pre-run-screen {
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  background: url("assets/gfx2/wood_background.png") center top / 100% auto repeat-y !important;
+}
+
+.pre-run-card {
+  width: 100vw !important;
+  max-width: none !important;
+  min-height: 100dvh !important;
+  max-height: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  display: flex;
+  flex-direction: column;
+}
+
+#pre-run-screen.is-launch-transition .pre-run-card {
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+}
+
+#pre-run-select-gfx2.pre-run-select-variant {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+#pre-run-select-gfx2 .pre-run-gfx2-scene {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100% !important;
+  max-height: none !important;
+}
+
+#pre-run-select-screen {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+#pre-run-select-gfx1.pre-run-select-variant {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+#pre-run-select-gfx2.pre-run-select-variant {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
 }
 
 #pre-run-screen.hidden {
@@ -702,15 +758,16 @@ body {
 
 .pre-run-card {
   position: relative;
-  width: min(1020px, 94vw);
+  width: 100%;
   max-width: 100%;
+  height: 100%;
+  max-height: 100%;
   background: transparent;
   background-color: transparent;
-  border-radius: 28px;
-  border: 4px solid #08293a;
+  border-radius: 0;
+  border: 0;
   padding: 26px 28px;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
-  max-height: calc(100dvh - 28px);
+  box-shadow: none;
   overflow-y: auto;
 }
 
@@ -792,10 +849,10 @@ body {
 
 .pre-run-badges-gfx2-back {
   position: absolute;
-  left: 2.5%;
-  top: 1.8%;
-  width: 14%;
-  height: 6.8%;
+  left: 3.8%;
+  top: 0.4%;
+  width: 11.8%;
+  aspect-ratio: 170 / 82;
   border: 0;
   background: transparent;
   cursor: pointer;
@@ -822,8 +879,9 @@ body {
 }
 
 .pre-run-badges-gfx2-top {
-  width: 100%;
-  aspect-ratio: 1024 / 190;
+  width: 104%;
+  margin-left: -2%;
+  aspect-ratio: 1024 / 127;
   background: url("assets/gfx2/badges_top.png") center center / 100% 100% no-repeat;
 }
 

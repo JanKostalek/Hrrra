@@ -950,3 +950,24 @@ ale nebudou tam dve pozadí pres sebe? ale dobre, zkus to udìlat. pak to pripadne
 udelej obojí
 
 -------------------
+ano
+
+-------------------
+ano
+-------------------
+ano
+-------------------
+na lokale je uvodní obrazovka zvlástne adaptivní.. zezaèátku vyplnuje celé otevøené okno od kraje ke kraji, ale v urèitý okamžik, kdyz okno zvìtšuju (prodluzuju dolu), tak se to utrhne a zùží (zmenší se výška, šíøka zùstane stejná)
+-------------------
+ted se tam vubec neobjevilo to okno!
+-------------------
+je to porad stejny. nic se nezmenilo. nic není videt
+-------------------
+uz to funguje. v poradku. ted na strance badges. dve veci a) tlaèítko pro back je pøíliš nízko, zasahuje jen do poloviny tlaèítka a naopak saha hroznì dolù (viz obrázek zašrafované èervené) a mìlo by byt jen tam co je obtazene tlaèítko exit. b) badges_top je pøíliš vysoký. zmenši jeho výšku o 33%. tady okno není od kraje ke kraji. asi by to nevadilo - ale musí tam být videt ty "hrany" okna? zakrouzkoval jsem je na obou stranach obrazku 
+-------------------
+povedlo se jen napùl. vyšku _top jsi zmensil v poradku. zmensil jsi i plochu tlaèítka overlay, ale je uplnì mimo. Odhaduji, že bys mìl hitbox posunout 3x jeho výšku v pixelech smerem nahoru.
+-------------------
+povedlo se jen napùl. vyšku _top jsi zmensil v poradku. zmensil jsi i plochu tlaèítka overlay, ale je uplnì mimo. Odhaduji, že bys mìl hitbox posunout 3x jeho výšku v pixelech smerem nahoru.
+-------------------
+udelej ted commit do main, pushni zmìny lokal i online. NEpøipravuj aab. jen commit. Potom vyèisti GFX2 branch a prepni do ni. Mùžeme pak použivat zase GFX2 bez problému ne?
+-------------------

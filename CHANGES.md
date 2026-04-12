@@ -777,3 +777,12 @@ Rules:
 - 2026-04-12: Switched the global pre-run screen background to the tiled wood texture and bumped the store version to 1.0.32 (33).
 
 - 2026-04-12: Removed the blue pre-run card background so the full-screen wood backdrop shows through, matching GFX2.
+
+- 2026-04-12: GFX2 test branch variant C: removed the pre-run card frame so screens sit full-bleed on the wood backdrop.
+
+- 2026-04-12: Forced the pre-run shell to stay full-screen at all breakpoints (no narrow card sizing) while keeping the wood background as the global backdrop.
+- 2026-04-12: Made the GFX2 pre-run scene always fill the available height to prevent it from shrinking when the window gets taller.
+- 2026-04-12: Forced the pre-run select screen (GFX1/GFX2) to stay visible as a full-height flex column after the full-screen wood backdrop changes.
+- 2026-04-12: Restored the GFX2 start scene by giving the select containers explicit height in the full-screen wood layout.
+- 2026-04-12: Tightened the GFX2 badges Exit hitbox to the visible button and reduced/cropped the `badges_top` header height so the side frame edges do not stick out as much.
+- 2026-04-12: Moved the GFX2 badges EXIT hitbox much higher so the smaller overlay sits back on top of the visible button.
