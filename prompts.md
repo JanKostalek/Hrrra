@@ -929,3 +929,24 @@ priprav aab
 podivej se do pravidel. je tady nainstalovany android studio, cili i java
 
 -------------------
+zapis do pravidel, kde se nachazi java
+
+-------------------
+mluvim o android verzi ze store
+
+-------------------
+ja myslel, ze aab co jsi naposledy pripravoval uz ma vsechny poslední úpravy. tak dobøe, na store je verze .30. na vercel koukam taky, ale chybí tam grafika. na locale grfiku vidim i to scrolluje. ale je tam to modré pozadí a není tam opakující se wood pozadí. tak to uprav na lokále, pak udelej push do main na lokal i na web a následne pøiprav aab s povýšenou verzí
+
+-------------------
+zatím nic nedelej, jen ovìø: a) obecne to nevadi, ale pri zpusteni na webu, je herní okno hodne malé. ma zjevnì pevnou velikost b) pøestoze vidím, ze build na vercel je hotovy, tak tam stále chybí grafika a i tady je okno male. ma pevné rozmìry na šiøku. nahrávám to na store, abych videl, jak to bude vypadat tam.
+
+-------------------
+ja myslím, ze vercel je nìjak èásteènì. protoze v credits mi to ukazuje verzi 31
+
+-------------------
+ale nebudou tam dve pozadí pres sebe? ale dobre, zkus to udìlat. pak to pripadne vratime a udìláme to jinak
+
+-------------------
+udelej obojí
+
+-------------------

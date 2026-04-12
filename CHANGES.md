@@ -775,3 +775,5 @@ Rules:
 - 2026-04-12: Swapped the pre-run screen background to the tiled GFX2 wood texture to eliminate the extra blue backdrop layer.
 
 - 2026-04-12: Switched the global pre-run screen background to the tiled wood texture and bumped the store version to 1.0.32 (33).
+
+- 2026-04-12: Removed the blue pre-run card background so the full-screen wood backdrop shows through, matching GFX2.
