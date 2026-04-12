@@ -767,3 +767,7 @@ Rules:
 - 2026-04-12: Made the GFX2 badges screen height auto-fit content by moving scrolling to the screen container and letting the inner list expand.
 
 - 2026-04-12: Added a right-side Exit hotspot on the GFX2 badges screen wired to the same back action as the left exit button.
+
+- 2026-04-12: GFX2 badges now scroll on the screen container and use a vertically tiled wood background to avoid stretching; removed the extra wood layer from the inner scene.
+
+- 2026-04-12: Fixed GFX2 badges scrolling on Android, switched the wood background to a vertical tile on the badges screen, and bumped the store version to 1.0.31 (32).

@@ -785,7 +785,7 @@ body {
   position: relative;
   width: min(100%, 1024px);
   margin: 0 auto;
-  background: url("assets/gfx2/wood_background.png") center center / 100% 100% no-repeat;
+  background: transparent;
   border-radius: 26px;
   overflow: hidden;
   box-shadow:
@@ -1014,7 +1014,8 @@ body {
 }
 
 #pre-run-badges-screen {
-  overflow: visible;
+  overflow-y: auto;
+  background: url("assets/gfx2/wood_background.png") center top / 100% auto repeat-y;
 }
 
 .pre-run-scores-grid {

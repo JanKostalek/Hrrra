@@ -43,6 +43,7 @@ This file captures standing project workflow conventions so they do not get lost
 - Prefer the Windows launcher `C:\\Windows\\py.exe` first.
 - Known direct Python path: `C:\\Program Files\\Python313\\python.exe`.
 - Do not assume `python` from `WindowsApps` will work; if plain `python` fails, use `py` or the direct path above.
+- Java is available via Android Studio. Known JDK path: `C:\\Program Files\\Android\\Android Studio\\jbr`.
 
 ## Releases
 
