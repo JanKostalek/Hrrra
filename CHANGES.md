@@ -771,3 +771,7 @@ Rules:
 - 2026-04-12: GFX2 badges now scroll on the screen container and use a vertically tiled wood background to avoid stretching; removed the extra wood layer from the inner scene.
 
 - 2026-04-12: Fixed GFX2 badges scrolling on Android, switched the wood background to a vertical tile on the badges screen, and bumped the store version to 1.0.31 (32).
+
+- 2026-04-12: Swapped the pre-run screen background to the tiled GFX2 wood texture to eliminate the extra blue backdrop layer.
+
+- 2026-04-12: Switched the global pre-run screen background to the tiled wood texture and bumped the store version to 1.0.32 (33).

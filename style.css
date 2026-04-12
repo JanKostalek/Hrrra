@@ -683,9 +683,7 @@ body {
 #pre-run-screen {
   position: fixed;
   inset: 0;
-  background:
-    linear-gradient(135deg, rgba(6, 20, 33, 0.96), rgba(8, 28, 45, 0.92)),
-    url("assets/start_bkg.png") center / cover no-repeat;
+  background: url("assets/gfx2/wood_background.png") center top / 100% auto repeat-y;
   display: flex;
   align-items: center;
   justify-content: center;
