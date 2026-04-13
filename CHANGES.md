@@ -786,3 +786,18 @@ Rules:
 - 2026-04-12: Restored the GFX2 start scene by giving the select containers explicit height in the full-screen wood layout.
 - 2026-04-12: Tightened the GFX2 badges Exit hitbox to the visible button and reduced/cropped the `badges_top` header height so the side frame edges do not stick out as much.
 - 2026-04-12: Moved the GFX2 badges EXIT hitbox much higher so the smaller overlay sits back on top of the visible button.
+- 2026-04-12: Added GFX2 badge shelf medals and goal text to each badge card, using the same bronze/silver/gold medal art and badge goal logic as GFX1 while leaving the large trophy area empty for later.
+- 2026-04-12: Shifted the GFX2 badge shelf medals and goal text block further left and lifted each shelf row upward independently so the medal rows sit better against the wooden shelves.
+- 2026-04-12: Expanded the GFX2 badge title and description text area farther to the right so longer badge names and descriptions wrap less aggressively.
+- 2026-04-13: Expanded the whole GFX2 badge text container to the right edge of the card so long titles and descriptions are no longer constrained by the old narrow copy column.
+- 2026-04-13: Added unlock dates next to the GFX2 Bronze/Silver/Gold labels and removed the badges scene width cap/outline so the screen can stretch edge-to-edge like the other inside layouts.
+- 2026-04-13: Enlarged the GFX2 badges EXIT overlay substantially on every side and shifted it downward so the touch target is much easier to hit.
+- 2026-04-13: Enlarged the GFX2 badges EXIT overlay by roughly one third of the button size on every side and shifted the hitbox downward so tapping the visible wooden EXIT button is easier and more forgiving.
+- 2026-04-13: Re-anchored the GFX2 badges back/exit overlays directly inside the `badges_top` header so each hitbox now follows the full header height and the left EXIT hotspot cleanly covers the leftmost 20 percent of the wooden top bar.
+- 2026-04-13: Removed the light paper background from the GFX2 `trophy_pics` JPEG drawings, cropped them to content, and exported transparent PNG variants for the trophy artwork set.
+- 2026-04-13: Added the first test GFX2 badge trophies to the large left display area of the `Greedy` and `Coin Collector` cards, loading `trophy_<badge-name>.png` artwork aligned to the left side of the showcase space for future trophy rollout.
+- 2026-04-13: Expanded the first GFX2 badge trophy hookup to also render `Bag Collector`, `Lucky`, `Unlucky`, and `Untouchable` showcase images from the matching `trophy_<badge-name>.png` files.
+- 2026-04-13: Extended the GFX2 badge trophy mapping again so the newly added `Big Spender`, `Doom Magnet`, `First Runner`, `Fortunate`, `Speed Demon`, and `Unkillable Custommer` trophy PNG files now render in their matching badge cards.
+- 2026-04-13: Added the missing `Heart Hunter` trophy slug to the GFX2 badge trophy mapping so the renamed `trophy_heart_hunter.png` asset now shows up in the Lifetime Legends card.
+- 2026-04-13: Increased the rendered GFX2 badge trophy artwork by 10% so the showcase images fill their reserved left display space a bit better.
+- 2026-04-13: Bumped the store/web release to version 1.0.33 (34) and refreshed the update-check message for the latest GFX2 badges trophy polish build.

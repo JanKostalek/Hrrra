@@ -971,3 +971,35 @@ povedlo se jen napùl. vyšku _top jsi zmensil v poradku. zmensil jsi i plochu tla
 -------------------
 udelej ted commit do main, pushni zmìny lokal i online. NEpøipravuj aab. jen commit. Potom vyèisti GFX2 branch a prepni do ni. Mùžeme pak použivat zase GFX2 bez problému ne?
 -------------------
+ted postupne dodìláme badges stranku. v tom vetsim prosotu pak budou poháry, ten zatím necháme být. ale pøipravíme na svá místa odznaky. budou vzdy jeden na policce. od spoda bude bronze nad ním silver a na vrchní polici bude gold. použij tu grafiku, jakou používas v gfx1. stejne jako vedle vzdy pis, kolik je potreba. pak jeste budeme psat i datum
+-------------------
+skoro dobrý. posun medaile a texty o 33% do leva (naznaèeno na obrázku). zároven je potreba posunout kazdou medaily trochu nahoru. Beru výšku medaile (v pixelech) jako mìøítko. Zlatou posun o 0,5x výšku medaile nahoru, støíbrnou o 0,8x výšky a bronzovou o 1x výšku medaile nahoru. (samozrejme posouváš medaily i text). tím že posuneš medaily a text do leva, tak posun jen levý kraj. pravý zùstane stejnì a tudíž tam bude více prostoru na kazdém øadku pro text
+-------------------
+ne, je to v poradku.
+-------------------
+ne, je to v poradku. ten obrázek byl pozdì poslany. patril k tomu textu predtim. ted to sedí dobøe
+-------------------
+ted jeste jednu zmìnu. u nadpisu odznakù nahore a u popisù odznakù dole je zjevne pravy okraj pøíliš blízko a proto dochází k zalamování textù. posun okraj textù az k okraji okna (police) 
+-------------------
+zadna zmìna není videt. vypada to uplne stejne
+-------------------
+Ted uz je to v poøádku. Ale jeste tedy dvì zmìny. a) dej vzdy vedle Bronze / Silver / Gold bílým mensím písmem nez je to "gold"  datum, kdy (pokud) byl odznak získán. b) okno není od kraje ke kraji. kdyz hodne roztahnu okno, tak má nakonec pevnou maximální šírku a je videt jeho okraj - obrys. mùže být od kraje ke kraji? jiné obrazovky _inside to tak mají 
+-------------------
+Ted na této stránce asi poslední zmìna. Zvìtši velikost overlay tlaèítka exit o 33% šíøky tlaèítka v pixelech do všech stran. to znamena pøidej tretinu v poètu pixelu nahoru, dolu, do leva i do prava. A následne posun tlaèítko o 50% výšky tlaèítka v pixelech smìrem dolù.
+-------------------
+Ted je to hodnì spatnì. ted je posunuté zcela mimo grafiku exit a je nesmyslnì dlouhé. udìlej to takto: at zabírá 20% badges_top plochy od levého kraje. od horní k dolní èásti _top sekce. tím by to mìlo být pøesné. 
+-------------------
+ve slozce gfx2 je složka trophy_pics a v ní jsou jpeg obrázky. prosím odstran z každého z nich pozadí, udìlej z nich png
+-------------------
+ted do badges_inside pøidáme poháry. Zatím na zkoušku a na zamìøení dva. pøijdou do oznaèeného prostoru. Jak to zamìøíš na jednom, budeš to moc kopírovat do vsech dalších. vždy bude pøipravený soubor trophy_xxxx s názvem podle odznakù. èili do sekce greedy pøijde trophy_greedy.png a tak dále. Je potøeba, aby velikostnì sedel v tom prostoru - myslím, že to znamená, že jej musíš zarovna k levému okraji toho okna. Výškovì bude prostredek png obrázku pøibližnì uprostred výšky okna. zkus to a doladíme
+-------------------
+pøidal jsem jeste bag collector, lucky, unlucky a untouchable. pridej je tam taky prosím. pozice obrázku je v poøádku, jen to zmultiplikuj
+-------------------
+pøidal jsem jeste další trophy. jsou ve stejné složce, mùžeš je pøidat k souvisejícím badge oknùm
+-------------------
+uz jsem to prejmenoval, ale stale se neobjevil
+-------------------
+parada. je to tam. ted jeste jedna vìc. zkus zobrazované trophy zvìtšit o 10%, aby lépe vyplnovaly pro nì urèený prostor. 
+-------------------
+Ted udelej commit do main, online i web a pøiprav aab
+-------------------

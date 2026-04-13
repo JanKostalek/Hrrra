@@ -224,6 +224,21 @@ Main tuning points:
     "assets/gfx2/badges_back/Sn%C3%ADmek7.JPG",
     "assets/gfx2/badges_back/Sn%C3%ADmek8.JPG"
   ];
+  var PRE_RUN_GFX2_BADGE_TROPHY_SLUGS = {
+    bag_collector: true,
+    big_spender: true,
+    coin_collector: true,
+    doom_magnet: true,
+    first_runner: true,
+    fortunate: true,
+    greedy: true,
+    heart_hunter: true,
+    speed_demon: true,
+    unkillable_custommer: true,
+    lucky: true,
+    unlucky: true,
+    untouchable: true
+  };
   var PRE_RUN_GFX2_SHOP_BACK_FRAMES = [
     "assets/gfx2/shop_back/Sn%C3%ADmek1.JPG",
     "assets/gfx2/shop_back/Sn%C3%ADmek2.JPG",
@@ -2815,6 +2830,21 @@ Main tuning points:
       return override.trim();
     }
     return series.name;
+  }
+
+  function slugifyBadgeTrophyName(name) {
+    return String(name || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "_")
+      .replace(/^_+|_+$/g, "");
+  }
+
+  function getPreRunBadgeTrophyPath(series) {
+    var trophySlug = slugifyBadgeTrophyName(getBadgeSeriesName(series));
+    if (!trophySlug || !PRE_RUN_GFX2_BADGE_TROPHY_SLUGS[trophySlug]) {
+      return "";
+    }
+    return "assets/gfx2/trophy_pics/trophy_" + trophySlug + ".png";
   }
 
   function getDefaultBadgeTierTarget(series, tierIndex) {
@@ -6023,8 +6053,53 @@ Main tuning points:
       });
 
       var rowsMarkup = seriesForCategory.map(function (series) {
+        var trophyPath = getPreRunBadgeTrophyPath(series);
+        var tierMarkup = series.tiers.map(function (tier, tierIndex) {
+          var tierPositionClass = "pre-run-badges-gfx2-tier-shelf-bottom";
+          var badgeUnlockDate = getBadgeUnlockDate(series, tierIndex);
+          if (series.tiers.length === 1) {
+            tierPositionClass = "pre-run-badges-gfx2-tier-shelf-top";
+          } else if (tierIndex === 1) {
+            tierPositionClass = "pre-run-badges-gfx2-tier-shelf-middle";
+          } else if (tierIndex === 2) {
+            tierPositionClass = "pre-run-badges-gfx2-tier-shelf-top";
+          }
+          return [
+            '<div class="pre-run-badges-gfx2-tier ',
+            tierPositionClass,
+            isBadgeTierCollected(series, tierIndex) ? "" : " is-locked",
+            '">',
+            '<div class="pre-run-badges-gfx2-tier-medal-wrap">',
+            '<span class="pre-run-badge-medal ',
+            getBadgeSpriteClassName(tier.sprite),
+            '"></span>',
+            "</div>",
+            '<div class="pre-run-badges-gfx2-tier-copy">',
+            '<div class="pre-run-badges-gfx2-tier-meta">',
+            '<div class="pre-run-badges-gfx2-tier-label">',
+            tier.tier,
+            "</div>",
+            '<div class="pre-run-badges-gfx2-tier-date">',
+            badgeUnlockDate,
+            "</div>",
+            "</div>",
+            '<div class="pre-run-badges-gfx2-tier-value">',
+            formatBadgeGoalText(series, tierIndex),
+            "</div>",
+            "</div>",
+            "</div>"
+          ].join("");
+        }).join("");
+
         return [
           '<div class="pre-run-badges-gfx2-row">',
+          trophyPath ? [
+            '<div class="pre-run-badges-gfx2-trophy-slot">',
+            '<img class="pre-run-badges-gfx2-trophy" src="',
+            trophyPath,
+            '" alt="" loading="lazy">',
+            "</div>"
+          ].join("") : "",
           '<div class="pre-run-badges-gfx2-row-copy">',
           "<h4>",
           getBadgeSeriesName(series),
@@ -6032,6 +6107,9 @@ Main tuning points:
           "<p>",
           series.description,
           "</p>",
+          "</div>",
+          '<div class="pre-run-badges-gfx2-tier-stack">',
+          tierMarkup,
           "</div>",
           "</div>"
         ].join("");

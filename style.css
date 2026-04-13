@@ -836,23 +836,20 @@ body {
 
 .pre-run-badges-gfx2-scene {
   position: relative;
-  width: min(100%, 1024px);
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   background: transparent;
-  border-radius: 26px;
+  border-radius: 0;
   overflow: hidden;
-  box-shadow:
-    inset 0 0 0 6px rgba(8, 41, 58, 0.86),
-    inset 0 1px 0 rgba(255, 255, 255, 0.34),
-    0 18px 34px rgba(8, 41, 58, 0.16);
+  box-shadow: none;
 }
 
 .pre-run-badges-gfx2-back {
   position: absolute;
-  left: 3.8%;
-  top: 0.4%;
-  width: 11.8%;
-  aspect-ratio: 170 / 82;
+  left: 0;
+  top: 0;
+  width: 20%;
+  height: 100%;
   border: 0;
   background: transparent;
   cursor: pointer;
@@ -861,7 +858,7 @@ body {
 
 .pre-run-badges-gfx2-back-right {
   left: auto;
-  right: 2.5%;
+  right: 0;
 }
 
 .pre-run-badges-gfx2-scroll {
@@ -879,6 +876,7 @@ body {
 }
 
 .pre-run-badges-gfx2-top {
+  position: relative;
   width: 104%;
   margin-left: -2%;
   aspect-ratio: 1024 / 127;
@@ -983,6 +981,30 @@ body {
   position: relative;
 }
 
+.pre-run-badges-gfx2-trophy-slot {
+  position: absolute;
+  left: 7%;
+  top: 19%;
+  width: 27%;
+  height: 48%;
+  pointer-events: none;
+}
+
+.pre-run-badges-gfx2-trophy {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: left center;
+  transform: translateY(-50%) scale(1.1);
+  transform-origin: left center;
+  filter: drop-shadow(0 6px 14px rgba(24, 12, 4, 0.35));
+}
+
 .pre-run-badges-gfx2-row-icon {
   display: none;
 }
@@ -995,13 +1017,110 @@ body {
   display: none;
 }
 
+.pre-run-badges-gfx2-tier-stack {
+  position: absolute;
+  top: 0;
+  right: 2.8%;
+  width: 57.2%;
+  height: 100%;
+}
+
+.pre-run-badges-gfx2-tier {
+  --badge-medal-size: clamp(34px, 4.3vw, 50px);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.2vw, 14px);
+  color: #f3ecd2;
+}
+
+.pre-run-badges-gfx2-tier.is-locked .pre-run-badge-medal {
+  filter: grayscale(1) brightness(1.02) contrast(0.86);
+}
+
+.pre-run-badges-gfx2-tier.is-locked .pre-run-badges-gfx2-tier-label,
+.pre-run-badges-gfx2-tier.is-locked .pre-run-badges-gfx2-tier-value {
+  color: rgba(243, 236, 210, 0.52);
+}
+
+.pre-run-badges-gfx2-tier-shelf-top {
+  top: 20%;
+  transform: translateY(calc(var(--badge-medal-size) * -0.5));
+}
+
+.pre-run-badges-gfx2-tier-shelf-middle {
+  top: 45%;
+  transform: translateY(calc(var(--badge-medal-size) * -0.8));
+}
+
+.pre-run-badges-gfx2-tier-shelf-bottom {
+  top: 70%;
+  transform: translateY(calc(var(--badge-medal-size) * -1));
+}
+
+.pre-run-badges-gfx2-tier-medal-wrap {
+  width: clamp(40px, 5vw, 58px);
+  min-width: clamp(40px, 5vw, 58px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pre-run-badges-gfx2-tier-medal-wrap .pre-run-badge-medal {
+  width: var(--badge-medal-size);
+  height: var(--badge-medal-size);
+}
+
+.pre-run-badges-gfx2-tier-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.pre-run-badges-gfx2-tier-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pre-run-badges-gfx2-tier-label {
+  font-size: clamp(10px, 1.1vw, 12px);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #b88a31;
+  line-height: 1;
+}
+
+.pre-run-badges-gfx2-tier-date {
+  font-size: clamp(9px, 0.95vw, 11px);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.pre-run-badges-gfx2-tier-value {
+  font-size: clamp(11px, 1.45vw, 17px);
+  line-height: 1.05;
+  font-weight: 800;
+  color: #f3ecd2;
+  text-shadow: 0 1px 2px rgba(39, 22, 8, 0.65);
+}
+
 .pre-run-badges-gfx2-row-copy {
   position: absolute;
   left: 6%;
-  right: 6%;
+  right: 2%;
   top: 6%;
   bottom: 6%;
   color: #2b4a61;
+  pointer-events: none;
 }
 
 .pre-run-badges-gfx2-row-copy h4 {
@@ -1011,7 +1130,7 @@ body {
   position: absolute;
   top: -0.5em !important;
   left: 4%;
-  width: 80%;
+  right: 2%;
   line-height: 1.05;
   font-weight: 900;
 }
@@ -1021,6 +1140,7 @@ body {
   position: absolute;
   bottom: 0% !important;
   left: 4%;
+  right: 2%;
   color: #f0f4f8;
   line-height: 1.15;
   font-size: clamp(12px, 2vw, 18px);
