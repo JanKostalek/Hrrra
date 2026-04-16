@@ -1,0 +1,10 @@
+.key/
+*.zip
+*.xlsx
+node_modules/
+www/
+android/.idea/
+android/build/
+android/app/build/
+UPLOAD_KEYSTORE_INFO.txt
+android/upload_certificate.pem

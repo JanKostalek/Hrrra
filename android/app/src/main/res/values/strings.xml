@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Hrrra</string>
+    <string name="title_activity_main">Hrrra</string>
+    <string name="package_name">cz.hrrra.game</string>
+    <string name="custom_url_scheme">cz.hrrra.game</string>
+    <string name="admob_app_id">ca-app-pub-6900731066060353~5995679934</string>
+    <string name="admob_banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="privacy_options_button">Privacy</string>
+    <string name="ad_debug_waiting">Ad debug: waiting</string>
+    <string name="ad_debug_requesting_consent">Ad debug: requesting consent</string>
+    <string name="ad_debug_consent_blocked">Ad debug: consent blocks ads</string>
+    <string name="ad_debug_loading_banner">Ad debug: loading test banner</string>
+    <string name="ad_debug_banner_loaded">Ad debug: banner loaded</string>
+    <string name="ad_debug_banner_failed">Ad debug: banner failed</string>
+</resources>
