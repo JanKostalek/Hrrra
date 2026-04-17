@@ -442,6 +442,7 @@ Main tuning points:
   var VERSION_INFO_URL = "https://hrrra.vercel.app/version.json";
   var STORE_URL = "https://play.google.com/store/apps/details?id=cz.hrrra.game";
   var STORE_MARKET_URL = "market://details?id=cz.hrrra.game";
+  var updateCheckRetryTimer = null;
   var preRunStartBtn = document.getElementById("pre-run-start-btn");
   var preRunDetailTitleEl = document.getElementById("pre-run-detail-title");
   var preRunDetailSubtitleEl = document.getElementById("pre-run-detail-subtitle");
@@ -4935,6 +4936,10 @@ Main tuning points:
     window.addEventListener("resize", applyResponsiveLayout);
     document.addEventListener("visibilitychange", function () {
       setAudioAppActive(!document.hidden);
+      if (!document.hidden) {
+        checkForAvailableUpdate();
+        scheduleUpdateCheckRetry(7000);
+      }
     });
     window.addEventListener("pagehide", function () {
       setAudioAppActive(false);
@@ -4979,6 +4984,7 @@ Main tuning points:
     updateOverlayUiVisibility();
     maybeShowWhatsNewNotice();
     checkForAvailableUpdate();
+    scheduleUpdateCheckRetry(7000);
     maybeShowPlayerNamePromptIfMissing();
     primePreRunGfx2CloudMotion(true);
     requestAnimationFrame(loop);
@@ -6977,6 +6983,19 @@ Main tuning points:
         });
       })
       .catch(function () {});
+  }
+
+  function scheduleUpdateCheckRetry(delayMs) {
+    if (!isNativeAndroidPlatform() || typeof window.setTimeout !== "function") {
+      return;
+    }
+    if (updateCheckRetryTimer) {
+      window.clearTimeout(updateCheckRetryTimer);
+    }
+    updateCheckRetryTimer = window.setTimeout(function () {
+      updateCheckRetryTimer = null;
+      checkForAvailableUpdate();
+    }, Math.max(1000, Number(delayMs) || 7000));
   }
 
   function loadCurrentLevelConfig() {

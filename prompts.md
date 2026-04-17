@@ -1105,3 +1105,12 @@ zkopiruj vse do www a androidu, aby to bylo shodne s lokalem a pak priprav aab. 
 vytvoř novou větev New a vsechny ostatní z lokalu smaz (samozrejme krome main - tu nech)
 
 -------------------
+ejdriv jeste uprav - odstran overlay button, který je na pravém kraji a je pro stranku settings. je prilis veliky a na mobilu prekryva button shop, do kterého tím nejde vejít. je to tím, ze ten overlay ma pevnou velikost a nezmenšuje se dle velikosti displeje. cili na lokale to je v poradku kdyz mam maximalizované olkno, ale kdyz zmenším okno prohlizece, tak jej prekryje i na lokale
+
+-------------------
+priprav to i pro pravy a pak udelej commit do main, local, web a pak priprav novy aab. nezapomen navýšit verzi
+
+-------------------
+a jeste ten pravy overlay zmensi o 50% - nech jej zarovnany s pravym krajem crossing_clean
+
+-------------------
