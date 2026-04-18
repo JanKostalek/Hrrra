@@ -83,3 +83,5 @@ This file captures standing project workflow conventions so they do not get lost
 
 - Do not auto-commit or push unless explicitly requested by the user.
 - Avoid including unrelated helper files, spreadsheets, certificates, or source/reference asset folders unless the user asks for them.
+
+- Pokud budeme na vetvi `main`, vždy to výslovne reknu, aby se na ní omylem nepracovalo.
