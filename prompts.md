@@ -1114,3 +1114,7 @@ priprav to i pro pravy a pak udelej commit do main, local, web a pak priprav nov
 a jeste ten pravy overlay zmensi o 50% - nech jej zarovnany s pravym krajem crossing_clean
 
 -------------------
+2026-04-18: nic se nezmenilo. zkus jeste jednou, tentokrat vytvoř tlačítko, které bude nad vsemi vrstavami, ktere bude mít overlay - červeny, vzdy viditelný a dej to tlačítko přesne doprostred obrazovky. jeho velikost udelej 512s512 pixelu
+2026-04-18: ano, ted jsem to oveřil. opravdu se to ukazuje v gfx1, ale ma to být v gfx2. vzdy vsechno děláme v gfx2 (pokud neřeknu jinak - zapis to do pravidel). a nyní to tlačítko z gfx1 odstran a udělej ho v gfx2. ale zpátky v horním rohu. velikost odpovídající tlačítku v levé části obrazovky "back"
+2026-04-18: uz to otevírá potvrzovací stranku. ale samozné tlačítko v horním rohu nemá žadný text. mělo by tam byt aspon Change User a nějaké pozadí. ted je tam jen cervený okraj a prohledné pozadí
+2026-04-18: udelej ted comming do main do local i do www. potom se vrat na vetev new

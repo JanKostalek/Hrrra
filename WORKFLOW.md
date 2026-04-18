@@ -65,6 +65,8 @@ This file captures standing project workflow conventions so they do not get lost
   - in-game/update metadata that must match the shipped build
 - Never reuse the previous release version when preparing a new `.aab`; every `.aab` preparation must bump the release version first.
 - Always ensure the Android packaged public assets contain the same version/update files as the web root so the app does not falsely report that a newer Store version exists immediately after install/update.
+- `main` is not a working branch. Use it only to preserve the last verified working state after testing; do not make changes on `main`. If the repo is on `main`, I will say so explicitly before doing anything else.
+- Unless the user explicitly says otherwise, settings-related UI work should be done in `gfx2` first; treat `gfx1` as legacy fallback only.
 - Unless the user explicitly says otherwise, `prepare aab` should include all of this:
   - commit the intended release changes
   - make sure the release commit is on local `main`

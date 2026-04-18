@@ -341,6 +341,10 @@ Main tuning points:
   var preRunSettingsGfx2BackBtn = document.getElementById("pre-run-settings-gfx2-back-btn");
   var preRunSettingsGfx2MusicBtn = document.getElementById("pre-run-settings-gfx2-music-btn");
   var preRunSettingsGfx2SfxBtn = document.getElementById("pre-run-settings-gfx2-sfx-btn");
+  var preRunSettingsGfx2AccountBtn = document.getElementById("pre-run-settings-gfx2-account-btn");
+  var preRunAccountConfirmEl = document.getElementById("pre-run-account-confirm");
+  var preRunAccountConfirmNoBtn = document.getElementById("pre-run-account-confirm-no");
+  var preRunAccountConfirmYesBtn = document.getElementById("pre-run-account-confirm-yes");
   var preRunPlayerNameBtn = document.getElementById("pre-run-player-name-btn");
   var preRunBadgesBackBtn = document.getElementById("pre-run-badges-back-btn");
   var preRunBadgesExitBtn = document.getElementById("pre-run-badges-exit-btn");
@@ -1809,6 +1813,18 @@ Main tuning points:
       playUiButtonSound();
     }
     renderPreRunSettingsScreen();
+  }
+
+  function openChangeUserConfirm() {
+    if (preRunAccountConfirmEl) {
+      preRunAccountConfirmEl.classList.remove("hidden");
+    }
+  }
+
+  function closeChangeUserConfirm() {
+    if (preRunAccountConfirmEl) {
+      preRunAccountConfirmEl.classList.add("hidden");
+    }
   }
 
   function playAudioPath(path, volume, cooldownKey, cooldownMs) {
@@ -7933,6 +7949,28 @@ Main tuning points:
     if (preRunSettingsGfx2SfxBtn) {
       preRunSettingsGfx2SfxBtn.addEventListener("click", function () {
         togglePreRunSfxSetting();
+      });
+    }
+    if (preRunSettingsGfx2AccountBtn) {
+      preRunSettingsGfx2AccountBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        openChangeUserConfirm();
+      });
+    }
+    if (preRunAccountConfirmNoBtn) {
+      preRunAccountConfirmNoBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        closeChangeUserConfirm();
+      });
+    }
+    if (preRunAccountConfirmYesBtn) {
+      preRunAccountConfirmYesBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        closeChangeUserConfirm();
+        setPlayerNamePromptOpen(true);
       });
     }
     if (preRunShopExchangeOneBtn) {
