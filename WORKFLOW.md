@@ -45,9 +45,45 @@ This file captures standing project workflow conventions so they do not get lost
 - Before searching for environment/tooling details or recurring workflow facts, first check this `WORKFLOW.md` to see whether the answer is already documented here.
 - Python is available on this machine.
 - Prefer the Windows launcher `C:\\Windows\\py.exe` first.
-- Known direct Python path: `C:\\Program Files\\Python313\\python.exe`.
+- Known direct Python path: `C:\\Program Files\\Python313\\python.exe` (`py -0p` reports `-V:3.13 *` there).
 - Do not assume `python` from `WindowsApps` will work; if plain `python` fails, use `py` or the direct path above.
 - Java is available via Android Studio. Known JDK path: `C:\\Program Files\\Android\\Android Studio\\jbr`.
+
+## Local Storage Cleanup
+
+- If the user asks for `vycisten√≠ local storage`, clear only Hrrra progress data for skins and badges.
+- The exact keys to remove are:
+  - `hrrra_player_skin_progress_v1`
+  - `hrrra_badge_stats_v1`
+- The Firefox file-origin storage for the local Hrrra build is under:
+  - `C:\\Users\\jkostalek\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\s33txe4g.default-release\\storage\\default\\file++++C++-_WeB_-+Hrrra+index.html\\ls\\data.sqlite`
+- If backup origin folders for the same page exist, remove the same two keys there too so the progress does not come back from an older local copy.
+- Do not clear `hrrra_economy_v1`, player name, player id, or max score unless the user explicitly asks for those too.
+- Reusable helper scripts: `reset-local-storage.cmd` and `reset-local-storage.ps1` in the repo root. Prefer the `.cmd` launcher when you want a one-click reset.
+- The helper reset clears the local `file://` Hrrra storage branch and its backup copies in the current Firefox profiles, but only removes the Hrrra skin/badge progress data.
+- One-shot reset command for the current Firefox profile:
+
+```powershell
+@'
+const { DatabaseSync } = require('node:sqlite');
+const path = require('path');
+const fs = require('fs');
+const base = path.join(process.env.APPDATA, 'Mozilla', 'Firefox', 'Profiles', 's33txe4g.default-release', 'storage', 'default');
+const keys = ['hrrra_player_skin_progress_v1', 'hrrra_badge_stats_v1'];
+for (const dirent of fs.readdirSync(base, { withFileTypes: true })) {
+  if (!dirent.isDirectory() || !dirent.name.startsWith('file++++C++-_WeB_-+Hrrra+index.html')) continue;
+  const dbPath = path.join(base, dirent.name, 'ls', 'data.sqlite');
+  if (!fs.existsSync(dbPath)) continue;
+  const db = new DatabaseSync(dbPath);
+  db.exec('BEGIN IMMEDIATE');
+  for (const key of keys) db.prepare('delete from data where key = ?').run(key);
+  const usage = db.prepare('select coalesce(sum(length(value)), 0) as usage from data').get().usage;
+  db.prepare('update database set usage = ? where origin = ?').run(usage, 'file:///C:/-_WeB_-/Hrrra/index.html');
+  db.exec('COMMIT');
+  db.close();
+}
+'@ | node -
+```
 
 ## Releases
 
@@ -65,8 +101,8 @@ This file captures standing project workflow conventions so they do not get lost
   - in-game/update metadata that must match the shipped build
 - Never reuse the previous release version when preparing a new `.aab`; every `.aab` preparation must bump the release version first.
 - Always ensure the Android packaged public assets contain the same version/update files as the web root so the app does not falsely report that a newer Store version exists immediately after install/update.
-- `main` is not a working branch. Use it only to preserve the last verified working state after testing; do not make changes on `main`. If the repo is on `main`, I will say so explicitly before doing anything else.
-- Unless the user explicitly says otherwise, settings-related UI work should be done in `gfx2` first; treat `gfx1` as legacy fallback only.
+- `main` is the verified local baseline. Do not make changes on `main`; use it only to preserve the last verified working state after testing. All new work goes on a side branch, currently `New`. If the repo is on `main`, I will say so explicitly before doing anything else.
+- Unless the user explicitly says otherwise, all UI and implementation work should be done in `gfx2` first; treat `gfx1` as legacy fallback only.
 - Unless the user explicitly says otherwise, `prepare aab` should include all of this:
   - commit the intended release changes
   - make sure the release commit is on local `main`
@@ -86,4 +122,4 @@ This file captures standing project workflow conventions so they do not get lost
 - Do not auto-commit or push unless explicitly requested by the user.
 - Avoid including unrelated helper files, spreadsheets, certificates, or source/reference asset folders unless the user asks for them.
 
-- Pokud budeme na vetvi `main`, vûdy to v˝slovne reknu, aby se na nÌ omylem nepracovalo.
+- Pokud budeme na vetvi `main`, v≈ædy to v√Ωslovne reknu, aby se na n√≠ omylem nepracovalo.

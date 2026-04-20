@@ -54,3 +54,17 @@
 
 - Tightened the GFX2 crossing Advanced and Classic hitboxes by trimming 15% from both left and right sides, lowered the GFX2 Badges hitbox top edge by 15% of its own height, and re-enabled native scrolling inside the GFX2 badges scene on web and Android.
 
+2026-04-19: Zvýšená velikost badge trophy obrázku v reward overlayi o 100 % pro všechny trophy_xxx.
+
+2026-04-19: Badge unlock overlay now uses assets/gfx2/trophy_pics/Badge_unlocked_bckg.jpg as the badge reward card background.
+
+2026-04-19: Badge reward card now uses Badge_unlocked_bckg.jpg directly, without the translucent window overlay, so the background image is visible cleanly.
+
+2026-04-19: Badge rewards now render 	rophy_clean as the base image and overlay the matching 	rophy_xxx art only when that specific badge image exists; otherwise only the clean trophy is shown.
+
+2026-04-19: Game over screen side panels now both use assets/gfx2/gameover_scr_scores_bckg.jpg at matching sizes, and the center continue/end buttons were removed from the game-over layout.
+
+2026-04-19: Reduced the local storage cleanup scope back to the local file-origin Hrrra branches only, and tuned the game-over side-panel backgrounds to 110% size with top anchoring for a slightly wider, bottom-cropped look.
+
+2026-04-19: Restored game-over continue/end-run buttons and made game-over clicks/space trigger the continue button again; side-panel backgrounds now use a 110% wide by 90% tall crop.
+

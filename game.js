@@ -60,6 +60,7 @@ Main tuning points:
   var continuePurchaseOverlayEl = document.getElementById("continue-purchase-overlay");
   var continuePurchaseHeartsEl = document.getElementById("continue-purchase-hearts");
   var continuePurchaseUnitPriceEl = document.getElementById("continue-purchase-unit-price");
+  var continuePurchaseWalletEl = document.getElementById("continue-purchase-wallet");
   var continuePurchaseTotalEl = document.getElementById("continue-purchase-total");
   var continuePurchaseStatusEl = document.getElementById("continue-purchase-status");
   var continuePurchaseBuyBtn = document.getElementById("continue-purchase-buy");
@@ -74,10 +75,20 @@ Main tuning points:
   var badgeRewardKickerEl = document.getElementById("badge-reward-kicker");
   var badgeRewardNameEl = document.getElementById("badge-reward-name");
   var badgeRewardTierEl = document.getElementById("badge-reward-tier");
-  var badgeRewardMedalEl = document.getElementById("badge-reward-medal");
+  var badgeRewardTrophyBaseEl = document.getElementById("badge-reward-trophy-base");
+  var badgeRewardTrophyArtEl = document.getElementById("badge-reward-trophy-art");
   var badgeRewardGoalEl = document.getElementById("badge-reward-goal");
   var badgeRewardProgressEl = document.getElementById("badge-reward-progress");
   var badgeRewardPromptEl = document.getElementById("badge-reward-prompt");
+  var skinRewardOverlayEl = document.getElementById("skin-reward-overlay");
+  var skinRewardKickerEl = document.getElementById("skin-reward-kicker");
+  var skinRewardNameEl = document.getElementById("skin-reward-name");
+  var skinRewardTierEl = document.getElementById("skin-reward-tier");
+  var skinRewardIconEl = document.getElementById("skin-reward-icon");
+  var skinRewardGoalEl = document.getElementById("skin-reward-goal");
+  var skinRewardProgressEl = document.getElementById("skin-reward-progress");
+  var skinRewardPromptEl = document.getElementById("skin-reward-prompt");
+  var modeRewardOverlayEl = document.getElementById("skin-reward-overlay");
   var preRunScreenEl = document.getElementById("pre-run-screen");
   var preRunLaunchOverlayEl = document.getElementById("pre-run-launch-overlay");
   var preRunLaunchCopyEl = document.getElementById("pre-run-launch-copy");
@@ -285,6 +296,21 @@ Main tuning points:
     lucky: true,
     unlucky: true,
     untouchable: true
+  };
+  var BADGE_TROPHY_SLUGS_BY_SERIES_ID = {
+    bag_collector_single_run: "bag_collector",
+    big_spender_all_runs: "big_spender",
+    coin_collector_single_run: "coin_collector",
+    doom_magnet_all_runs: "doom_magnet",
+    first_runner_legends: "first_runner",
+    fortunate_all_runs: "fortunate",
+    greedy_single_run: "greedy",
+    heart_hunter_legends: "heart_hunter",
+    lucky_single_run: "lucky",
+    speed_demon_skills: "speed_demon",
+    unkillable_custommer_all_runs: "unkillable_custommer",
+    unlucky_single_run: "unlucky",
+    untouchable_single_run: "untouchable"
   };
   var PRE_RUN_GFX2_SHOP_BACK_FRAMES = [
     "assets/gfx2/shop_back/frame-01.png",
@@ -2233,6 +2259,10 @@ Main tuning points:
       continuePurchaseUnitPriceEl.textContent =
         "1 life costs " + lifePrice.toLocaleString("en-US") + " coins.";
     }
+    if (continuePurchaseWalletEl) {
+      continuePurchaseWalletEl.textContent =
+        "Wallet available: " + walletAfterRun.toLocaleString("en-US") + " coins";
+    }
     if (continuePurchaseHeartsEl) {
       continuePurchaseHeartsEl.innerHTML = "";
       for (var lifeIndex = 1; lifeIndex <= maxLives; lifeIndex += 1) {
@@ -2548,10 +2578,16 @@ Main tuning points:
       return false;
     }
     state.unlockedSkins[normalized] = true;
-    state.skinUnlockToastText = getSkinDisplayName(normalized) + " unlocked";
-    state.skinUnlockToastTimeLeft = 3;
     writePlayerSkinProgress();
     refreshPreRunBriefValues();
+    state.skinUnlockToastText = getSkinDisplayName(normalized) + " Unlocked";
+    state.skinUnlockToastTimeLeft = 2.8;
+    state.pendingSkinRewardName = normalized;
+    state.pendingSkinRewardDeferred = Boolean(state.running && !state.preRunActive);
+    state.pendingSkinRewardNextAction = "";
+    if (!state.pendingSkinRewardDeferred) {
+      showSkinRewardOverlay(normalized, "");
+    }
     return true;
   }
 
@@ -3028,9 +3064,26 @@ Main tuning points:
       .replace(/^_+|_+$/g, "");
   }
 
+  function getBadgeTrophySlug(series) {
+    var seriesId = String(series && series.id || "");
+    var mappedSlug = BADGE_TROPHY_SLUGS_BY_SERIES_ID[seriesId];
+    if (mappedSlug && PRE_RUN_GFX2_BADGE_TROPHY_SLUGS[mappedSlug]) {
+      return mappedSlug;
+    }
+    var derivedSlug = seriesId.replace(/_(single_run|all_runs|skills|legends|discovery)$/, "");
+    if (derivedSlug && PRE_RUN_GFX2_BADGE_TROPHY_SLUGS[derivedSlug]) {
+      return derivedSlug;
+    }
+    var nameSlug = slugifyBadgeTrophyName(getBadgeSeriesName(series));
+    if (nameSlug && PRE_RUN_GFX2_BADGE_TROPHY_SLUGS[nameSlug]) {
+      return nameSlug;
+    }
+    return "";
+  }
+
   function getPreRunBadgeTrophyPath(series) {
-    var trophySlug = slugifyBadgeTrophyName(getBadgeSeriesName(series));
-    if (!trophySlug || !PRE_RUN_GFX2_BADGE_TROPHY_SLUGS[trophySlug]) {
+    var trophySlug = getBadgeTrophySlug(series);
+    if (!trophySlug) {
       return "";
     }
     return "assets/gfx2/trophy_pics/trophy_" + trophySlug + ".png";
@@ -3436,6 +3489,133 @@ Main tuning points:
       badgeRewardOverlayEl.classList.add("hidden");
       badgeRewardOverlayEl.classList.remove("is-revealing", "is-ready");
     }
+    if (badgeRewardTrophyBaseEl) {
+      badgeRewardTrophyBaseEl.removeAttribute("src");
+    }
+    if (badgeRewardTrophyArtEl) {
+      badgeRewardTrophyArtEl.removeAttribute("src");
+      badgeRewardTrophyArtEl.classList.remove("is-visible");
+    }
+  }
+
+  function getBadgeRewardTrophyArtPath(series) {
+    return getPreRunBadgeTrophyPath(series) || "";
+  }
+
+  function resetSkinRewardOverlay(clearPendingState) {
+    if (skinRewardOverlayEl) {
+      skinRewardOverlayEl.classList.add("hidden");
+      skinRewardOverlayEl.classList.remove("is-revealing", "is-ready");
+    }
+    if (clearPendingState !== false) {
+      state.pendingSkinRewardName = "";
+      state.pendingSkinRewardDeferred = false;
+      state.pendingSkinRewardNextAction = "";
+    }
+  }
+
+  function showSkinRewardOverlay(skinName, nextAction) {
+    if (!skinRewardOverlayEl) {
+      return;
+    }
+    var displayName = getSkinDisplayName(skinName);
+    state.pendingSkinRewardName = normalizeSkinName(skinName);
+    state.pendingSkinRewardDeferred = Boolean(nextAction);
+    state.pendingSkinRewardNextAction = nextAction || "";
+    if (skinRewardKickerEl) {
+      skinRewardKickerEl.textContent = "New Skin";
+    }
+    if (skinRewardNameEl) {
+      skinRewardNameEl.textContent = displayName;
+    }
+    if (skinRewardTierEl) {
+      skinRewardTierEl.textContent = "Unlocked";
+    }
+    if (skinRewardIconEl) {
+      skinRewardIconEl.src = "assets/gfx2/trophy_pics/trophy_clean.png";
+    }
+    if (skinRewardGoalEl) {
+      skinRewardGoalEl.textContent = displayName + " is now available.";
+    }
+    if (skinRewardProgressEl) {
+      skinRewardProgressEl.textContent = "Check the pre-run skin select to use it.";
+    }
+    if (skinRewardPromptEl) {
+      skinRewardPromptEl.textContent = "Tap or press Space to continue";
+    }
+    skinRewardOverlayEl.classList.remove("hidden", "is-revealing", "is-ready");
+    void skinRewardOverlayEl.offsetWidth;
+    skinRewardOverlayEl.classList.add("is-revealing");
+    window.setTimeout(function () {
+      if (skinRewardOverlayEl && !skinRewardOverlayEl.classList.contains("hidden")) {
+        skinRewardOverlayEl.classList.remove("is-revealing");
+        skinRewardOverlayEl.classList.add("is-ready");
+      }
+    }, 20);
+  }
+
+  function showQueuedSkinReward(nextAction) {
+    if (!state.pendingSkinRewardName) {
+      return false;
+    }
+    showSkinRewardOverlay(state.pendingSkinRewardName, nextAction || state.pendingSkinRewardNextAction || "");
+    return true;
+  }
+
+  function advanceSkinRewardOverlay() {
+    if (!skinRewardOverlayEl || skinRewardOverlayEl.classList.contains("hidden")) {
+      return false;
+    }
+    var pendingAction = state.pendingSkinRewardNextAction;
+    resetSkinRewardOverlay();
+    if (pendingAction === "pre-run") {
+      openPreRunScreen();
+    } else if (pendingAction === "game-over") {
+      showGameOverScreen();
+    }
+    return true;
+  }
+
+  function showModeRewardOverlay(kind) {
+    if (!modeRewardOverlayEl) {
+      return;
+    }
+    var isHard = kind === "hard";
+    var title = isHard ? "Hard Mode" : "Advanced Mode";
+    var subtitle = isHard ? "Unlocked" : "Unlocked";
+    var message = isHard
+      ? "Jump Classic Hard is now available."
+      : "Jump Advanced is now available.";
+    if (skinRewardKickerEl) {
+      skinRewardKickerEl.textContent = isHard ? "New Hard Mode" : "New Advanced Mode";
+    }
+    if (skinRewardNameEl) {
+      skinRewardNameEl.textContent = title;
+    }
+    if (skinRewardTierEl) {
+      skinRewardTierEl.textContent = subtitle;
+    }
+    if (skinRewardIconEl) {
+      skinRewardIconEl.src = "assets/gfx2/trophy_pics/trophy_clean.png";
+    }
+    if (skinRewardGoalEl) {
+      skinRewardGoalEl.textContent = message;
+    }
+    if (skinRewardProgressEl) {
+      skinRewardProgressEl.textContent = "The unlock is reflected in the pre-run screen.";
+    }
+    if (skinRewardPromptEl) {
+      skinRewardPromptEl.textContent = "Tap or press Space to continue";
+    }
+    modeRewardOverlayEl.classList.remove("hidden", "is-revealing", "is-ready");
+    void modeRewardOverlayEl.offsetWidth;
+    modeRewardOverlayEl.classList.add("is-revealing");
+    window.setTimeout(function () {
+      if (modeRewardOverlayEl && !modeRewardOverlayEl.classList.contains("hidden")) {
+        modeRewardOverlayEl.classList.remove("is-revealing");
+        modeRewardOverlayEl.classList.add("is-ready");
+      }
+    }, 20);
   }
 
   function buildNewlyUnlockedBadgeQueueForRun() {
@@ -3448,6 +3628,7 @@ Main tuning points:
         }
         queue.push({
           seriesId: series.id,
+          trophyArtPath: getBadgeRewardTrophyArtPath(series),
           tierIndex: tierIndex,
           name: getBadgeSeriesName(series),
           tier: series.tiers[tierIndex].tier,
@@ -3483,8 +3664,27 @@ Main tuning points:
     if (badgeRewardPromptEl) {
       badgeRewardPromptEl.textContent = "Tap or press Space to continue";
     }
-    if (badgeRewardMedalEl) {
-      badgeRewardMedalEl.className = "badge-reward-medal " + getBadgeSpriteClassName(item.sprite);
+    if (badgeRewardTrophyBaseEl) {
+      badgeRewardTrophyBaseEl.src = "assets/gfx2/trophy_pics/trophy_clean.png";
+    }
+    if (badgeRewardTrophyArtEl) {
+      badgeRewardTrophyArtEl.classList.remove("is-visible");
+      badgeRewardTrophyArtEl.removeAttribute("src");
+      if (item.trophyArtPath) {
+        var artPath = item.trophyArtPath;
+        badgeRewardTrophyArtEl.onload = function () {
+          if (badgeRewardTrophyArtEl && badgeRewardTrophyArtEl.getAttribute("src") === artPath) {
+            badgeRewardTrophyArtEl.classList.add("is-visible");
+          }
+        };
+        badgeRewardTrophyArtEl.onerror = function () {
+          if (badgeRewardTrophyArtEl && badgeRewardTrophyArtEl.getAttribute("src") === artPath) {
+            badgeRewardTrophyArtEl.classList.remove("is-visible");
+            badgeRewardTrophyArtEl.removeAttribute("src");
+          }
+        };
+        badgeRewardTrophyArtEl.setAttribute("src", artPath);
+      }
     }
   }
 
@@ -3517,6 +3717,10 @@ Main tuning points:
 
   function finishBadgeRewardSequence() {
     resetBadgeRewardQueue();
+    if (state.pendingSkinRewardDeferred && state.pendingSkinRewardName) {
+      showQueuedSkinReward(state.returnToPreRunAfterBadgeRewards ? "pre-run" : "game-over");
+      return;
+    }
     if (state.returnToPreRunAfterBadgeRewards) {
       state.returnToPreRunAfterBadgeRewards = false;
       openPreRunScreen();
@@ -3543,6 +3747,10 @@ Main tuning points:
     closeContinuePurchaseOverlay();
     finalizeCompletedRun();
     if (!startBadgeRewardSequence(buildNewlyUnlockedBadgeQueueForRun())) {
+      if (state.pendingSkinRewardDeferred && state.pendingSkinRewardName) {
+        showQueuedSkinReward("game-over");
+        return;
+      }
       if (keepCurrentScreen) {
         state.gameOverInputBlockUntil = Date.now() + 350;
         updateGameOverSummary(true);
@@ -3558,6 +3766,10 @@ Main tuning points:
     closeContinuePurchaseOverlay();
     finalizeCompletedRun();
     if (!startBadgeRewardSequence(buildNewlyUnlockedBadgeQueueForRun())) {
+      if (state.pendingSkinRewardDeferred && state.pendingSkinRewardName) {
+        showQueuedSkinReward("pre-run");
+        return;
+      }
       openPreRunScreen();
       return;
     }
@@ -4446,6 +4658,8 @@ Main tuning points:
     },
     skinUnlockToastTimeLeft: 0,
     skinUnlockToastText: "",
+    lastHardUnlockShown: false,
+    lastFullUnlockShown: false,
     score: 0,
     scoreCarryOver: 0,
     bonusScore: 0,
@@ -4476,6 +4690,9 @@ Main tuning points:
     badgeRewardTimer: 0,
     badgeRewardShowRip: false,
     returnToPreRunAfterBadgeRewards: false,
+    pendingSkinRewardName: "",
+    pendingSkinRewardDeferred: false,
+    pendingSkinRewardNextAction: "",
     gameOverInputBlockUntil: 0,
     lifeLossInvulnerabilityTimeLeft: 0,
     continueUsesThisRun: 0,
@@ -7074,6 +7291,10 @@ Main tuning points:
 
     state.currentLevel = Math.max(1, Math.min(LEVEL_COUNT, level));
     state.highestLevelReached = Math.max(state.highestLevelReached, state.currentLevel);
+    if (isHardDifficultyUnlocked() && !state.lastHardUnlockShown) {
+      state.lastHardUnlockShown = true;
+      showModeRewardOverlay("hard");
+    }
     writePlayerSkinProgress();
     updateSurvivorBadgeProgressForCurrentRun();
     updatePuristBadgeProgressForCurrentRun();
@@ -9407,11 +9628,14 @@ Main tuning points:
     if (resetLives) {
       state.livesLeft = state.maxLives;
     } else {
-      state.livesLeft = Math.max(1, Math.min(state.livesLeft, state.maxLives));
+    state.livesLeft = Math.max(1, Math.min(state.livesLeft, state.maxLives));
     }
     state.lifeLossFlashTimeLeft = 0;
     state.skinUnlockToastTimeLeft = 0;
     state.skinUnlockToastText = "";
+    resetSkinRewardOverlay(resetLives);
+    state.lastHardUnlockShown = false;
+    state.lastFullUnlockShown = false;
     state.speedPercent = 0;
     state.scrollSpeed = C.worldAutoRunSpeed;
     state.speedSlowMultiplier = 1;
@@ -10086,6 +10310,11 @@ Main tuning points:
         return;
       }
 
+      if ((event.key === " " || event.key === "Enter") && advanceSkinRewardOverlay()) {
+        event.preventDefault();
+        return;
+      }
+
       if (state.preRunActive && state.preRunStep === "details" && (event.key === " " || event.key === "Enter")) {
         startPreRunLaunchTransition();
         return;
@@ -10109,6 +10338,9 @@ Main tuning points:
         !state.questionCoinAnimActive
       ) {
         if (state.continueOfferActive) {
+          if (finalContinueBtn) {
+            finalContinueBtn.click();
+          }
           return;
         }
         openPreRunScreen();
@@ -10153,6 +10385,9 @@ Main tuning points:
         return;
       }
       if (state.continueOfferActive) {
+        if (finalContinueBtn) {
+          finalContinueBtn.click();
+        }
         return;
       }
       if (!state.running && !state.projectileDeathAnimActive && !state.teleportFinishAnimActive && !state.questionCoinAnimActive) {
@@ -10167,6 +10402,25 @@ Main tuning points:
         tryForceFullscreen();
         unlockAudioIfNeeded();
         advanceBadgeRewardSequence();
+      });
+    }
+    if (skinRewardOverlayEl) {
+      skinRewardOverlayEl.addEventListener("pointerdown", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        tryForceFullscreen();
+        unlockAudioIfNeeded();
+        advanceSkinRewardOverlay();
+      });
+    }
+    if (modeRewardOverlayEl) {
+      modeRewardOverlayEl.addEventListener("pointerdown", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        tryForceFullscreen();
+        unlockAudioIfNeeded();
+        modeRewardOverlayEl.classList.add("hidden");
+        modeRewardOverlayEl.classList.remove("is-revealing", "is-ready");
       });
     }
 
@@ -10352,6 +10606,10 @@ Main tuning points:
     if (state.score > sessionMaxScore) {
       sessionMaxScore = state.score;
       writeMaxScoreToStorage(state.gameMode, state.gameDifficulty, sessionMaxScore);
+      if (state.gameMode === 2 && state.gameDifficulty === "hard" && isFullModeUnlocked() && !state.lastFullUnlockShown) {
+        state.lastFullUnlockShown = true;
+        showModeRewardOverlay("full");
+      }
     }
     state.speedPercent = Math.round((state.scrollSpeed / C.worldAutoRunSpeed - 1) * 100);
     updateBadgeBestStat("maxSpeedPercent", Math.max(0, state.speedPercent));

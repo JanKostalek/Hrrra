@@ -580,6 +580,7 @@
         <div id="continue-purchase-card">
           <h2>How many lives?</h2>
           <p id="continue-purchase-unit-price">1 life costs 100 coins.</p>
+          <p id="continue-purchase-wallet">Wallet: 0 coins</p>
           <div id="continue-purchase-hearts" aria-label="Choose lives to restore"></div>
           <p id="continue-purchase-total">Total price: -</p>
           <p id="continue-purchase-status">Select how many lives to buy.</p>
@@ -598,11 +599,27 @@
         <h2 id="badge-reward-name" class="badge-reward-name">Lucky</h2>
         <p id="badge-reward-tier" class="badge-reward-tier">Bronze unlocked</p>
         <div class="badge-reward-medal-wrap">
-          <span id="badge-reward-medal" class="badge-reward-medal badge-sprite-bronze" aria-hidden="true"></span>
+          <img id="badge-reward-trophy-base" class="badge-reward-trophy badge-reward-trophy-base" src="" alt="" aria-hidden="true" />
+          <img id="badge-reward-trophy-art" class="badge-reward-trophy badge-reward-trophy-art" src="" alt="" aria-hidden="true" />
         </div>
         <p id="badge-reward-goal" class="badge-reward-goal">1 positive ? Coin win</p>
         <p id="badge-reward-progress" class="badge-reward-progress">1 of 2 new badges from this run</p>
         <p id="badge-reward-prompt" class="badge-reward-prompt">Tap or press Space to continue</p>
+      </div>
+    </div>
+    <div id="skin-reward-overlay" class="hidden" aria-label="New skin unlocked">
+      <div class="badge-reward-backdrop"></div>
+      <div class="badge-reward-flash" aria-hidden="true"></div>
+      <div class="badge-reward-card">
+        <p id="skin-reward-kicker" class="badge-reward-kicker">New Skin</p>
+        <h2 id="skin-reward-name" class="badge-reward-name">Skin</h2>
+        <p id="skin-reward-tier" class="badge-reward-tier">Unlocked</p>
+        <div class="badge-reward-medal-wrap">
+          <img id="skin-reward-icon" class="badge-reward-trophy" src="" alt="" aria-hidden="true" />
+        </div>
+        <p id="skin-reward-goal" class="badge-reward-goal">A new character skin is now available.</p>
+        <p id="skin-reward-progress" class="badge-reward-progress">Check the pre-run skin select to use it.</p>
+        <p id="skin-reward-prompt" class="badge-reward-prompt">Tap or press Space to continue</p>
       </div>
     </div>
     <div id="level-finished" class="hidden">
