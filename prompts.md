@@ -1,98 +1,98 @@
 ﻿# Prompts
 
-pĹ™iprav soubor, kam budeĹˇ kopĂ­rovat vĹˇechny moje prompty. NÄ›co jako `prompts.md` - vĹľdy budou oddÄ›leny odĹ™ĂˇdkovĂˇnĂ­m `-------------------` a dalĹˇĂ­m odĹ™ĂˇdkovĂˇnĂ­m
+připrav soubor, kam budeš kopírovat všechny moje prompty. Něco jako `prompts.md` - vždy budou odděleny odřádkováním `-------------------` a dalším odřádkováním
 
 -------------------
 
-souhlasĂ­m s doporuÄŤenĂ­m na wav
+souhlasím s doporučením na wav
 
 -------------------
 
-souhlasĂ­m. dÄ›lej to tak, aby to bylo co nejlepĹˇĂ­ pro budoucĂ­ zmÄ›ny a pro testovĂˇnĂ­
+souhlasím. dělej to tak, aby to bylo co nejlepší pro budoucí změny a pro testování
 
 -------------------
 
-jeĹˇtÄ› tuto zmÄ›nu uloĹľ do `changes`, aby bylo jasnĂ©, Ĺľe toto mĂˇĹˇ vĹľdy, kdyĹľ nÄ›co napĂ­Ĺˇu, automaticky dÄ›lat. Abys to vÄ›dÄ›l, aĹľ ukonÄŤĂ­me a znovu zaÄŤneme relaci
+ještě tuto změnu ulož do `changes`, aby bylo jasné, že toto máš vždy, když něco napíšu, automaticky dělat. Abys to věděl, až ukončíme a znovu začneme relaci
 
 -------------------
 
-TeÄŹ chci zaÄŤĂ­t pracovat na zvukovĂ© strĂˇnce. Budeme mĂ­t hudbu na pozadĂ­ pro kaĹľdou ĂşroveĹ. Bude to opakujĂ­cĂ­ se smyÄŤka. KaĹľdĂˇ ĂşroveĹ bude mĂ­t vlastnĂ­ hudebnĂ­ linku. V kaĹľdĂ© Ăşrovni bude nÄ›kolik vÄ›cĂ­, kdy se bude ozĂ˝vat zvuk. TĹ™eba sebrĂˇnĂ­ mince, coin bagu, mystery coin a vĹˇeho dalĹˇĂ­ho. Bude tam zvuk pro Jump, death. Budou zvuky pro jednotlivĂ© strĂˇnky. Zvuk pro objevovĂˇnĂ­ se informace o zĂ­skanĂ©m badge etc. Bude ideĂˇlnĂ­ v administraci udÄ›lat sekci sounds, kde se bude vĹˇe moct doladovat. Bude klasicky collapsable, jako ostatnĂ­ sekce. V prvnĂ­m kroku mi potvrÄŹ, Ĺľe rozumĂ­Ĺˇ co chci, navrhni pĹ™Ă­padnÄ› co si o tom myslĂ­Ĺˇ a jak to udÄ›lat tĹ™eba i jinak neĹľ navrhuju, ale nic zatĂ­m neimplementuj. To nechĂˇme na krok 2
+Teď chci začít pracovat na zvukové stránce. Budeme mít hudbu na pozadí pro každou úroveň. Bude to opakující se smyčka. Každá úroveň bude mít vlastní hudební linku. V každé úrovni bude několik věcí, kdy se bude ozývat zvuk. Třeba sebrání mince, coin bagu, mystery coin a všeho dalšího. Bude tam zvuk pro Jump, death. Budou zvuky pro jednotlivé stránky. Zvuk pro objevování se informace o získaném badge etc. Bude ideální v administraci udělat sekci sounds, kde se bude vše moct doladovat. Bude klasicky collapsable, jako ostatní sekce. V prvním kroku mi potvrď, že rozumíš co chci, navrhni případně co si o tom myslíš a jak to udělat třeba i jinak než navrhuju, ale nic zatím neimplementuj. To necháme na krok 2
 
 -------------------
 
-souhlasĂ­m s tĂ­m co Ĺ™Ă­kĂˇĹˇ. V administraci bych v budoucnu ale chtÄ›l, aby tam pro kaĹľdou ĂşroveĹ byla sekce, kde bude vidÄ›t, kterĂ˝ zvuk se na kterou akci pĹ™ehrĂˇvĂˇ. ÄŚili kaĹľdĂ˝ level by mÄ›l mĂ­t svoji sloĹľku - nÄ›co jako `assets/sound/levelxx` nebo ve sloĹľce `levelxx` pĹ™idat sloĹľku `sound`. A to proto, abych v budoucnu mohl jednoduĹˇe ty zvuky zamÄ›Ĺovat. Je to srozumitelnĂ©?
+souhlasím s tím co říkáš. V administraci bych v budoucnu ale chtěl, aby tam pro každou úroveň byla sekce, kde bude vidět, který zvuk se na kterou akci přehrává. Čili každý level by měl mít svoji složku - něco jako `assets/sound/levelxx` nebo ve složce `levelxx` přidat složku `sound`. A to proto, abych v budoucnu mohl jednoduše ty zvuky zaměňovat. Je to srozumitelné?
 
 -------------------
 
-naprosto se vĹˇĂ­m souhlasĂ­m. TeÄŹ ale udÄ›lej commit do `main` - local i online a pak vytvoĹ™ novou branch `sfx`, ve kterĂ© pak budeme pokraÄŤovat
+naprosto se vším souhlasím. Teď ale udělej commit do `main` - local i online a pak vytvoř novou branch `sfx`, ve které pak budeme pokračovat
 
 -------------------
 
-tak a teÄŹ mĹŻĹľeĹˇ zaÄŤĂ­t s implementacĂ­ tak, jak jsi ji navrhoval. Pokud mĂˇĹˇ jeĹˇtÄ› nÄ›jakĂ˝ dotaz anebo nĂˇvrh, tak mi ho Ĺ™ekni. JeĹˇtÄ› mi navrhni jmennou konvenci pro uĹľĂ­vanĂ© zvuky. VytvoĹ™ rovnou potĹ™ebnĂ© sloĹľky a ideĂˇlnÄ› prĂˇzdnĂ© placeholder zvuky. V jakĂ©m budou formĂˇtu? `wav`? `mp3`? A jĂˇ pak ty placeholder / prĂˇzdnĂ© soubory nahrazovat reĂˇlnĂ˝m obsahem. Je to tak v poĹ™Ăˇdku? Abychom postupovali postupnÄ› a neutopili se v tom, navrhuji zaÄŤĂ­t nejdĹ™Ă­v pro `Level1` a pak to mĹŻĹľeme multiplikovat pro ostatnĂ­
+tak a teď můžeš začít s implementací tak, jak jsi ji navrhoval. Pokud máš ještě nějaký dotaz anebo návrh, tak mi ho řekni. Ještě mi navrhni jmennou konvenci pro užívané zvuky. Vytvoř rovnou potřebné složky a ideálně prázdné placeholder zvuky. V jakém budou formátu? `wav`? `mp3`? A já pak ty placeholder / prázdné soubory nahrazovat reálným obsahem. Je to tak v pořádku? Abychom postupovali postupně a neutopili se v tom, navrhuji začít nejdřív pro `Level1` a pak to můžeme multiplikovat pro ostatní
 
 -------------------
 
-a) kdyĹľ nynĂ­ pustĂ­m hru na lokale, mÄ›l bych slyĹˇet nÄ›jakĂ© placeholder zvuky nebo jsou zatĂ­m jen "prĂˇzdnĂ©", ÄŤili tichĂ© a uslyĹˇĂ­m aĹľ je zamÄ›nĂ­m? Plus pĹ™idej zvuk pro ztrĂˇtu ĹˇtĂ­tu. A hudba na screeny pĹ™ed zaÄŤĂˇtkem hry jsou? Potom je potĹ™eba nÄ›jakĂ˝ zvuk mezi ĂşrovnÄ›mi. Na obrazovce, kterĂˇ Ĺ™Ă­kĂˇ, Ĺľe zaÄŤne dalĹˇĂ­ level. A pak `Game Over` obrazovka by mÄ›la mĂ­t nÄ›jakĂ˝ vlastnĂ­ zvuk loop
+a) když nyní pustím hru na lokale, měl bych slyšet nějaké placeholder zvuky nebo jsou zatím jen "prázdné", čili tiché a uslyším až je zaměním? Plus přidej zvuk pro ztrátu štítu. A hudba na screeny před začátkem hry jsou? Potom je potřeba nějaký zvuk mezi úrovněmi. Na obrazovce, která říká, že začne další level. A pak `Game Over` obrazovka by měla mít nějaký vlastní zvuk loop
 
 -------------------
 
-a jeĹˇtÄ› pĹ™iprav soubor `sound.md`, kam popĂ­ĹˇeĹˇ, pĹ™i kterĂ© akci / udĂˇlosti / menu je pĹ™ehrĂˇvanĂ˝ kterĂ˝ zvuk
+a ještě připrav soubor `sound.md`, kam popíšeš, při které akci / události / menu je přehrávaný který zvuk
 
 -------------------
 
-mĂˇme pĹ™ipravenĂ˝ zvuk pro ztrĂˇtu jednoho Ĺľivota ve hĹ™e?
+máme připravený zvuk pro ztrátu jednoho života ve hře?
 
 -------------------
 
-ano, pĹ™iprav to
+ano, připrav to
 
 -------------------
 
-MĹŻĹľeĹˇ ovÄ›Ĺ™it? NahrĂˇl jsem vlastnĂ­ jump a coin zvuky a pĹ™ijde mi, Ĺľe kdyĹľ zkoÄŤĂ­m, tak zvuk zaÄŤne o zlomek pozdÄ›ji neĹľ postaviÄŤka zaÄŤne skĂˇkat. StejnÄ› tak pĹ™i sebrĂˇnĂ­ mince. Mince zmizĂ­, ale zvuk se ozve o chlup pozdÄ›ji. MĹŻĹľeĹˇ ovÄ›Ĺ™it, zda to je v kĂłdu a nebo zda ty zvuky majĂ­ prĂˇzdnĂ© mĂ­sto na zaÄŤĂˇtku, kterĂ© to zpĹŻsobujĂ­?
+Můžeš ověřit? Nahrál jsem vlastní jump a coin zvuky a přijde mi, že když zkočím, tak zvuk začne o zlomek později než postavička začne skákat. Stejně tak při sebrání mince. Mince zmizí, ale zvuk se ozve o chlup později. Můžeš ověřit, zda to je v kódu a nebo zda ty zvuky mají prázdné místo na začátku, které to způsobují?
 
 -------------------
 
-proveÄŹ to. A nebude lepĹˇĂ­ to udÄ›lat u vĹˇeho?
+proveď to. A nebude lepší to udělat u všeho?
 
 -------------------
 
-dvÄ› vÄ›ci, kdyĹľ postaviÄŤka ztratĂ­ poslednĂ­ Ĺľivot - objevuje se `RIP` a pĹ™ehrĂˇvĂˇ se death zvuk, tak v okamĹľiku, kdy pĹ™ijdu o Ĺľivot, musĂ­ pĹ™estat hrĂˇt background. b) NahrĂˇl jsem `badge reveal` zvuk a `game over loop`, ale kdyĹľ jdu do sekce odznakĹŻ ani kdyĹľ se objevĂ­ `Game Over` screen, tak se loopy nepĹ™ehrĂˇvajĂ­. Nejsem si jistĂ˝, zda to nenĂ­ tĂ­m, Ĺľe jsem pĹ™ejmenoval mp3 soubor na wav
+dvě věci, když postavička ztratí poslední život - objevuje se `RIP` a přehrává se death zvuk, tak v okamžiku, kdy přijdu o život, musí přestat hrát background. b) Nahrál jsem `badge reveal` zvuk a `game over loop`, ale když jdu do sekce odznaků ani když se objeví `Game Over` screen, tak se loopy nepřehrávají. Nejsem si jistý, zda to není tím, že jsem přejmenoval mp3 soubor na wav
 
 -------------------
 
-pĹ™ejmenoval jsem soubor zpÄ›t na mp3 (`ui-game-over-loop.mp3`). DokĂˇĹľeĹˇ mi jej zkonvertovat na wav?
+přejmenoval jsem soubor zpět na mp3 (`ui-game-over-loop.mp3`). Dokážeš mi jej zkonvertovat na wav?
 
 -------------------
 
-ano, pĹ™eveÄŹ, protoĹľe teÄŹ mi jeĹˇtÄ› ve hĹ™e nefunguje
+ano, převeď, protože teď mi ještě ve hře nefunguje
 
 -------------------
 
-u `Game Over` jsem zjistil, proÄŤ jsem nic neslyĹˇel. Byl neskuteÄŤnÄ› ztlumenĂ˝. Je sĂˇm o sobÄ› potichu. KdyĹľ nastavĂ­m zvuk, aby byl pĹ™Ă­jemnĂ˝, tak tento uĹľ nenĂ­ vĹŻbec slyĹˇet. KdyĹľ dĂˇm vĹˇe na plno, nedĂˇ se standardnĂ­ zvuky vydrĹľet, ale `Game Over` je slyĹˇet. MĹŻĹľeĹˇ `Game Over` zvednout natvrdo hlasitost? V tom wav souboru? Bez zĂˇsahu do kĂłdu? Nebo se to musĂ­ dÄ›lat pĹ™Ă­mo ve hĹ™e? A `badges` stĂˇle neslyĹˇĂ­m - a nenĂ­ to hlasitostĂ­ a uĹľ jsem zjistil problĂ©m. JĂˇ `badge reveal` hledal na strĂˇnce, kterĂˇ zobrazuje vĹˇechny odznaky. A to je jinĂˇ strĂˇnka. MĹŻĹľeĹˇ prosĂ­m vytvoĹ™it jeĹˇtÄ› placeholder a moĹľnost pĹ™ehrĂˇvat zvuk pĹ™i otevĹ™enĂ­ strĂˇnky `Badges`?
+u `Game Over` jsem zjistil, proč jsem nic neslyšel. Byl neskutečně ztlumený. Je sám o sobě potichu. Když nastavím zvuk, aby byl příjemný, tak tento už není vůbec slyšet. Když dám vše na plno, nedá se standardní zvuky vydržet, ale `Game Over` je slyšet. Můžeš `Game Over` zvednout natvrdo hlasitost? V tom wav souboru? Bez zásahu do kódu? Nebo se to musí dělat přímo ve hře? A `badges` stále neslyším - a není to hlasitostí a už jsem zjistil problém. Já `badge reveal` hledal na stránce, která zobrazuje všechny odznaky. A to je jiná stránka. Můžeš prosím vytvořit ještě placeholder a možnost přehrávat zvuk při otevření stránky `Badges`?
 
 -------------------
 
-`Badges` page zvuk jsem zamÄ›nil a funguje. Ale kdyĹľ ze strĂˇnky odejdu, tak hraje poĹ™Ăˇd dĂˇl. MusĂ­ skonÄŤit ve chvĂ­li, kdy odejdu. ProtoĹľe jinak pak zaÄŤnu hrĂˇt hru a kromÄ› ĂşrovĹovĂ© muziky hraje i `Badges` page muzika
+`Badges` page zvuk jsem zaměnil a funguje. Ale když ze stránky odejdu, tak hraje pořád dál. Musí skončit ve chvíli, kdy odejdu. Protože jinak pak začnu hrát hru a kromě úrovňové muziky hraje i `Badges` page muzika
 
 -------------------
 
-`Badges` page zvuk jsem zamÄ›nil a funguje. Ale kdyĹľ ze strĂˇnky odejdu, tak hraje poĹ™Ăˇd dĂˇl. MusĂ­ skonÄŤit ve chvĂ­li, kdy odejdu. ProtoĹľe jinak pak zaÄŤnu hrĂˇt hru a kromÄ› ĂşrovĹovĂ© muziky hraje i `Badges` page muzika
+`Badges` page zvuk jsem zaměnil a funguje. Ale když ze stránky odejdu, tak hraje pořád dál. Musí skončit ve chvíli, kdy odejdu. Protože jinak pak začnu hrát hru a kromě úrovňové muziky hraje i `Badges` page muzika
 
 -------------------
 
-mĂˇm dva chyby. a) KdyĹľ otevĹ™u `Badges`, vidĂ­m `First Run` objevenĂ˝. Jdu do administrace, udÄ›lĂˇm reset, vypnu administraci a pokraÄŤuju ve hĹ™e, ale badge zĹŻstane odemÄŤenĂ˝. Pokud udÄ›lĂˇm totĂ©Ĺľ a ze startovacĂ­ strĂˇnky dĂˇm `Back`, tam otevĹ™u `Badges`, tak najednou je `First Run` zase zamÄŤenĂ˝. b) `badge reveal` zvuk se nepĹ™ehrĂˇvĂˇ, aÄŤ jsem ho tam nahrĂˇl
+mám dva chyby. a) Když otevřu `Badges`, vidím `First Run` objevený. Jdu do administrace, udělám reset, vypnu administraci a pokračuju ve hře, ale badge zůstane odemčený. Pokud udělám totéž a ze startovací stránky dám `Back`, tam otevřu `Badges`, tak najednou je `First Run` zase zamčený. b) `badge reveal` zvuk se nepřehrává, ač jsem ho tam nahrál
 
 -------------------
 
-ten `Reset Badges` se neumÄ›nil. Pokud mĂˇm odemÄŤenĂ˝ `First Run`, hraju, jdu do administrace a resetnu, nezamkne se. KdyĹľ umĹ™u, stĂˇle si myslĂ­, Ĺľe ho mĂˇm. Teprve kdyĹľ zaÄŤnu novou hru, tak se objevĂ­, Ĺľe jsem ho zĂ­skal. Pokud mĂˇm badge odemknutĂ˝, jdu na start screen do admin, resetnu a zaÄŤnu hru, je stĂˇle odemÄŤenĂ˝. KdyĹľ zaÄŤnu dalĹˇĂ­ run, je stĂˇle odemÄŤenĂ˝, kdyĹľ jdu do `Badges` - po tom prvnĂ­m ÄŤi druhĂ©m runu, je stĂˇle odemÄŤenĂ˝. KdyĹľ na start screen resetnu badge a jdu zpÄ›t a pak na `Badges`, tak se zamkne
+ten `Reset Badges` se neuměnil. Pokud mám odemčený `First Run`, hraju, jdu do administrace a resetnu, nezamkne se. Když umřu, stále si myslí, že ho mám. Teprve když začnu novou hru, tak se objeví, že jsem ho získal. Pokud mám badge odemknutý, jdu na start screen do admin, resetnu a začnu hru, je stále odemčený. Když začnu další run, je stále odemčený, když jdu do `Badges` - po tom prvním či druhém runu, je stále odemčený. Když na start screen resetnu badge a jdu zpět a pak na `Badges`, tak se zamkne
 
 -------------------
 
-jak se nazĂ˝vĂˇ tato obrazovka a mĂˇ pĹ™iĹ™azenĂ˝ nÄ›jakĂ˝ zvuk? Ten druhĂ˝ obrĂˇzek je `prerun`, je to tak? UĹľ asi rozumĂ­m. Oni jsou obÄ› obrazovky `prerun` a majĂ­ ten `prerun` zvuk. Ale pĹ™i spuĹˇtÄ›nĂ­ hry se na tĂ© prvnĂ­ obrazovce zvuk nepĹ™ehrĂˇvĂˇ, dokud nekliknu. Je to tak? ProtoĹľe kdyĹľ otevĹ™u `Badges` a vrĂˇtĂ­m se, uĹľ hraje. Ono to nejde udÄ›lat, aby zaÄŤala rovnou hrĂˇt?
+jak se nazývá tato obrazovka a má přiřazený nějaký zvuk? Ten druhý obrázek je `prerun`, je to tak? Už asi rozumím. Oni jsou obě obrazovky `prerun` a mají ten `prerun` zvuk. Ale při spuštění hry se na té první obrazovce zvuk nepřehrává, dokud nekliknu. Je to tak? Protože když otevřu `Badges` a vrátím se, už hraje. Ono to nejde udělat, aby začala rovnou hrát?
 
 -------------------
 
-jdi na branch `sfx` a tam potom uprav ve hĹ™e default hodnoty podle obrĂˇzku pro sounds. ZĂˇroveĹ ty cesty ke zvukĹŻm mĹŻĹľeĹˇ schovat. NenĂ­ potĹ™eba, aby byly v administraci vidÄ›t
+jdi na branch `sfx` a tam potom uprav ve hře default hodnoty podle obrázku pro sounds. Zároveň ty cesty ke zvukům můžeš schovat. Není potřeba, aby byly v administraci vidět
 
 -------------------
 
@@ -100,75 +100,75 @@ zvedni natvrdo zvuk v `Game Over` screen o 100%
 
 -------------------
 
-mezi start obrazovkou a zaÄŤĂˇtkem runu, ale i start obrazovkou mezi levely trochu zmÄ›nime. KdyĹľ se klikne na start, tak vezmi z tĂ©to obrazovky jen pozadĂ­, veĹˇkerĂ© ostatnĂ­ vÄ›ci tam nebudou, objevĂ­ se na 1s zvÄ›tĹˇujĂ­cĂ­ se (z malĂ©ho na hodnÄ› velkĂ©) `READY...` a pak na 1s `RUN!`. KdyĹľ na tĂ© start obrazovce klikneme na start, tak po dobu tÄ›ch dvou sekund, co bude obrazovka `READY / RUN`, tak muzika ze start screen bude `fade to silence`. Nechci, aby pĹ™i pĹ™echodu ze start screen do runu byl ostrĂ˝ lom mezi hudbami
+mezi start obrazovkou a začátkem runu, ale i start obrazovkou mezi levely trochu změnime. Když se klikne na start, tak vezmi z této obrazovky jen pozadí, veškeré ostatní věci tam nebudou, objeví se na 1s zvětšující se (z malého na hodně velké) `READY...` a pak na 1s `RUN!`. Když na té start obrazovce klikneme na start, tak po dobu těch dvou sekund, co bude obrazovka `READY / RUN`, tak muzika ze start screen bude `fade to silence`. Nechci, aby při přechodu ze start screen do runu byl ostrý lom mezi hudbami
 
 -------------------
 
-kolik Ĺ™ĂˇdkĹŻ kĂłdu uĹľ mĂˇ nĂˇĹˇ projekt?
+kolik řádků kódu už má náš projekt?
 
 -------------------
 
-teÄŹ udÄ›lej commit local, online a pĹ™iprav `aab`
+teď udělej commit local, online a připrav `aab`
 
 -------------------
 
-urÄŤitÄ›. KdyĹľ Ĺ™eknu, Ĺľe mi mĂˇĹˇ pĹ™ipravit `aab`, tak to proto, Ĺľe to chci nahrĂˇvat, ÄŤili VĹ˝DY pĹ™iprav vĹˇe co je potĹ™eba pro nahrĂˇnĂ­ na store a jelikoĹľ nechci, aby pĹ™i kaĹľdĂ©m spuĹˇtÄ›nĂ­ hra hlĂˇsila, Ĺľe je novĂˇ verze, i kdyĹľ novĂˇ verze nenĂ­, tak zvedej vĹˇe co je potĹ™eba. Tohle si zapiĹˇ jako pravidlo
+určitě. Když řeknu, že mi máš připravit `aab`, tak to proto, že to chci nahrávat, čili VŽDY připrav vše co je potřeba pro nahrání na store a jelikož nechci, aby při každém spuštění hra hlásila, že je nová verze, i když nová verze není, tak zvedej vše co je potřeba. Tohle si zapiš jako pravidlo
 
 -------------------
 
-mi to Ĺ™Ă­kĂˇ pĹ™i pokusu nahrĂˇt. VypadĂˇ, Ĺľe jsi nezvedl verzi kĂłdu
+mi to říká při pokusu nahrát. Vypadá, že jsi nezvedl verzi kódu
 
 -------------------
 
-pĹ™iprav novou vÄ›tev `highscore` a pĹ™epni do nĂ­. Budu teÄŹ chtĂ­t pĹ™ipravit moĹľnost, aby se score uklĂˇdalo online a bylo sdĂ­lenĂ©
+připrav novou větev `highscore` a přepni do ní. Budu teď chtít připravit možnost, aby se score ukládalo online a bylo sdílené
 
 -------------------
 
-teÄŹ bych rĂˇd do hry implementoval moĹľnost, aby se highscore uklĂˇdal online a kaĹľdĂ˝ vidÄ›l svĂ© umĂ­stÄ›nĂ­ v porovnĂˇnĂ­ se zbytkem hrĂˇÄŤĹŻ
+teď bych rád do hry implementoval možnost, aby se highscore ukládal online a každý viděl své umístění v porovnání se zbytkem hráčů
 
 -------------------
 
-jĂˇ na Vercelu uĹľ nÄ›jakou DB pouĹľĂ­vĂˇm. PouĹľĂ­val jsem ji pro projekt `hlĂ­daÄŤka` a `hledaÄŤka` - jsou to sloĹľky ve sloĹľce `-_web_-`. MĹŻĹľeĹˇ se tam podĂ­vat, jakĂˇ a jak pouĹľĂ­vĂˇme
+já na Vercelu už nějakou DB používám. Používal jsem ji pro projekt `hlídačka` a `hledačka` - jsou to složky ve složce `-_web_-`. Můžeš se tam podívat, jaká a jak používáme
 
 -------------------
 
-ten druhĂ˝ projekt se jmenuje `menu`
+ten druhý projekt se jmenuje `menu`
 
 -------------------
 
-ano. StaÄŤĂ­ mi jednoduchĂˇ. ChtÄ›l bych tam jen `JmĂ©no - Score`. A to podle toho, zda hrĂˇl `Jump / Full`, `Easy / Hard`. To jmĂ©no jeĹˇtÄ› bude potĹ™eba asi zaimplementovat do hry. TĹ™eba pĹ™i prvnĂ­m spuĹˇtÄ›nĂ­, Ĺľe se to zeptĂˇ na jmĂ©no, kterĂ© se pak uloĹľĂ­ do local. A nebo jak bys to navrhoval?
+ano. Stačí mi jednoduchá. Chtěl bych tam jen `Jméno - Score`. A to podle toho, zda hrál `Jump / Full`, `Easy / Hard`. To jméno ještě bude potřeba asi zaimplementovat do hry. Třeba při prvním spuštění, že se to zeptá na jméno, které se pak uloží do local. A nebo jak bys to navrhoval?
 
 -------------------
 
-zaÄŤni
+začni
 
 -------------------
 
-upravĂ­me vzhled `Game Over` strĂˇnky. LokĂˇlnÄ› uloĹľenĂ© rekordy posuneme do okna do levĂ© ÄŤĂˇsti obrazovky. Bude to `Your High Scores`. Bude to ve formĂˇtu `Jump Easy`, `Jump Hard`, `Full Easy`, `Full Hard`. AktuĂˇlnĂ­ score posuneĹˇ dolĹŻ doprostĹ™ed obrazovky. A `online high` dĂˇĹˇ do okna do pravĂ© ÄŤĂˇsti obrazovky. Bude se tam zobrazovat 15 nejlepĹˇĂ­ch v tom modu, kterĂ˝ zrovna hrĂˇÄŤ hrĂˇl, a ĹˇestnĂˇctĂ© jmĂ©no bude jeho high score a sedmnĂˇctĂ© bude aktuĂˇlnĂ­ score, kterĂ© uhrĂˇl. ÄŚili ĹˇestnĂˇctĂ© a sedmnĂˇctĂ© jmĂ©no vĹľdy uvidĂ­ ten hrĂˇÄŤ, kterĂ˝ hraje - sebe. SvĂ© nej score pro ten mode a obtĂ­Ĺľnost a aktuĂˇlnĂ­ score pro mode a obtĂ­Ĺľnost. Z aktuĂˇlnĂ­ho score mĹŻĹľeĹˇ odmazat `coins` a `bags collected`. NenĂ­ to dĹŻleĹľitĂ©. Nech jen score a time
+upravíme vzhled `Game Over` stránky. Lokálně uložené rekordy posuneme do okna do levé části obrazovky. Bude to `Your High Scores`. Bude to ve formátu `Jump Easy`, `Jump Hard`, `Full Easy`, `Full Hard`. Aktuální score posuneš dolů doprostřed obrazovky. A `online high` dáš do okna do pravé části obrazovky. Bude se tam zobrazovat 15 nejlepších v tom modu, který zrovna hráč hrál, a šestnácté jméno bude jeho high score a sedmnácté bude aktuální score, které uhrál. Čili šestnácté a sedmnácté jméno vždy uvidí ten hráč, který hraje - sebe. Své nej score pro ten mode a obtížnost a aktuální score pro mode a obtížnost. Z aktuálního score můžeš odmazat `coins` a `bags collected`. Není to důležité. Nech jen score a time
 
 -------------------
 
-dvÄ› vÄ›ci. a) `Game Over` screen. Okna pĹ™etĂ©kajĂ­. UdÄ›lej strĂˇnku vĂ­c responzivnĂ­, aĹĄ se pĹ™izpĹŻsobuje velikosti. b) TotĂ©Ĺľ u start screen. AĹĄ se pĹ™izpĹŻsobuje a nepĹ™etĂ©kĂˇ
+dvě věci. a) `Game Over` screen. Okna přetékají. Udělej stránku víc responzivní, ať se přizpůsobuje velikosti. b) Totéž u start screen. Ať se přizpůsobuje a nepřetéká
 
 -------------------
 
-tohle bylo sprĂˇvnĂ© rozmĂ­stÄ›nĂ­, jen to pĹ™etĂ©kalo tam, jak jsem to oznaÄŤil. TeÄŹ to je pod sebou a to nenĂ­ dobĹ™e, protoĹľe se tam nevejde cost score pod sebou. UdÄ›lej to jak to bylo pĹ™edtĂ­m na stranĂˇch, jen ty okna udÄ›lej, aby nepĹ™etĂ©kala
+tohle bylo správné rozmístění, jen to přetékalo tam, jak jsem to označil. Teď to je pod sebou a to není dobře, protože se tam nevejde cost score pod sebou. Udělej to jak to bylo předtím na stranách, jen ty okna udělej, aby nepřetékala
 
 -------------------
 
-a) moĹľnĂˇ to tam nenĂ­ jen proto, Ĺľe jeĹˇtÄ› nenĂ­ napojenĂ© online score, ale mÄ›lo by tam pak bĂ˝t poĹ™adĂ­ pĹ™ed jmĂ©nem. a b) Napravo to ukazuje top score 70000 a vpravo `Your Best` pĂ­Ĺˇe 0. MÄ›lo by to bĂ˝t propojenĂ©
+a) možná to tam není jen proto, že ještě není napojené online score, ale mělo by tam pak být pořadí před jménem. a b) Napravo to ukazuje top score 70000 a vpravo `Your Best` píše 0. Mělo by to být propojené
 
 -------------------
 
-zĂ­tra to zase budeme ladit. UdÄ›lej commit do `main` local i online. TĂ­m by se to mÄ›lo dostat na Vercel a zaÄŤĂ­t score ukazovat, je to tak?
+zítra to zase budeme ladit. Udělej commit do `main` local i online. Tím by se to mělo dostat na Vercel a začít score ukazovat, je to tak?
 
 -------------------
 
-pokraÄŤuj
+pokračuj
 
 -------------------
 
-takto to nechĂˇm?
+takto to nechám?
 
 -------------------
 
@@ -180,7 +180,7 @@ takto to nechĂˇm?
 
 -------------------
 
-dvÄ› vÄ›ci. Tady je vidÄ›t, Ĺľe moje score se propĂ­Ĺˇe do `Top Players` v poĹ™Ăˇdku. Je tam jmĂ©no a score, ale v `Top Scores` se uloĹľĂ­ mĂ­sto jmĂ©na jen `Player`. A zĂˇroveĹ v tom oknÄ› prohoÄŹ `Your Best` a `Current Run`. Srovnej font v `Top Players` a `Top Scores` - to `Jump Easy` je pokaĹľdĂ© jinak. UdÄ›lej ho menĹˇĂ­ a vycentruj na Ĺ™Ăˇdek. A nadpisy tÄ›ch oken `Online Top Scores` a `Online Top Players`. b) `READY / RUN` strĂˇnka mĂˇ nevĂ­m proÄŤ moĹľnost scrollovat, i kdyĹľ tam nic nenĂ­. UdÄ›lej maximĂˇlnĂ­ velikost podle toho pozadĂ­. Tam kde se zaÄŤne opakovat, tam to zasekni - znĂˇzornÄ›no ÄŤarou. Pokud bude potĹ™eba menĹˇĂ­, tak aĹĄ je responzivnĂ­, ale aĹĄ se nezvÄ›tĹˇuje do tĂ© mĂ­ry, Ĺľe tam budou posuvnĂ­ky
+dvě věci. Tady je vidět, že moje score se propíše do `Top Players` v pořádku. Je tam jméno a score, ale v `Top Scores` se uloží místo jména jen `Player`. A zároveň v tom okně prohoď `Your Best` a `Current Run`. Srovnej font v `Top Players` a `Top Scores` - to `Jump Easy` je pokaždé jinak. Udělej ho menší a vycentruj na řádek. A nadpisy těch oken `Online Top Scores` a `Online Top Players`. b) `READY / RUN` stránka má nevím proč možnost scrollovat, i když tam nic není. Udělej maximální velikost podle toho pozadí. Tam kde se začne opakovat, tam to zasekni - znázorněno čarou. Pokud bude potřeba menší, tak ať je responzivní, ale ať se nezvětšuje do té míry, že tam budou posuvníky
 
 -------------------
 
@@ -188,7 +188,7 @@ tak implementuj, jak jsme psali. Jen bez rate limit na pokusy a lockout
 
 -------------------
 
-bezpeÄŤnÄ›
+bezpečně
 
 -------------------
 
@@ -196,47 +196,47 @@ ono to bude v souboru s promptama
 
 -------------------
 
-ÄŤili mĹŻĹľu zkusit?
+čili můžu zkusit?
 
 -------------------
 
-Jen odpovĂ­dej. Funguje, super. TeÄŹ mne napadĂˇ, kdyĹľ novĂ˝ hrĂˇÄŤ spustĂ­ hru, zeptĂˇ se ho to na jmĂ©no, vybere si uĹľ nÄ›jakĂ©, kterĂ© je - hra to nijak pĹ™edpoklĂˇdĂˇm vĹŻÄŤi online scores neovÄ›Ĺ™uje, tak dva rĹŻznĂ­ hrĂˇÄŤi mĹŻĹľou mĂ­t stejnĂˇ jmĂ©na a budou se plĂ©st jejich score? VidĂ­m, Ĺľe kdyĹľ si v prĹŻbÄ›hu hry zmÄ›nĂ­m jmĂ©no, tak se zmÄ›nĂ­ jmĂ©no i u vĹˇech online score a ovÄ›Ĺ™il jsem si to - ale jen na online (web Vercel - nikoliv Android a o ten mi hlavnÄ› jde. ProtoĹľe Vercel nebude veĹ™ejnĂ˝. Ten mĂˇm jen na testovĂˇnĂ­). KdyĹľ si jĂˇ na svĂ©m Google ĂşÄŤtu vyberu jmĂ©no a jinĂ˝ tester na svĂ©m si vybere stejnĂ©, tak se to bude tlouct v online scores, je to tak?
+Jen odpovídej. Funguje, super. Teď mne napadá, když nový hráč spustí hru, zeptá se ho to na jméno, vybere si už nějaké, které je - hra to nijak předpokládám vůči online scores neověřuje, tak dva různí hráči můžou mít stejná jména a budou se plést jejich score? Vidím, že když si v průběhu hry změním jméno, tak se změní jméno i u všech online score a ověřil jsem si to - ale jen na online (web Vercel - nikoliv Android a o ten mi hlavně jde. Protože Vercel nebude veřejný. Ten mám jen na testování). Když si já na svém Google účtu vyberu jméno a jiný tester na svém si vybere stejné, tak se to bude tlouct v online scores, je to tak?
 
 -------------------
 
-jde udÄ›lat, aby dva hrĂˇÄŤi nemohli mĂ­t stejnĂ© jmĂ©no? NÄ›jakĂ© ovÄ›Ĺ™enĂ­, Ĺľe uĹľ v databĂˇzi nenĂ­?
+jde udělat, aby dva hráči nemohli mít stejné jméno? Nějaké ověření, že už v databázi není?
 
 -------------------
 
-pokud se nepletu, nikdo jinĂ˝ si ho vzĂ­t nemĹŻĹľe, protoĹľe ve chvĂ­li kdy uĹľ se jednou zapĂ­Ĺˇe do databĂˇze, tak mu ho to nedovolĂ­ si vzĂ­t. Ale kdyĹľ budu na jinĂ©m zaĹ™Ă­zenĂ­, kterĂ© mne vyzve ke jmĂ©nu, tak ani jĂˇ si svoje uĹľ vzĂ­t nemĹŻĹľu, protoĹľe jsem si ho zabral na jinĂ©m zaĹ™Ă­zenĂ­
+pokud se nepletu, nikdo jiný si ho vzít nemůže, protože ve chvíli kdy už se jednou zapíše do databáze, tak mu ho to nedovolí si vzít. Ale když budu na jiném zařízení, které mne vyzve ke jménu, tak ani já si svoje už vzít nemůžu, protože jsem si ho zabral na jiném zařízení
 
 -------------------
 
-ta varianta `tag` se mi nelĂ­bĂ­. Lidi majĂ­ rĂˇdy svĂˇ jmĂ©na a ten tag je oĹˇklivĂ˝. Jak sloĹľitĂ© je pĹ™ihlĂˇĹˇenĂ­ pĹ™es Google ID jako ovÄ›Ĺ™enĂ­ identity? Pak by si to pamatovalo moje jmĂ©no z jinĂ©ho zaĹ™Ă­zenĂ­ a mohl bych si ho i dĂˇl mÄ›nit
+ta varianta `tag` se mi nelíbí. Lidi mají rády svá jména a ten tag je ošklivý. Jak složité je přihlášení přes Google ID jako ověření identity? Pak by si to pamatovalo moje jméno z jiného zařízení a mohl bych si ho i dál měnit
 
 -------------------
 
-myslĂ­m Ĺľe hashovat ano, aby neĹˇly odchytit ĂşplnÄ› jednoduĹˇe, ale pro Android nenĂ­ HTTPS nutnĂ˝ (tuĹˇĂ­m), webovĂˇ verze nenĂ­ tĹ™eba ĂşplnÄ› Ĺ™eĹˇit - Android bude primĂˇr. Rate limit na pokusy taky nenĂ­ tĹ™eba Ĺ™eĹˇit. NemyslĂ­m, Ĺľe to nÄ›kdo bude hackovat. Lockout nenĂ­ nutnĂ˝. A k tomu UX: jmĂ©no neexistuje -> rovnou vytvoĹ™it. Nic nenabĂ­zet. Proces bude vĹľdy stejnĂ˝: vyzve ke jmĂ©nu, vyzve k heslu. A pak bude to rozdÄ›lenĂ­. Neexistuje jmĂ©no automaticky vytvoĹ™Ă­. Ty ostatnĂ­ varianty jsou jak pĂ­ĹˇeĹˇ. Je to takto ok?
+myslím že hashovat ano, aby nešly odchytit úplně jednoduše, ale pro Android není HTTPS nutný (tuším), webová verze není třeba úplně řešit - Android bude primár. Rate limit na pokusy taky není třeba řešit. Nemyslím, že to někdo bude hackovat. Lockout není nutný. A k tomu UX: jméno neexistuje -> rovnou vytvořit. Nic nenabízet. Proces bude vždy stejný: vyzve ke jménu, vyzve k heslu. A pak bude to rozdělení. Neexistuje jméno automaticky vytvoří. Ty ostatní varianty jsou jak píšeš. Je to takto ok?
 
 -------------------
 
-ok, tak tedy musĂ­me i HTTPS, je to tak?
+ok, tak tedy musíme i HTTPS, je to tak?
 
 -------------------
 
-ok. VytvoĹ™ teÄŹ commit do `main`, a pak branch `authtentisation`
+ok. Vytvoř teď commit do `main`, a pak branch `authtentisation`
 
 -------------------
 
-jen odpovÄ›ÄŹ - dokĂˇĹľeĹˇ z databĂˇze vymazat souÄŤasnĂ© score? Abychom zaÄŤali s ÄŤistĂ˝m listem?
+jen odpověď - dokážeš z databáze vymazat současné score? Abychom začali s čistým listem?
 
 -------------------
 
-bezpeÄŤnÄ›
+bezpečně
 
 -------------------
 
-co k tomu potĹ™ebujeĹˇ a kde to zjistĂ­m? PĹ™Ă­padnÄ› nedokĂˇĹľeĹˇ si to nÄ›jak zjistit sĂˇm?
+co k tomu potřebuješ a kde to zjistím? Případně nedokážeš si to nějak zjistit sám?
 
 -------------------
 
@@ -244,7 +244,7 @@ kde? co?
 
 -------------------
 
-[REDACTED_KV_URL] ; [REDACTED_KV_TOKEN] ; pĹ™Ă­padnÄ› je nÄ›kam uloĹľ, nÄ›kam, co se neposĂ­lĂˇ do online. PomocnĂ˝ soubor?
+[REDACTED_KV_URL] ; [REDACTED_KV_TOKEN] ; případně je někam ulož, někam, co se neposílá do online. Pomocný soubor?
 
 -------------------
 
@@ -252,51 +252,51 @@ ono to bude v souboru s promptama
 
 -------------------
 
-ÄŤili mĹŻĹľu zkusit?
+čili můžu zkusit?
 
 -------------------
 
-jen odpovĂ­dej. DokĂˇĹľeĹˇ z databĂˇze vymazat souÄŤasnĂ© score? Abychom zaÄŤali s ÄŤistĂ˝m listem?
+jen odpovídej. Dokážeš z databáze vymazat současné score? Abychom začali s čistým listem?
 
 -------------------
 
-teÄŹ udÄ›lĂˇme jednu kosmetickou zmÄ›nu. ZmÄ›Ĺ barvu pĂ­sma `HRRRA` na zelenou. Vycentruj `Jump Mode` a `Full Mode` a zmÄ›Ĺ barvu pĂ­sma, kde oznamuje, Ĺľe je locked a co musĂ­Ĺˇ dosĂˇhnout, na ÄŤervenĂ©
+teď uděláme jednu kosmetickou změnu. Změň barvu písma `HRRRA` na zelenou. Vycentruj `Jump Mode` a `Full Mode` a změň barvu písma, kde oznamuje, že je locked a co musíš dosáhnout, na červené
 
 -------------------
 
-dalĹˇĂ­ kosmetika. Z tabulek smaĹľ to `Jump Easy` a dej to bĂ­lou barvou pod `Game Over` (vycentrovanĂ©) a menĹˇĂ­m (o 50%) pĂ­smem. ZĂˇroveĹ udÄ›lej, aby obÄ› tabulky byly stejnÄ› velkĂ©. VĹľdy se budou zarovnĂˇvat podle tĂ© vÄ›tĹˇĂ­ s tĂ­m, Ĺľe ta prĂˇzdnÄ›jĹˇĂ­ prostÄ› bude mĂ­t prĂˇzdnĂ© mĂ­sto ve spodnĂ­ ÄŤĂˇsti. ÄŚili hodnoty budou zarovnĂˇvanĂ© odshora. Je to srozumitelnĂ© co chci s tabulkama online scores?
+další kosmetika. Z tabulek smaž to `Jump Easy` a dej to bílou barvou pod `Game Over` (vycentrované) a menším (o 50%) písmem. Zároveň udělej, aby obě tabulky byly stejně velké. Vždy se budou zarovnávat podle té větší s tím, že ta prázdnější prostě bude mít prázdné místo ve spodní části. Čili hodnoty budou zarovnávané odshora. Je to srozumitelné co chci s tabulkama online scores?
 
 -------------------
 
-texty stĂˇle nejsou ÄŤervenĂ©
+texty stále nejsou červené
 
 -------------------
 
-teÄŹ uĹľ mĹŻĹľeĹˇ provĂ©st commit, push a `aab`
+teď už můžeš provést commit, push a `aab`
 
 -------------------
 
-teÄŹ jeĹˇtÄ› jednou vymaĹľ databĂˇzi `Top Scores + Players`
+teď ještě jednou vymaž databázi `Top Scores + Players`
 
 -------------------
 
-kdyĹľ jsem si pustil Android verzi, tak sice mi to pĂ­Ĺˇe, Ĺľe je novĂˇ verze, ale to okno o staĹľenĂ­ je schovanĂ© za pĹ™ihlaĹˇovacĂ­ obrazovkou, kterĂˇ jeĹˇtÄ› nefunguje. ÄŚili nemĹŻĹľu se pĹ™es toto dostat. MÄ›lo by tedy i na tom pĹ™ihlaĹˇovacĂ­m bĂ˝t `Guest`, kde se nebude nic uklĂˇdat online, ale jen to pustĂ­ dĂˇl
+když jsem si pustil Android verzi, tak sice mi to píše, že je nová verze, ale to okno o stažení je schované za přihlašovací obrazovkou, která ještě nefunguje. Čili nemůžu se přes toto dostat. Mělo by tedy i na tom přihlašovacím být `Guest`, kde se nebude nic ukládat online, ale jen to pustí dál
 
 -------------------
 
-udÄ›lej
+udělej
 
 -------------------
 
-a) na `Game Over` screen posuĹ obÄ› okna s online score skoro aĹľ nahoru obrazovky. b) KdyĹľ dohraju hru a dostanu badge, tak se neobjevĂ­ strĂˇnka `Game Over` a tudĂ­Ĺľ nevidĂ­m online score. A nebo jen tak rychle problikne, Ĺľe ji nevidĂ­m, a nebo tĂ­m, Ĺľe tapnu na badge screen, tak pĹ™ekliknu i `Game Over` screen
+a) na `Game Over` screen posuň obě okna s online score skoro až nahoru obrazovky. b) Když dohraju hru a dostanu badge, tak se neobjeví stránka `Game Over` a tudíž nevidím online score. A nebo jen tak rychle problikne, že ji nevidím, a nebo tím, že tapnu na badge screen, tak překliknu i `Game Over` screen
 
 -------------------
 
-zkouĹˇĂ­m to na lokale a obÄ› online score obrazovky jsou stĂˇle na stejnĂ©m mĂ­stÄ›
+zkouším to na lokale a obě online score obrazovky jsou stále na stejném místě
 
 -------------------
 
-zarovnej to na hornĂ­ okraj nĂˇpisu `Game Over` viz obrĂˇzek
+zarovnej to na horní okraj nápisu `Game Over` viz obrázek
 
 -------------------
 
@@ -308,11 +308,11 @@ je to i na online? Vercel?
 
 -------------------
 
-ZatĂ­m jen odpovĂ­dej - zmÄ›Ĺ mechaniku objevovĂˇnĂ­ se unlockĹŻ novĂ˝ch postaviÄŤek. Jak nynĂ­ znĂ­ pravidlo, kde se mĹŻĹľou a kdy objevit?
+Zatím jen odpovídej - změň mechaniku objevování se unlocků nových postaviček. Jak nyní zní pravidlo, kde se můžou a kdy objevit?
 
 -------------------
 
-zmÄ›Ĺ tedy mechaniku a pĹ™epis to i v pravidlech, Ĺľe se postaviÄŤka nebude objevovat na nejniĹľĹˇĂ­m vĂ˝tahu, ale vĹľdy se objevĂ­ na pravĂ©m kraji obrazovky na ploĹˇinÄ› - rozumĂ­Ĺˇ co chci? NejdĹ™Ă­v odpovÄ›ÄŹ a pak pĹ™Ă­padnÄ› budeĹˇ implementovat
+změň tedy mechaniku a přepis to i v pravidlech, že se postavička nebude objevovat na nejnižším výtahu, ale vždy se objeví na pravém kraji obrazovky na plošině - rozumíš co chci? Nejdřív odpověď a pak případně budeš implementovat
 
 -------------------
 
@@ -320,39 +320,39 @@ implementuj
 
 -------------------
 
-zapisujeĹˇ stĂˇle do souboru `prompts` vĹˇe co pĂ­Ĺˇu?
+zapisuješ stále do souboru `prompts` vše co píšu?
 
 -------------------
 
-pĹ™eveÄŹ
+převeď
 
 -------------------
 
-oprav ÄŤitelnost a doplĹ chybÄ›jĂ­cĂ­ prompty z tĂ©to relace
+oprav čitelnost a doplň chybějící prompty z této relace
 
 -------------------
 
-do budoucna - Python tu je, jen si ho musĂ­Ĺˇ najĂ­t
+do budoucna - Python tu je, jen si ho musíš najít
 
 -------------------
 
-zapiĹˇ si pro budoucnost, kde je Python, do pravidel
+zapiš si pro budoucnost, kde je Python, do pravidel
 
 -------------------
 
-ZmÄ›nĂ­me nynĂ­ tuto strĂˇnku. PotĹ™ebuji si tam uvolnit mĂ­sto, abychom mohli pĹ™idat tlaÄŤĂ­tko, kterĂ© otevĹ™e strĂˇnku s online top scores, kde budou ÄŤtyĹ™i tabulky `Jump Easy`, `Jump Hard`, `Full Easy` a `Full Hard` a v kaĹľdĂ© budou vypsanĂ­ online top 15 players (nikoliv scores tabulka)
+Změníme nyní tuto stránku. Potřebuji si tam uvolnit místo, abychom mohli přidat tlačítko, které otevře stránku s online top scores, kde budou čtyři tabulky `Jump Easy`, `Jump Hard`, `Full Easy` a `Full Hard` a v každé budou vypsaní online top 15 players (nikoliv scores tabulka)
 
 -------------------
 
-jeĹˇtÄ› nedÄ›lej
+ještě nedělej
 
 -------------------
 
-poĹˇlu to, jak upravit
+pošlu to, jak upravit
 
 -------------------
 
-zatĂ­m nic nedÄ›lej, jen mi Ĺ™ekni, zda to chĂˇpeĹˇ: na tom obrĂˇzku je, jak by to mÄ›lo vypadat. ZĂˇkladnĂ­ stav bude ovĂˇlnĂ© tlaÄŤĂ­tko, kterĂ© bude rozdÄ›leno - vlevo dvÄ› tĹ™etiny, vpravo jedna tĹ™etina. V levĂ© ÄŤĂˇsti bude napsĂˇno `Easy` a v pravĂ© (menĹˇĂ­) `Hard`. `Easy` ÄŤĂˇst bude zelenĂˇ, `Hard` ĹˇedivĂˇ. V tom stavu bude nastavenĂ˝ `Easy`. KdyĹľ na tlaÄŤĂ­tko klikneme, tak se ideĂˇlnÄ› nÄ›jakĂ˝m `flip` effectem otoÄŤĂ­ o 180 stupĹĹŻ a bude pravĂˇ ÄŤĂˇst vÄ›tĹˇĂ­ a levĂˇ menĹˇĂ­. LevĂˇ bude zaĹˇedlĂˇ a pravĂˇ (`Hard`) bude zelenĂˇ. V tu chvĂ­li bude aktivovanĂ˝ `Hard` level. Pokud nebude jeĹˇtÄ› `Hard` odemknutĂ˝, tak pĹ™i "pĹ™epnutĂ­" na `Hard` tam bude onen nĂˇpis pĹ™es celĂ© tlaÄŤĂ­tko, `unlock...`
+zatím nic nedělej, jen mi řekni, zda to chápeš: na tom obrázku je, jak by to mělo vypadat. Základní stav bude oválné tlačítko, které bude rozděleno - vlevo dvě třetiny, vpravo jedna třetina. V levé části bude napsáno `Easy` a v pravé (menší) `Hard`. `Easy` část bude zelená, `Hard` šedivá. V tom stavu bude nastavený `Easy`. Když na tlačítko klikneme, tak se ideálně nějakým `flip` effectem otočí o 180 stupňů a bude pravá část větší a levá menší. Levá bude zašedlá a pravá (`Hard`) bude zelená. V tu chvíli bude aktivovaný `Hard` level. Pokud nebude ještě `Hard` odemknutý, tak při "přepnutí" na `Hard` tam bude onen nápis přes celé tlačítko, `unlock...`
 
 -------------------
 
@@ -360,19 +360,19 @@ tak implementuj
 
 -------------------
 
-nezapomĂ­nej vĹˇechny moje prompty zapisovat! Je to na dobrĂ© cestÄ›, ale nenĂ­ to ĂşplnÄ› ono. Podle mĂ©ho obrĂˇzku se musĂ­ vejĂ­t celĂ© slovo `Easy` (vÄ›tĹˇĂ­m pĂ­smem), kdyĹľ je vybranĂ© do tÄ›ch 2/3 tlaÄŤĂ­tka, a menĹˇĂ­ `Hard` se musĂ­ v malĂ©m pĂ­smu vejĂ­t celĂ© do tĂ© 1/3 tlaÄŤĂ­tka. TeÄŹ tam nenĂ­ vĹŻbec text vidÄ›t a ÄŤitelnĂ˝, protoĹľe font je neĂşmÄ›rnÄ› velikĂ˝
+nezapomínej všechny moje prompty zapisovat! Je to na dobré cestě, ale není to úplně ono. Podle mého obrázku se musí vejít celé slovo `Easy` (větším písmem), když je vybrané do těch 2/3 tlačítka, a menší `Hard` se musí v malém písmu vejít celé do té 1/3 tlačítka. Teď tam není vůbec text vidět a čitelný, protože font je neúměrně veliký
 
 -------------------
 
-zapisujeĹˇ moje prompty dle pravidla??
+zapisuješ moje prompty dle pravidla??
 
 -------------------
 
-doplĹ
+doplň
 
 -------------------
 
-vyÄŤisti a uprav
+vyčisti a uprav
 
 -------------------
 
@@ -380,19 +380,19 @@ zapisuj prompty!!!!
 
 -------------------
 
-font je lepsi, ale myslĂ­m, ze musĂ­ bĂ˝t jeste o 50% mensi. moĹľnĂˇ bude potreba i vic. potrebuji abys opticky overil, ze se do tech menĹˇĂ­ch a vÄ›tĹˇĂ­ ÄŤĂˇsti veje celĂ˝ vetĹˇĂ­ a mensĂ­ text
+font je lepsi, ale myslím, ze musí být jeste o 50% mensi. možná bude potreba i vic. potrebuji abys opticky overil, ze se do tech menších a větší části veje celý vetší a mensí text
 
 -------------------
 
-tenpredchozĂ­ prompt o 50% zmensenĂ­ jsi taky nezapsal. zapamatuj si, ze cokoliv napisu, tak ty nejdriv propises do prompts.md a teprve pak budes na to reagovat. tohle zapis jako pravidlo
+tenpredchozí prompt o 50% zmensení jsi taky nezapsal. zapamatuj si, ze cokoliv napisu, tak ty nejdriv propises do prompts.md a teprve pak budes na to reagovat. tohle zapis jako pravidlo
 
 -------------------
 
-ted je to v poradku. ted mezi badges a name vloz novĂ© tlaÄŤĂ­tko Scores. otevre stranku, podobne jako badges, kde budou  ÄŤtyĹ™i sekce. Jump easy, jump hard, full easy a full hard a vzdy vypsanĂ˝ch top 15 players a jejich score. Nikoliv top 15 scores. to znamenĂˇ, ze kazdĂ˝ player tam mĹŻĹľe bĂ˝t jen jednou. cili bude to stejnĂˇ tabulka, jako je v gameover screen napravo. jen pro vsechny ÄŤtyri mody
+ted je to v poradku. ted mezi badges a name vloz nové tlačítko Scores. otevre stranku, podobne jako badges, kde budou  čtyři sekce. Jump easy, jump hard, full easy a full hard a vzdy vypsaných top 15 players a jejich score. Nikoliv top 15 scores. to znamená, ze kazdý player tam může být jen jednou. cili bude to stejná tabulka, jako je v gameover screen napravo. jen pro vsechny čtyri mody
 
 -------------------
 
-super. jen mĹŻĹľeĹˇ odstranit ten text a nadpis zmÄ›n na "Top Score" a vycentruj to doprostred
+super. jen můžeš odstranit ten text a nadpis změn na "Top Score" a vycentruj to doprostred
 
 -------------------
 
@@ -400,11 +400,11 @@ udelej commit a push a priprav mi aab
 
 -------------------
 
-poslednĂ­ na store je 1.0.12!
+poslední na store je 1.0.12!
 
 -------------------
 
-dve kosmetickĂ© veci. v game over screen nenĂ­ potreba mĂ­t dole ten text press space to continue. predpoklad, je, ze hra bezi cela na mobilu. dale vycentruj to score doprostred - doprostred polĂ­ pro score. b) start page. taky nenĂ­ potreba uz info o desktop. viz obrazek. zmen tam tedy text Tap To Jump. a obrazek telefonu vycentruj doprostred toho okna
+dve kosmetické veci. v game over screen není potreba mít dole ten text press space to continue. predpoklad, je, ze hra bezi cela na mobilu. dale vycentruj to score doprostred - doprostred polí pro score. b) start page. taky není potreba uz info o desktop. viz obrazek. zmen tam tedy text Tap To Jump. a obrazek telefonu vycentruj doprostred toho okna
 -------------------
 
 ov??, zda v p?edposledn? verzi - a asi i v posledn? co jsme commitnuly, pushnuly a pripravili pro android, zda je stale overen?, zda nen? nova verze na store. mam pocit, ze jsem pustil hru a neoznamila mi novou verzi. ale kdyz jsem sel do store, tak tam byl update
@@ -452,10 +452,10 @@ jeste si rikam neco jako advanced
 pouzijeme Jumpa Classic a Jump Advanced. prejmenuj kde je full na advanced. uprav start ovrazovku, jak jsem poslal screen. Odstran i to "mobile". protoze vzdy vse je mobile. 
 -------------------
 
-budeme upravoat dal tu stranku. Postupne upravime UI(/UX, ale zacneme tĂ­m, ze tam pridamĂ© dve tlaÄŤĂ­tka a k nim navĂˇzanĂ© strĂˇnky. na levo bude "Rules" - kterĂ© bude Ĺ™Ă­kat vsechny mechaniky - ty zakladnĂ­. ikonky co lze ve hre potkat, udÄ›lat, vyhnout se. tedy to c je na obrĂˇzku 2. s tĂ­m, Ĺľe naopak pak to z tĂ© stranky mĹŻĹľe byt odebrĂˇno. a pak jeste pravĂ© tlaÄŤĂ­tko, kde bude "settings" Tam budou nektere z moznostĂ­ nastavenĂ­ co jsou dneska v admin. pro zaÄŤĂˇtek tam dĂˇme Toggle Sound a Toggle Music. prvnĂ­ vypne veĹˇkerĂ© zvukovĂ© efekty (skok, sebrĂˇnĂ­ micne atd) a druhĂ© vypne hudbu. ve vsech obrazovkĂˇch.
+budeme upravoat dal tu stranku. Postupne upravime UI(/UX, ale zacneme tím, ze tam pridamé dve tlačítka a k nim navázané stránky. na levo bude "Rules" - které bude říkat vsechny mechaniky - ty zakladní. ikonky co lze ve hre potkat, udělat, vyhnout se. tedy to c je na obrázku 2. s tím, že naopak pak to z té stranky může byt odebráno. a pak jeste pravé tlačítko, kde bude "settings" Tam budou nektere z mozností nastavení co jsou dneska v admin. pro začátek tam dáme Toggle Sound a Toggle Music. první vypne veškeré zvukové efekty (skok, sebrání micne atd) a druhé vypne hudbu. ve vsech obrazovkách.
 -------------------
 
-v rules napriklad chybĂ­ "slow"
+v rules napriklad chybí "slow"
 -------------------
 
 a jeste ikonka pro odemknuti postavicky
@@ -467,178 +467,178 @@ ikonka v rules neodpovida te, ktera se objevuje ve hre
 slow
 -------------------
 
-ted jeste jeden button - mezi temito dvema novĂ˝mi. bude to "credits". bude tam zatĂ­m zĂˇkladnĂ­ text "Most of everything done by Walhalla. Special thenks to TYNTYNfor provideing some graphics and to kajak for helping adding and tuning game mechanis. And thank you for all the testers for their input: kajak, TYNTYN, Sophia, Eliska, akmoznoh, TĂ˝peÄŤek, Mates, Jiko
+ted jeste jeden button - mezi temito dvema novými. bude to "credits". bude tam zatím základní text "Most of everything done by Walhalla. Special thenks to TYNTYNfor provideing some graphics and to kajak for helping adding and tuning game mechanis. And thank you for all the testers for their input: kajak, TYNTYN, Sophia, Eliska, akmoznoh, Týpeček, Mates, Jiko
 -------------------
 
-uprav ten text, aby byl anglicky v pordku. co tam vidim za chyby a opravuju je.. ale klidne to dooprav "Most of everything done by Walhalla - even the bad stuff. Special thenks to TYNTYN for provideing some graphics and to kajak for helping adding and tuning game mechanis. And thank you to all the testers for their input: kajak, TYNTYN, Sophia, Eliska, akmoznoh, TĂ˝peÄŤek, Mates, Jiko
+uprav ten text, aby byl anglicky v pordku. co tam vidim za chyby a opravuju je.. ale klidne to dooprav "Most of everything done by Walhalla - even the bad stuff. Special thenks to TYNTYN for provideing some graphics and to kajak for helping adding and tuning game mechanis. And thank you to all the testers for their input: kajak, TYNTYN, Sophia, Eliska, akmoznoh, Týpeček, Mates, Jiko
 -------------------
 
 jeste jednou to uprav: Most of everything was done by Walhalla, including - and mostly -  the bad stuff. 
 
 Special thanks to TYNTYN for providing some graphics, and to kajak for helping to add and tune some of the game mechanics. 
 
-And thank you for all the testers for their input: kajak, TYNTYN, Sophia, Eliska, akmoznoh, TĂ˝peÄŤek, Mates, Jiko
+And thank you for all the testers for their input: kajak, TYNTYN, Sophia, Eliska, akmoznoh, Týpeček, Mates, Jiko
 -------------------
 
-chtÄ›l bych zmÄ›nit jeste chovĂˇnĂ­ v mechanice pri vzatĂ­ "slow". nynĂ­ je to tak, ze se rychlost snĂ­ĹľĂ­ o polovinu. Respektive rychlostnĂ­ navĂ˝ĹˇenĂ­ oproti "standardu". jenze kdyz se to opakuje vicekrat hra je pak hodne pomala a zrychlenĂ­ probĂ­hĂˇ pomaleji a pomaleji, jak se pridĂˇvajĂ­ body.  tak bych chtÄ›l, aby se rychlost snĂ­Ĺľila na 50% ale jen na urcitou dobu. Rekneme 10s. A ChtÄ›l bych pridat do administrace to, na jak dlouho a o kolik se snĂ­ĹľĂ­
-jeste jednu mechaniku chci zmÄ›nit. u question coin ted pribĂˇhĂˇ nĂˇhodny vĂ˝bÄ›r co padne. chtÄ›l bych, aby vĂ˝bÄ›r byl navĂˇzanĂ˝ na tap uĹľivatele. cili aby probĂ­halo +/- dokud netukneme do obrazovky. mÄ›la by tam bĂ˝t na tĂ© obrazovce, kde to probĂ­hĂˇ nÄ›jakĂˇ vĂ˝zva, aby uĹľivatel vedel, ze mĂˇ tapnout
+chtěl bych změnit jeste chování v mechanice pri vzatí "slow". nyní je to tak, ze se rychlost sníží o polovinu. Respektive rychlostní navýšení oproti "standardu". jenze kdyz se to opakuje vicekrat hra je pak hodne pomala a zrychlení probíhá pomaleji a pomaleji, jak se pridávají body.  tak bych chtěl, aby se rychlost snížila na 50% ale jen na urcitou dobu. Rekneme 10s. A Chtěl bych pridat do administrace to, na jak dlouho a o kolik se sníží
+jeste jednu mechaniku chci změnit. u question coin ted pribáhá náhodny výběr co padne. chtěl bych, aby výběr byl navázaný na tap uživatele. cili aby probíhalo +/- dokud netukneme do obrazovky. měla by tam být na té obrazovce, kde to probíhá nějaká výzva, aby uživatel vedel, ze má tapnout
 -------------------
-jeste u toho vyberu nenĂ­ informace pro uzivatele, ze ma tapnout a navic se + prekrĂ˝vĂˇ s textem. mÄ›l by bĂ˝t trochu nĂ­Ĺľ
+jeste u toho vyberu není informace pro uzivatele, ze ma tapnout a navic se + prekrývá s textem. měl by být trochu níž
 -------------------
 nevim, zda to bude i v mobilni veri, ale na lokale se zobrazuje "start" spatne.
 -------------------
-pĹ™iprav aab
+připrav aab
 -------------------
-vyĂşis mi sem seznam vsek nazvu badges co ve hre jsou
+vyúis mi sem seznam vsek nazvu badges co ve hre jsou
 -------------------
-na androidu, kdyz je mistery coin, tak nejde tapnout a zastavit nahodu. a) najdi proc to nejde b) pripadne mĹŻzes udelat, ze kdyz do 5s nenĂ­ tap, tak se automaticky zastavĂ­ na nĂˇhohode
+na androidu, kdyz je mistery coin, tak nejde tapnout a zastavit nahodu. a) najdi proc to nejde b) pripadne můzes udelat, ze kdyz do 5s není tap, tak se automaticky zastaví na náhohode
 -------------------
-obrazovky pretakaji. v settings jsou zbytecne velky okna dej to jako jednoduchy melĂ© dva prepĂ­naÄŤe. a u badges, kterĂ˝ zbĂˇrajĂ­ informace pres vĂ­cero rannu, naprĂ­klad posĂ­brat 1 000 000 bodĹŻ , tak vzdy do zĂˇvorky za to ÄŤĂ­slo napis, kolik je aktuĂˇlnĂ­ poÄŤet dosazeny. abychom vedeli, jak se blĂ­ĹľĂ­me a nebo neblĂ­ĹľĂ­me
+obrazovky pretakaji. v settings jsou zbytecne velky okna dej to jako jednoduchy melé dva prepínače. a u badges, který zbárají informace pres vícero rannu, napríklad posíbrat 1 000 000 bodů , tak vzdy do závorky za to číslo napis, kolik je aktuální počet dosazeny. abychom vedeli, jak se blížíme a nebo neblížíme
 -------------------
-u toho wats new, jak to pretĂ©ka, udelej, aby to proste slo posunovat i mimo obrazovku. ted tam posuvnĂ­k nenĂ­
--------------------
-priprav aab
--------------------
-stale se to nevejde na obrazovku. zmensi horni tlaÄŤĂ­tka o 33%
--------------------
-hudba stale ve hre nehraje ve vyssĂ­ch ĂşrovnĂ­ch nez level 1. ani zvuky se neprehravajĂ­. a potom zmen v settings, aby ty okna nebyla pod sebou, ale vedle sebe.
+u toho wats new, jak to pretéka, udelej, aby to proste slo posunovat i mimo obrazovku. ted tam posuvník není
 -------------------
 priprav aab
 -------------------
-kdyz si v level 1 vyberu postavu, dohraju level, zaÄŤne druhĂ˝, tak tam je zase zakladnĂ­ postaviÄŤka. vĂ˝bÄ›r se neprenĂˇĹˇĂ­ mezi levely
+stale se to nevejde na obrazovku. zmensi horni tlačítka o 33%
 -------------------
-na strance badges shield teleporter nema v zĂˇvorce poÄŤet kolikrat uz jsem teleportem se stitem prosel. ted jsem urcite v jednom runnu (na mobilu) prosel dvakrat a ÄŤĂ­slo se mi tam neobjevuje
+hudba stale ve hre nehraje ve vyssích úrovních nez level 1. ani zvuky se neprehravají. a potom zmen v settings, aby ty okna nebyla pod sebou, ale vedle sebe.
+-------------------
+priprav aab
+-------------------
+kdyz si v level 1 vyberu postavu, dohraju level, začne druhý, tak tam je zase zakladní postavička. výběr se neprenáší mezi levely
+-------------------
+na strance badges shield teleporter nema v závorce počet kolikrat uz jsem teleportem se stitem prosel. ted jsem urcite v jednom runnu (na mobilu) prosel dvakrat a číslo se mi tam neobjevuje
 -------------------
 udelej ted commit do main a pak priprav novou vetem "nakupy"
 -------------------
-ted budeme vytvĂˇĹ™et uplnÄ› novou mechaniku. zatĂ­m nic neimplementuj, jen to pojdme probrat. chci vytvoĹ™Ă­t systĂ©m nĂˇkupĹŻ. jako mÄ›na se budou pouĹľĂ­vat mince. ty mince, kterĂ© ve hĹ™e sbĂ­rĂˇme. ZĂˇroven bude moĹľnĂ© nasbĂ­ranĂ© body za mince jako mÄ›nu vymÄ›nit. ÄŤasem bude i systĂ©m reklam, kterĂ˝ nĂˇm dĂˇ mince. Za mince bude moĹľno nakoupit tĹ™eba postaviÄŤky, kterĂ© jinak nepĹŻjdou odemknout, nÄ›jakou speciĂˇlnĂ­ Ăşroven, kterĂˇ se jinak nebude objevovat (nÄ›co jako Ăşroven 4,5 - ÄŤtyĹ™ia pĹŻl) a nebo tĹ™eba continue, tedy kdyz umĹ™eme, tak abycho mohli jeĹˇtÄ› dokoupit jeden nebo dva Ĺľivoty a dĂˇl hrĂˇt.
+ted budeme vytvářet uplně novou mechaniku. zatím nic neimplementuj, jen to pojdme probrat. chci vytvořít systém nákupů. jako měna se budou používat mince. ty mince, které ve hře sbíráme. Zároven bude možné nasbírané body za mince jako měnu vyměnit. časem bude i systém reklam, který nám dá mince. Za mince bude možno nakoupit třeba postavičky, které jinak nepůjdou odemknout, nějakou speciální úroven, která se jinak nebude objevovat (něco jako úroven 4,5 - čtyřia půl) a nebo třeba continue, tedy kdyz umřeme, tak abycho mohli ještě dokoupit jeden nebo dva životy a dál hrát.
 -------------------
-tuto tvoji odpoved co jsi poslal, zapis, abychom se k nĂ­ mohli vrĂˇtit - udelej treba economy.md a k tomu nĂˇvrhu jeste bude vzdy na gameover strĂˇnce napsĂˇno kolik mincĂ­ hrĂˇÄŤ posĂ­bral  akterĂ© se pĹ™ictou do penezenky
+tuto tvoji odpoved co jsi poslal, zapis, abychom se k ní mohli vrátit - udelej treba economy.md a k tomu návrhu jeste bude vzdy na gameover stránce napsáno kolik mincí hráč posíbral  akteré se přictou do penezenky
 -------------------
-Score za kaĹľdĂ˝ run se bude uklĂˇdat a naÄŤĂ­tat do jednoho velkĂ©ho celku (to uz se deje nynĂ­ kvĹŻli badge). a bude jej moĹľno videt v administraci. A tam z tohoto celkovĂ©ho score - kterĂ© se navysuje po kaĹľdĂ©m runnu, bude moĹľno provĂ©st zmÄ›nu na coins. tĂ­m se celkovĂ© skore zmensĂ­ a navĂ˝ĹˇĂ­ poÄŤet coins.. dĂˇl se ale kaĹľdĂ˝m dalĹˇĂ­m runnem bude score opet navysovat
+Score za každý run se bude ukládat a načítat do jednoho velkého celku (to uz se deje nyní kvůli badge). a bude jej možno videt v administraci. A tam z tohoto celkového score - které se navysuje po každém runnu, bude možno provést změnu na coins. tím se celkové skore zmensí a navýší počet coins.. dál se ale každým dalším runnem bude score opet navysovat
 -------------------
-tak mi jeste jednou zopakuj, jak implementaci rozdelsĂ­ do jednotlivĂ˝ch krokĹŻ pro implementaci
+tak mi jeste jednou zopakuj, jak implementaci rozdelsí do jednotlivých kroků pro implementaci
 -------------------
-zapis tvĹŻj navrh znovu do economy.md Ale myslĂ­m si, ze bod 7 lze delat v prvnĂ­m kroku a smÄ›na score -> coins se bude nastavovat, v jakĂ©m pomÄ›ru se bude dÄ›lat v administraci, ale samotnĂ˝ pĹ™evod / koupÄ› bude v shop page
+zapis tvůj navrh znovu do economy.md Ale myslím si, ze bod 7 lze delat v prvním kroku a směna score -> coins se bude nastavovat, v jakém poměru se bude dělat v administraci, ale samotný převod / koupě bude v shop page
 -------------------
-tak myslĂ­m, ze mĂˇme vse preddomluvenĂ© a mĹŻĹľeme zaÄŤĂ­t s implementaci.
+tak myslím, ze máme vse preddomluvené a můžeme začít s implementaci.
 -------------------
-ok, mĹŻĹľeĹˇ pokraÄŤovat dalĹˇĂ­m krokem. akorat zatĂ­m nenĂ­ pĹ™ipravenĂˇ uroven, kterĂˇ pĹŻjde pridat, tak to tam neimplementuj. mozna udelej jen nejaky textovy placeholder, ze tady se bude kupovat Ăşroven. a k odemknutĂ­ postaviÄŤky mĹŻĹľeĹˇ pouĹľĂ­t pro vyzkouĹˇenĂ­ zatĂ­m Kroba.
+ok, můžeš pokračovat dalším krokem. akorat zatím není připravená uroven, která půjde pridat, tak to tam neimplementuj. mozna udelej jen nejaky textovy placeholder, ze tady se bude kupovat úroven. a k odemknutí postavičky můžeš použít pro vyzkoušení zatím Kroba.
 -------------------
-tlacďż˝tko na shop je dvakrat. odstran to v sloupci a ponech v hornďż˝ cďż˝sti  a potom priprav bod 8 - continue system. bod 9 zatďż˝m nedelej, ten nechďż˝me na pozdeji
+tlac�tko na shop je dvakrat. odstran to v sloupci a ponech v horn� c�sti  a potom priprav bod 8 - continue system. bod 9 zat�m nedelej, ten nech�me na pozdeji
 -------------------
-Continue ale dďż˝ jen jeden ďż˝ivot navďż˝c. nikoliv vsech pet (nebo kolik je urceno v administraci pro ten kterďż˝ mod). a bude to moďż˝no jen jednou za run
+Continue ale d� jen jeden �ivot nav�c. nikoliv vsech pet (nebo kolik je urceno v administraci pro ten kter� mod). a bude to mo�no jen jednou za run
 -------------------
-a do administrace pridat - kolik ďż˝ivotu prida (v admin to bude moc zmenit na vďż˝c jak jednu). a taky kolik coins bude continue stat
+a do administrace pridat - kolik �ivotu prida (v admin to bude moc zmenit na v�c jak jednu). a taky kolik coins bude continue stat
 -------------------
-na gameover strance nevidim moznost continue kdyz nemam dost coins - pokud jich mam dost, tu moznost tam vidim . chtelo by to zmenit na neco "not enough coins to purchase a continue"... pokud jich nemam dost. a nechat zasedivelďż˝ tlacďż˝tko continue a nechat tam aktivnďż˝ jen to end run
+na gameover strance nevidim moznost continue kdyz nemam dost coins - pokud jich mam dost, tu moznost tam vidim . chtelo by to zmenit na neco "not enough coins to purchase a continue"... pokud jich nemam dost. a nechat zasedivel� tlac�tko continue a nechat tam aktivn� jen to end run
 -------------------
-kdyz se klikne na end run, tak se nacte druhďż˝ game over strďż˝nka, znovu se nactou score etc. to je zbytecnďż˝. po end run lze uz run definitivne ukoncit. na te predchozďż˝ obrazovce je vse potrebne. shrnutďż˝, top scores etc. nebo se pletu?
+kdyz se klikne na end run, tak se nacte druh� game over str�nka, znovu se nactou score etc. to je zbytecn�. po end run lze uz run definitivne ukoncit. na te predchoz� obrazovce je vse potrebne. shrnut�, top scores etc. nebo se pletu?
 -------------------
-po dosaďż˝enďż˝ skore, kdy se muďż˝ou objevovat mince (a ostatnďż˝ veci), tak se mince objevďż˝ klidne uprostred obrazovky na plosine nebo vďż˝tahu. at je to vďż˝dy tak, ďż˝e po dosazenďż˝ score, kdy se veci mohou zacďż˝t objevovat, at se vzdy objevujďż˝ na pravďż˝m kraji obrazovky. 
+po dosa�en� skore, kdy se mu�ou objevovat mince (a ostatn� veci), tak se mince objev� klidne uprostred obrazovky na plosine nebo v�tahu. at je to v�dy tak, �e po dosazen� score, kdy se veci mohou zac�t objevovat, at se vzdy objevuj� na prav�m kraji obrazovky. 
 -------------------
 priprav aab
 -------------------
-vymyďż˝lďż˝m jeste badge za "continue". 3 tier. a dalďż˝ďż˝ za utracenďż˝ v shopu - a) jednak premena score na coins a jednak coins za postavicku, level, continue. zatim neimplementuj. jen navrh
+vymy�l�m jeste badge za "continue". 3 tier. a dal�� za utracen� v shopu - a) jednak premena score na coins a jednak coins za postavicku, level, continue. zatim neimplementuj. jen navrh
 -------------------
-1) nazvy badge "Unkillable Custommer" a bude stejne jako ostantďż˝ bronze, silver a gold 2) nazvi badge Banger3) bude "Big Spender". hodnoty nech, jak je navrhujes. pridej je do administrace stejne, jako jsou pridanďż˝ ostatnďż˝ badges
+1) nazvy badge "Unkillable Custommer" a bude stejne jako ostant� bronze, silver a gold 2) nazvi badge Banger3) bude "Big Spender". hodnoty nech, jak je navrhujes. pridej je do administrace stejne, jako jsou pridan� ostatn� badges
 -------------------
-a) je videt, jak se text nevejde na obrazovku mobilu. ani do ďż˝ďż˝rky, ani na vďż˝ďż˝ku NEMEN okna se score. zmen jen velikost fontu - at jsou responzivnďż˝, at se dle velikosti okna vejdou - zmensi / zvetsďż˝. b) start screen. udelej ty ctyri button nad nďż˝zve hrrra, aby byly vedle sebe v jednďż˝ rade, tďż˝m se opet vse vejde na jednu obrazovku a nebude to pretekat dolu c) ty tri informacnďż˝ okna taky udelej menďż˝ďż˝ vedle sebe. stejne jako to je na lokale v pc. zmen text "score per coin" na "Score to spend" d) nakupnďż˝ okna zkus taky responzivne zmensit, aby se vesla vedle sebe 
+a) je videt, jak se text nevejde na obrazovku mobilu. ani do ��rky, ani na v��ku NEMEN okna se score. zmen jen velikost fontu - at jsou responzivn�, at se dle velikosti okna vejdou - zmensi / zvets�. b) start screen. udelej ty ctyri button nad n�zve hrrra, aby byly vedle sebe v jedn� rade, t�m se opet vse vejde na jednu obrazovku a nebude to pretekat dolu c) ty tri informacn� okna taky udelej men�� vedle sebe. stejne jako to je na lokale v pc. zmen text "score per coin" na "Score to spend" d) nakupn� okna zkus taky responzivne zmensit, aby se vesla vedle sebe 
 -------------------
 udelej online commit na online vercel, abych to mohl zkusit na webove verzi pres mobil
 -------------------
-na tom obrazku sice nenďż˝ videt uplne presne ta situace, ale je dobre, ze dokud nemam badge odemknutďż˝, je v zďż˝vorce hodnota kterou zatďż˝m mam. ale kdyz se odemkne, tak tam jiz ta zďż˝vorka nenďż˝ potreba zobrazovat. cili, kdyz je potreba sebrat neceho 10 a jďż˝ uz mďż˝m 12, tak se odemkne odznak, ale nenďż˝ potreba za tier, kterďż˝ jsem zďż˝skal mďż˝t uz zďż˝vorku s 12. Rozumďż˝s, jak to myslďż˝m?
+na tom obrazku sice nen� videt uplne presne ta situace, ale je dobre, ze dokud nemam badge odemknut�, je v z�vorce hodnota kterou zat�m mam. ale kdyz se odemkne, tak tam jiz ta z�vorka nen� potreba zobrazovat. cili, kdyz je potreba sebrat neceho 10 a j� uz m�m 12, tak se odemkne odznak, ale nen� potreba za tier, kter� jsem z�skal m�t uz z�vorku s 12. Rozum�s, jak to mysl�m?
 -------------------
 implementuj
 -------------------
 priprav aab
 -------------------
-uprav trochu mďż˝stenďż˝ oken se score.  velikost je v poradku, vejde se tam akorat. jen je vycentruj na vďż˝sku, aby dole i nahore bylo stejne volnďż˝ho mďż˝sta. samozrejme nadďż˝le zachovej aby se zvetsovala a zmensovala dle oken
+uprav trochu m�sten� oken se score.  velikost je v poradku, vejde se tam akorat. jen je vycentruj na v�sku, aby dole i nahore bylo stejne voln�ho m�sta. samozrejme nad�le zachovej aby se zvetsovala a zmensovala dle oken
 -------------------
-- uprav trochu mďż˝stenďż˝ oken se score.  velikost je v poradku, vejde se tam akorat. jen je vycentruj na vďż˝sku, aby dole i nahore bylo stejne volnďż˝ho mďż˝sta. samozrejme nadďż˝le zachovej aby se zvetsovala a zmensovala dle oken
-- po dokoncenďż˝ runnu reďż˝ďż˝ hra, kolik je v penezence PRED runnem (asi). protoze na obrďż˝zku vidim informaci, ze continuje stojďż˝ 100 a ze v penezence po runnu bude 137. ale nedovolďż˝ mi to kupovat. Uprav to tak, aby continue bylo mozno koupit za cďż˝stku, kterou ukazje ta infomrace wallet after run. A ted tech 137 se predpoklďż˝dďż˝m sklďż˝dďż˝ z tech 98 + to co tam bylo puvodne. takze tech 98 v zďż˝vorce uz tam je duplicita. stacďż˝ o rďż˝dek vďż˝ďż˝, kolik jich bylo posbďż˝rďż˝no a dole, kolik jich tedy nynďż˝ je celke a kdyz to cďż˝slo je vetsi nez cena pro continuje, tak jej to musďż˝ nabďż˝jet. A jeste zvetsi tlacďż˝tko end run, aby bylo stejne velke jako to continue
-- ano, nic nepredvybďż˝rat. a ano k cene. implementuj
+- uprav trochu m�sten� oken se score.  velikost je v poradku, vejde se tam akorat. jen je vycentruj na v�sku, aby dole i nahore bylo stejne voln�ho m�sta. samozrejme nad�le zachovej aby se zvetsovala a zmensovala dle oken
+- po dokoncen� runnu re�� hra, kolik je v penezence PRED runnem (asi). protoze na obr�zku vidim informaci, ze continuje stoj� 100 a ze v penezence po runnu bude 137. ale nedovol� mi to kupovat. Uprav to tak, aby continue bylo mozno koupit za c�stku, kterou ukazje ta infomrace wallet after run. A ted tech 137 se predpokl�d�m skl�d� z tech 98 + to co tam bylo puvodne. takze tech 98 v z�vorce uz tam je duplicita. stac� o r�dek v��, kolik jich bylo posb�r�no a dole, kolik jich tedy nyn� je celke a kdyz to c�slo je vetsi nez cena pro continuje, tak jej to mus� nab�jet. A jeste zvetsi tlac�tko end run, aby bylo stejne velke jako to continue
+- ano, nic nepredvyb�rat. a ano k cene. implementuj
 - implementuj
 - priprav aab
-- a) prohod continue a text, kterďż˝ rďż˝ka cenu. b) kdyz hrďż˝c prijde o zivot, udelej 2s ochranou lhutu, kdy nemuďż˝e znovu prijďż˝t o ďż˝ivot - krome death zone dole. ale kdyz se dotkne horni death zone, strely, blockeru, tak 2s mu dalďż˝ďż˝ strela, blocker hornďż˝ death zone ďż˝ivot nesebere. Nenďż˝ potreba toto ani nijak graficky ve hre znďż˝zornovat. jen do hernďż˝ch pravidel to muďż˝eďż˝ nekam zapsat. respektive nakonec pripravďż˝me "manual" nebo pravidla.. a tam to taky musďż˝ bďż˝t....
-- dokaďż˝eďż˝ pripravit kratkou animaci (gif/video/signle frames), kde vyuďż˝ijeďż˝ grafiku z toho obrďż˝zku a udelďż˝, aby postavicka veďż˝la v levďż˝m spodnďż˝m rohu po ceste a doďż˝la k rozcestnďż˝ku?
+- a) prohod continue a text, kter� r�ka cenu. b) kdyz hr�c prijde o zivot, udelej 2s ochranou lhutu, kdy nemu�e znovu prij�t o �ivot - krome death zone dole. ale kdyz se dotkne horni death zone, strely, blockeru, tak 2s mu dal�� strela, blocker horn� death zone �ivot nesebere. Nen� potreba toto ani nijak graficky ve hre zn�zornovat. jen do hern�ch pravidel to mu�e� nekam zapsat. respektive nakonec priprav�me "manual" nebo pravidla.. a tam to taky mus� b�t....
+- doka�e� pripravit kratkou animaci (gif/video/signle frames), kde vyu�ije� grafiku z toho obr�zku a udel�, aby postavicka ve�la v lev�m spodn�m rohu po ceste a do�la k rozcestn�ku?
 - c:\-_WeB_-\Hrrra\assets\temp\
 ty soubory tam nividim
-dokaĹľeĹˇ obrĂˇzek PixelovĂˇ figurka na kamennĂ© podloĹľce.png ve slozce temp dopoÄŤĂ­tat jak by vypadal, kdyby se otaÄŤel o 360 stupnĹŻ v 9 frames? abychom meli pohled i na postaviÄŤku, jak jde doleva, doprava, nahoru a dolĹŻ? vĂ­m, Ĺľe nevĂ­s, jak vypada zepredu, ale myslĂ­m Ĺľe to vymyslĂ­s :-)
-pridal jsem jak vypada postaviÄŤka zepredu
+dokažeš obrázek Pixelová figurka na kamenné podložce.png ve slozce temp dopočítat jak by vypadal, kdyby se otačel o 360 stupnů v 9 frames? abychom meli pohled i na postavičku, jak jde doleva, doprava, nahoru a dolů? vím, že nevís, jak vypada zepredu, ale myslím že to vymyslís :-)
+pridal jsem jak vypada postavička zepredu
 
-RoztomilĂˇ pixelovĂˇ figurka na podstavci k nam.png
+Roztomilá pixelová figurka na podstavci k nam.png
 je to v temp
-to je figurka, kde levy a pravy jsou od sebe jen zrcadleny a prostrednĂ­, koukĂˇnĂ­ od nĂˇs je dopoÄŤĂ­tĂˇno. pĹ™iprav mi stejne tri obrĂˇzky z figurka na podstavci k nam.png kde jeden bude zrcadleny a jeden bude dopoÄŤĂ­tanĂ©, Ĺľe se figurka koukĂˇ smerem k nĂˇm. obrĂˇzky mĂˇs v temp
+to je figurka, kde levy a pravy jsou od sebe jen zrcadleny a prostrední, koukání od nás je dopočítáno. připrav mi stejne tri obrázky z figurka na podstavci k nam.png kde jeden bude zrcadleny a jeden bude dopočítané, že se figurka kouká smerem k nám. obrázky más v temp
 figurka od nas rotace.png
-trojice od nas.png trojice k nam.png jsou v temp - rozrezej, at mĂˇme postaviÄŤku do sesti smÄ›rĹŻ - ÄŤili Ĺˇest obrazku
-mĹŻĹľeĹˇ tento obrĂˇzek upravit tak, aby Ĺˇipka "scores" smÄ›Ĺ™ovala tĂ­m smÄ›rem co je naznaÄŤeno ÄŤervenou Ĺˇipkou? tedy podĂ©l tĂ© pravĂ© spodnĂ­ cesty?
+trojice od nas.png trojice k nam.png jsou v temp - rozrezej, at máme postavičku do sesti směrů - čili šest obrazku
+můžeš tento obrázek upravit tak, aby šipka "scores" směřovala tím směrem co je naznačeno červenou šipkou? tedy podél té pravé spodní cesty?
 rozscestnik k uprave v temp
 rozscestnik k uprave v temp
 rozscestnik k uprave v temp
 jeste jednou se podivej do temp. uz tam je rozcestnik k uprave.png
-udelej ted commit do main - local i online a pak vytvoĹ™ novou vetev gfx2 - budeme vytvĂˇĹ™et novou start strĂˇnku
-udelej ted commit do main - local i online a pak vytvoĹ™ novou vetev gfx2 - budeme vytvĂˇĹ™et novou start strĂˇnku
-ZatĂ­m nic nedelej, jen to chci promyslet a vymyslet. chci nahradit startovacĂ­ stranku (obr1) za novou, grafickoiu (ob2). jednotlivĂ© buttons pĹ™emapujeme z pĹŻvodnĂ­ch na ĹˇĂ­pky (rozcestnĂ­k a samotnĂ˝ v pravo dole). Budou tam zatĂ­m nÄ›kterĂ©  vÄ›ci - jako shop chybÄ›t, ale to pak dopĹ™ipravĂ­me. ZĂˇroven bych chtÄ›l, aby ta obrazovka byla "pohyblivĂˇ". to znamenĂˇ, chtÄ›l bych, aby se mraky na tom obrĂˇzku pohybovaly - z leva do prava. ProtoĹľe to bude velkĂˇ zmÄ›na, kde bude velky prostor po udÄ›lĂˇnĂ­ chyb, tak pĹ™emĂ˝ĹˇlĂ­m, Ĺľe bychom udÄ›laly novou verzi, ale tu starou zachovali - moĹľnost pĹ™epnout v administra ci (GFX1 vs GFX2 pro jednoduchost). a mohli bychom ladit tu novou strĂˇnku, aby tam bylo vse co potrebujeme a zĂˇroven mÄ›li zachovanou tu pĹŻvodnĂ­.
-takze nĂˇm chybĂ­ pĹ™epĂ­nĂˇnĂ­ obtĂ­Ĺľnosti a jmĂ©no. jĂˇ chci pouĹľĂ­t postaviÄŤku, kterĂˇ na zaÄŤĂˇtku "pĹ™ijde" k rozcestnĂ­ku . po tĂ© cest z levĂ©ho spodnĂ­ho rohu. a na jejĂ­m podstavci mĹŻĹľe bĂ˝t jmĂ©no. tĂ­m se to vyĹ™eĹˇĂ­. to nechĂˇme taky na pozdejsĂ­ kroky.  easy hard - napada mne, treba ze tam jeste pripravĂ­m na oblohu "slunĂ­ÄŤko", kterĂ© bude easy. kdyz na nej klikneme, tak se posune na druhou stranu a tam bude hard. a po kliknuti se zase posune na druhou a bude easy... Ted mi popis, jak to tedy navrhujes celĂ© implementovat, rozdÄ›leno do krokĹŻ podle tvĂ©ho nĂˇvrhu. pak to zapĂ­seme do gfx2.md a pokud to bude vse v porĂˇdku, potvrdĂ­m implementaci
+udelej ted commit do main - local i online a pak vytvoř novou vetev gfx2 - budeme vytvářet novou start stránku
+udelej ted commit do main - local i online a pak vytvoř novou vetev gfx2 - budeme vytvářet novou start stránku
+Zatím nic nedelej, jen to chci promyslet a vymyslet. chci nahradit startovací stranku (obr1) za novou, grafickoiu (ob2). jednotlivé buttons přemapujeme z původních na šípky (rozcestník a samotný v pravo dole). Budou tam zatím některé  věci - jako shop chybět, ale to pak dopřipravíme. Zároven bych chtěl, aby ta obrazovka byla "pohyblivá". to znamená, chtěl bych, aby se mraky na tom obrázku pohybovaly - z leva do prava. Protože to bude velká změna, kde bude velky prostor po udělání chyb, tak přemýšlím, že bychom udělaly novou verzi, ale tu starou zachovali - možnost přepnout v administra ci (GFX1 vs GFX2 pro jednoduchost). a mohli bychom ladit tu novou stránku, aby tam bylo vse co potrebujeme a zároven měli zachovanou tu původní.
+takze nám chybí přepínání obtížnosti a jméno. já chci použít postavičku, která na začátku "přijde" k rozcestníku . po té cest z levého spodního rohu. a na jejím podstavci může být jméno. tím se to vyřeší. to necháme taky na pozdejsí kroky.  easy hard - napada mne, treba ze tam jeste pripravím na oblohu "sluníčko", které bude easy. kdyz na nej klikneme, tak se posune na druhou stranu a tam bude hard. a po kliknuti se zase posune na druhou a bude easy... Ted mi popis, jak to tedy navrhujes celé implementovat, rozděleno do kroků podle tvého návrhu. pak to zapíseme do gfx2.md a pokud to bude vse v porádku, potvrdím implementaci
 zapis a implementuj
-zmensi obrĂˇzek "pozadĂ­", aby se ho vĂ­c veslo - aby tam bylo vĂ­c oblohy a vĂ­c se tam vesly sipky
-zmensi obrĂˇzek "pozadĂ­", aby se ho vĂ­c veslo - aby tam bylo vĂ­c oblohy a vĂ­c se tam vesly sipky
-jakou velikost obrĂˇzku potrebujes, aby byl presne na velikost nasĂ­ hry? ideĂˇlnÄ› velikost vhodna pro android.
-KĹ™iĹľovatka v hernĂ­m svÄ›tÄ›.png v temp - mĹŻĹľeĹˇ jej upscale na idealnĂ­ velikost?
-tak nynĂ­ nahrad obrĂˇzek co je ted ve hĹ™e. pĹ™Ă­padnÄ› jej nÄ›jak uprav, aby byl ĹˇirĹˇĂ­ ale niĹľĹˇĂ­. chci aby tam bylo vĂ­c oblohy
-ted jsem zjistil, ze jsme zmÄ›nili spatny obrĂˇzek. je potreba crossing.png ten druhĂ˝ mĂˇ spatnÄ› Ĺˇipky. potrebuji, aby na obrazovce bylo opravdu vĂ­c te oblohy. kdyztak udelej crop obrazku dle znĂˇzornĂ©nĂ©ho na prilozenem obrazku
-ted nesedĂ­ dobĹ™e overlay buttons nad Ĺˇipkami. mĹŻĹľes to srovnat? a dokĂˇĹľeĹˇ udÄ›lat i ĹˇikmĂ© button tak jak jsou Ĺˇikmo smÄ›Ĺ™ovanĂ© Ĺˇipky?
-obrazek crossing.png - oÄŤisti krajinu + rozcestnĂ­k od pozadĂ­. To pak nahradĂ­me modrĂ˝m pozadĂ­m a pĹ™ipravĂ­me grafiku mrakĹŻ, kterĂ© se budou po obloze pohybovat.
-tady je detail obrĂˇzku a overlay buttonu, kde je videt, ze nesedĂ­ presne. mĹŻĹľeĹˇ podle obrĂˇzku upravit?
-tady je dalsĂ­ detail k upresnenĂ­
-tady je dalsĂ­ detail k upresnenĂ­
+zmensi obrázek "pozadí", aby se ho víc veslo - aby tam bylo víc oblohy a víc se tam vesly sipky
+zmensi obrázek "pozadí", aby se ho víc veslo - aby tam bylo víc oblohy a víc se tam vesly sipky
+jakou velikost obrázku potrebujes, aby byl presne na velikost nasí hry? ideálně velikost vhodna pro android.
+Křižovatka v herním světě.png v temp - můžeš jej upscale na idealní velikost?
+tak nyní nahrad obrázek co je ted ve hře. případně jej nějak uprav, aby byl širší ale nižší. chci aby tam bylo víc oblohy
+ted jsem zjistil, ze jsme změnili spatny obrázek. je potreba crossing.png ten druhý má spatně šipky. potrebuji, aby na obrazovce bylo opravdu víc te oblohy. kdyztak udelej crop obrazku dle znázornéného na prilozenem obrazku
+ted nesedí dobře overlay buttons nad šipkami. můžes to srovnat? a dokážeš udělat i šikmé button tak jak jsou šikmo směřované šipky?
+obrazek crossing.png - očisti krajinu + rozcestník od pozadí. To pak nahradíme modrým pozadím a připravíme grafiku mraků, které se budou po obloze pohybovat.
+tady je detail obrázku a overlay buttonu, kde je videt, ze nesedí presne. můžeš podle obrázku upravit?
+tady je dalsí detail k upresnení
+tady je dalsí detail k upresnení
 nejde o credits, ale o "badge" sipku
 mraky budeme delat az pozdeji
 badges chce jeste trochu upravit
-na obrazku jsem ted znĂˇzornil jak overlay je a jak mĂˇ bĂ˝t
-davam dalsĂ­ detail, jak overlay je a jak by mel bĂ˝t
-v temp jsem ulozil 3cloud.png. rozrezej to na tri jednotlivĂ© obrĂˇzky / mraky. udelej prĹŻhlednĂ© pozadĂ­. a umĂ­sti je na "oblohu" nad krajinu. zatim na pevnĂ© mĂ­sto a zĂˇroven pres ne udelej overlay buttons, tak jak tam jsou nynĂ­.
-- 2026-04-06: v temp jsem ulozil 3cloud.png. rozrezej to na tri jednotlivĂ© obrĂˇzky / mraky. udelej prĹŻhlednĂ© pozadĂ­. a umĂ­sti je na "oblohu" nad krajinu. zatim na pevnĂ© mĂ­sto a zĂˇroven pres ne udelej overlay buttons, tak jak tam jsou nynĂ­.
-- 2026-04-06: zmensi trochu ten mrak, posun ho do leva, jak ukazuje sipka a hlavne, musĂ­ bĂ˝t na pozadĂ­ za rozcestnĂ­kem a ne pred nĂ­m.
-- 2026-04-06: posunutĂ˝ je, ale nenĂ­ za rozcestnĂ­kem, ale pred nĂ­m. mraky musĂ­ bĂ˝t zcela na pozadĂ­. nejdrĂ­v je layer krajina a rozcestnĂ­ky, pak je layer mraky a pak je layer obloha (modrĂˇ)
-- 2026-04-06: ted musĂ­m vypnout CScode a ty zapomenes vse. az te pustĂ­m, jakĂ˝ prĂ­kaz ti mam dat, aby sis na co nejvic veci "vzpomne" (tedy abys je nedke vycetl)?
+na obrazku jsem ted znázornil jak overlay je a jak má být
+davam dalsí detail, jak overlay je a jak by mel být
+v temp jsem ulozil 3cloud.png. rozrezej to na tri jednotlivé obrázky / mraky. udelej průhledné pozadí. a umísti je na "oblohu" nad krajinu. zatim na pevné místo a zároven pres ne udelej overlay buttons, tak jak tam jsou nyní.
+- 2026-04-06: v temp jsem ulozil 3cloud.png. rozrezej to na tri jednotlivé obrázky / mraky. udelej průhledné pozadí. a umísti je na "oblohu" nad krajinu. zatim na pevné místo a zároven pres ne udelej overlay buttons, tak jak tam jsou nyní.
+- 2026-04-06: zmensi trochu ten mrak, posun ho do leva, jak ukazuje sipka a hlavne, musí být na pozadí za rozcestníkem a ne pred ním.
+- 2026-04-06: posunutý je, ale není za rozcestníkem, ale pred ním. mraky musí být zcela na pozadí. nejdrív je layer krajina a rozcestníky, pak je layer mraky a pak je layer obloha (modrá)
+- 2026-04-06: ted musím vypnout CScode a ty zapomenes vse. az te pustím, jaký príkaz ti mam dat, aby sis na co nejvic veci "vzpomne" (tedy abys je nedke vycetl)?
 
 -------------------
 
-ted na start screen - gfx2 - chci aby se postavicka z assets/figure 01xxxxx.png presunula behem 2 vterin z levďż˝ spodnďż˝ strany po trase cervenďż˝ ďż˝ipky a zastavila se na puntďż˝ku, tam jak ted je. Uprav to velikostne tak, aby to sedelo
+ted na start screen - gfx2 - chci aby se postavicka z assets/figure 01xxxxx.png presunula behem 2 vterin z lev� spodn� strany po trase cerven� �ipky a zastavila se na punt�ku, tam jak ted je. Uprav to velikostne tak, aby to sedelo
 [image attached]
 
 -------------------
 
 -------------------
 
-kdyz strďż˝nku file:///C:/-_WeB_-/Hrrra/index.html (cili lokal) pustďż˝m, prepnu na gfx2 tak tam zďż˝dnou postavicku ani pohyb nevidim
+kdyz str�nku file:///C:/-_WeB_-/Hrrra/index.html (cili lokal) pust�m, prepnu na gfx2 tak tam z�dnou postavicku ani pohyb nevidim
 
 -------------------
 
 -------------------
 
-a) pozadďż˝ tech obrďż˝zku musďż˝ bďż˝t pruhlednďż˝ b) sledovat tu cďż˝ru musďż˝ tďż˝m podstavcem na obrďż˝zku. nikoliv prostredkem toho obrďż˝zku c) nakonci se objevďż˝ frame 05xxxxx.png ten tam bďż˝t nemďż˝
+a) pozad� tech obr�zku mus� b�t pruhledn� b) sledovat tu c�ru mus� t�m podstavcem na obr�zku. nikoliv prostredkem toho obr�zku c) nakonci se objev� frame 05xxxxx.png ten tam b�t nem�
 
 -------------------
 
 -------------------
 
-naznacil jsem na postavicce stred, kterďż˝m to ma sledovat. a cďż˝ru, po kterďż˝.
+naznacil jsem na postavicce stred, kter�m to ma sledovat. a c�ru, po kter�.
 [image attached]
 
 -------------------
 
 -------------------
 
-ted se pohbuje po tďż˝ tenkďż˝ cďż˝re, potrebuji, aby se pohyboval po tďż˝ tlusďż˝ďż˝ o kousek vedle
+ted se pohbuje po t� tenk� c�re, potrebuji, aby se pohyboval po t� tlus�� o kousek vedle
 
 -------------------
 
 -------------------
 
-prijde mi, ze se vubec nic nemenďż˝
+prijde mi, ze se vubec nic nemen�
 
 -------------------
 
@@ -650,33 +650,33 @@ ted je videt, ze se to zmenilo, ale stale malo. udelej tu zmenu co jsi ted udela
 
 -------------------
 
-zkus podle toho obrazku, tam jak jsem udelal puntďż˝ky, udelej z toho referencnďż˝ body, po kterďż˝ch se mďż˝ pohybovat. soucasnďż˝ cesta je stďż˝le prďż˝lis dole a nemďż˝ sprďż˝vnou krivku. rekl bych, ze tam je mďż˝lo bodu
+zkus podle toho obrazku, tam jak jsem udelal punt�ky, udelej z toho referencn� body, po kter�ch se m� pohybovat. soucasn� cesta je st�le pr�lis dole a nem� spr�vnou krivku. rekl bych, ze tam je m�lo bodu
 
 -------------------
 
 -------------------
 
-je tam jak se pohybuje a cďż˝ra s puntďż˝ky, kde mďż˝ zacďż˝nat a kde koncit
+je tam jak se pohybuje a c�ra s punt�ky, kde m� zac�nat a kde koncit
 [image attached]
 
 -------------------
 
 -------------------
 
-zkus udelat rovnou ďż˝secku z levďż˝ho dolnďż˝ho rohu obrazovky do prostredka obrazovky
+zkus udelat rovnou �secku z lev�ho doln�ho rohu obrazovky do prostredka obrazovky
 [image attached]
 
 -------------------
 
 -------------------
 
-postavicka nevyrďż˝zďż˝ z leveho spodnďż˝ho rohu. urcite ne z rohu okna. kdyz vemes referencnďż˝ body levďż˝ spodnďż˝ roh a na nem bude zacďż˝nat prostredek podstavce postavicky. a po prďż˝mce do prostred obrazovky
+postavicka nevyr�z� z leveho spodn�ho rohu. urcite ne z rohu okna. kdyz vemes referencn� body lev� spodn� roh a na nem bude zac�nat prostredek podstavce postavicky. a po pr�mce do prostred obrazovky
 
 -------------------
 
 -------------------
 
-pomoďż˝ mi vymyslet, jak ti mam presneji oznacit souradnice, kudy se mďż˝ pohybovat. muďż˝eďż˝ treba vytvorit obrďż˝zek crossing_x.png kde udelďż˝ mrďż˝zku s koordinatama, abych mohl presne nadiktovat nebo nakreslit, kudy se mďż˝ pohybovat postavicka a ty to nebudes muset hďż˝dat, ale vyctes z tech souradnic?
+pomo� mi vymyslet, jak ti mam presneji oznacit souradnice, kudy se m� pohybovat. mu�e� treba vytvorit obr�zek crossing_x.png kde udel� mr�zku s koordinatama, abych mohl presne nadiktovat nebo nakreslit, kudy se m� pohybovat postavicka a ty to nebudes muset h�dat, ale vyctes z tech souradnic?
 
 -------------------
 
@@ -688,40 +688,40 @@ ano
 
 -------------------
 
-tady ti jeste posďż˝lďż˝m obrďż˝zek figurky, abys vedel, kde mďż˝ ona "stred", kterďż˝ se musďż˝ pohybovat po tďż˝ krivce. jeste jednou to uprav
+tady ti jeste pos�l�m obr�zek figurky, abys vedel, kde m� ona "stred", kter� se mus� pohybovat po t� krivce. jeste jednou to uprav
 [image attached]
 
 -------------------
 
 -------------------
 
-a ten puntďż˝k je relevantnďż˝ k podstavci figurky a nikoliv k celďż˝mu obrďż˝zku 
+a ten punt�k je relevantn� k podstavci figurky a nikoliv k cel�mu obr�zku 
 
 -------------------
 
 -------------------
 
-muzes udelat jako debug to, ze nakreslďż˝s do toho obrďż˝zku pozadďż˝ - prďż˝mo ve hre - trasu po kterďż˝ se mďż˝ postavicka pohybovat? abych az hru pustim jsem videl tu trasu
+muzes udelat jako debug to, ze nakresl�s do toho obr�zku pozad� - pr�mo ve hre - trasu po kter� se m� postavicka pohybovat? abych az hru pustim jsem videl tu trasu
 
 -------------------
 
 -------------------
 
-trasa planovanďż˝ a reďż˝lna nejsou shodnďż˝.
+trasa planovan� a re�lna nejsou shodn�.
 [image attached]
 
 -------------------
 
 -------------------
 
-tady mas jeste jednou referencni obrďż˝zek s mrďż˝zkou, vcetne puntďż˝ku na postavicce, tam kde mďż˝ postavicka zacďż˝nat, trasu a konec. s tďż˝m, ďż˝e poslednďż˝ bod musďż˝ lďż˝covat s bodem na postavicce
+tady mas jeste jednou referencni obr�zek s mr�zkou, vcetne punt�ku na postavicce, tam kde m� postavicka zac�nat, trasu a konec. s t�m, �e posledn� bod mus� l�covat s bodem na postavicce
 [image attached]
 
 -------------------
 
 -------------------
 
-tady mas presne cestu kudy postavicka musďż˝ jďż˝t. uprav to
+tady mas presne cestu kudy postavicka mus� j�t. uprav to
 [image attached]
 [image attached]
 [image attached]
@@ -734,30 +734,30 @@ tady mas presne cestu kudy postavicka musďż˝ jďż˝t. uprav to
 
 -------------------
 
-uz vidim, ze se obrazek crossing nezmensuje podle okna. Je potreba, aby byl responzivni, stejne jako mraky a postavicka. Aby obrďż˝zek vďż˝dy vyplnoval celou obrazovku a kdyz se obrazovka / okno zmensi, aby se zmensoval i obrazek a nikoliv orezaval. 
+uz vidim, ze se obrazek crossing nezmensuje podle okna. Je potreba, aby byl responzivni, stejne jako mraky a postavicka. Aby obr�zek v�dy vyplnoval celou obrazovku a kdyz se obrazovka / okno zmensi, aby se zmensoval i obrazek a nikoliv orezaval. 
 [image attached]
 
 -------------------
 
 -------------------
 
-uz se zmensuje, ale vzdy s pevnďż˝m pomerem stran. je potreba, aby se obrďż˝zek prizpusoboval a vzdy se drzel obou rozmeru bez ohledu na pomer. to znamena, ze se obrďż˝zek muďż˝e trochu deformovat
+uz se zmensuje, ale vzdy s pevn�m pomerem stran. je potreba, aby se obr�zek prizpusoboval a vzdy se drzel obou rozmeru bez ohledu na pomer. to znamena, ze se obr�zek mu�e trochu deformovat
 [image attached]
 
 -------------------
 
-ocisti assets/figure vsechny obrďż˝zky, aby dole u podstavce nebyly ty bďż˝lďż˝ fleky. Aby to slo lďż˝pe pouďż˝ďż˝t a pozadďż˝ bylo opravdu pryc/pruhlednďż˝
+ocisti assets/figure vsechny obr�zky, aby dole u podstavce nebyly ty b�l� fleky. Aby to slo l�pe pou��t a pozad� bylo opravdu pryc/pruhledn�
 
 -------------------
 
-stďż˝le tam vidďż˝m relativne velkďż˝ bďż˝lďż˝ fleky. muďż˝eďż˝ jeste doupravit?
+st�le tam vid�m relativne velk� b�l� fleky. mu�e� jeste doupravit?
 [image attached]
 [image attached]
 [image attached]
 
 -------------------
 
-ted je to horsi nez to bylo. znicilo to samotnďż˝ postavicky. obliceje a tak. vrat to do puvodnďż˝ verze. pokud muďż˝eďż˝
+ted je to horsi nez to bylo. znicilo to samotn� postavicky. obliceje a tak. vrat to do puvodn� verze. pokud mu�e�
 
 -------------------
 
@@ -766,87 +766,87 @@ zkus to pouze na obrazku 06xxxxx a pouze v zobrazenem vyrezu
 
 -------------------
 
-je to lepsi, ale stale tam vidim dole bďż˝lou barvu 
+je to lepsi, ale stale tam vidim dole b�lou barvu 
 [image attached]
 
 -------------------
 
-gde o tyto dve mďż˝sta
+gde o tyto dve m�sta
 [image attached]
 
 -------------------
 
-ve sloďż˝ce c:\-_WeB_-\Hrrra\assets\temp\entrance\ je sekvence png obrďż˝zku. chtel bych, abys je pouďż˝il pri oterenďż˝ startovacďż˝ obrazovky v gfx2. aby behem jedne vteriny probehla sekvence obrďż˝zku 01-08 a na tom poslednďż˝m se pozadďż˝ zastavilo. Zďż˝roven odstran cervenou debug cďż˝ru, kterou jsme tam pripravili . stejne tak ted postavicka tak jak se pohybuje po obrazovce jiz nenďż˝ potreba. je natvrdo v tech frames pozadďż˝
+ve slo�ce c:\-_WeB_-\Hrrra\assets\temp\entrance\ je sekvence png obr�zku. chtel bych, abys je pou�il pri oteren� startovac� obrazovky v gfx2. aby behem jedne vteriny probehla sekvence obr�zku 01-08 a na tom posledn�m se pozad� zastavilo. Z�roven odstran cervenou debug c�ru, kterou jsme tam pripravili . stejne tak ted postavicka tak jak se pohybuje po obrazovce jiz nen� potreba. je natvrdo v tech frames pozad�
 [image attached]
 
 -------------------
 
-dobre. ted, kdyz se klikne na tlacďż˝tko klassic, tak vezmi ze sloďż˝ky c:\-_WeB_-\Hrrra\assets\temp\classic\ snďż˝mky 01-07 a behem jednďż˝ vteriny je prehraj. teprve po frame 07 prepnďż˝ na obrazovku pro start classic
+dobre. ted, kdyz se klikne na tlac�tko klassic, tak vezmi ze slo�ky c:\-_WeB_-\Hrrra\assets\temp\classic\ sn�mky 01-07 a behem jedn� vteriny je prehraj. teprve po frame 07 prepn� na obrazovku pro start classic
 
 -------------------
 
-2026-04-07: 'dobre. ted, kdyz se klikne na tlacďż˝tko klassic, tak vezmi ze sloďż˝ky c:\-_WeB_-\Hrrra\assets\temp\classic\ snďż˝mky 01-07 a behem jednďż˝ vteriny je prehraj. teprve po frame 07 prepnďż˝ na obrazovku pro start classic'
+2026-04-07: 'dobre. ted, kdyz se klikne na tlac�tko klassic, tak vezmi ze slo�ky c:\-_WeB_-\Hrrra\assets\temp\classic\ sn�mky 01-07 a behem jedn� vteriny je prehraj. teprve po frame 07 prepn� na obrazovku pro start classic'
 
-2026-04-07: 'ted totďż˝ pro advanced. je to ve slotce c:\-_WeB_-\Hrrra\assets\temp\advance\. po kliknutďż˝ prehraj 01-06 frames a teprve po 06 prepnďż˝ na advanced strďż˝nku'
+2026-04-07: 'ted tot� pro advanced. je to ve slotce c:\-_WeB_-\Hrrra\assets\temp\advance\. po kliknut� prehraj 01-06 frames a teprve po 06 prepn� na advanced str�nku'
 
-2026-04-07: 'kdyz se animace prehrďż˝vďż˝ poprvďż˝ po nactenďż˝ aplikace, tak tam problikďż˝vajďż˝ v pozadďż˝ mraky s tlacďż˝tky, ale nejsou potom uz videt, ackoliv tam to tlacďż˝tko je'
+2026-04-07: 'kdyz se animace prehr�v� poprv� po nacten� aplikace, tak tam problik�vaj� v pozad� mraky s tlac�tky, ale nejsou potom uz videt, ackoliv tam to tlac�tko je'
 
-2026-04-07: 'Je potreba, aby se ty mraky taky zmenďż˝ovaly podle velikosti okna. nesmďż˝ zasahovat do krajny a rozcestnďż˝ku. je to moďż˝nďż˝ udelat? prďż˝padne je natvrdo zmenďż˝ďż˝me a ukotvďż˝me tak, aby nezasahovaly. kaďż˝dopďż˝dne bych mrak credits posunul trochu doleva  vcetne overlay tlacďż˝tka, aby se ani tlacďż˝tka neprekrďż˝vala Credits / advanced'
+2026-04-07: 'Je potreba, aby se ty mraky taky zmen�ovaly podle velikosti okna. nesm� zasahovat do krajny a rozcestn�ku. je to mo�n� udelat? pr�padne je natvrdo zmen��me a ukotv�me tak, aby nezasahovaly. ka�dop�dne bych mrak credits posunul trochu doleva  vcetne overlay tlac�tka, aby se ani tlac�tka neprekr�vala Credits / advanced'
 
-2026-04-07: 'je potreba jeste kousek. jeste zasahuje do rozcestnďż˝ku'
+2026-04-07: 'je potreba jeste kousek. jeste zasahuje do rozcestn�ku'
 
-2026-04-07: 'pri kliknutďż˝ na scores pouďż˝ij frames z c:\-_WeB_-\Hrrra\assets\temp\scores\ ve stejnďż˝ logice jako predtďż˝m'
+2026-04-07: 'pri kliknut� na scores pou�ij frames z c:\-_WeB_-\Hrrra\assets\temp\scores\ ve stejn� logice jako predt�m'
 
-2026-04-07: 'c:\-_WeB_-\Hrrra\assets\temp\badges - totďż˝ jeste pro badges tlacďż˝tko'
+2026-04-07: 'c:\-_WeB_-\Hrrra\assets\temp\badges - tot� jeste pro badges tlac�tko'
 
-2026-04-07: 'kdyz pustďż˝m hru na androidu, tak start screen je v okne, kterďż˝ je pres pozadďż˝ hry, kterďż˝ ale vubec jeste nebyla spustena. tďż˝m ze to je okno, tak to nevyuďż˝ďż˝vďż˝ celou obrazovku. To okno, pokud to musďż˝ bďż˝t v okne, by melo zabďż˝rat celou screen a nikoliv jejďż˝ vďż˝rez, protoze potom se tam nevejde co se vejďż˝t mďż˝. Navďż˝c tam vidďż˝m i treba tlacďż˝tko admin, kterďż˝ ale je soucďż˝stďż˝ tďż˝ nespustenďż˝ hry a tudďż˝t stejne nefunguje. muďż˝eďż˝ to roztahnout?  at je to responzivnďż˝, ale na celďż˝ screen?'
+2026-04-07: 'kdyz pust�m hru na androidu, tak start screen je v okne, kter� je pres pozad� hry, kter� ale vubec jeste nebyla spustena. t�m ze to je okno, tak to nevyu��v� celou obrazovku. To okno, pokud to mus� b�t v okne, by melo zab�rat celou screen a nikoliv jej� v�rez, protoze potom se tam nevejde co se vej�t m�. Nav�c tam vid�m i treba tlac�tko admin, kter� ale je souc�st� t� nespusten� hry a tud�t stejne nefunguje. mu�e� to roztahnout?  at je to responzivn�, ale na cel� screen?'
 
 2026-04-07: 'uprav je do formatu JPG'
 
-2026-04-07: 'zkusďż˝m tedy novďż˝ release. priprav aab'
+2026-04-07: 'zkus�m tedy nov� release. priprav aab'
 
-2026-04-07: 'do temp/entrance jsem nahral soubor entrance_shop.jpg. Oproti standardnďż˝m frames je v obrďż˝zk pridanďż˝ domek a nďż˝pis shop. dokďż˝eďż˝ jej zkopďż˝rovat do vsech frames ve slozce gfx2/entrance - aby byl presne na stejnďż˝m mďż˝ste, stejne velkďż˝ a konzistentnďż˝? je to ten domek zakrouďż˝kovanďż˝. ten krouďż˝ek tam ale samozrejme nechci - lepsďż˝ si to vytďż˝hnout z toho souboru jak jsem psal'
+2026-04-07: 'do temp/entrance jsem nahral soubor entrance_shop.jpg. Oproti standardn�m frames je v obr�zk pridan� domek a n�pis shop. dok�e� jej zkop�rovat do vsech frames ve slozce gfx2/entrance - aby byl presne na stejn�m m�ste, stejne velk� a konzistentn�? je to ten domek zakrou�kovan�. ten krou�ek tam ale samozrejme nechci - leps� si to vyt�hnout z toho souboru jak jsem psal'
 
-2026-04-07: 'super, ted uplne stejnďż˝m zpusobem na stejnďż˝ mďż˝sto dopln tu grafiku (domek a nďż˝pis) do gfx2/scores, classic, badges a advance'
+2026-04-07: 'super, ted uplne stejn�m zpusobem na stejn� m�sto dopln tu grafiku (domek a n�pis) do gfx2/scores, classic, badges a advance'
 
-2026-04-07: 'a nynďż˝ jeste pro sloďż˝ku shop'
+2026-04-07: 'a nyn� jeste pro slo�ku shop'
 
 2026-04-07: 'uz tam ta slozka je'
 
-2026-04-07: 'ted jeste jednou over, ďż˝e starscreen gfx2 se preloaduje ci jinak nacachuje, aby nedochďż˝zelo k blikďż˝nďż˝ ani na lokale ani na androidu. na lokale kde to ted zousim, tak to stale blikďż˝. kdyz pak kliknu na back, tak uz nikoliv. android vyzkousim az za chvili'
+2026-04-07: 'ted jeste jednou over, �e starscreen gfx2 se preloaduje ci jinak nacachuje, aby nedoch�zelo k blik�n� ani na lokale ani na androidu. na lokale kde to ted zousim, tak to stale blik�. kdyz pak kliknu na back, tak uz nikoliv. android vyzkousim az za chvili'
 
-2026-04-07: 'ten posledďż˝ aab jsem neposďż˝lal do store. takďż˝e mi uprav novďż˝, ale nemusďż˝s zvedat verzi, protoze tato na store jeste nenďż˝.'
+2026-04-07: 'ten posled� aab jsem nepos�lal do store. tak�e mi uprav nov�, ale nemus�s zvedat verzi, protoze tato na store jeste nen�.'
 
-2026-04-07: 'ten posledďż˝ aab jsem neposďż˝lal do store. takďż˝e mi uprav novďż˝, ale nemusďż˝s zvedat verzi, protoze tato na store jeste nenďż˝.'
-2026-04-07: 'Zapomnel jsem na jednu vec, kterou jeďż˝te chci udelat. Zmen tlacďż˝tko Shop z mraku na novďż˝ domek. Z mraku odstran nďż˝pis ""shop"". Mrak jako takovďż˝ tam nech. Domek udelej overlay tlacďż˝tko. Nďż˝pis shop nenďż˝ potreba pridďż˝vat, protoze uz tam je. Zďż˝roven jeďż˝te udelej ze sloďż˝ky shop animaci po kliknutďż˝ na tlacďż˝tko shop. AAB ted jeste nedelej. overďż˝m na lokďż˝le a pak jej pripravďż˝me'
-2026-04-07: 'ty jsi tam grafiku domku pridal. ale ona uz v tom obrďż˝zku je natvrdo. stacilo kolem ni udelat overlay button - tak jak je znďż˝zorneno na prilozenďż˝m obrďż˝zku. ten mensďż˝ domek co jsi pridal muďż˝es odstranit.'
-2026-04-07: 'dve veci a) button toho domku zustal tam kde byl puvoden ten pridanďż˝. je potreba jej posunout trochu vďż˝c doprava - az ke kraji a zďż˝roven jej zvetďż˝it. b) dopln grafiku domku a napisu shop stejne jako drďż˝v i do slogky gfx settings a nďż˝sledne udelej prehrďż˝vďż˝nďż˝ sekvence po kliknutďż˝ na settings'
-2026-04-07: 'tlacďż˝tko shop chce posunout jeste vďż˝c doleva. stďż˝le nenďż˝ nad grafikou domku'
-2026-04-07: 'hitbox je zcela mimo domek. je prďż˝lis vlevo a napravo nenďż˝ az na krajďż˝ okna. na obrďż˝zku je znďż˝zorneno, jak mďż˝ bďż˝t'
+2026-04-07: 'ten posled� aab jsem nepos�lal do store. tak�e mi uprav nov�, ale nemus�s zvedat verzi, protoze tato na store jeste nen�.'
+2026-04-07: 'Zapomnel jsem na jednu vec, kterou je�te chci udelat. Zmen tlac�tko Shop z mraku na nov� domek. Z mraku odstran n�pis ""shop"". Mrak jako takov� tam nech. Domek udelej overlay tlac�tko. N�pis shop nen� potreba prid�vat, protoze uz tam je. Z�roven je�te udelej ze slo�ky shop animaci po kliknut� na tlac�tko shop. AAB ted jeste nedelej. over�m na lok�le a pak jej priprav�me'
+2026-04-07: 'ty jsi tam grafiku domku pridal. ale ona uz v tom obr�zku je natvrdo. stacilo kolem ni udelat overlay button - tak jak je zn�zorneno na prilozen�m obr�zku. ten mens� domek co jsi pridal mu�es odstranit.'
+2026-04-07: 'dve veci a) button toho domku zustal tam kde byl puvoden ten pridan�. je potreba jej posunout trochu v�c doprava - az ke kraji a z�roven jej zvet�it. b) dopln grafiku domku a napisu shop stejne jako dr�v i do slogky gfx settings a n�sledne udelej prehr�v�n� sekvence po kliknut� na settings'
+2026-04-07: 'tlac�tko shop chce posunout jeste v�c doleva. st�le nen� nad grafikou domku'
+2026-04-07: 'hitbox je zcela mimo domek. je pr�lis vlevo a napravo nen� az na kraj� okna. na obr�zku je zn�zorneno, jak m� b�t'
 2026-04-07: 'tak ano, uprav to hned a rovnou to commitni na online, abych se mohl zkusit podivat'
-2026-04-07: 'na ďż˝ďż˝rku displej porad je jen do pulky obrazovky, kdyz je na vďż˝ďż˝ku, tak je odshora az dolu....'
-2026-04-07: 'zda se, ze ted uz to sedďż˝. zmen jeste jednu vec. na game over screen, kdyz klikneme na end run, tak zustane dal ta obrazovka, jen zmizi ty buttons. to je zbytecnďż˝. rovnou tu druhou muďż˝eďż˝ preskocit'
+2026-04-07: 'na ��rku displej porad je jen do pulky obrazovky, kdyz je na v��ku, tak je odshora az dolu....'
+2026-04-07: 'zda se, ze ted uz to sed�. zmen jeste jednu vec. na game over screen, kdyz klikneme na end run, tak zustane dal ta obrazovka, jen zmizi ty buttons. to je zbytecn�. rovnou tu druhou mu�e� preskocit'
 2026-04-07: 'kod verze 23 uz byl. je potreba povysit'
-2026-04-07: 'muzes do obrazovky Credits, do praveho hornďż˝ho rohu dďż˝t cďż˝slo verze? aktuďż˝lnďż˝? jde to udelat nejak, aby nacďż˝talo samo, nebo ho budes muset vzdy zvyďż˝ovat?'
+2026-04-07: 'muzes do obrazovky Credits, do praveho horn�ho rohu d�t c�slo verze? aktu�ln�? jde to udelat nejak, aby nac�talo samo, nebo ho budes muset vzdy zvy�ovat?'
 2026-04-07: 'na strance scores nejde scrolovat. ani na lokale ani na androidu.'
-2026-04-07: 'zkus nejdrďż˝v variantu dve, cili zmensit okraje. Zkus to jen u sekvence Badges a Shop. U jinďż˝ch to nevadďż˝'
-2026-04-07: 'pouďż˝il jsi ďż˝patny obrďż˝zek domku. udelej to jeste jednou, ale pouďż˝ij shop.png z c:\-_WeB_-\Hrrra\assets\shop\. Je tam i celďż˝ strďż˝nka, abys i videl, kde presne je - obrazek shop_full.png. akorat musďż˝s zmenit pozadďż˝ na pruhlednďż˝. a urpav znovu frames na badges a shop, tak jak jsi upravoval predtim classic, advanced a ostatnďż˝'
-pouďż˝il jsi ďż˝patny obrďż˝zek domku. udelej to jeste jednou, ale pouďż˝ij shop.png z c:\-_WeB_-\Hrrra\assets\shop\. Je tam i celďż˝ strďż˝nka, abys i videl, kde presne je - obrazek shop_full.png. akorat musďż˝s zmenit pozadďż˝ na pruhlednďż˝. a urpav znovu frames na badges a shop, tak jak jsi upravoval predtim classic, advanced a ostatnďż˝
-ted udelďż˝me jednu vetsi zmenu. kdyz z jakďż˝koliv strďż˝nky z ďż˝vodnďż˝ (classic, advanced, score, badges, shop) dďż˝me back, tak se opet prehraje entrance. Ted to pozmenďż˝me. podle toho odkud se bude hrďż˝c vracet, tak se prehraje prďż˝slusnďż˝ _back sekvence. Tedy pokud z puvodnďż˝ obrazovky klikneme na classic, tak se prehraje classic a objevďż˝ se classic stranka. pokud tam klikneme na back, tak se prehraje classic_back animace - c:\-_WeB_-\Hrrra\assets\gfx2\classic_back\. Z advance se prehraje advance_back, z badges se prehraje badges_back, shop bude shop_back, stejne tak ze store to bude store_back. rozumďż˝ co je potreba udelat? nejdrďż˝ve odpoved, nez zacnes cokoliv implementovat
-jsem se preklepl. scores_back je zpravne. a vidim, ze mam spatne advance i advance_back. mam tam preklep. ale to je asi detail. at to nemusis prepisovat i v kodu. A jeste, do kazdeho frame ze vsech _back slozek je potreba pridat grafiku domecku, stejne jako jsi naposledy upravoval pro Shop a badges. Kaďż˝dďż˝ _back sekvence at trva taky jednu vterinu
-a nezapomďż˝nej vse zapisovat do prompts.md
-na strďż˝nkach classic, advanced, badges nejde scrolovat
-kdyz ztratďż˝m poslednďż˝ ďż˝ivot, objevďż˝ se obrazovka , kde muďż˝u continue nebo end run. kdyz dďż˝m end run, tak se objevďż˝ jeste jednou gameover obrazovka se score a musďż˝m jeste jednou kliknout. to druhďż˝ uz je zbytecnďż˝. po "end run" tu druhou preskocit.
+2026-04-07: 'zkus nejdr�v variantu dve, cili zmensit okraje. Zkus to jen u sekvence Badges a Shop. U jin�ch to nevad�'
+2026-04-07: 'pou�il jsi �patny obr�zek domku. udelej to jeste jednou, ale pou�ij shop.png z c:\-_WeB_-\Hrrra\assets\shop\. Je tam i cel� str�nka, abys i videl, kde presne je - obrazek shop_full.png. akorat mus�s zmenit pozad� na pruhledn�. a urpav znovu frames na badges a shop, tak jak jsi upravoval predtim classic, advanced a ostatn�'
+pou�il jsi �patny obr�zek domku. udelej to jeste jednou, ale pou�ij shop.png z c:\-_WeB_-\Hrrra\assets\shop\. Je tam i cel� str�nka, abys i videl, kde presne je - obrazek shop_full.png. akorat mus�s zmenit pozad� na pruhledn�. a urpav znovu frames na badges a shop, tak jak jsi upravoval predtim classic, advanced a ostatn�
+ted udel�me jednu vetsi zmenu. kdyz z jak�koliv str�nky z �vodn� (classic, advanced, score, badges, shop) d�me back, tak se opet prehraje entrance. Ted to pozmen�me. podle toho odkud se bude hr�c vracet, tak se prehraje pr�slusn� _back sekvence. Tedy pokud z puvodn� obrazovky klikneme na classic, tak se prehraje classic a objev� se classic stranka. pokud tam klikneme na back, tak se prehraje classic_back animace - c:\-_WeB_-\Hrrra\assets\gfx2\classic_back\. Z advance se prehraje advance_back, z badges se prehraje badges_back, shop bude shop_back, stejne tak ze store to bude store_back. rozum� co je potreba udelat? nejdr�ve odpoved, nez zacnes cokoliv implementovat
+jsem se preklepl. scores_back je zpravne. a vidim, ze mam spatne advance i advance_back. mam tam preklep. ale to je asi detail. at to nemusis prepisovat i v kodu. A jeste, do kazdeho frame ze vsech _back slozek je potreba pridat grafiku domecku, stejne jako jsi naposledy upravoval pro Shop a badges. Ka�d� _back sekvence at trva taky jednu vterinu
+a nezapom�nej vse zapisovat do prompts.md
+na str�nkach classic, advanced, badges nejde scrolovat
+kdyz ztrat�m posledn� �ivot, objev� se obrazovka , kde mu�u continue nebo end run. kdyz d�m end run, tak se objev� jeste jednou gameover obrazovka se score a mus�m jeste jednou kliknout. to druh� uz je zbytecn�. po "end run" tu druhou preskocit.
 priprav commit lokal, online, aab
 urcite navys verzi. Delej to vzdy, kdyz pripravujes aab. to si zapis do pravidel!
 prava hromada bude deset, leva 1. new level i postavicky zatim udelej jako placeholder a muzes implementovat
 overlay button u postavicek muzes zmenist. uber spodni hranu, tak jak je to naznacene na obrazku. text na tabuli trohu zmensi pismo a posun nahoru. to zakrouzkovane presahuje mimo tabuli. vse musi byt na tabuli
-super. ted viz obrazek, posun jeste hitboxi pro nakup minci. jsou prilis dole. pak trohcu posun doprava texty - k naznacenďż˝ cďż˝re. tlacďż˝tko uy posun do pravďż˝ho spodnďż˝ho rohu zelenďż˝ plochy (tabule)
+super. ted viz obrazek, posun jeste hitboxi pro nakup minci. jsou prilis dole. pak trohcu posun doprava texty - k naznacen� c�re. tlac�tko uy posun do prav�ho spodn�ho rohu zelen� plochy (tabule)
 overlay nad mistem k nakupu coins jeste posun trochu nahoru . viz obrazek. zaroven zmensi tlacitko Buy (asi o 50%) a posun ho trohu nahoru doprava, viz sipka
 tlacitka jeste trochu zmensit a posunout. Buy tlacitko taky. nahoru a doprava. viz obrazek
 overlay chce jeste trochu posunout. tenpravy z leva trochu ubrat. a u leveho overlay naopak posunout pravy okraj jeste vic doprava. buy tlacitko posunout nahoru
 jeste jednou totet. tlacitko buy uz nezmensuj, jen ho posun vys. asi dvojnasobek vysky samotneho tlacitka. tlacitka zmensi podle predchoziho navodu
-tlacitko buy jeste o vysku samtonďż˝ho tlacitka nahoru
+tlacitko buy jeste o vysku samton�ho tlacitka nahoru
 jeste jednou posun tlacitko vys o vysku tlacitka
 jeste o 100 pixelu nahoru
 jeste o 100 pixelu nahoru
@@ -873,30 +873,30 @@ posun to jeste 2x tolik
 
 Posouvas jen levy okraj a pravy asi nechavas zachovany na stejnem miste. Neposouval jsi celou aktivni plochu. ty texty na tabuli jsou urizly v pravem okraji. Rozsir okno, kam se texty vpisuji o 50% soucasne velikosti toho sloupce
 
-- 2026-04-09: Druhou radu overlay buttonu pro postavicky posun pod tlacďż˝tka v hornďż˝ rade. At jsou prďż˝mo pod sebou.
+- 2026-04-09: Druhou radu overlay buttonu pro postavicky posun pod tlac�tka v horn� rade. At jsou pr�mo pod sebou.
 
-- 2026-04-09: Zmenďż˝i trochu rozestupy mezi rďż˝dky textu na tabuli. Ideďż˝lne udelej ten text adaptivnďż˝, at se prizpusobuje velikosti tabule.
+- 2026-04-09: Zmen�i trochu rozestupy mezi r�dky textu na tabuli. Ide�lne udelej ten text adaptivn�, at se prizpusobuje velikosti tabule.
 
-- 2026-04-09: Na android verzi shop posun tlacďż˝tko Buy do pravďż˝ho dolnďż˝ho rohu, zmenďż˝i ho o 33 % a informaci o koupi posun nďż˝ podle screenshotu.
+- 2026-04-09: Na android verzi shop posun tlac�tko Buy do prav�ho doln�ho rohu, zmen�i ho o 33 % a informaci o koupi posun n� podle screenshotu.
 
-- 2026-04-09: Pushni to na online do main, abych se na to mohl podďż˝vat na mobilu ve web verzi.
+- 2026-04-09: Pushni to na online do main, abych se na to mohl pod�vat na mobilu ve web verzi.
 
-- 2026-04-09: Ve shop obrazovce dej BUY i status text do popredďż˝, aby se neschovďż˝valy za prekrďż˝vajďż˝cďż˝ vrstvu/dekorace ani na Androidu.
+- 2026-04-09: Ve shop obrazovce dej BUY i status text do popred�, aby se neschov�valy za prekr�vaj�c� vrstvu/dekorace ani na Androidu.
 
-- 2026-04-09: Pushni i poslednďż˝ ďż˝pravu shop vrstvy na online web / main.
+- 2026-04-09: Pushni i posledn� �pravu shop vrstvy na online web / main.
 
-- 2026-04-09: Mezi levely v Classic neschovďż˝vej sprďż˝vne Easy/Hard a nepovol zmenu difficulty; pred prvnďż˝m levelem dej Easy/Hard do prvnďż˝ho rďż˝dku a zmenďż˝i mezery. Ve shop screen posun BUY o 200 % vďż˝ďż˝ky tlacďż˝tka dolu a status text vycentruj doprostred pod pokladnu do spodnďż˝ cďż˝sti obrazovky.
+- 2026-04-09: Mezi levely v Classic neschov�vej spr�vne Easy/Hard a nepovol zmenu difficulty; pred prvn�m levelem dej Easy/Hard do prvn�ho r�dku a zmen�i mezery. Ve shop screen posun BUY o 200 % v��ky tlac�tka dolu a status text vycentruj doprostred pod pokladnu do spodn� c�sti obrazovky.
 
-- 2026-04-09: V shop posun tlacďż˝tko Buy o 100 % ďż˝ďż˝rky tlacďż˝tka doprava a pushni to na main / online web.
+- 2026-04-09: V shop posun tlac�tko Buy o 100 % ��rky tlac�tka doprava a pushni to na main / online web.
 
-- 2026-04-09: V shop posun tlacďż˝tko Buy o 100 % ďż˝ďż˝rky tlacďż˝tka doprava a pak udelej push na main / online web.
+- 2026-04-09: V shop posun tlac�tko Buy o 100 % ��rky tlac�tka doprava a pak udelej push na main / online web.
 
-- 2026-04-09: Priprav AAB a nezapomen navďż˝ďż˝it verzi.
+- 2026-04-09: Priprav AAB a nezapomen nav��it verzi.
 ---------------------------------------
-rozďż˝irovat je nebudu. mysleno, ze vďż˝dy budou jen tri medaile bronze/silver/gold.  a otďż˝zce cďż˝slo jedna nerozumďż˝m. jak to myslďż˝s?
+roz�irovat je nebudu. mysleno, ze v�dy budou jen tri medaile bronze/silver/gold.  a ot�zce c�slo jedna nerozum�m. jak to mysl�s?
 ---------------------------------------
-ano, udelej to takto. prďż˝padne pak budeme zamenovat. tak muďż˝eďż˝ zahďż˝jit implementaci
-Zatďż˝m nic nemen, jen povďż˝dej... Dokďż˝eďż˝ mi pripravit... (badges gfx2 slicing)
+ano, udelej to takto. pr�padne pak budeme zamenovat. tak mu�e� zah�jit implementaci
+Zat�m nic nemen, jen pov�dej... Dok�e� mi pripravit... (badges gfx2 slicing)
 
 ---------------------------------------
 ano, udelej to takto. pripadne pak budeme zamenovat. tak muzes zahajit implementaci
@@ -907,22 +907,22 @@ vzdyt tam mas soubor badges_inside_marked. na nem je presne videt, jak to ma vyp
 ano
 
 ---------------------------------------
-uz je to skoro presne ono. ted jeste posun nadpis o 50% vďż˝ďż˝ky toho textu nahoru
+uz je to skoro presne ono. ted jeste posun nadpis o 50% v��ky toho textu nahoru
 
 ---------------------------------------
-je to v poradku. ale na konci skrolovani je kus oken uriznutďż˝ a podle toho co je v gfx1 tam i kus - jedna kategorie - chybďż˝
+je to v poradku. ale na konci skrolovani je kus oken uriznut� a podle toho co je v gfx1 tam i kus - jedna kategorie - chyb�
 
 ---------------------------------------
-uz to nenďż˝ spatne zarizlďż˝, ale chybďż˝ mi tam kagegorie discovery
+uz to nen� spatne zarizl�, ale chyb� mi tam kagegorie discovery
 
 ---------------------------------------
-je tam ted nadpis kategorie, ale neneďż˝ tam okno s badges
+je tam ted nadpis kategorie, ale nene� tam okno s badges
 
 ---------------------------------------
-udelej celkovou velikost okna - skrolovanďż˝ - taky adaptivnďż˝. to znamenďż˝, aby byla tak velka, kolik je potreba podle poďż˝tu oken. aby, az tam neco dalsiho pridame, aby se to automaticky protahlo. pripadne, kdyz neco ubereme, aby se to zmensilo
+udelej celkovou velikost okna - skrolovan� - taky adaptivn�. to znamen�, aby byla tak velka, kolik je potreba podle po�tu oken. aby, az tam neco dalsiho pridame, aby se to automaticky protahlo. pripadne, kdyz neco ubereme, aby se to zmensilo
 
 ---------------------------------------
-ted koukam, ze v te badge strance nenďż˝ na EXIT (pravy hornďż˝ roh) navazany back tlaďż˝ďż˝tko
+ted koukam, ze v te badge strance nen� na EXIT (pravy horn� roh) navazany back tla��tko
 
 ---------------------------------------
 priprav aab
@@ -935,233 +935,180 @@ zapis do pravidel, kde se nachazi java
 mluvim o android verzi ze store
 
 -------------------
-ja myslel, ze aab co jsi naposledy pripravoval uz ma vsechny poslednďż˝ ďż˝pravy. tak dobďż˝e, na store je verze .30. na vercel koukam taky, ale chybďż˝ tam grafika. na locale grfiku vidim i to scrolluje. ale je tam to modrďż˝ pozadďż˝ a nenďż˝ tam opakujďż˝cďż˝ se wood pozadďż˝. tak to uprav na lokďż˝le, pak udelej push do main na lokal i na web a nďż˝sledne pďż˝iprav aab s povďż˝ďż˝enou verzďż˝
+ja myslel, ze aab co jsi naposledy pripravoval uz ma vsechny posledn� �pravy. tak dob�e, na store je verze .30. na vercel koukam taky, ale chyb� tam grafika. na locale grfiku vidim i to scrolluje. ale je tam to modr� pozad� a nen� tam opakuj�c� se wood pozad�. tak to uprav na lok�le, pak udelej push do main na lokal i na web a n�sledne p�iprav aab s pov��enou verz�
 
 -------------------
-zatďż˝m nic nedelej, jen ovďż˝ďż˝: a) obecne to nevadi, ale pri zpusteni na webu, je hernďż˝ okno hodne malďż˝. ma zjevnďż˝ pevnou velikost b) pďż˝estoze vidďż˝m, ze build na vercel je hotovy, tak tam stďż˝le chybďż˝ grafika a i tady je okno male. ma pevnďż˝ rozmďż˝ry na ďż˝iďż˝ku. nahrďż˝vďż˝m to na store, abych videl, jak to bude vypadat tam.
+zat�m nic nedelej, jen ov��: a) obecne to nevadi, ale pri zpusteni na webu, je hern� okno hodne mal�. ma zjevn� pevnou velikost b) p�estoze vid�m, ze build na vercel je hotovy, tak tam st�le chyb� grafika a i tady je okno male. ma pevn� rozm�ry na �i�ku. nahr�v�m to na store, abych videl, jak to bude vypadat tam.
 
 -------------------
-ja myslďż˝m, ze vercel je nďż˝jak ďż˝ďż˝steďż˝nďż˝. protoze v credits mi to ukazuje verzi 31
+ja mysl�m, ze vercel je n�jak ��ste�n�. protoze v credits mi to ukazuje verzi 31
 
 -------------------
-ale nebudou tam dve pozadďż˝ pres sebe? ale dobre, zkus to udďż˝lat. pak to pripadne vratime a udďż˝lďż˝me to jinak
+ale nebudou tam dve pozad� pres sebe? ale dobre, zkus to ud�lat. pak to pripadne vratime a ud�l�me to jinak
 
 -------------------
-udelej obojďż˝
-
--------------------
-ano
+udelej oboj�
 
 -------------------
 ano
+
 -------------------
 ano
 -------------------
-na lokale je uvodnďż˝ obrazovka zvlďż˝stne adaptivnďż˝.. zezaďż˝ďż˝tku vyplnuje celďż˝ otevďż˝enďż˝ okno od kraje ke kraji, ale v urďż˝itďż˝ okamďż˝ik, kdyz okno zvďż˝tďż˝uju (prodluzuju dolu), tak se to utrhne a zďż˝ďż˝ďż˝ (zmenďż˝ďż˝ se vďż˝ďż˝ka, ďż˝ďż˝ďż˝ka zďż˝stane stejnďż˝)
+ano
+-------------------
+na lokale je uvodn� obrazovka zvl�stne adaptivn�.. zeza��tku vyplnuje cel� otev�en� okno od kraje ke kraji, ale v ur�it� okam�ik, kdyz okno zv�t�uju (prodluzuju dolu), tak se to utrhne a z��� (zmen�� se v��ka, ���ka z�stane stejn�)
 -------------------
 ted se tam vubec neobjevilo to okno!
 -------------------
-je to porad stejny. nic se nezmenilo. nic nenďż˝ videt
+je to porad stejny. nic se nezmenilo. nic nen� videt
 -------------------
-uz to funguje. v poradku. ted na strance badges. dve veci a) tlaďż˝ďż˝tko pro back je pďż˝ďż˝liďż˝ nďż˝zko, zasahuje jen do poloviny tlaďż˝ďż˝tka a naopak saha hroznďż˝ dolďż˝ (viz obrďż˝zek zaďż˝rafovanďż˝ ďż˝ervenďż˝) a mďż˝lo by byt jen tam co je obtazene tlaďż˝ďż˝tko exit. b) badges_top je pďż˝ďż˝liďż˝ vysokďż˝. zmenďż˝i jeho vďż˝ďż˝ku o 33%. tady okno nenďż˝ od kraje ke kraji. asi by to nevadilo - ale musďż˝ tam bďż˝t videt ty "hrany" okna? zakrouzkoval jsem je na obou stranach obrazku 
+uz to funguje. v poradku. ted na strance badges. dve veci a) tla��tko pro back je p��li� n�zko, zasahuje jen do poloviny tla��tka a naopak saha hrozn� dol� (viz obr�zek za�rafovan� �erven�) a m�lo by byt jen tam co je obtazene tla��tko exit. b) badges_top je p��li� vysok�. zmen�i jeho v��ku o 33%. tady okno nen� od kraje ke kraji. asi by to nevadilo - ale mus� tam b�t videt ty "hrany" okna? zakrouzkoval jsem je na obou stranach obrazku 
 -------------------
-povedlo se jen napďż˝l. vyďż˝ku _top jsi zmensil v poradku. zmensil jsi i plochu tlaďż˝ďż˝tka overlay, ale je uplnďż˝ mimo. Odhaduji, ďż˝e bys mďż˝l hitbox posunout 3x jeho vďż˝ďż˝ku v pixelech smerem nahoru.
+povedlo se jen nap�l. vy�ku _top jsi zmensil v poradku. zmensil jsi i plochu tla��tka overlay, ale je upln� mimo. Odhaduji, �e bys m�l hitbox posunout 3x jeho v��ku v pixelech smerem nahoru.
 -------------------
-povedlo se jen napďż˝l. vyďż˝ku _top jsi zmensil v poradku. zmensil jsi i plochu tlaďż˝ďż˝tka overlay, ale je uplnďż˝ mimo. Odhaduji, ďż˝e bys mďż˝l hitbox posunout 3x jeho vďż˝ďż˝ku v pixelech smerem nahoru.
+povedlo se jen nap�l. vy�ku _top jsi zmensil v poradku. zmensil jsi i plochu tla��tka overlay, ale je upln� mimo. Odhaduji, �e bys m�l hitbox posunout 3x jeho v��ku v pixelech smerem nahoru.
 -------------------
-udelej ted commit do main, pushni zmďż˝ny lokal i online. NEpďż˝ipravuj aab. jen commit. Potom vyďż˝isti GFX2 branch a prepni do ni. Mďż˝ďż˝eme pak pouďż˝ivat zase GFX2 bez problďż˝mu ne?
+udelej ted commit do main, pushni zm�ny lokal i online. NEp�ipravuj aab. jen commit. Potom vy�isti GFX2 branch a prepni do ni. M��eme pak pou�ivat zase GFX2 bez probl�mu ne?
 -------------------
-ted postupne dodďż˝lďż˝me badges stranku. v tom vetsim prosotu pak budou pohďż˝ry, ten zatďż˝m nechďż˝me bďż˝t. ale pďż˝ipravďż˝me na svďż˝ mďż˝sta odznaky. budou vzdy jeden na policce. od spoda bude bronze nad nďż˝m silver a na vrchnďż˝ polici bude gold. pouďż˝ij tu grafiku, jakou pouďż˝ďż˝vas v gfx1. stejne jako vedle vzdy pis, kolik je potreba. pak jeste budeme psat i datum
+ted postupne dod�l�me badges stranku. v tom vetsim prosotu pak budou poh�ry, ten zat�m nech�me b�t. ale p�iprav�me na sv� m�sta odznaky. budou vzdy jeden na policce. od spoda bude bronze nad n�m silver a na vrchn� polici bude gold. pou�ij tu grafiku, jakou pou��vas v gfx1. stejne jako vedle vzdy pis, kolik je potreba. pak jeste budeme psat i datum
 -------------------
-skoro dobrďż˝. posun medaile a texty o 33% do leva (naznaďż˝eno na obrďż˝zku). zďż˝roven je potreba posunout kazdou medaily trochu nahoru. Beru vďż˝ďż˝ku medaile (v pixelech) jako mďż˝ďż˝ďż˝tko. Zlatou posun o 0,5x vďż˝ďż˝ku medaile nahoru, stďż˝ďż˝brnou o 0,8x vďż˝ďż˝ky a bronzovou o 1x vďż˝ďż˝ku medaile nahoru. (samozrejme posouvďż˝ medaily i text). tďż˝m ďż˝e posuneďż˝ medaily a text do leva, tak posun jen levďż˝ kraj. pravďż˝ zďż˝stane stejnďż˝ a tudďż˝ tam bude vďż˝ce prostoru na kazdďż˝m ďż˝adku pro text
+skoro dobr�. posun medaile a texty o 33% do leva (nazna�eno na obr�zku). z�roven je potreba posunout kazdou medaily trochu nahoru. Beru v��ku medaile (v pixelech) jako m���tko. Zlatou posun o 0,5x v��ku medaile nahoru, st��brnou o 0,8x v��ky a bronzovou o 1x v��ku medaile nahoru. (samozrejme posouv� medaily i text). t�m �e posune� medaily a text do leva, tak posun jen lev� kraj. prav� z�stane stejn� a tud� tam bude v�ce prostoru na kazd�m �adku pro text
 -------------------
 ne, je to v poradku.
 -------------------
-ne, je to v poradku. ten obrďż˝zek byl pozdďż˝ poslany. patril k tomu textu predtim. ted to sedďż˝ dobďż˝e
+ne, je to v poradku. ten obr�zek byl pozd� poslany. patril k tomu textu predtim. ted to sed� dob�e
 -------------------
-ted jeste jednu zmďż˝nu. u nadpisu odznakďż˝ nahore a u popisďż˝ odznakďż˝ dole je zjevne pravy okraj pďż˝ďż˝liďż˝ blďż˝zko a proto dochďż˝zďż˝ k zalamovďż˝nďż˝ textďż˝. posun okraj textďż˝ az k okraji okna (police) 
+ted jeste jednu zm�nu. u nadpisu odznak� nahore a u popis� odznak� dole je zjevne pravy okraj p��li� bl�zko a proto doch�z� k zalamov�n� text�. posun okraj text� az k okraji okna (police) 
 -------------------
-zadna zmďż˝na nenďż˝ videt. vypada to uplne stejne
+zadna zm�na nen� videt. vypada to uplne stejne
 -------------------
-Ted uz je to v poďż˝ďż˝dku. Ale jeste tedy dvďż˝ zmďż˝ny. a) dej vzdy vedle Bronze / Silver / Gold bďż˝lďż˝m mensďż˝m pďż˝smem nez je to "gold"  datum, kdy (pokud) byl odznak zďż˝skďż˝n. b) okno nenďż˝ od kraje ke kraji. kdyz hodne roztahnu okno, tak mďż˝ nakonec pevnou maximďż˝lnďż˝ ďż˝ďż˝rku a je videt jeho okraj - obrys. mďż˝ďż˝e bďż˝t od kraje ke kraji? jinďż˝ obrazovky _inside to tak majďż˝ 
+Ted uz je to v po��dku. Ale jeste tedy dv� zm�ny. a) dej vzdy vedle Bronze / Silver / Gold b�l�m mens�m p�smem nez je to "gold"  datum, kdy (pokud) byl odznak z�sk�n. b) okno nen� od kraje ke kraji. kdyz hodne roztahnu okno, tak m� nakonec pevnou maxim�ln� ��rku a je videt jeho okraj - obrys. m��e b�t od kraje ke kraji? jin� obrazovky _inside to tak maj� 
 -------------------
-Ted na tďż˝to strďż˝nce asi poslednďż˝ zmďż˝na. Zvďż˝tďż˝i velikost overlay tlaďż˝ďż˝tka exit o 33% ďż˝ďż˝ďż˝ky tlaďż˝ďż˝tka v pixelech do vďż˝ech stran. to znamena pďż˝idej tretinu v poďż˝tu pixelu nahoru, dolu, do leva i do prava. A nďż˝sledne posun tlaďż˝ďż˝tko o 50% vďż˝ďż˝ky tlaďż˝ďż˝tka v pixelech smďż˝rem dolďż˝.
+Ted na t�to str�nce asi posledn� zm�na. Zv�t�i velikost overlay tla��tka exit o 33% ���ky tla��tka v pixelech do v�ech stran. to znamena p�idej tretinu v po�tu pixelu nahoru, dolu, do leva i do prava. A n�sledne posun tla��tko o 50% v��ky tla��tka v pixelech sm�rem dol�.
 -------------------
-Ted je to hodnďż˝ spatnďż˝. ted je posunutďż˝ zcela mimo grafiku exit a je nesmyslnďż˝ dlouhďż˝. udďż˝lej to takto: at zabďż˝rďż˝ 20% badges_top plochy od levďż˝ho kraje. od hornďż˝ k dolnďż˝ ďż˝ďż˝sti _top sekce. tďż˝m by to mďż˝lo bďż˝t pďż˝esnďż˝. 
+Ted je to hodn� spatn�. ted je posunut� zcela mimo grafiku exit a je nesmysln� dlouh�. ud�lej to takto: at zab�r� 20% badges_top plochy od lev�ho kraje. od horn� k doln� ��sti _top sekce. t�m by to m�lo b�t p�esn�. 
 -------------------
-ve slozce gfx2 je sloďż˝ka trophy_pics a v nďż˝ jsou jpeg obrďż˝zky. prosďż˝m odstran z kaďż˝dďż˝ho z nich pozadďż˝, udďż˝lej z nich png
+ve slozce gfx2 je slo�ka trophy_pics a v n� jsou jpeg obr�zky. pros�m odstran z ka�d�ho z nich pozad�, ud�lej z nich png
 -------------------
-ted do badges_inside pďż˝idďż˝me pohďż˝ry. Zatďż˝m na zkouďż˝ku a na zamďż˝ďż˝enďż˝ dva. pďż˝ijdou do oznaďż˝enďż˝ho prostoru. Jak to zamďż˝ďż˝ďż˝ na jednom, budeďż˝ to moc kopďż˝rovat do vsech dalďż˝ďż˝ch. vďż˝dy bude pďż˝ipravenďż˝ soubor trophy_xxxx s nďż˝zvem podle odznakďż˝. ďż˝ili do sekce greedy pďż˝ijde trophy_greedy.png a tak dďż˝le. Je potďż˝eba, aby velikostnďż˝ sedel v tom prostoru - myslďż˝m, ďż˝e to znamenďż˝, ďż˝e jej musďż˝ zarovna k levďż˝mu okraji toho okna. Vďż˝ďż˝kovďż˝ bude prostredek png obrďż˝zku pďż˝ibliďż˝nďż˝ uprostred vďż˝ďż˝ky okna. zkus to a doladďż˝me
+ted do badges_inside p�id�me poh�ry. Zat�m na zkou�ku a na zam��en� dva. p�ijdou do ozna�en�ho prostoru. Jak to zam��� na jednom, bude� to moc kop�rovat do vsech dal��ch. v�dy bude p�ipraven� soubor trophy_xxxx s n�zvem podle odznak�. �ili do sekce greedy p�ijde trophy_greedy.png a tak d�le. Je pot�eba, aby velikostn� sedel v tom prostoru - mysl�m, �e to znamen�, �e jej mus� zarovna k lev�mu okraji toho okna. V��kov� bude prostredek png obr�zku p�ibli�n� uprostred v��ky okna. zkus to a dolad�me
 -------------------
-pďż˝idal jsem jeste bag collector, lucky, unlucky a untouchable. pridej je tam taky prosďż˝m. pozice obrďż˝zku je v poďż˝ďż˝dku, jen to zmultiplikuj
+p�idal jsem jeste bag collector, lucky, unlucky a untouchable. pridej je tam taky pros�m. pozice obr�zku je v po��dku, jen to zmultiplikuj
 -------------------
-pďż˝idal jsem jeste dalďż˝ďż˝ trophy. jsou ve stejnďż˝ sloďż˝ce, mďż˝ďż˝eďż˝ je pďż˝idat k souvisejďż˝cďż˝m badge oknďż˝m
+p�idal jsem jeste dal�� trophy. jsou ve stejn� slo�ce, m��e� je p�idat k souvisej�c�m badge okn�m
 -------------------
 uz jsem to prejmenoval, ale stale se neobjevil
 -------------------
-parada. je to tam. ted jeste jedna vďż˝c. zkus zobrazovanďż˝ trophy zvďż˝tďż˝it o 10%, aby lďż˝pe vyplnovaly pro nďż˝ urďż˝enďż˝ prostor. 
+parada. je to tam. ted jeste jedna v�c. zkus zobrazovan� trophy zv�t�it o 10%, aby l�pe vyplnovaly pro n� ur�en� prostor. 
 -------------------
-Ted udelej commit do main, online i web a pďż˝iprav aab
+Ted udelej commit do main, online i web a p�iprav aab
 -------------------
-naÄŤti kontext projektu hrrra z md souborĹŻ a z kodu
+načti kontext projektu hrrra z md souborů a z kodu
 
 -------------------
-ja jsem rucne menil soubory v projektu hrrra, jak v rootu, tak v assets. Je potreba, abys z toho co ted mĂˇme udÄ›lal main, commitnul to do lokalu i do online - slozka www je nynĂ­ asi hodnÄ› rozdĂ­lnĂˇ a nĂˇslednÄ› to jako vzdy i kopiroval do android. pro jistotu z toho ucelej 40 / 1.0.40
+ja jsem rucne menil soubory v projektu hrrra, jak v rootu, tak v assets. Je potreba, abys z toho co ted máme udělal main, commitnul to do lokalu i do online - slozka www je nyní asi hodně rozdílná a následně to jako vzdy i kopiroval do android. pro jistotu z toho ucelej 40 / 1.0.40
 
 -------------------
-na strance crossing mĂˇme background vrstvu, foreground, shop. a mraky. chtÄ›l bych ty mraky rozpohibovat. aby pluly po obloze (background). jemne vlnky z prava do prava
+na strance crossing máme background vrstvu, foreground, shop. a mraky. chtěl bych ty mraky rozpohibovat. aby pluly po obloze (background). jemne vlnky z prava do prava
 
 -------------------
-je potreba zamÄ›Ĺ™it mraky, aby kdyz se dostanou mimo obraz (mimo prostor, kde je crossing_background a crossing_foreground, aby se objevili na druhĂ© stranÄ› obrazovky a zaÄŤaly znouvu plout po obloze. plus dej kazdemu mraku o 15% rozdĂ­lnĂ© rychlosti
+je potreba zaměřit mraky, aby kdyz se dostanou mimo obraz (mimo prostor, kde je crossing_background a crossing_foreground, aby se objevili na druhé straně obrazovky a začaly znouvu plout po obloze. plus dej kazdemu mraku o 15% rozdílné rychlosti
 
 -------------------
-zapis pravidla, ze nebudes automaticky delat sync do www a android. pouze kdyz ti reknu, abys tak delal. pouze kdyz reknu "priprav www", tak zkopirujes do www a pouze pokud reknu "priprav aab", tak syncknes do android a nĂˇslednÄ› pĹ™ipravĂ­s aab balĂ­ÄŤek
+zapis pravidla, ze nebudes automaticky delat sync do www a android. pouze kdyz ti reknu, abys tak delal. pouze kdyz reknu "priprav www", tak zkopirujes do www a pouze pokud reknu "priprav aab", tak syncknes do android a následně připravís aab balíček
 
 -------------------
-udÄ›lej rozdĂ­l v rychlosti mrakĹŻ o 33%. zvÄ›tĹˇi trochu vlnÄ›nĂ­ - po sinusoidÄ›.
+udělej rozdíl v rychlosti mraků o 33%. zvětši trochu vlnění - po sinusoidě.
 
 -------------------
-na strane badges uprav velikost trophy_xx soubory... zvÄ›tĹˇi je o 10%
+na strane badges uprav velikost trophy_xx soubory... zvětši je o 10%
 
 -------------------
-Ted je posun o 50% velikosti obrĂˇzku v pixelech smÄ›rem nahoru
+Ted je posun o 50% velikosti obrázku v pixelech směrem nahoru
 
 -------------------
 a ted jeste o 5% do prava
 
 -------------------
-ty jsi zmÄ›nil velikost i trophy_clean. tu vrt na pĹŻvodnĂ­ velikost
+ty jsi změnil velikost i trophy_clean. tu vrt na původní velikost
 
 -------------------
 ted zvets trophy_xx (mimo clean) o 10%
 
 -------------------
-zvÄ›tĹˇi trophy_xx mimo clean o 10% jejich velikosti v pixelech
+zvětši trophy_xx mimo clean o 10% jejich velikosti v pixelech
 
 -------------------
 posun trophy_xx (mimo clean) o 33% do leva a pak o 33% dolu
 
 -------------------
-zmÄ›n pomÄ›r o kterĂ˝ jsi je posnul z 33 na 5%
+změn poměr o který jsi je posnul z 33 na 5%
 
 -------------------
 a ted o 5% nahoru
 
 -------------------
-tak udelej sync s www i android a potom priprav aab balĂ­ÄŤek. ovÄ›Ĺ™, Ĺľe verze je navĂ­ĹˇenĂˇ
+tak udelej sync s www i android a potom priprav aab balíček. ověř, že verze je navíšená
 
 -------------------
-na crossing page se ted pohybujĂ­ tĹ™i mraky. pridej tam pĹ™ibliĹľnÄ› v podobnĂ© vĂ˝Ĺˇce jeĹˇtÄ› jeden - vyber jedn z tech co uz tam jsou. cili se budou pohybovat ÄŤtyĹ™i. a tomu jeste o 50% zvÄ›tĹˇi vlnÄ›nĂ­ a o 20% rychlost b)  kdyz na androidu tapnu na znaÄŤku - sipku - button overlay zustane viditelny.  viz obrazek. uprav to, aby nebyl viditelny
+na crossing page se ted pohybují tři mraky. pridej tam přibližně v podobné výšce ještě jeden - vyber jedn z tech co uz tam jsou. cili se budou pohybovat čtyři. a tomu jeste o 50% zvětši vlnění a o 20% rychlost b)  kdyz na androidu tapnu na značku - sipku - button overlay zustane viditelny.  viz obrazek. uprav to, aby nebyl viditelny
 
 -------------------
 na androidu, na shop strance je kolem veci, ktere si lze koupit neustale videt button overlay. muzes jej odstranit?
 
 -------------------
-ted koukam na lokal a vidim kolem vĂ˝bÄ›ru skinu divny overlay. oznacil jsem ho cervene. je to button overlay? muzes ho odstranit? je jak v classic tak advanced page
+ted koukam na lokal a vidim kolem výběru skinu divny overlay. oznacil jsem ho cervene. je to button overlay? muzes ho odstranit? je jak v classic tak advanced page
 
 -------------------
-na lokale ty ramecky porad vidim (ostatnĂ­ jsem nezkousel). projdi veskery kod a uprav, aby pri najeti nad tlaÄŤĂ­to se neobjevila plocha - button overlay. na crossing page, kdyz najedu nad shop, tak se nic neobjevĂ­, ale kdyz najedu na rozcestnĂ­k tak ano. stejne tak v settings page, kdyz najedu na music i sound nebo i exit, tak se objevĂ­ ramecek. na androidu, kdyz zmenim sound, tak zĹŻstane videt button overlay kolem kytary nebo zzzap. odstran vsechny ty viditelne overlay
+na lokale ty ramecky porad vidim (ostatní jsem nezkousel). projdi veskery kod a uprav, aby pri najeti nad tlačíto se neobjevila plocha - button overlay. na crossing page, kdyz najedu nad shop, tak se nic neobjeví, ale kdyz najedu na rozcestník tak ano. stejne tak v settings page, kdyz najedu na music i sound nebo i exit, tak se objeví ramecek. na androidu, kdyz zmenim sound, tak zůstane videt button overlay kolem kytary nebo zzzap. odstran vsechny ty viditelne overlay
 
 -------------------
-zda se, ze je to vsude pryc, zĹŻstalo to jen na crossing page na rozcestinku. kdyz najedu na sipky na rozcestinku, tak stale vidim overlay
+zda se, ze je to vsude pryc, zůstalo to jen na crossing page na rozcestinku. kdyz najedu na sipky na rozcestinku, tak stale vidim overlay
 
 -------------------
-muzes ted pridat button overlay na levo na grafiku domecku - bude to shodne tlaÄŤĂ­tko jako je na rozcestĂ­nku classic a na pravĂ˝ domeÄŤek pĹ™idat tlaÄŤĂ­tko shodnĂ© s rozcestnĂ­kem settings. tak jak jsem naznacil na obrazku
+muzes ted pridat button overlay na levo na grafiku domecku - bude to shodne tlačítko jako je na rozcestínku classic a na pravý domeček přidat tlačítko shodné s rozcestníkem settings. tak jak jsem naznacil na obrazku
 
 -------------------
-udelej u techto dvou tlaÄŤĂ­tek ktere jsi pridal viditelnĂ© button overlay ÄŤervenĂ©, abych videl, kde ty  tlaÄŤĂ­tka tedka jsou. jen u techto dvou nad grafikou domek classic a domek settings
+udelej u techto dvou tlačítek ktere jsi pridal viditelné button overlay červené, abych videl, kde ty  tlačítka tedka jsou. jen u techto dvou nad grafikou domek classic a domek settings
 
 -------------------
-dobre a ted udelej kopii toho tlaÄŤĂ­tka dle toho obrazku co posilam. cili to tlaÄŤĂ­tko bude na rozcestnĂ­ku - tak jak je ted - a k tomu i na domecku. bude to kopiet tlaÄŤĂ­tka. novĂ© tlaÄŤĂ­tko se stejnou vlastnostĂ­ jako to pĹŻvodni
+dobre a ted udelej kopii toho tlačítka dle toho obrazku co posilam. cili to tlačítko bude na rozcestníku - tak jak je ted - a k tomu i na domecku. bude to kopiet tlačítka. nové tlačítko se stejnou vlastností jako to původni
 
 -------------------
-zvĂ˝razni tlaÄŤĂ­tka pro classic i settings. predpokladam, ze uvidim celkem 4 tlaÄŤĂ­tka. 2x pro settings a 2x pro classic
+zvýrazni tlačítka pro classic i settings. predpokladam, ze uvidim celkem 4 tlačítka. 2x pro settings a 2x pro classic
 
 -------------------
-vidim jen dve overlay. ne ctyri. chci aby byly jeste dve nad domecky, tam jak ukazujĂ­ Ĺˇipky 
+vidim jen dve overlay. ne ctyri. chci aby byly jeste dve nad domecky, tam jak ukazují šipky 
 
 -------------------
-stale tam nenĂ­. zarovnej classic button (ten druhy) na kraj, kde je v tuto chvili crossing_foreground, tak aby se jejich leve kraje dotykaly a umĂ­sti ho 20% vĂ˝Ĺˇky crossing_foreground dolu - tedy 20% vĂˇĹˇly od shora. totez pro button shop - akorat na pravy kraj a 20% od shora
+stale tam není. zarovnej classic button (ten druhy) na kraj, kde je v tuto chvili crossing_foreground, tak aby se jejich leve kraje dotykaly a umísti ho 20% výšky crossing_foreground dolu - tedy 20% vášly od shora. totez pro button shop - akorat na pravy kraj a 20% od shora
 
 -------------------
-tak to udÄ›lĂˇme jinak. zamÄ›r tlaÄŤĂ­tko settings. a to novĂ© posun o 100% ĹˇĂ­Ĺ™ky tlaÄŤĂ­tka do prava. u tlaÄŤĂ­tka classic zamÄ›Ĺ™ tlaÄŤĂ­tko classic jej posun o 100% vĂ˝Ĺˇky tlaÄŤĂ­tka nahoru a nĂˇslednÄ› o 300% ĹˇĂ­Ĺ™ky tlaÄŤĂ­tka do leva
+tak to uděláme jinak. zaměr tlačítko settings. a to nové posun o 100% šířky tlačítka do prava. u tlačítka classic zaměř tlačítko classic jej posun o 100% výšky tlačítka nahoru a následně o 300% šířky tlačítka do leva
 
 -------------------
-ty tlaÄŤĂ­tka tam nejsou
+ty tlačítka tam nejsou
 
 -------------------
-na obrazku znĂˇzornuji ĹˇĂ­rku tlaÄŤĂ­tek a kam posunout jejich kopii. to znamenĂˇ, tlaÄŤĂ­tko bude tam kde je a jeho kopie bude posunuta o ĹˇĂ­Ĺ™ku toho tlaÄŤĂ­tka na levo a to druhĂ© na pravo
+na obrazku znázornuji šírku tlačítek a kam posunout jejich kopii. to znamená, tlačítko bude tam kde je a jeho kopie bude posunuta o šířku toho tlačítka na levo a to druhé na pravo
 
 -------------------
-do leveho hornĂ­ho rohu - zarovnej podle crossing_clean-  dej tlaÄŤĂ­tko - velikost 256x256, kterĂ© otevĹ™e stranku classic. tlaÄŤĂ­tku dej cerveny overlay
+do leveho horního rohu - zarovnej podle crossing_clean-  dej tlačítko - velikost 256x256, které otevře stranku classic. tlačítku dej cerveny overlay
 
 -------------------
-do praveho hornĂ­ho rohu umĂ­sti tlaÄŤĂ­tko 256x256, ktere otevre stranku settings. ZĂˇroven odstran vsechny cervene overlay nad tlaÄŤĂ­tkama na strance crossing
+do praveho horního rohu umísti tlačítko 256x256, ktere otevre stranku settings. Zároven odstran vsechny cervene overlay nad tlačítkama na strance crossing
 
 -------------------
 zkopiruj vse do www a androidu, aby to bylo shodne s lokalem a pak priprav aab. nezapomen navysit verzi
 
 -------------------
-vytvoĹ™ novou vÄ›tev New a vsechny ostatnĂ­ z lokalu smaz (samozrejme krome main - tu nech)
+vytvoř novou větev New a vsechny ostatní z lokalu smaz (samozrejme krome main - tu nech)
 
 -------------------
-ejdriv jeste uprav - odstran overlay button, kterĂ˝ je na pravĂ©m kraji a je pro stranku settings. je prilis veliky a na mobilu prekryva button shop, do kterĂ©ho tĂ­m nejde vejĂ­t. je to tĂ­m, ze ten overlay ma pevnou velikost a nezmenĹˇuje se dle velikosti displeje. cili na lokale to je v poradku kdyz mam maximalizovanĂ© olkno, ale kdyz zmenĹˇĂ­m okno prohlizece, tak jej prekryje i na lokale
-
--------------------
-priprav to i pro pravy a pak udelej commit do main, local, web a pak priprav novy aab. nezapomen navĂ˝Ĺˇit verzi
-
--------------------
-a jeste ten pravy overlay zmensi o 50% - nech jej zarovnany s pravym krajem crossing_clean
-
--------------------
-2026-04-18: nic se nezmenilo. zkus jeste jednou, tentokrat vytvoĹ™ tlaÄŤĂ­tko, kterĂ© bude nad vsemi vrstavami, ktere bude mĂ­t overlay - ÄŤerveny, vzdy viditelnĂ˝ a dej to tlaÄŤĂ­tko pĹ™esne doprostred obrazovky. jeho velikost udelej 512s512 pixelu
-2026-04-18: ano, ted jsem to oveĹ™il. opravdu se to ukazuje v gfx1, ale ma to bĂ˝t v gfx2. vzdy vsechno dÄ›lĂˇme v gfx2 (pokud neĹ™eknu jinak - zapis to do pravidel). a nynĂ­ to tlaÄŤĂ­tko z gfx1 odstran a udÄ›lej ho v gfx2. ale zpĂˇtky v hornĂ­m rohu. velikost odpovĂ­dajĂ­cĂ­ tlaÄŤĂ­tku v levĂ© ÄŤĂˇsti obrazovky "back"
-2026-04-18: uz to otevĂ­rĂˇ potvrzovacĂ­ stranku. ale samoznĂ© tlaÄŤĂ­tko v hornĂ­m rohu nemĂˇ ĹľadnĂ˝ text. mÄ›lo by tam byt aspon Change User a nÄ›jakĂ© pozadĂ­. ted je tam jen cervenĂ˝ okraj a prohlednĂ© pozadĂ­
+2026-04-18: nic se nezmenilo. zkus jeste jednou, tentokrat vytvoř tlačítko, které bude nad vsemi vrstavami, ktere bude mít overlay - červeny, vzdy viditelný a dej to tlačítko přesne doprostred obrazovky. jeho velikost udelej 512s512 pixelu
+2026-04-18: ano, ted jsem to oveřil. opravdu se to ukazuje v gfx1, ale ma to být v gfx2. vzdy vsechno děláme v gfx2 (pokud neřeknu jinak - zapis to do pravidel). a nyní to tlačítko z gfx1 odstran a udělej ho v gfx2. ale zpátky v horním rohu. velikost odpovídající tlačítku v levé části obrazovky "back"
+2026-04-18: uz to otevírá potvrzovací stranku. ale samozné tlačítko v horním rohu nemá žadný text. mělo by tam byt aspon Change User a nějaké pozadí. ted je tam jen cervený okraj a prohledné pozadí
 2026-04-18: udelej ted comming do main do local i do www. potom se vrat na vetev new
-
-2026-04-19: over, ze v pravidlech je zapsano, ze vsechny zmeny se NESMI delat na main, ale vzdy na branch - nyni je to New. a zaroven, ze vsechny zmeny se delaji na gfx2 a nikoliv na gfx1
-
--------------------
-2026-04-19: chci, aby vzdy byl na locale main, kter? je overeny, ze funguje a vsechny zmeny, kter? budeme delat, delame na vedlejsi vetvi. Nyni chci pracovat na new
-
--------------------
-2026-04-19: kdyz se odemkne nova postava / hard mode / advanced mode, tak to ukaze v ten okamzik ve hre maly banner (je to jen napis) a melo by to ukazovat i na konci hry jeste vetsi upozorneni, podobne jako ze jsme z?skali novy badge. ale ja ho tam nevidim. je otazka, zda se neukazuje na gfx1
-
--------------------
-2026-04-19: ano
-
--------------------
-2026-04-19: a) kdyz na konci zobrazuje z?skane badges, tak tam nen? videt p??slu?n? obr?zek trophy_xxx viz obr?zky. b) oznamovac? obrazovka za z?sk?n? nov? postavi?ky se objev? v pr?b?hu hry a nikoliv na konci, stejn? jako se objevuj? info o z?skan?ch badges. c) kdyz dame continue a chceme koupit ?ivoty, tak n?m to neukazuje, kolik m?je aktu?ln? coins na n?kup
-
--------------------
-2026-04-19: smaz v firefox local storage moje z?skan? postavi?ky a medaile. abych je mohl sb?rat znovu
-
--------------------
-2026-04-19: proved 1.
-
--------------------
-
-2026-04-19: zvetši zobrazovaný obrázek získaneho badge (trophy_xxx) o 100% (u vsech obrázku, nejen tohoto jednoho)
-2026-04-19: Badge_unlocked_bckg.jpg použij tento obrázek z c:\-\_WeB_-\Hrrra\assets\gfx2\trophy_pics\ pro pozadí okna pro oznámení odemknutí získání odznaku
-2026-04-19: opet vycisti local storage - at vidim jednoduse odemknutelné a mužu se podívat, jak to vypada
-2026-04-19: napis
-2026-04-19: ok, priprav
-2026-04-19: ten obrázek Badge_unlocked_bckg.jpg je pokud se nepletu skryty za tím oknem, které je polopruhledné, nebo se pletu? pokud ano, tak to okno odstran, aby byl videt citste ten badge_xxx obrázek
-2026-04-19: kdyz je ve slozce trophy_pics obrázek trophy_xx - tedy príslušný obrázek ke získanému badge, tak ho zobrazís, kdyz není, tak zobrazis trophy_clean. Pokud tam není, zobrazuj opravdu jen ten trophy_clean. poku ale prislusný obrázek je, tak zobrazuj oba trophy_clean i trophy_xx
-2026-04-19: vycistil local storage
-2026-04-19: do game over screen, jak jsou na stranach okna se top scores, zamen to okno za obrazek gameover_scr_scores_bckg.jpg ze slozky c:\-\_WeB_-\Hrrra\assets\gfx2\ udelej to okno stejne velké, jako je nyní to levé okno s online top scores a to prave online top players udelej stejne velké jako to levé. Odstran zase ten soucasný button, aby se neprekrývaly
-2026-04-19: vycisti jeste jednou local storage. nezda se, ze by byla vycistena
-2026-04-19: i kdyz udelam ctrl F5, stale vidim odemcene badges
-2026-04-19: a) ted uz to fungovalo, zapis, jak jsi to udelal, ale nemusís mazat pro vercel a tu verzi co je ve slozce temp. b) game over screen. myslím, ze ty obrázky nejsou velke jak to puvodní okno. Mužeš ty okna udelat o 10% šírky obrázku širší (tedy 5% na každou stranu a o 10% výšky toho obrázku jej dole zkrátit? Prípadne tam dej puvodní okno, jak bylo, jen ho udelej 50% pruhledné - jako debug prvek
-2026-04-19: ted se to osklivé. ja chtel, abys ten roztáhnul o 10% do stran a zároven ho smrsknul o 10% ze spodní cásti nahoru - tedy aby byl o deset 10% kratší. ale co je nejhorsí, zmizelo all screen overlay button - nebo jak to bylo, kde slo budto kliknout kamkoliv a nebo stisknout mezerník a hra pokracovala z té obrazovky. ted kdyz tiskná mezerník tak se nic nestane. ani kdyz klikam. Projdi si zmen, co jsi ted udelal pri pridávání tech obrázku. zjevne jsi odstranil to tlacítko na pokracování
-2026-04-19: a) ted se neukládá local host. kdykoliv znovu nactu stranku (F5), tak musím se znovu prihlasit a hra si o mne nic nepamatuje b) uplne se rozbili badges info. puvodní obrázek pozadí je spatnej a stejne tak trophy_clean i trophy_xx je mimo
-2026-04-19: restartoval jsem firefox a uz prihlasení drzí
-2026-04-19: ted jsem získal nový skin a a) nezobrazil se malý banner ve hre - jen nápis v horní cásti herní obrazovky "xxx unlocked" (v tomto príade Vexi Unlocked) a ani se nakonci nezobrazil badge like zobrazení, jak jsme se domlouvali
-2026-04-19: ted, kdyz se na konci vykresloval badge, tak okno bylo v pořádku a na spravném místě se objevil trophy_clean a trophy_xx. pak byl efekt, kdy se objevil za co jsem badge získal a v tu chvíli se posunuly badge clean i badge xx opet dolů do rohu. kdyby zůstali na stejném místě a neo
-2026-04-19: ted, kdyz se na konci vykresloval badge, tak okno bylo v poradku a na spravnem miste se objevil trophy_clean a trophy_xx. pak byl efekt, kdy se objevil za co jsem badge získal a v tu chvíli se posunuly badge clean i badge xx opet dolů do rohu. kdyby zustaly na stejném místě a neposunuly se, tak je to v poradku. ale ony se prave ve chvili, kdy se objeví text, za co je badge ziskany, posunou
-2026-04-19: ted se zobrazuje banner i final info o odemknuté postavičce. jen v tom info okne použij stejné Badge_unlocked_bckg.jpg jako pro info o odemknutém badge
-2026-04-19: pročisti můj local storage
-2026-04-19: písmo se zmenšuje, ale badge_clean a badge_xx nikoliv
-2026-04-20: vycisti local storage
-2026-04-20: obrázky (badges_clean i badges_xx) se stále nezmenšují. respektive jednou se skokově zmenší, ale jen uplně málo a pak uz nikoliv. Ono při zmenšování se zmenší skokove jednou celý rám a obrázky. Pak už se frame zmenšuje tak jak má, ale obrázky poháru nikoliv
-2026-04-20: Udelej sync online, andorid, udelej commit do main local i online, priprav aab a pak se vrat do new. Nezapomen povysit verzi a overit, ze je v posledni verz i kontrola ze je k dispozici nova verze na store.
+2026-04-20: na webove casti se scores ukazuji dobre, pokud je okno vetsi. kdyz se okno zmensi na velikost, jak je to na mobilu, tak se ramecek zmensi tak, ze se tam nevejdou dva posledni radky. Zvetsi tu "zmensenou verzi" tak, aby byla o 10% vysky okna delsi smerem dolu. tedy nahore zustane na stejnem miste, ale dole se vejdou i ty dva radky, co tam nyni nejsou
+2026-04-20: ted se to zmensuje v poradku, ale chybi tam ten dreveny ramecek. je tam zase jen bile okno. Neni to bile okno overlay, ktery prekresluje ten ramecek?
+2026-04-20: a) tak jak se v urcitou chvíli to okno s rámečkem zmensí. tak tu zmenšenou velikost použij jako standard a at je to okno tak velké vždy b) zvětši okraje textu na pravé straně, aby čísla netekla do do grafiky dřeva (zvětši odsazení o 10% šířky řádku s textem) a změn aby byly v případně "online Top scores" a "Onine top players" vycentrované ty řádky.

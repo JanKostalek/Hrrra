@@ -86,22 +86,7 @@ body {
   overflow: hidden;
 }
 
-#skin-reward-overlay {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 31;
-  padding: 20px;
-  overflow: hidden;
-}
-
 #badge-reward-overlay.hidden {
-  display: none;
-}
-
-#skin-reward-overlay.hidden {
   display: none;
 }
 
@@ -130,10 +115,10 @@ body {
 .badge-reward-card {
   position: relative;
   z-index: 1;
-  width: min(520px, 88vw);
-  max-width: 88vw;
-  max-height: min(80vh, 680px);
-  padding: clamp(20px, 2.2vw, 28px) clamp(20px, 2.2vw, 30px) clamp(18px, 2vw, 24px);
+  width: min(560px, 92vw);
+  max-width: 92vw;
+  max-height: min(86vh, 760px);
+  padding: 28px 28px 24px;
   border-radius: 28px;
   border: 4px solid rgba(8, 41, 58, 0.9);
   background:
@@ -147,25 +132,9 @@ body {
   overflow: auto;
 }
 
-#badge-reward-overlay .badge-reward-card {
-  border: none;
-  box-shadow: none;
-  padding: 26px 34px 22px;
-  overflow: hidden;
-  background: url("assets/gfx2/trophy_pics/Badge_unlocked_bckg.jpg") center center / 100% 100% no-repeat;
-}
-
-#skin-reward-overlay .badge-reward-card {
-  border: none;
-  box-shadow: none;
-  padding: 26px 34px 22px;
-  overflow: hidden;
-  background: url("assets/gfx2/trophy_pics/Badge_unlocked_bckg.jpg") center center / 100% 100% no-repeat;
-}
-
 .badge-reward-kicker {
   margin: 0 0 8px 0;
-  font-size: clamp(13px, 1.5vw, 18px);
+  font-size: clamp(16px, 2.4vw, 20px);
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -175,17 +144,16 @@ body {
 
 .badge-reward-name {
   margin: 0;
-  font-size: clamp(30px, 5vw, 62px);
+  font-size: clamp(42px, 7vw, 70px);
   line-height: 0.98;
   color: #0d2b3f;
   opacity: 0;
   transform: translateY(14px);
-  overflow-wrap: anywhere;
 }
 
 .badge-reward-tier {
   margin: 12px 0 0 0;
-  font-size: clamp(16px, 2vw, 22px);
+  font-size: clamp(18px, 2.9vw, 26px);
   font-weight: 800;
   color: #496476;
   opacity: 0;
@@ -193,66 +161,45 @@ body {
 }
 
 .badge-reward-medal-wrap {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(18vw, 150px);
-  height: min(18vw, 150px);
-  min-height: 0;
-  margin: 10px auto 6px;
+  min-height: min(24vh, 220px);
+  margin: 16px 0 10px;
 }
 
-.badge-reward-trophy {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center center;
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-  filter: drop-shadow(0 12px 22px rgba(8, 41, 58, 0.26));
-}
-
-.badge-reward-trophy-base {
-  z-index: 1;
-}
-
-.badge-reward-trophy-art {
-  z-index: 2;
+.badge-reward-medal {
+  width: min(24vw, 180px);
+  height: min(24vw, 180px);
+  background-image: url("assets/badges/badges.png");
+  background-repeat: no-repeat;
+  background-size: 300% 100%;
+  background-position: center;
+  transform: scale(0.04);
   opacity: 0;
-  width: 78%;
-  height: 78%;
-}
-
-.badge-reward-trophy-art.is-visible {
-  opacity: 1;
+  filter: drop-shadow(0 12px 22px rgba(8, 41, 58, 0.26));
 }
 
 .badge-reward-goal {
   margin: 0;
-  font-size: clamp(18px, 2.5vw, 30px);
+  font-size: clamp(24px, 3.4vw, 34px);
   line-height: 1.18;
   color: #15364a;
   font-weight: 800;
   opacity: 0;
   transform: translateY(10px);
-  overflow-wrap: anywhere;
 }
 
 .badge-reward-progress {
   margin: 14px 0 0 0;
-  font-size: clamp(13px, 1.6vw, 18px);
+  font-size: clamp(16px, 2.2vw, 20px);
   color: #5b7485;
   opacity: 0.88;
 }
 
 .badge-reward-prompt {
   margin: 18px 0 0 0;
-  font-size: clamp(12px, 1.4vw, 16px);
+  font-size: clamp(15px, 2vw, 18px);
   color: #7a8892;
   opacity: 0.92;
 }
@@ -260,45 +207,6 @@ body {
 #badge-reward-overlay.is-revealing .badge-reward-backdrop,
 #badge-reward-overlay.is-ready .badge-reward-backdrop {
   opacity: 1;
-}
-
-#skin-reward-overlay .badge-reward-backdrop,
-#skin-reward-overlay .badge-reward-flash,
-#skin-reward-overlay .badge-reward-card {
-  pointer-events: none;
-}
-
-#skin-reward-overlay.is-revealing .badge-reward-backdrop,
-#skin-reward-overlay.is-ready .badge-reward-backdrop {
-  opacity: 1;
-}
-
-#skin-reward-overlay.is-revealing .badge-reward-flash {
-  animation: badge-reward-flash 760ms ease-out forwards;
-}
-
-#skin-reward-overlay.is-revealing .badge-reward-card {
-  animation: badge-reward-shake 420ms ease-out;
-}
-
-#skin-reward-overlay.is-revealing .badge-reward-name,
-#skin-reward-overlay.is-ready .badge-reward-name {
-  animation: badge-reward-copy-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) 60ms forwards;
-}
-
-#skin-reward-overlay.is-revealing .badge-reward-tier,
-#skin-reward-overlay.is-ready .badge-reward-tier {
-  animation: badge-reward-copy-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) 150ms forwards;
-}
-
-#skin-reward-overlay.is-revealing .badge-reward-trophy,
-#skin-reward-overlay.is-ready .badge-reward-trophy {
-  animation: badge-reward-medal-pop 760ms cubic-bezier(0.18, 0.82, 0.22, 1) 280ms forwards;
-}
-
-#skin-reward-overlay.is-revealing .badge-reward-goal,
-#skin-reward-overlay.is-ready .badge-reward-goal {
-  animation: badge-reward-copy-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) 540ms forwards;
 }
 
 #badge-reward-overlay.is-revealing .badge-reward-flash {
@@ -319,8 +227,8 @@ body {
   animation: badge-reward-copy-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) 150ms forwards;
 }
 
-#badge-reward-overlay.is-revealing .badge-reward-trophy,
-#badge-reward-overlay.is-ready .badge-reward-trophy {
+#badge-reward-overlay.is-revealing .badge-reward-medal,
+#badge-reward-overlay.is-ready .badge-reward-medal {
   animation: badge-reward-medal-pop 760ms cubic-bezier(0.18, 0.82, 0.22, 1) 280ms forwards;
 }
 
@@ -349,17 +257,17 @@ body {
 @keyframes badge-reward-medal-pop {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.04);
+    transform: scale(0.04);
   }
 
   55% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1.08);
+    transform: scale(1.08);
   }
 
   100% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
   }
 }
 
@@ -408,58 +316,51 @@ body {
   }
 
   .badge-reward-card {
-    width: min(90vw, 440px);
-    max-width: 90vw;
-    max-height: min(86vh, 620px);
-    padding: 14px 14px 12px;
+    width: min(94vw, 480px);
+    max-width: 94vw;
+    max-height: min(92vh, 680px);
+    padding: 16px 16px 14px;
     border-width: 3px;
     border-radius: 20px;
   }
 
   .badge-reward-kicker {
     margin-bottom: 4px;
-    font-size: clamp(11px, 2.6vw, 14px);
+    font-size: clamp(12px, 3vw, 16px);
     letter-spacing: 0.14em;
   }
 
   .badge-reward-name {
-    font-size: clamp(24px, 7.2vw, 42px);
+    font-size: clamp(28px, 8vw, 48px);
   }
 
   .badge-reward-tier {
     margin-top: 8px;
-    font-size: clamp(14px, 4vw, 20px);
+    font-size: clamp(16px, 4.5vw, 22px);
   }
 
   .badge-reward-medal-wrap {
-    width: min(24vw, 118px);
-    height: min(24vw, 118px);
-    min-height: 0;
-    margin: 10px auto 6px;
+    min-height: min(18vh, 120px);
+    margin: 10px 0 6px;
   }
 
-  .badge-reward-trophy {
-    width: 100%;
-    height: 100%;
-  }
-
-  .badge-reward-trophy-art {
-    width: 78%;
-    height: 78%;
+  .badge-reward-medal {
+    width: min(30vw, 132px);
+    height: min(30vw, 132px);
   }
 
   .badge-reward-goal {
-    font-size: clamp(16px, 4.6vw, 24px);
+    font-size: clamp(18px, 5vw, 28px);
   }
 
   .badge-reward-progress {
     margin-top: 10px;
-    font-size: clamp(12px, 3vw, 15px);
+    font-size: clamp(13px, 3.4vw, 16px);
   }
 
   .badge-reward-prompt {
     margin-top: 12px;
-    font-size: clamp(11px, 2.8vw, 14px);
+    font-size: clamp(12px, 3vw, 15px);
   }
 }
 
@@ -478,11 +379,11 @@ body {
 }
 
 #game-over-layout {
-  width: min(1480px, 96vw);
+  width: min(100%, 980px);
   display: grid;
-  grid-template-columns: minmax(320px, 360px) minmax(320px, 1fr) minmax(320px, 360px);
+  grid-template-columns: minmax(240px, 280px) minmax(180px, 1fr) minmax(240px, 280px);
   align-items: center;
-  gap: clamp(18px, 3vw, 36px);
+  gap: 12px;
   margin: 0 0 18px;
 }
 
@@ -502,14 +403,14 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: clamp(16px, 2vw, 26px);
+  padding: 2px 4px;
   width: 100%;
   text-align: center;
 }
 
 #final-current-run p {
-  margin: 14px 0;
-  font-size: clamp(22px, 3vw, 44px);
+  margin: 6px 0;
+  font-size: clamp(16px, 2.8vh, 28px);
   font-weight: 700;
   line-height: 1.05;
   overflow-wrap: anywhere;
@@ -518,8 +419,8 @@ body {
 }
 
 #final-current-run .final-economy-line {
-  margin: 8px 0;
-  font-size: clamp(17px, 2vw, 28px);
+  margin: 6px 0;
+  font-size: clamp(14px, 2.15vh, 22px);
   line-height: 1.15;
 }
 
@@ -595,7 +496,6 @@ body {
 }
 
 #continue-purchase-unit-price,
-#continue-purchase-wallet,
 #continue-purchase-total,
 #continue-purchase-status {
   margin: 8px 0;
@@ -696,63 +596,63 @@ body {
 
 #final-highscores {
   margin: 0;
-  padding: 34px 26px 30px;
+  padding: 10px 12px 24px;
   border: 0;
   border-radius: 18px;
-  background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 110% 90% no-repeat;
+  background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
   color: #10263b;
   width: 100%;
   max-width: none;
   text-shadow: none;
   text-align: left;
-  align-self: stretch;
+  align-self: center;
   display: flex;
   flex-direction: column;
   transform: none;
-  min-height: min(70vh, 760px);
-  box-shadow: none;
+  min-height: min(78vh, 760px);
 }
 
 #final-highscores h2 {
   margin: 0 0 8px 0;
-  font-size: clamp(24px, 3vw, 32px);
+  font-size: clamp(16px, 2vh, 22px);
+  text-align: center;
   text-shadow: none;
 }
 
 #final-highscores p {
   margin: 6px 0;
-  font-size: clamp(20px, 2.6vw, 28px);
+  font-size: clamp(12px, 1.8vh, 16px);
   text-shadow: none;
 }
 
 #final-online-highscore {
   margin: 0;
-  padding: 34px 26px 30px;
+  padding: 10px 12px 24px;
   border: 0;
   border-radius: 18px;
-  background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 110% 90% no-repeat;
+  background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
   color: #10263b;
   width: 100%;
   max-width: none;
   text-shadow: none;
   text-align: left;
-  align-self: stretch;
+  align-self: center;
   display: flex;
   flex-direction: column;
   transform: none;
-  min-height: min(70vh, 760px);
-  box-shadow: none;
+  min-height: min(78vh, 760px);
 }
 
 #final-online-highscore h2 {
   margin: 0 0 8px 0;
-  font-size: clamp(24px, 3vw, 32px);
+  font-size: clamp(16px, 2vh, 22px);
+  text-align: center;
   text-shadow: none;
 }
 
 #final-online-status {
   margin: 0 0 8px 0;
-  font-size: clamp(14px, 1.6vw, 18px);
+  font-size: clamp(12px, 1.8vh, 16px);
   color: #355161;
   text-shadow: none;
   text-align: center;
@@ -761,7 +661,7 @@ body {
 
 #final-top-scores-status {
   margin: 0 0 8px 0;
-  font-size: clamp(14px, 1.6vw, 18px);
+  font-size: clamp(12px, 1.8vh, 16px);
   color: #355161;
   text-shadow: none;
   text-align: center;
@@ -771,15 +671,16 @@ body {
 #final-top-scores-list,
 #final-online-list {
   margin: 0;
-  padding-left: 26px;
+  padding: 0 28px 0 22px;
   text-align: left;
   flex: 1 1 auto;
+  box-sizing: border-box;
 }
 
 #final-top-scores-list li,
 #final-online-list li {
   margin: 4px 0;
-  font-size: clamp(18px, 2.2vw, 24px);
+  font-size: clamp(12px, 1.8vh, 16px);
   color: #143043;
   text-shadow: none;
   display: flex;
@@ -1752,16 +1653,16 @@ body {
 .pre-run-gfx2-hotspot-classic-corner {
   left: 0;
   top: 0;
-  width: clamp(148px, 17vw, 256px);
-  height: clamp(148px, 17vw, 256px);
+  width: 256px;
+  height: 256px;
   z-index: 7;
 }
 
 .pre-run-gfx2-hotspot-settings-corner {
   right: 0;
   top: 0;
-  width: clamp(74px, 8.5vw, 128px);
-  height: clamp(74px, 8.5vw, 128px);
+  width: 256px;
+  height: 256px;
   z-index: 7;
 }
 
@@ -4674,35 +4575,39 @@ body.visual-theme-retro .brief-live::before {
   }
 
   #game-over-layout {
-    width: min(1120px, 96vw);
-    grid-template-columns: minmax(280px, 320px) minmax(240px, 1fr) minmax(280px, 320px);
-    gap: 16px;
+    width: min(100%, 980px);
+    grid-template-columns: minmax(240px, 280px) minmax(180px, 1fr) minmax(240px, 280px);
+    gap: 12px;
   }
 
   #final-current-run {
-    padding: 10px 8px;
+    padding: 2px 4px;
   }
 
   #final-current-run p {
-    font-size: clamp(28px, 3.8vw, 52px);
-    margin: 10px 0;
+    font-size: clamp(16px, 2.8vh, 28px);
+    margin: 6px 0;
   }
 
   #final-highscores,
   #final-online-highscore {
-    padding: 16px 18px 18px;
+    padding: 10px 16px 24px;
+    border: 0;
+    border-radius: 18px;
+    background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
   }
 
   #final-highscores h2,
   #final-online-highscore h2 {
-    font-size: clamp(20px, 2.5vw, 28px);
+    font-size: clamp(16px, 2vh, 22px);
+    text-align: center;
   }
 
   #final-top-scores-status,
   #final-online-status,
   #final-top-scores-list li,
   #final-online-list li {
-    font-size: clamp(16px, 1.7vw, 21px);
+    font-size: clamp(12px, 1.8vh, 16px);
   }
 
   .pre-run-card {
@@ -4769,7 +4674,7 @@ body.visual-theme-retro .brief-live::before {
 
   #game-over-layout {
     width: min(100%, 980px);
-    grid-template-columns: minmax(240px, 280px) minmax(180px, 1fr) minmax(240px, 280px);
+    grid-template-columns: minmax(170px, 240px) minmax(180px, 1fr) minmax(180px, 250px);
     gap: 12px;
   }
 
@@ -4791,15 +4696,19 @@ body.visual-theme-retro .brief-live::before {
   #final-online-highscore {
     width: 100%;
     justify-self: stretch;
-    padding: 12px 14px 14px;
-    align-self: stretch;
+    padding: 10px 16px 24px;
+    border: 0;
+    border-radius: 18px;
+    background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
+    align-self: center;
     transform: none;
-    min-height: min(68vh, 700px);
+    min-height: min(78vh, 760px);
   }
 
   #final-highscores h2,
   #final-online-highscore h2 {
     font-size: clamp(16px, 2vh, 22px);
+    text-align: center;
   }
 
   #final-top-scores-status,
@@ -4811,7 +4720,7 @@ body.visual-theme-retro .brief-live::before {
 
   #final-top-scores-list,
   #final-online-list {
-    padding-left: 18px;
+    padding: 0 36px 0 18px;
   }
 
   .pre-run-card {
@@ -4926,11 +4835,15 @@ body.visual-theme-retro .brief-live::before {
 
   #final-highscores {
     width: min(100%, 100%);
-    padding: 12px 14px;
+    padding: 10px 16px 24px;
+    border: 0;
+    border-radius: 18px;
+    background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
     transform: none;
   }
 
   #final-highscores h2 {
+    text-align: center;
     font-size: clamp(20px, 6vw, 26px);
   }
 
@@ -4940,11 +4853,15 @@ body.visual-theme-retro .brief-live::before {
 
   #final-online-highscore {
     width: min(100%, 100%);
-    padding: 12px 14px;
+    padding: 10px 16px 24px;
+    border: 0;
+    border-radius: 18px;
+    background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
     transform: none;
   }
 
   #final-online-highscore h2 {
+    text-align: center;
     font-size: clamp(20px, 6vw, 26px);
   }
 
@@ -5170,7 +5087,7 @@ body.visual-theme-retro .brief-live::before {
 
 @media (max-height: 520px) and (orientation: landscape) {
   #game-over {
-    padding: 10px 12px 14px;
+    padding: 10px 12px 20px;
     justify-content: flex-start;
   }
 
@@ -5194,7 +5111,7 @@ body.visual-theme-retro .brief-live::before {
   }
 
   #level-finished {
-    padding: 10px 12px 14px;
+    padding: 10px 12px 20px;
     justify-content: flex-start;
   }
 
@@ -5227,12 +5144,16 @@ body.visual-theme-retro .brief-live::before {
   #final-highscores {
     width: 100%;
     margin: 6px 0 2px 0;
-    padding: 8px 12px;
+    padding: 8px 16px 22px;
+    border: 0;
+    border-radius: 18px;
+    background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
   }
 
   #final-highscores h2 {
     margin-bottom: 4px;
     font-size: clamp(16px, 4.2vh, 22px);
+    text-align: center;
   }
 
   #final-top-scores-status {
@@ -5243,12 +5164,17 @@ body.visual-theme-retro .brief-live::before {
   #final-online-highscore {
     width: 100%;
     margin: 6px 0 2px 0;
-    padding: 8px 12px;
+    padding: 8px 16px 22px;
+    min-height: min(78vh, 760px);
+    border: 0;
+    border-radius: 18px;
+    background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
   }
 
   #final-online-highscore h2 {
     margin-bottom: 4px;
     font-size: clamp(16px, 4.2vh, 22px);
+    text-align: center;
   }
 
   #final-online-status {
@@ -5257,7 +5183,7 @@ body.visual-theme-retro .brief-live::before {
 
   #final-top-scores-list,
   #final-online-list {
-    padding-left: 18px;
+    padding: 0 36px 0 18px;
   }
 
   #final-top-scores-list li,
@@ -5411,6 +5337,16 @@ body.visual-theme-retro .brief-live::before {
     font-size: clamp(28px, 8vh, 40px);
   }
 
+  #final-continue-actions {
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  #final-continue-actions button {
+    min-height: 40px;
+    padding: 8px 14px;
+    font-size: clamp(13px, 2.4vh, 18px);
+  }
 
   .pre-run-shop-summary {
     gap: 8px;
