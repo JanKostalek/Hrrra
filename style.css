@@ -680,7 +680,7 @@ body {
 #final-top-scores-list li,
 #final-online-list li {
   margin: 4px 0;
-  font-size: clamp(12px, 1.8vh, 16px);
+  font-size: 12px;
   color: #143043;
   text-shadow: none;
   display: flex;
@@ -1439,13 +1439,13 @@ body {
 }
 
 .pre-run-gfx2-foreground {
-  z-index: 3;
+  z-index: 2;
   background: url("assets/gfx2/crossing_page/crossing_foreground.png") center center / 100% 100% no-repeat;
   display: block;
 }
 
 .pre-run-gfx2-animation-frame {
-  z-index: 4;
+  z-index: 5;
   background: none;
   background-position: center center;
   background-size: 100% 100%;
@@ -1460,7 +1460,7 @@ body {
 }
 
 .pre-run-gfx2-static-cloud {
-  z-index: 2;
+  z-index: 1;
   pointer-events: none;
   display: block;
   width: auto;
@@ -1475,7 +1475,7 @@ body {
 
 .pre-run-gfx2-shop-visual {
   position: absolute;
-  z-index: 5;
+  z-index: 3;
   display: block;
   pointer-events: none;
   width: auto;
@@ -1494,7 +1494,7 @@ body {
 
 .pre-run-gfx2-house {
   position: absolute;
-  z-index: 6;
+  z-index: 4;
   display: block;
   padding: 0;
   border: 0;
@@ -1522,7 +1522,7 @@ body {
   --hotspot-rotate: 0deg;
   border-radius: 0;
   clip-path: none;
-  z-index: 6;
+  z-index: 4;
   transition:
     transform 180ms ease,
     box-shadow 180ms ease,
@@ -1637,7 +1637,7 @@ body {
   top: 8.8%;
   width: 10.8%;
   height: 21.8%;
-  z-index: 7;
+  z-index: 4;
   transform: none;
 }
 
@@ -1646,7 +1646,7 @@ body {
   top: 8.8%;
   width: 10.8%;
   height: 21.8%;
-  z-index: 7;
+  z-index: 4;
   transform: none;
 }
 
@@ -1655,7 +1655,7 @@ body {
   top: 0;
   width: 256px;
   height: 256px;
-  z-index: 7;
+  z-index: 4;
 }
 
 .pre-run-gfx2-hotspot-settings-corner {
@@ -1663,7 +1663,7 @@ body {
   top: 0;
   width: 256px;
   height: 256px;
-  z-index: 7;
+  z-index: 4;
 }
 
 .pre-run-gfx2-hotspot-classic,
@@ -4607,7 +4607,7 @@ body.visual-theme-retro .brief-live::before {
   #final-online-status,
   #final-top-scores-list li,
   #final-online-list li {
-    font-size: clamp(12px, 1.8vh, 16px);
+    font-size: 12px;
   }
 
   .pre-run-card {
@@ -4715,7 +4715,7 @@ body.visual-theme-retro .brief-live::before {
   #final-online-status,
   #final-top-scores-list li,
   #final-online-list li {
-    font-size: clamp(12px, 1.8vh, 16px);
+    font-size: 12px;
   }
 
   #final-top-scores-list,
@@ -4904,7 +4904,7 @@ body.visual-theme-retro .brief-live::before {
   }
 
   #final-online-list li {
-    font-size: clamp(15px, 4.4vw, 21px);
+    font-size: 12px;
   }
 
   #pre-run-screen {
@@ -5189,7 +5189,7 @@ body.visual-theme-retro .brief-live::before {
   #final-top-scores-list li,
   #final-online-list li {
     margin: 2px 0;
-    font-size: clamp(12px, 2.9vh, 16px);
+    font-size: 12px;
   }
 
   #pre-run-screen {

@@ -189,99 +189,27 @@ Main tuning points:
       initialProgress: 0.73
     }
   ];
-  var PRE_RUN_GFX2_ENTRANCE_FRAMES = [
-    "assets/gfx2/entrance/frame-01.png",
-    "assets/gfx2/entrance/frame-02.png",
-    "assets/gfx2/entrance/frame-03.png",
-    "assets/gfx2/entrance/frame-04.png",
-    "assets/gfx2/entrance/frame-05.png",
-    "assets/gfx2/entrance/frame-06.png",
-    "assets/gfx2/entrance/frame-07.png",
-    "assets/gfx2/entrance/frame-08.png"
-  ];
-  var PRE_RUN_GFX2_CLASSIC_FRAMES = [
-    "assets/gfx2/classic/frame-01.png",
-    "assets/gfx2/classic/frame-02.png",
-    "assets/gfx2/classic/frame-03.png",
-    "assets/gfx2/classic/frame-04.png",
-    "assets/gfx2/classic/frame-05.png",
-    "assets/gfx2/classic/frame-06.png",
-    "assets/gfx2/classic/frame-07.png"
-  ];
-  var PRE_RUN_GFX2_ADVANCE_FRAMES = [
-    "assets/gfx2/advance/frame-01.png",
-    "assets/gfx2/advance/frame-02.png",
-    "assets/gfx2/advance/frame-03.png",
-    "assets/gfx2/advance/frame-04.png",
-    "assets/gfx2/advance/frame-05.png",
-    "assets/gfx2/advance/frame-06.png"
-  ];
-  var PRE_RUN_GFX2_SCORES_FRAMES = [
-    "assets/gfx2/scores/frame-01.png",
-    "assets/gfx2/scores/frame-02.png",
-    "assets/gfx2/scores/frame-03.png",
-    "assets/gfx2/scores/frame-04.png",
-    "assets/gfx2/scores/frame-05.png"
-  ];
-  var PRE_RUN_GFX2_BADGES_FRAMES = [
-    "assets/gfx2/badges/frame-01.png",
-    "assets/gfx2/badges/frame-02.png",
-    "assets/gfx2/badges/frame-03.png",
-    "assets/gfx2/badges/frame-04.png",
-    "assets/gfx2/badges/frame-05.png",
-    "assets/gfx2/badges/frame-06.png",
-    "assets/gfx2/badges/frame-07.png",
-    "assets/gfx2/badges/frame-08.png"
-  ];
-  var PRE_RUN_GFX2_SHOP_FRAMES = [
-    "assets/gfx2/shop/frame-01.png",
-    "assets/gfx2/shop/frame-02.png",
-    "assets/gfx2/shop/frame-03.png",
-    "assets/gfx2/shop/frame-04.png",
-    "assets/gfx2/shop/frame-05.png",
-    "assets/gfx2/shop/frame-06.png",
-    "assets/gfx2/shop/frame-07.png"
-  ];
-  var PRE_RUN_GFX2_SETTINGS_FRAMES = [
-    "assets/gfx2/settings/frame-01.png",
-    "assets/gfx2/settings/frame-02.png",
-    "assets/gfx2/settings/frame-03.png",
-    "assets/gfx2/settings/frame-04.png",
-    "assets/gfx2/settings/frame-05.png",
-    "assets/gfx2/settings/frame-06.png",
-    "assets/gfx2/settings/frame-07.png",
-    "assets/gfx2/settings/frame-08.png",
-    "assets/gfx2/settings/frame-09.png"
-  ];
-  var PRE_RUN_GFX2_CLASSIC_BACK_FRAMES = [
-    "assets/gfx2/classic_back/frame-01.png",
-    "assets/gfx2/classic_back/frame-02.png",
-    "assets/gfx2/classic_back/frame-03.png",
-    "assets/gfx2/classic_back/frame-04.png",
-    "assets/gfx2/classic_back/frame-05.png",
-    "assets/gfx2/classic_back/frame-06.png",
-    "assets/gfx2/classic_back/frame-07.png",
-    "assets/gfx2/classic_back/frame-08.png"
-  ];
-  var PRE_RUN_GFX2_ADVANCE_BACK_FRAMES = [
-    "assets/gfx2/advance_back/frame-01.png",
-    "assets/gfx2/advance_back/frame-02.png",
-    "assets/gfx2/advance_back/frame-03.png",
-    "assets/gfx2/advance_back/frame-04.png",
-    "assets/gfx2/advance_back/frame-05.png",
-    "assets/gfx2/advance_back/frame-06.png",
-    "assets/gfx2/advance_back/frame-07.png"
-  ];
-  var PRE_RUN_GFX2_BADGES_BACK_FRAMES = [
-    "assets/gfx2/badges_back/frame-01.png",
-    "assets/gfx2/badges_back/frame-02.png",
-    "assets/gfx2/badges_back/frame-03.png",
-    "assets/gfx2/badges_back/frame-04.png",
-    "assets/gfx2/badges_back/frame-05.png",
-    "assets/gfx2/badges_back/frame-06.png",
-    "assets/gfx2/badges_back/frame-07.png",
-    "assets/gfx2/badges_back/frame-08.png"
-  ];
+  var PRE_RUN_GFX2_WAIT_FRAMES = buildPreRunFrameSet("assets/gfx2/crossing_wait", 13, 0);
+  var PRE_RUN_GFX2_WAIT_ANIM_SECONDS = 4 / 3;
+  function buildPreRunFrameSet(basePath, totalFrames, lowerCaseCount) {
+    var frames = [];
+    var frameIndex;
+    for (frameIndex = 1; frameIndex <= totalFrames; frameIndex++) {
+      var extension = frameIndex <= lowerCaseCount ? ".png" : ".PNG";
+      frames.push(basePath + "/frame-" + ("0" + frameIndex).slice(-2) + extension);
+    }
+    return frames;
+  }
+  var PRE_RUN_GFX2_ENTRANCE_FRAMES = buildPreRunFrameSet("assets/gfx2/entrance", 10, 7);
+  var PRE_RUN_GFX2_CLASSIC_FRAMES = buildPreRunFrameSet("assets/gfx2/classic", 10, 7);
+  var PRE_RUN_GFX2_ADVANCE_FRAMES = buildPreRunFrameSet("assets/gfx2/advance", 10, 6);
+  var PRE_RUN_GFX2_SCORES_FRAMES = buildPreRunFrameSet("assets/gfx2/scores", 10, 5);
+  var PRE_RUN_GFX2_BADGES_FRAMES = buildPreRunFrameSet("assets/gfx2/badges", 10, 8);
+  var PRE_RUN_GFX2_SHOP_FRAMES = buildPreRunFrameSet("assets/gfx2/shop", 10, 7);
+  var PRE_RUN_GFX2_SETTINGS_FRAMES = buildPreRunFrameSet("assets/gfx2/settings", 10, 7);
+  var PRE_RUN_GFX2_CLASSIC_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/classic_back", 10, 7);
+  var PRE_RUN_GFX2_ADVANCE_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/advance_back", 10, 7);
+  var PRE_RUN_GFX2_BADGES_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/badges_back", 10, 8);
   var PRE_RUN_GFX2_BADGE_TROPHY_SLUGS = {
     bag_collector: true,
     big_spender: true,
@@ -296,8 +224,8 @@ Main tuning points:
     lucky: true,
     unlucky: true,
     untouchable: true
-  };
-  var BADGE_TROPHY_SLUGS_BY_SERIES_ID = {
+    };
+    var BADGE_TROPHY_SLUGS_BY_SERIES_ID = {
     bag_collector_single_run: "bag_collector",
     big_spender_all_runs: "big_spender",
     coin_collector_single_run: "coin_collector",
@@ -339,7 +267,10 @@ Main tuning points:
     "assets/gfx2/scores_back/frame-04.png",
     "assets/gfx2/scores_back/frame-05.png",
     "assets/gfx2/scores_back/frame-06.png"
-  ];
+    ];
+    var PRE_RUN_GFX2_SHOP_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/shop_back", 10, 7);
+    var PRE_RUN_GFX2_SETTINGS_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/settings_back", 10, 7);
+    var PRE_RUN_GFX2_SCORES_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/scores_back", 10, 6);
   var PRE_RUN_GFX2_ALL_FRAMES = Array.from(new Set(
     PRE_RUN_GFX2_ENTRANCE_FRAMES
       .concat(PRE_RUN_GFX2_CLASSIC_FRAMES)
@@ -354,6 +285,7 @@ Main tuning points:
       .concat(PRE_RUN_GFX2_SHOP_BACK_FRAMES)
       .concat(PRE_RUN_GFX2_SETTINGS_BACK_FRAMES)
       .concat(PRE_RUN_GFX2_SCORES_BACK_FRAMES)
+      .concat(PRE_RUN_GFX2_WAIT_FRAMES)
   ));
   var preRunGfx2FrameCache = Object.create(null);
   var preRunGfx2PreloadPromise = null;
@@ -4721,6 +4653,9 @@ Main tuning points:
     preRunGfx2ShopExitTime: 0,
     preRunGfx2SettingsExitActive: false,
     preRunGfx2SettingsExitTime: 0,
+    preRunGfx2IdleCountdown: 20,
+    preRunGfx2WaitActive: false,
+    preRunGfx2WaitAnimTime: 0,
     preRunGfx2ShopSelection: "coin-one",
     preRunGfx2ShopVisitCoinTotal: 0,
     preRunGfx2ShopStatus: "",
@@ -6072,6 +6007,15 @@ Main tuning points:
     state.preRunGfx2BackActive = false;
     state.preRunGfx2BackTime = 0;
     state.preRunGfx2BackFrames = null;
+    state.preRunGfx2IdleCountdown = 20;
+    state.preRunGfx2WaitActive = false;
+    state.preRunGfx2WaitAnimTime = 0;
+  }
+
+  function resetPreRunGfx2IdleCountdown() {
+    state.preRunGfx2IdleCountdown = 20;
+    state.preRunGfx2WaitActive = false;
+    state.preRunGfx2WaitAnimTime = 0;
   }
 
   function startPreRunGfx2BackAnimation(frames) {
@@ -6088,8 +6032,92 @@ Main tuning points:
     state.preRunGfx2SelectAnimEnabled = false;
     state.preRunGfx2EntranceAnimStarted = false;
     state.preRunGfx2EntranceAnimTime = 0;
+    resetPreRunGfx2IdleCountdown();
     setPreRunGfx2ForegroundFrame(0, frames);
     renderPreRunScreen();
+  }
+
+  if (preRunSelectGfx2El) {
+    preRunSelectGfx2El.addEventListener("pointerdown", function () {
+      if (state.preRunActive && state.preRunStep === "select" && isGfx2StartScreenEnabled()) {
+        resetPreRunGfx2IdleCountdown();
+      }
+    }, true);
+  }
+
+  document.addEventListener("keydown", function () {
+    if (state.preRunActive && state.preRunStep === "select" && isGfx2StartScreenEnabled()) {
+      resetPreRunGfx2IdleCountdown();
+    }
+  }, true);
+
+  function updatePreRunGfx2WaitAnimation(dt) {
+    if (!preRunGfx2ForegroundEl) {
+      return;
+    }
+
+    var canRunIdleWait = state.preRunActive &&
+      state.preRunStep === "select" &&
+      isGfx2StartScreenEnabled() &&
+      !state.preRunLaunchActive &&
+      !state.preRunGfx2BackActive &&
+      !state.preRunGfx2ClassicExitActive &&
+      !state.preRunGfx2AdvanceExitActive &&
+      !state.preRunGfx2ScoresExitActive &&
+      !state.preRunGfx2BadgesExitActive &&
+      !state.preRunGfx2ShopExitActive &&
+      !state.preRunGfx2SettingsExitActive;
+
+    if (!canRunIdleWait) {
+      if (state.preRunGfx2WaitActive) {
+        state.preRunGfx2WaitActive = false;
+        state.preRunGfx2WaitAnimTime = 0;
+      }
+      return;
+    }
+
+    if (state.preRunGfx2WaitActive) {
+      if (!arePreRunGfx2FramesReady(PRE_RUN_GFX2_WAIT_FRAMES)) {
+        preloadPreRunGfx2EntranceFrames();
+        setPreRunGfx2ForegroundFrame(0, PRE_RUN_GFX2_WAIT_FRAMES);
+        return;
+      }
+
+      if (dt > 0) {
+        state.preRunGfx2WaitAnimTime = Math.min(PRE_RUN_GFX2_WAIT_ANIM_SECONDS, state.preRunGfx2WaitAnimTime + dt);
+      }
+
+      var waitProgress = Math.max(
+        0,
+        Math.min(1, state.preRunGfx2WaitAnimTime / PRE_RUN_GFX2_WAIT_ANIM_SECONDS)
+      );
+      var waitFrameIndex = Math.min(
+        PRE_RUN_GFX2_WAIT_FRAMES.length - 1,
+        Math.floor(waitProgress * PRE_RUN_GFX2_WAIT_FRAMES.length)
+      );
+      setPreRunGfx2ForegroundFrame(waitFrameIndex, PRE_RUN_GFX2_WAIT_FRAMES);
+
+      if (waitProgress >= 1) {
+        state.preRunGfx2WaitActive = false;
+        state.preRunGfx2WaitAnimTime = 0;
+        state.preRunGfx2IdleCountdown = 15;
+        setPreRunGfx2ForegroundFrame(
+          getPreRunGfx2SelectFrames().length - 1,
+          getPreRunGfx2SelectFrames()
+        );
+      }
+      return;
+    }
+
+    if (state.preRunGfx2IdleCountdown > 0 && dt > 0) {
+      state.preRunGfx2IdleCountdown = Math.max(0, state.preRunGfx2IdleCountdown - dt);
+    }
+
+    if (state.preRunGfx2IdleCountdown <= 0) {
+      state.preRunGfx2WaitActive = true;
+      state.preRunGfx2WaitAnimTime = 0;
+      setPreRunGfx2ForegroundFrame(0, PRE_RUN_GFX2_WAIT_FRAMES);
+    }
   }
 
   function setPreRunGfx2ForegroundFrame(frameIndex, frames) {
@@ -10526,6 +10554,7 @@ Main tuning points:
       } else {
         updatePreRunGfx2EntranceAnimation(dt);
       }
+      updatePreRunGfx2WaitAnimation(dt);
     } else if (state.running && !state.adminPaused && !state.preRunActive) {
       update(dt);
     } else if (state.questionCoinAnimActive && !state.adminPaused && !state.preRunActive) {

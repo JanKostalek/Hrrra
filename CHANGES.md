@@ -55,3 +55,5 @@
 - Tightened the GFX2 crossing Advanced and Classic hitboxes by trimming 15% from both left and right sides, lowered the GFX2 Badges hitbox top edge by 15% of its own height, and re-enabled native scrolling inside the GFX2 badges scene on web and Android.
 
 - 2026-04-20: Game over score panels now use the smaller wood-backed frame as the default on web and mobile, with the score list pushed farther from the right edge and the panel headings centered.
+- 2026-04-20: Standardized the GFX2 crossing transition animations to 10 frames each, including entrance, classic, advance, shop, settings, and their back animations, while keeping playback duration unchanged.
+- 2026-04-20: Added a crossing idle wait animation using assets/gfx2/crossing_wait; it now plays after 20 seconds of no input on the GFX2 crossing screen, repeats every 15 seconds until the player clicks or triggers another transition, and now uses 13 frames with playback stretched by 33%.
