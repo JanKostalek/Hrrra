@@ -2322,39 +2322,59 @@ Main tuning points:
       return existing.promise;
     }
 
-    var image = new Image();
-    image.decoding = "async";
     var entry = {
-      image: image,
+      image: null,
       loaded: false,
       promise: null
     };
+    var fallbackSrc = src.slice(-4) === ".PNG"
+      ? src.slice(0, -4) + ".png"
+      : src.slice(-4) === ".png"
+        ? src.slice(0, -4) + ".PNG"
+        : "";
+    var triedFallback = false;
 
-    function finalizeLoad(resolve) {
+    function finalizeLoad(image, resolve) {
       var decodePromise = typeof image.decode === "function"
         ? image.decode().catch(function () {})
         : Promise.resolve();
       decodePromise.finally(function () {
+        entry.image = image;
         entry.loaded = image.naturalWidth > 0 && image.naturalHeight > 0;
         resolve(entry);
       });
     }
 
+    function finalizeFailure(resolve) {
+      if (!triedFallback && fallbackSrc && fallbackSrc !== src) {
+        triedFallback = true;
+        image.src = fallbackSrc;
+        return;
+      }
+      entry.loaded = false;
+      resolve(entry);
+    }
+
+    var image = new Image();
+    image.decoding = "async";
+
     entry.promise = new Promise(function (resolve) {
       image.addEventListener("load", function () {
-        finalizeLoad(resolve);
+        finalizeLoad(image, resolve);
       }, { once: true });
       image.addEventListener("error", function () {
-        entry.loaded = false;
-        resolve(entry);
+        finalizeFailure(resolve);
       }, { once: true });
       image.src = src;
       if (image.complete && image.naturalWidth > 0) {
-        finalizeLoad(resolve);
+        finalizeLoad(image, resolve);
       }
     });
 
     preRunGfx2FrameCache[src] = entry;
+    if (fallbackSrc) {
+      preRunGfx2FrameCache[fallbackSrc] = entry;
+    }
     return entry.promise;
   }
 
@@ -2474,7 +2494,17 @@ Main tuning points:
       return false;
     }
     return frames.every(function (src) {
-      return Boolean(preRunGfx2FrameCache[src] && preRunGfx2FrameCache[src].loaded);
+      var entry = preRunGfx2FrameCache[src];
+      if (entry && entry.loaded) {
+        return true;
+      }
+      var fallbackSrc = src.slice(-4) === ".PNG"
+        ? src.slice(0, -4) + ".png"
+        : src.slice(-4) === ".png"
+          ? src.slice(0, -4) + ".PNG"
+          : "";
+      var fallbackEntry = fallbackSrc ? preRunGfx2FrameCache[fallbackSrc] : null;
+      return Boolean(fallbackEntry && fallbackEntry.loaded);
     });
   }
 
@@ -10403,23 +10433,6 @@ Main tuning points:
       }
       if (event.key === " ") {
         input.jumpDown = false;
-      }
-    });
-
-    gameOverEl.addEventListener("click", function () {
-      tryForceFullscreen();
-      unlockAudioIfNeeded();
-      if (Date.now() < state.gameOverInputBlockUntil) {
-        return;
-      }
-      if (state.continueOfferActive) {
-        if (finalContinueBtn) {
-          finalContinueBtn.click();
-        }
-        return;
-      }
-      if (!state.running && !state.projectileDeathAnimActive && !state.teleportFinishAnimActive && !state.questionCoinAnimActive) {
-        openPreRunScreen();
       }
     });
 

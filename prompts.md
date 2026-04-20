@@ -1116,3 +1116,8 @@ vytvoř novou větev New a vsechny ostatní z lokalu smaz (samozrejme krome main
 2026-04-20: skladej crossing animace takto: crossing_background uplne v pozadi, pak crossing_foreground a uplne navrchu sekvenční PNG obrazky.
 2026-04-20: crossing scéna se sklada takto: crossing_background dole, clouds nad nim, crossing_foreground nad mraky, shop_house jako dalsi vrstva a sekvenční PNG uplne navrchu.
 2026-04-20: na crossing page, kdyz se 20 vteřin na nic neklikne, prehraj sekvenci ze slozky crossing_wait a opakuj ji kazdych 15 vterin, dokud se neklikne na neco jineho. Sekvence ma 13 frame a bezi o 33% dele.
+2026-04-20: na Androidu na game over screen ma fungovat continue jen pres skutecna tlacitka Continue a End Run; cely overlay uz nesmi fungovat jako click-to-continue fallback.
+
+-------------------
+
+na locale to taky funguje v porakdu
