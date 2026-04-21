@@ -1156,3 +1156,7 @@ na locale to taky funguje v porakdu
 
 -------------------
 2026-04-21 - Keep the continue purchase overlay at the exact 256:199 aspect ratio of buy_continue_clean.png.
+2026-04-21: Android splash screen switched to the JPG splash asset and `fitCenter` so the whole splash image stays visible on mobile.
+2026-04-21: Renamed the splash JPG to `hrrra_splash.jpg` so Android resource compilation accepts it.
+2026-04-22: Android launcher icon regenerated from `assets/game_icon.jpg` into the `mipmap-*` launcher and foreground resources.
+2026-04-22: Release version bumped to `1.0.50` for the new launcher icon and splash asset bundle.

@@ -88,3 +88,9 @@
 2026-04-21 - continue purchase overlay: tightened the text spacing, moved the content lower to clear the title area, added pixelated rendering for the panel art, and shifted the Buy/Back hitboxes down by one-third of their height.
 2026-04-21 - continue purchase overlay: resized the card to match the new 433x327 asset ratio and allowed a larger max width so the updated panel scales up without distortion.
 2026-04-21 - continue purchase overlay: constrained the card to the source image ratio (256:199) so the transparent panel no longer stretches vertically on short viewports.
+## 2026-04-21
+- Android splash screen now uses `hrrra_splash` with `fitCenter` so the full image stays visible on mobile instead of being cropped by `centerCrop`.
+- Android resource file was renamed to `hrrra_splash.jpg` because `res/drawable` filenames cannot contain `-`.
+## 2026-04-22
+- Android launcher icon now uses `assets/game_icon.jpg` as the source for all `ic_launcher` and `ic_launcher_foreground` density variants.
+- Release bumped to `1.0.50` so the new Android icon and splash assets can ship as a new bundle.
