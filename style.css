@@ -47,7 +47,7 @@ body {
   justify-content: flex-start;
   text-align: center;
   z-index: 30;
-  cursor: pointer;
+  cursor: default;
   padding: 10px 16px 16px;
   overflow-y: auto;
 }
@@ -454,30 +454,48 @@ body {
 }
 
 #final-continue-actions button {
-  min-height: 52px;
-  min-width: clamp(220px, 28vw, 340px);
-  padding: 10px 20px;
-  border: 2px solid #08293a;
-  border-radius: 999px;
-  font-size: clamp(18px, 2vw, 24px);
-  font-weight: 800;
+  position: relative;
+  display: block;
+  width: clamp(150px, 22vw, 340px);
+  min-width: 0;
+  aspect-ratio: 331 / 98;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  font-size: 0;
+  line-height: 0;
+  color: transparent;
+  overflow: visible;
+  z-index: 3;
 }
 
 #final-continue-actions button:disabled {
   cursor: default;
-  opacity: 0.58;
-  filter: grayscale(0.4);
+  opacity: 0.72;
+  filter: grayscale(0.25);
+}
+
+#final-continue-actions button img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+  opacity: 1;
 }
 
 #final-continue-btn {
-  background: #d8ffd4;
-  color: #123c1a;
+  filter: drop-shadow(0 2px 0 rgba(18, 60, 26, 0.18));
 }
 
 #final-end-run-btn {
-  background: #fff0c7;
-  color: #5a3812;
+  filter: drop-shadow(0 2px 0 rgba(90, 56, 18, 0.18));
 }
 
 #continue-purchase-overlay {
@@ -5356,14 +5374,14 @@ body.visual-theme-retro .brief-live::before {
   }
 
   #final-continue-actions {
-    gap: 8px;
-    margin-top: 10px;
+  gap: 8px;
+  margin-top: 10px;
   }
 
   #final-continue-actions button {
-    min-height: 40px;
-    padding: 8px 14px;
-    font-size: clamp(13px, 2.4vh, 18px);
+    width: clamp(138px, 40vw, 280px);
+    min-width: 0;
+    padding: 0;
   }
 
   .pre-run-shop-summary {
@@ -6290,12 +6308,20 @@ body.visual-theme-retro .brief-live::before {
   background: #d9eefc;
 }
 
+#mode-2-btn {
+  display: none !important;
+}
+
 .mode-lives {
   min-height: 18px;
   display: flex;
   justify-content: center;
   gap: 6px;
   pointer-events: none;
+}
+
+#mode-2-lives {
+  margin-top: 0;
 }
 
 .life-square {

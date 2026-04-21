@@ -200,14 +200,14 @@ Main tuning points:
     }
     return frames;
   }
-  var PRE_RUN_GFX2_ENTRANCE_FRAMES = buildPreRunFrameSet("assets/gfx2/entrance", 10, 7);
+  var PRE_RUN_GFX2_ENTRANCE_FRAMES = buildPreRunFrameSet("assets/gfx2/entrance", 10, 8);
   var PRE_RUN_GFX2_CLASSIC_FRAMES = buildPreRunFrameSet("assets/gfx2/classic", 10, 7);
   var PRE_RUN_GFX2_ADVANCE_FRAMES = buildPreRunFrameSet("assets/gfx2/advance", 10, 6);
   var PRE_RUN_GFX2_SCORES_FRAMES = buildPreRunFrameSet("assets/gfx2/scores", 10, 5);
   var PRE_RUN_GFX2_BADGES_FRAMES = buildPreRunFrameSet("assets/gfx2/badges", 10, 8);
   var PRE_RUN_GFX2_SHOP_FRAMES = buildPreRunFrameSet("assets/gfx2/shop", 10, 7);
-  var PRE_RUN_GFX2_SETTINGS_FRAMES = buildPreRunFrameSet("assets/gfx2/settings", 10, 7);
-  var PRE_RUN_GFX2_CLASSIC_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/classic_back", 10, 7);
+  var PRE_RUN_GFX2_SETTINGS_FRAMES = buildPreRunFrameSet("assets/gfx2/settings", 10, 9);
+  var PRE_RUN_GFX2_CLASSIC_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/classic_back", 10, 8);
   var PRE_RUN_GFX2_ADVANCE_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/advance_back", 10, 7);
   var PRE_RUN_GFX2_BADGES_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/badges_back", 10, 8);
   var PRE_RUN_GFX2_BADGE_TROPHY_SLUGS = {
@@ -269,7 +269,7 @@ Main tuning points:
     "assets/gfx2/scores_back/frame-06.png"
     ];
     var PRE_RUN_GFX2_SHOP_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/shop_back", 10, 7);
-    var PRE_RUN_GFX2_SETTINGS_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/settings_back", 10, 7);
+    var PRE_RUN_GFX2_SETTINGS_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/settings_back", 10, 9);
     var PRE_RUN_GFX2_SCORES_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/scores_back", 10, 6);
   var PRE_RUN_GFX2_ALL_FRAMES = Array.from(new Set(
     PRE_RUN_GFX2_ENTRANCE_FRAMES
@@ -7521,11 +7521,9 @@ Main tuning points:
       finalContinueActionsEl.classList.toggle("hidden", !state.continueOfferActive);
     }
     if (finalContinueBtn) {
-      finalContinueBtn.textContent = "Continue";
       finalContinueBtn.disabled = !canBuyContinue;
     }
     if (finalEndRunBtn) {
-      finalEndRunBtn.textContent = "End Run";
       finalEndRunBtn.disabled = false;
     }
     if (state.continuePurchaseOverlayActive) {
