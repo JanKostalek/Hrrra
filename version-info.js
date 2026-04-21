@@ -1,9 +1,9 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 45,
-  versionName: "1.0.45",
+  versionCode: 46,
+  versionName: "1.0.46",
   whatsNew: [
-  "Release bump to version 1.0.45.",
-  "Crossing wait now uses the new 13-frame sequence and plays 33% longer.",
-  "Web assets and Android packaging are synced for the release build."
+  "Release bump to version 1.0.46.",
+  "Continue and End Run buttons use the GFX2 artwork again.",
+  "Game-over and continue flows were cleaned up for responsive layouts."
 ]
 });

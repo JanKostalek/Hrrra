@@ -65,7 +65,7 @@
         <div id="mode-1-lives" class="mode-lives" aria-label="Jump Advanced lives"></div>
       </div>
       <div id="mode-2-wrap" class="mode-slot">
-        <div id="mode-2-btn" class="mode-badge active" aria-label="Jump Classic active">Jump Classic</div>
+        <div id="mode-2-btn" class="mode-badge active" aria-hidden="true"></div>
         <div id="mode-2-lives" class="mode-lives" aria-label="Jump Classic lives"></div>
       </div>
     </div>
@@ -565,8 +565,12 @@
           <p id="final-coins-earned" class="final-economy-line">Coins Collected: 0</p>
           <p id="final-wallet-balance" class="final-economy-line">Wallet Balance: 0</p>
           <div id="final-continue-actions" class="hidden">
-            <button id="final-continue-btn" type="button">Continue - 100 Coins</button>
-            <button id="final-end-run-btn" type="button">End Run</button>
+            <button id="final-continue-btn" type="button" aria-label="Continue - 100 Coins">
+              <img src="assets/gfx2/game_over_scr/continue.png" alt="" aria-hidden="true" />
+            </button>
+            <button id="final-end-run-btn" type="button" aria-label="End Run">
+              <img src="assets/gfx2/game_over_scr/end_run.png" alt="" aria-hidden="true" />
+            </button>
           </div>
           <p id="final-continue-status" class="final-economy-line hidden">Continue once for 100 coins.</p>
         </div>

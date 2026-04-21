@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 45,
-  "latestVersionName": "1.0.45",
+  "latestVersionCode": 46,
+  "latestVersionName": "1.0.46",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.45 build is available. Update now to get the latest release bump, synced web assets, and Android packaging refresh.",
+  "message": "A new Hrrra 1.0.46 build is available. Update now to get the latest release bump, synced web assets, and Android packaging refresh.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }
