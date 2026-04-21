@@ -1,5 +1,14 @@
 # Hrrra - Working Changes Log
 
+- 2026-04-21: Reworked the continue purchase overlay in `index.html` and `style.css` to remove the visible title, keep only the score/wallet/heart rows, and turn Buy/Back into invisible hitboxes aligned to the button art in `buy_continue_clean.png`.
+- 2026-04-21: Restyled the continue purchase overlay in `style.css` to use `buy_continue_clean.png` as the panel background and tightened the inner typography, hearts, and buttons to match the new framed layout.
+- 2026-04-21: Raised and compressed the game over center block in `style.css` by lifting `#final-current-run`, reducing `#final-continue-actions` spacing, and shrinking the Continue/End Run buttons so the score, actions, and cost text fit without vertical scrolling.
+- 2026-04-21: Shifted the game over top-score panels upward by 10% in `style.css` on the base layout and the game-over responsive breakpoints so they leave more vertical room beside the smaller banner.
+- 2026-04-21: Reduced the game over banner size in `style.css` for `.game-over-banner` and its responsive breakpoints so the top-score columns have more room beside the header art.
+- 2026-04-21: Replaced the game over screen's text header and mode label with a responsive PNG banner in `index.html`, wired by `game.js` via `getGameOverBannerAssetPath()` / `renderOnlineHighscoreUi()`, and styled in `style.css` with `.game-over-banner`.
+- 2026-04-21: Added a workflow rule in `WORKFLOW.md` to log every implemented change immediately with what changed, why, and where in the code/docs it happened.
+- 2026-04-21: Restored the `crossing_page` `cloudfortune` layer after briefly hiding it during overlay debugging, because the visible issue was not the cloud itself.
+- 2026-04-21: Hid the locked-state dark overlay on the GFX2 `Advanced` crossing hotspot so the button no longer shows a faint rectangular block above the sign while keeping the hotspot functional.
 - 2026-04-15: Fixed the GFX2 Lifetime Legends data so `First Runner` uses the gold medal sprite when unlocked instead of incorrectly showing the bronze medal art.
 - 2026-04-15: Nudged the enlarged shared `trophy_clean` base 10% of its own height downward and 10% of its own width leftward to better sit under the restored badge-specific trophy art.
 - 2026-04-15: Restored the original GFX2 badge `trophy_xxx` art sizing and instead enlarged the shared `trophy_clean` base by 20% while shifting it 10% of its own width to the right.
@@ -59,3 +68,10 @@
 - 2026-04-20: Added a crossing idle wait animation using assets/gfx2/crossing_wait; it now plays after 20 seconds of no input on the GFX2 crossing screen, repeats every 15 seconds until the player clicks or triggers another transition, and now uses 13 frames with playback stretched by 33%.
 - 2026-04-20: Fixed Android-only GFX2 frame casing mismatches in entrance, classic_back, settings, and settings_back so the release build no longer skips frame 08/09/10 on the store AAB.
 - 2026-04-20: Swapped the game over Continue/End Run buttons to the dedicated gfx2 artwork, removed the full-screen game over click fallback, and hid the Jump Classic badge so the lives row sits in its place.
+2026-04-21 - pre-run GFX2 shop: replaced the Buy pill button with the dedicated `assets/gfx2/shop_scr/buy.png` artwork and hid the inline label so only the graphic remains.
+2026-04-21 - continue purchase overlay: pushed the text block lower again by increasing the top padding, and halved the remaining vertical gaps between the rows.
+2026-04-21 - continue purchase overlay: pushed the text block lower by increasing the panel's top padding, tightened the vertical gaps between the text pairs, and made the invisible Buy/Back hitboxes taller toward the top.
+2026-04-21 - continue purchase overlay: moved the text block slightly lower, tightened the spacing between the top text pairs and the lower text pairs, and corrected the Buy/Back hitboxes to shift upward instead of downward.
+2026-04-21 - continue purchase overlay: tightened the text spacing, moved the content lower to clear the title area, added pixelated rendering for the panel art, and shifted the Buy/Back hitboxes down by one-third of their height.
+2026-04-21 - continue purchase overlay: resized the card to match the new 433x327 asset ratio and allowed a larger max width so the updated panel scales up without distortion.
+2026-04-21 - continue purchase overlay: constrained the card to the source image ratio (256:199) so the transparent panel no longer stretches vertically on short viewports.

@@ -45,6 +45,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  gap: 0;
   text-align: center;
   z-index: 30;
   cursor: default;
@@ -54,6 +55,17 @@ body {
 
 #game-over.hidden {
   display: none;
+}
+
+.game-over-banner {
+  display: block;
+  width: min(37vw, 380px);
+  max-width: 92vw;
+  height: auto;
+  margin: 0 auto 12px;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
 }
 
 #level-finished {
@@ -405,29 +417,20 @@ body {
   margin: 0 0 18px;
 }
 
-#final-board-label {
-  margin: 0 0 4px 0 !important;
-  color: #ffffff;
-  font-size: clamp(20px, 4vw, 42px) !important;
-  font-weight: 700;
-  text-align: center;
-  line-height: 1.05;
-  text-shadow: none;
-}
-
 #final-current-run {
   min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 2px 4px;
+  padding: 0 4px;
   width: 100%;
   text-align: center;
+  transform: translateY(-6%);
 }
 
 #final-current-run p {
-  margin: 6px 0;
+  margin: 4px 0;
   font-size: clamp(16px, 2.8vh, 28px);
   font-weight: 700;
   line-height: 1.05;
@@ -437,7 +440,7 @@ body {
 }
 
 #final-current-run .final-economy-line {
-  margin: 6px 0;
+  margin: 4px 0;
   font-size: clamp(14px, 2.15vh, 22px);
   line-height: 1.15;
 }
@@ -446,8 +449,8 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 #final-continue-actions.hidden {
@@ -457,7 +460,7 @@ body {
 #final-continue-actions button {
   position: relative;
   display: block;
-  width: clamp(150px, 22vw, 340px);
+  width: clamp(135px, 19.8vw, 306px);
   min-width: 0;
   aspect-ratio: 331 / 98;
   min-height: 0;
@@ -515,28 +518,42 @@ body {
 }
 
 #continue-purchase-card {
-  width: min(560px, 92vw);
-  padding: clamp(18px, 3vw, 28px);
-  border: 3px solid #08293a;
-  border-radius: 28px;
-  background: linear-gradient(180deg, rgba(255, 250, 237, 0.98), rgba(244, 255, 247, 0.98));
+  position: relative;
+  box-sizing: border-box;
+  width: min(560px, 82vw, calc((100vh - 36px) * 433 / 327));
+  aspect-ratio: 433 / 327;
+  padding: clamp(47px, 8.3vw, 66px) clamp(20px, 3.6vw, 30px) clamp(54px, 8.5vw, 88px);
+  border: 0;
+  border-radius: 0;
+  background:
+    url("assets/gfx2/game_over_scr/buy_continue_clean.png") center center / 100% 100% no-repeat;
+  image-rendering: pixelated;
   color: #08293a;
   text-align: center;
-  box-shadow: 0 22px 50px rgba(3, 16, 24, 0.34);
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
 }
 
-#continue-purchase-card h2 {
-  margin: 0 0 10px 0;
-  font-size: clamp(28px, 4vw, 42px);
-  line-height: 1.05;
+#continue-purchase-unit-price {
+  margin: 0;
+  font-size: clamp(14px, 1.8vw, 20px);
+  line-height: 1;
 }
 
-#continue-purchase-unit-price,
+#continue-purchase-wallet,
 #continue-purchase-total,
 #continue-purchase-status {
-  margin: 8px 0;
-  font-size: clamp(18px, 2.2vw, 26px);
-  line-height: 1.2;
+  margin: 0;
+  font-size: clamp(14px, 1.8vw, 20px);
+  line-height: 1;
+}
+
+#continue-purchase-wallet {
+  margin: 0;
 }
 
 #continue-purchase-hearts {
@@ -544,19 +561,27 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin: 18px 0 14px;
+  margin: 1px 0 0;
+}
+
+#continue-purchase-total {
+  margin-top: 0;
+}
+
+#continue-purchase-status {
+  margin-top: 0;
 }
 
 .continue-life-heart {
-  min-width: clamp(38px, 6.2vw, 56px);
-  min-height: clamp(38px, 6.2vw, 56px);
+  min-width: clamp(30px, 4.8vw, 42px);
+  min-height: clamp(30px, 4.8vw, 42px);
   border: none;
   border-radius: 0;
   background: transparent;
   color: transparent;
   -webkit-text-stroke: 2px #c64f6b;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
-  font-size: clamp(28px, 6vw, 46px);
+  font-size: clamp(22px, 4.4vw, 34px);
   line-height: 1;
   cursor: pointer;
   padding: 0;
@@ -572,38 +597,94 @@ body {
 }
 
 #continue-purchase-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 18px;
+  position: absolute;
+  left: clamp(12px, 10%, 48px);
+  right: clamp(12px, 10%, 48px);
+  bottom: clamp(14px, 5.5%, 28px);
+  transform: translateY(-33.333%);
+  transform-origin: center bottom;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(10px, 4%, 18px);
+  align-items: stretch;
 }
 
 #continue-purchase-actions button {
-  min-height: 52px;
-  min-width: clamp(180px, 26vw, 260px);
-  padding: 10px 18px;
-  border: 2px solid #08293a;
-  border-radius: 999px;
-  font-size: clamp(18px, 2vw, 24px);
-  font-weight: 800;
+  width: 100%;
+  min-height: clamp(34px, 5.5vw, 48px);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 0;
+  line-height: 0;
+  color: transparent;
   cursor: pointer;
+  opacity: 0;
+  box-shadow: none;
+  transform: scaleY(1.25);
+  transform-origin: center bottom;
 }
 
 #continue-purchase-buy {
-  background: #d8ffd4;
-  color: #123c1a;
+  grid-column: 1;
+  background: transparent;
 }
 
 #continue-purchase-back {
-  background: #fff0c7;
-  color: #5a3812;
+  grid-column: 2;
+  background: transparent;
 }
 
 #continue-purchase-actions button:disabled {
   cursor: default;
-  opacity: 0.58;
-  filter: grayscale(0.4);
+  opacity: 0;
+}
+
+@media (max-width: 700px) {
+  #continue-purchase-overlay {
+    padding: 14px;
+  }
+
+  #continue-purchase-card {
+    width: min(94vw, 560px, calc((100vh - 28px) * 433 / 327));
+    aspect-ratio: 433 / 327;
+    box-sizing: border-box;
+    padding: clamp(37px, 7.8vw, 55px) clamp(16px, 4vw, 24px) clamp(42px, 7vw, 68px);
+  }
+
+  #continue-purchase-unit-price,
+  #continue-purchase-wallet,
+  #continue-purchase-total,
+  #continue-purchase-status {
+    font-size: clamp(12px, 3.4vw, 16px);
+    line-height: 1;
+  }
+
+  #continue-purchase-hearts {
+    gap: 8px;
+    margin: 0;
+  }
+
+  .continue-life-heart {
+    min-width: clamp(24px, 7.2vw, 36px);
+    min-height: clamp(24px, 7.2vw, 36px);
+    font-size: clamp(18px, 6vw, 28px);
+  }
+
+  #continue-purchase-actions {
+    left: clamp(10px, 8.5%, 40px);
+    right: clamp(10px, 8.5%, 40px);
+    bottom: clamp(12px, 4.2%, 22px);
+    transform: translateY(-33.333%);
+    transform-origin: center bottom;
+    gap: clamp(8px, 3.5%, 14px);
+  }
+
+  #continue-purchase-actions button {
+    min-height: clamp(28px, 6.4vw, 40px);
+    transform: scaleY(1.25);
+  }
 }
 
 #level-finished h1 {
@@ -645,6 +726,7 @@ body {
   display: flex;
   flex-direction: column;
   transform: none;
+  transform: translateY(-10%);
   min-height: min(78vh, 760px);
 }
 
@@ -676,6 +758,7 @@ body {
   display: flex;
   flex-direction: column;
   transform: none;
+  transform: translateY(-10%);
   min-height: min(78vh, 760px);
 }
 
@@ -1598,6 +1681,12 @@ body {
 
 .pre-run-gfx2-hotspot.locked {
   background: rgba(72, 45, 10, 0.08);
+}
+
+.pre-run-gfx2-hotspot-advanced.locked {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .pre-run-gfx2-hotspot-advanced {
@@ -2823,22 +2912,19 @@ body {
   transform: translate(50%, 0);
   min-width: clamp(96px, 9.5vw, 132px);
   min-height: clamp(34px, 3.8vw, 46px);
-  padding: 4px 14px;
+  padding: 0;
   margin: 0;
-  border: 3px solid #0a2e19;
-  border-radius: 999px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.08)),
-    linear-gradient(180deg, #d9ffd7 0%, #8fe18b 100%);
-  color: #0f3517;
-  font-size: clamp(14px, 1.25vw, 19px);
-  font-weight: 900;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
+  border: 0;
+  border-radius: 0;
+  background: url("assets/gfx2/shop_scr/buy.png") center center / 100% 100% no-repeat;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
+  text-indent: -9999px;
   cursor: pointer;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 10px 18px rgba(5, 22, 34, 0.22);
+  box-shadow: none;
+  overflow: hidden;
+  image-rendering: pixelated;
 }
 
 .pre-run-shop-gfx2-buy-btn:hover {
@@ -3382,9 +3468,9 @@ body {
   .pre-run-shop-gfx2-buy-btn {
     min-width: 128px;
     min-height: 42px;
-    padding: 5px 18px;
-    border-width: 2px;
-    font-size: clamp(15px, 2.1vw, 19px);
+    padding: 0;
+    border-width: 0;
+    font-size: 0;
     left: 78%;
     top: 90.5%;
     transform: translate(50%, 0);
@@ -4606,9 +4692,9 @@ body.visual-theme-retro .brief-live::before {
 
 @media (max-width: 1280px),
 (max-height: 880px) {
-  #game-over h1 {
-    font-size: clamp(60px, 8vw, 92px);
-    margin-bottom: 12px;
+  .game-over-banner {
+    width: min(40vw, 340px);
+    margin-bottom: 10px;
   }
 
   #game-over-layout {
@@ -4709,6 +4795,11 @@ body.visual-theme-retro .brief-live::before {
     padding: 14px 10px 18px;
   }
 
+  .game-over-banner {
+    width: min(42vw, 310px);
+    margin-bottom: 10px;
+  }
+
   #game-over-layout {
     width: min(100%, 980px);
     grid-template-columns: minmax(170px, 240px) minmax(180px, 1fr) minmax(180px, 250px);
@@ -4717,12 +4808,13 @@ body.visual-theme-retro .brief-live::before {
 
   #final-current-run {
     order: 0;
-    padding: 2px 4px;
+    padding: 0 4px;
+    transform: translateY(-6%);
   }
 
   #final-current-run p {
     font-size: clamp(16px, 2.8vh, 28px);
-    margin: 6px 0;
+    margin: 4px 0;
   }
 
   #final-current-run .final-economy-line {
@@ -4738,7 +4830,7 @@ body.visual-theme-retro .brief-live::before {
     border-radius: 18px;
     background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
     align-self: center;
-    transform: none;
+    transform: translateY(-10%);
     min-height: min(78vh, 760px);
   }
 
@@ -4825,6 +4917,11 @@ body.visual-theme-retro .brief-live::before {
     padding: 18px 12px 24px;
   }
 
+  .game-over-banner {
+    width: min(44vw, 270px);
+    margin-bottom: 8px;
+  }
+
   #game-over-layout {
     width: min(100%, 760px);
     grid-template-columns: 1fr;
@@ -4833,11 +4930,12 @@ body.visual-theme-retro .brief-live::before {
 
   #final-current-run {
     order: -1;
-    padding: 8px 0 4px;
+    padding: 2px 0 0;
+    transform: translateY(-4%);
   }
 
   #final-current-run p {
-    margin: 6px 0;
+    margin: 4px 0;
     font-size: clamp(18px, 5.8vw, 30px);
   }
 
@@ -4848,16 +4946,6 @@ body.visual-theme-retro .brief-live::before {
   #level-finished {
     justify-content: flex-start;
     padding: 18px 12px 24px;
-  }
-
-  #game-over h1 {
-    margin-bottom: 14px;
-    font-size: clamp(34px, 10vw, 60px);
-  }
-
-  #game-over p {
-    margin: 6px 0;
-    font-size: clamp(14px, 4.4vw, 22px);
   }
 
   #level-finished h1 {
@@ -4876,7 +4964,7 @@ body.visual-theme-retro .brief-live::before {
     border: 0;
     border-radius: 18px;
     background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
-    transform: none;
+    transform: translateY(-10%);
   }
 
   #final-highscores h2 {
@@ -4894,7 +4982,7 @@ body.visual-theme-retro .brief-live::before {
     border: 0;
     border-radius: 18px;
     background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
-    transform: none;
+    transform: translateY(-10%);
   }
 
   #final-online-highscore h2 {
@@ -5156,6 +5244,11 @@ body.visual-theme-retro .brief-live::before {
     justify-content: flex-start;
   }
 
+  .game-over-banner {
+    width: min(35vw, 280px);
+    margin-bottom: 8px;
+  }
+
   #game-over-layout {
     width: min(100%, 1120px);
     grid-template-columns: minmax(240px, 320px) minmax(240px, 1fr) minmax(260px, 360px);
@@ -5163,11 +5256,12 @@ body.visual-theme-retro .brief-live::before {
   }
 
   #final-current-run {
-    padding: 2px 0;
+    padding: 0 0;
+    transform: translateY(-6%);
   }
 
   #final-current-run p {
-    margin: 4px 0;
+    margin: 3px 0;
     font-size: clamp(14px, 3.4vh, 24px);
   }
 
@@ -5178,22 +5272,6 @@ body.visual-theme-retro .brief-live::before {
   #level-finished {
     padding: 10px 12px 20px;
     justify-content: flex-start;
-  }
-
-  #game-over h1 {
-    margin-bottom: 8px;
-    font-size: clamp(26px, 5.2vh, 42px);
-    text-shadow: none;
-  }
-
-  #game-over p {
-    margin: 4px 0;
-    font-size: clamp(11px, 2.4vh, 16px);
-    text-shadow: none;
-  }
-
-  #final-board-label {
-    font-size: clamp(16px, 3vh, 24px) !important;
   }
 
   #level-finished h1 {
@@ -5234,6 +5312,7 @@ body.visual-theme-retro .brief-live::before {
     border: 0;
     border-radius: 18px;
     background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
+    transform: translateY(-10%);
   }
 
   #final-online-highscore h2 {
@@ -5527,9 +5606,9 @@ body.visual-theme-retro .brief-live::before {
   .pre-run-shop-gfx2-buy-btn {
     min-width: 128px;
     min-height: 42px;
-    padding: 5px 18px;
-    border-width: 2px;
-    font-size: clamp(15px, 2vh, 19px);
+    padding: 0;
+    border-width: 0;
+    font-size: 0;
     left: 78%;
     top: 90.5%;
     transform: translate(50%, 0);
