@@ -19,6 +19,9 @@ This file captures standing project workflow conventions so they do not get lost
 
 - Non-mechanic changes should be logged in `CHANGES.md`.
 - Any gameplay or balance behavior changes must also be logged in `MECHANICS.md`.
+- After each implemented change, append a short note to the relevant log immediately.
+- Log entries should include what changed, why it changed, and where it changed when possible.
+- Prefer file plus selector/function/section names over line numbers so the note stays useful after later edits.
 
 ## Android Mirror
 

@@ -48,7 +48,7 @@ Main tuning points:
   var touchControls = document.getElementById("touch-controls");
   var ctx = canvas.getContext("2d");
   var gameOverEl = document.getElementById("game-over");
-  var finalBoardLabelEl = document.getElementById("final-board-label");
+  var gameOverBannerEl = document.getElementById("game-over-banner");
   var finalScoreEl = document.getElementById("final-score");
   var finalRuntimeEl = document.getElementById("final-runtime");
   var finalCoinsEarnedEl = document.getElementById("final-coins-earned");
@@ -5554,6 +5554,12 @@ Main tuning points:
     ].join("");
   }
 
+  function getGameOverBannerAssetPath() {
+    var modeKey = state.gameMode === 1 ? "advanced" : "classic";
+    var difficultyKey = state.gameDifficulty === "hard" ? "hard" : "easy";
+    return "assets/gfx2/game_over_scr/gameover_" + modeKey + difficultyKey + ".png";
+  }
+
   function getSkinSelectionHintText() {
     var unopenedSkins = getUnopenedDiscoverableSkins();
     if (!unopenedSkins.length) {
@@ -6842,7 +6848,7 @@ Main tuning points:
   function renderOnlineHighscoreUi() {
     if (
       !finalHighscoresEl ||
-      !finalBoardLabelEl ||
+      !gameOverBannerEl ||
       !finalTopScoresStatusEl ||
       !finalTopScoresListEl ||
       !finalOnlineHighscoreEl ||
@@ -6853,8 +6859,8 @@ Main tuning points:
     }
     finalHighscoresEl.classList.toggle("hidden", false);
     finalOnlineHighscoreEl.classList.toggle("hidden", false);
-    var boardLabel = getOnlineLeaderboardLabel();
-    finalBoardLabelEl.textContent = boardLabel;
+    gameOverBannerEl.src = getGameOverBannerAssetPath();
+    gameOverBannerEl.alt = getOnlineLeaderboardLabel() + " game over";
     var topScoresStatusText = "";
     var topPlayersStatusText = "";
     if (state.onlineHighscore.loading) {

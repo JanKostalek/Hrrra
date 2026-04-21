@@ -1126,3 +1126,22 @@ na locale to taky funguje v porakdu
 
 2026-04-20: na Android AAB over, ze frame sekvence entrance, classic_back, settings a settings_back pouzivaji spravny casing souboru, aby se nevynechaval frame 08/09/10 na store verzi.
 2026-04-20: na game over screenu pouzij continue.png a end_run.png z assets/gfx2/game_over_scr jako grafiku tlacitek, odstran celoplosny click fallback na game over overlay a skryj Jump Classic badge tak, aby lives zustaly na jeho miste.
+2026-04-21: tak to tak odted dělej a zapis to i do pravidel k ostatnim. Tam jak je napsano co treba máš dělat, kdyz napíšu vycisti local storage nebo priprav aab. pokud sis ty pravidla nenacetl, udelej tak nyní
+2026-04-21: uprav game over screen tak, aby misto textu Game Over a nazvu modu/difficulty pouzival jednu responsivni grafiku z assets/gfx2/game_over_scr podle kombinace Classic Easy, Classic Hard, Advanced Easy a Advanced Hard
+2026-04-21: udelej ted sync do www i androidu, at se na to můžu podívat na emulatoru
+2026-04-21: udelat tu grafiku o 50% mensi, protoze zabira prostor, kam potrebuji, aby se vesly grafiky s topscore
+2026-04-21: sync prosím
+2026-04-21: posun ty topscore okna o 10% nahoru. a pak rovnou znovu udelej sync
+2026-04-21: zvedni ten blok s textem o score, tlačítky a spodním textem o ceně trochu nahoru. Přetéká to pod obrazovku a musí se posouvat. chci aby to bylo videt najednou. Případně to můžeš uděla tak, že tlačítka continue a end run zmenšís o 10% čímž se zvedne text each life costs..... a bude to vyřešené. rovnou sync
+2026-04-21: priprav continue purchase overlay tak, aby po kliknuti na continue pouzival buy_continue_clean.png a mel podobne rozlozeni jako druhy referencni obrazek
+2026-04-21: buy_continue_clean.png soubor jsem upravil. nyní ma opravdu průhledné pozadí. Nezobrazuj text How Many Lives, protoze uz je na pevno na obrazku. Tlačítka buy a back, jak jsi je tam dal ty, tam nejsou potřeba, stačí overlay na místo na obrázku, kde je grafika buy a back. - Stačí kdyz overlay bude o 20% užší a 33% vyšší. Zároven zmenší mezery mezi řádky textu. Celé okno at je responzivn. ja zmenšil jeho velikost.
+2026-04-21: ten obrázek co jsem nahral má strany 256x199 Zachovej ten poměr stran. ted je to uplně nesmyslné
+2026-04-21: pre-run GFX2 shop Buy button now uses assets/gfx2/shop_scr/buy.png and the inline label is hidden.
+2026-04-21: continue purchase overlay text block pushed lower again by increasing top padding, and the remaining row gaps are halved.
+2026-04-21: continue purchase overlay text block moved lower by increasing top padding, the row gaps are tighter, and the invisible Buy/Back hitboxes are taller upward.
+2026-04-21: continue purchase overlay text block moved slightly lower, the top and lower text pairs are tighter, and the Buy/Back hitboxes now shift upward instead of downward.
+2026-04-21: continue purchase overlay now has tighter text spacing, a lower text block, pixelated panel rendering, and the Buy/Back hitboxes shifted down by one-third of their height.
+2026-04-21: continue purchase overlay now matches the updated 433x327 buy_continue_clean.png ratio and can scale larger without distortion.
+
+-------------------
+2026-04-21 - Keep the continue purchase overlay at the exact 256:199 aspect ratio of buy_continue_clean.png.
