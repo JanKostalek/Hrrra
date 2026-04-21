@@ -9731,6 +9731,7 @@ Main tuning points:
     state.slowTimeLeft = 0;
     state.startX = spawnX;
     state.cameraX = 0;
+    world.generateAhead(state.cameraX, C.canvasWidth);
     state.doubleJumpTimeLeft = 0;
     state.tripleJumpTimeLeft = 0;
     state.storedDoubleJumpTimeLeft = 0;

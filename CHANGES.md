@@ -1,5 +1,14 @@
 # Hrrra - Working Changes Log
 
+- 2026-04-21 - release version bump: raised the app/web version from 1.0.48 to 1.0.49 and bumped Android versionCode to 49 so the next AAB and update check are treated as newer builds.
+- 2026-04-21 - gameplay start: pre-generated the initial world section during `restartGame()` so the READY preview and the live run use the same first platform instead of growing a new long segment after start.
+- 2026-04-21 - badges layout: changed `.pre-run-badges-gfx2-row` from viewport-width-based sizing to a fixed aspect-ratio box so the trophy art and tier stack scale with the panel itself instead of jumping when the grid switches between one and two columns.
+- 2026-04-21 - game over layout: removed the manual horizontal offset from the Game Over banner so it stays centered naturally instead of drifting to the right.
+- 2026-04-21 - game over layout: centered the Game Over banner on the page by anchoring it to the screen midpoint instead of applying a fixed horizontal offset.
+- 2026-04-21 - game over layout: moved the Game Over banner 10% to the right in `style.css` across the base layout and responsive breakpoints.
+- 2026-04-21 - game over layout: reduced the side score-panel width budget by 25% in `style.css` so the boards no longer intrude into the top Game Over banner.
+- 2026-04-21 - game over layout: doubled the side score-panel width budget in `style.css` so the top-score boards stay in their wider form on large windows instead of collapsing to the previously narrow version.
+- 2026-04-21 - game over layout: replaced the width-changing breakpoint overrides with one fluid `clamp()`-based grid so the top-score panels keep growing with the window and no longer jump back to a narrower width on wider viewports.
 - 2026-04-21: Reworked the continue purchase overlay in `index.html` and `style.css` to remove the visible title, keep only the score/wallet/heart rows, and turn Buy/Back into invisible hitboxes aligned to the button art in `buy_continue_clean.png`.
 - 2026-04-21: Restyled the continue purchase overlay in `style.css` to use `buy_continue_clean.png` as the panel background and tightened the inner typography, hearts, and buttons to match the new framed layout.
 - 2026-04-21: Raised and compressed the game over center block in `style.css` by lifting `#final-current-run`, reducing `#final-continue-actions` spacing, and shrinking the Continue/End Run buttons so the score, actions, and cost text fit without vertical scrolling.
@@ -70,6 +79,7 @@
 - 2026-04-20: Fixed Android-only GFX2 frame casing mismatches in entrance, classic_back, settings, and settings_back so the release build no longer skips frame 08/09/10 on the store AAB.
 - 2026-04-20: Removed the full-screen Game Over click fallback so Android now continues only through the actual Continue and End Run buttons, matching the desktop behavior.
 - 2026-04-20: Swapped the game over Continue/End Run buttons to the dedicated gfx2 artwork, removed the full-screen game over click fallback, and hid the Jump Classic badge so the lives row sits in its place.
+2026-04-21 - game over layout: moved the banner 10% left, pushed both top score panels 20% higher, and reduced the Continue/End Run button size by 10% in both dimensions.
 2026-04-21 - release version bump: raised the app/web version from 1.0.47 to 1.0.48 and bumped Android versionCode to 48 so the new AAB is recognized as newer on mobile.
 2026-04-21 - pre-run GFX2 shop: replaced the Buy pill button with the dedicated `assets/gfx2/shop_scr/buy.png` artwork and hid the inline label so only the graphic remains.
 2026-04-21 - continue purchase overlay: pushed the text block lower again by increasing the top padding, and halved the remaining vertical gaps between the rows.
