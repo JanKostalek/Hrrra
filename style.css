@@ -120,13 +120,12 @@ body {
   max-height: min(86vh, 760px);
   padding: 28px 28px 24px;
   border-radius: 28px;
-  border: 4px solid rgba(8, 41, 58, 0.9);
+  border: 0;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(245, 250, 255, 0.95)),
-    radial-gradient(circle at top, rgba(255, 241, 199, 0.68), rgba(255, 255, 255, 0) 55%);
+    url("assets/gfx2/trophy_pics/Badge_unlocked_bckg.jpg") center center / 100% 100% no-repeat;
+  background-color: transparent;
   box-shadow:
-    0 24px 54px rgba(4, 12, 22, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    0 24px 54px rgba(4, 12, 22, 0.28);
   text-align: center;
   transform: scale(0.98);
   overflow: auto;
@@ -144,8 +143,8 @@ body {
 
 .badge-reward-name {
   margin: 0;
-  font-size: clamp(42px, 7vw, 70px);
-  line-height: 0.98;
+  font-size: clamp(34px, 5.6vw, 56px);
+  line-height: 0.94;
   color: #0d2b3f;
   opacity: 0;
   transform: translateY(14px);
@@ -162,9 +161,6 @@ body {
 
 .badge-reward-medal-wrap {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: min(24vw, 180px);
   height: min(24vw, 180px);
   margin: 16px auto 10px;
@@ -172,25 +168,26 @@ body {
 
 .badge-reward-trophy {
   position: absolute;
-  display: block;
   left: 50%;
   top: 50%;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  object-position: center center;
-  transform: translate(-50%, -50%) scale(0.04);
+  transform: translate(-50%, -50%) scale(1);
   transform-origin: center center;
-  opacity: 0;
-  filter: drop-shadow(0 12px 22px rgba(8, 41, 58, 0.26));
+  user-select: none;
   pointer-events: none;
+  display: block;
 }
 
 .badge-reward-trophy-base {
+  opacity: 1;
   z-index: 1;
+  filter: drop-shadow(0 12px 22px rgba(8, 41, 58, 0.26));
 }
 
 .badge-reward-trophy-art {
+  opacity: 0;
   z-index: 2;
 }
 
@@ -209,14 +206,14 @@ body {
 }
 
 .badge-reward-progress {
-  margin: 14px 0 0 0;
+  margin: 8px 0 0 0;
   font-size: clamp(16px, 2.2vw, 20px);
   color: #5b7485;
   opacity: 0.88;
 }
 
 .badge-reward-prompt {
-  margin: 18px 0 0 0;
+  margin: 12px 0 0 0;
   font-size: clamp(15px, 2vw, 18px);
   color: #7a8892;
   opacity: 0.92;
@@ -245,8 +242,10 @@ body {
   animation: badge-reward-copy-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) 150ms forwards;
 }
 
-#badge-reward-overlay.is-revealing .badge-reward-trophy,
-#badge-reward-overlay.is-ready .badge-reward-trophy {
+#badge-reward-overlay.is-revealing .badge-reward-trophy-base,
+#badge-reward-overlay.is-ready .badge-reward-trophy-base,
+#badge-reward-overlay.is-revealing .badge-reward-trophy-art.is-visible,
+#badge-reward-overlay.is-ready .badge-reward-trophy-art.is-visible {
   animation: badge-reward-medal-pop 760ms cubic-bezier(0.18, 0.82, 0.22, 1) 280ms forwards;
 }
 
@@ -364,6 +363,8 @@ body {
   }
 
   .badge-reward-trophy {
+    width: 100%;
+    height: 100%;
   }
 
   .badge-reward-goal {
@@ -3482,7 +3483,7 @@ body {
 
 .pre-run-scores-grid-gfx2 .pre-run-scores-board-header h3 {
   color: #f7f2d8;
-  font-size: clamp(20px, 1.6vw, 28px);
+  font-size: clamp(18px, 1.4vw, 28px);
   text-align: center;
 }
 
@@ -3499,28 +3500,28 @@ body {
   left: 3.45%;
   top: 9.82%;
   width: 44.08%;
-  height: 40.26%;
+  height: 41.2%;
 }
 
 .pre-run-scores-board-jump_hard {
   left: 52.28%;
   top: 9.82%;
   width: 44.27%;
-  height: 40.26%;
+  height: 41.2%;
 }
 
 .pre-run-scores-board-full_easy {
   left: 3.45%;
   top: 54.72%;
   width: 44.08%;
-  height: 40.26%;
+  height: 41.2%;
 }
 
 .pre-run-scores-board-full_hard {
   left: 52.28%;
   top: 54.72%;
   width: 44.27%;
-  height: 40.26%;
+  height: 41.2%;
 }
 
 .pre-run-scores-board-header h3 {
@@ -3532,8 +3533,8 @@ body {
 }
 
 .pre-run-scores-status {
-  margin: 14px 0 0 0;
-  font-size: clamp(15px, 1.4vw, 19px);
+  margin: 10px 0 0 0;
+  font-size: clamp(12px, 1.2vw, 19px);
   line-height: 1.35;
   color: #355364;
   text-align: center;
@@ -3541,11 +3542,11 @@ body {
 
 .pre-run-scores-list {
   list-style: none;
-  margin: 14px 0 0 0;
+  margin: 10px 0 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .pre-run-scores-list li {
@@ -3553,9 +3554,10 @@ body {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 12px;
   align-items: baseline;
-  font-size: clamp(15px, 1.45vw, 21px);
+  font-size: clamp(11px, 1.1vw, 21px);
   color: #113450;
   font-weight: 700;
+  line-height: 1.04;
 }
 
 .pre-run-scores-list li span {
@@ -4943,6 +4945,34 @@ body.visual-theme-retro .brief-live::before {
     font-size: 12px;
   }
 
+  .pre-run-scores-grid-gfx2 .pre-run-scores-board-header h3 {
+    font-size: clamp(16px, 5vw, 22px);
+  }
+
+  .pre-run-scores-grid-gfx2 .pre-run-scores-status {
+    margin-top: 6px;
+    font-size: clamp(10px, 3.2vw, 13px);
+    line-height: 1.1;
+  }
+
+  .pre-run-scores-grid-gfx2 .pre-run-scores-list {
+    margin-top: 6px;
+    gap: 3px;
+  }
+
+  .pre-run-scores-grid-gfx2 .pre-run-scores-list li {
+    font-size: clamp(10px, 3vw, 14px);
+    line-height: 1;
+    gap: 8px;
+  }
+
+  .pre-run-scores-board-jump_easy,
+  .pre-run-scores-board-jump_hard,
+  .pre-run-scores-board-full_easy,
+  .pre-run-scores-board-full_hard {
+    height: 42.7%;
+  }
+
   #pre-run-screen {
     padding: 0;
     align-items: stretch;
@@ -5226,6 +5256,34 @@ body.visual-theme-retro .brief-live::before {
   #final-online-list li {
     margin: 2px 0;
     font-size: 12px;
+  }
+
+  .pre-run-scores-grid-gfx2 .pre-run-scores-board-header h3 {
+    font-size: clamp(15px, 1.2vw, 24px);
+  }
+
+  .pre-run-scores-grid-gfx2 .pre-run-scores-status {
+    margin-top: 6px;
+    font-size: clamp(9px, 1vw, 13px);
+    line-height: 1.05;
+  }
+
+  .pre-run-scores-grid-gfx2 .pre-run-scores-list {
+    margin-top: 6px;
+    gap: 3px;
+  }
+
+  .pre-run-scores-grid-gfx2 .pre-run-scores-list li {
+    font-size: clamp(9px, 1.05vw, 15px);
+    line-height: 1;
+    gap: 8px;
+  }
+
+  .pre-run-scores-board-jump_easy,
+  .pre-run-scores-board-jump_hard,
+  .pre-run-scores-board-full_easy,
+  .pre-run-scores-board-full_hard {
+    height: 43.4%;
   }
 
   #pre-run-screen {

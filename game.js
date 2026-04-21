@@ -2163,6 +2163,10 @@ Main tuning points:
     return shouldShowContinueForCurrentRun() && getWalletBalanceAfterRunPreview() >= getContinueCoinPrice();
   }
 
+  function canReturnToPreRunFromGameOver() {
+    return state.continueUsesThisRun > 0 && !state.continueOfferActive && !state.continuePurchaseOverlayActive;
+  }
+
   function getSelectedContinueLifeTotalPrice() {
     return Math.max(0, state.continuePurchaseSelectedLives * getContinueCoinPrice());
   }
@@ -7512,10 +7516,16 @@ Main tuning points:
         : "Wallet After Run: " + getWalletBalanceAfterRunPreview().toLocaleString("en-US");
     }
     if (finalContinueStatusEl) {
-      finalContinueStatusEl.textContent = canBuyContinue
-        ? "Each life costs " + continuePrice.toLocaleString("en-US") + " coins. Tap Continue to choose how many lives to buy."
-        : "Not enough coins to purchase a continue. Each life costs " + continuePrice.toLocaleString("en-US") + " coins.";
-      finalContinueStatusEl.classList.toggle("hidden", !state.continueOfferActive);
+      if (state.continueOfferActive) {
+        finalContinueStatusEl.textContent = canBuyContinue
+          ? "Each life costs " + continuePrice.toLocaleString("en-US") + " coins. Tap Continue to choose how many lives to buy."
+          : "Not enough coins to purchase a continue. Each life costs " + continuePrice.toLocaleString("en-US") + " coins.";
+      } else if (canReturnToPreRunFromGameOver()) {
+        finalContinueStatusEl.textContent = "Tap anywhere to return to the crossing page.";
+      } else {
+        finalContinueStatusEl.textContent = "";
+      }
+      finalContinueStatusEl.classList.toggle("hidden", !(state.continueOfferActive || canReturnToPreRunFromGameOver()));
     }
     if (finalContinueActionsEl) {
       finalContinueActionsEl.classList.toggle("hidden", !state.continueOfferActive);
@@ -8410,6 +8420,23 @@ Main tuning points:
     if (continuePurchaseOverlayEl) {
       continuePurchaseOverlayEl.addEventListener("click", function (event) {
         event.stopPropagation();
+      });
+    }
+    if (gameOverEl) {
+      gameOverEl.addEventListener("pointerdown", function (event) {
+        if (!canReturnToPreRunFromGameOver()) {
+          return;
+        }
+        if (event.target && event.target.closest) {
+          if (event.target.closest("#final-continue-actions") || event.target.closest("#continue-purchase-overlay")) {
+            return;
+          }
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        tryForceFullscreen();
+        unlockAudioIfNeeded();
+        openPreRunScreen();
       });
     }
     if (preRunBackBtn) {
