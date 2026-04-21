@@ -70,6 +70,7 @@
 - 2026-04-20: Fixed Android-only GFX2 frame casing mismatches in entrance, classic_back, settings, and settings_back so the release build no longer skips frame 08/09/10 on the store AAB.
 - 2026-04-20: Removed the full-screen Game Over click fallback so Android now continues only through the actual Continue and End Run buttons, matching the desktop behavior.
 - 2026-04-20: Swapped the game over Continue/End Run buttons to the dedicated gfx2 artwork, removed the full-screen game over click fallback, and hid the Jump Classic badge so the lives row sits in its place.
+2026-04-21 - release version bump: raised the app/web version from 1.0.47 to 1.0.48 and bumped Android versionCode to 48 so the new AAB is recognized as newer on mobile.
 2026-04-21 - pre-run GFX2 shop: replaced the Buy pill button with the dedicated `assets/gfx2/shop_scr/buy.png` artwork and hid the inline label so only the graphic remains.
 2026-04-21 - continue purchase overlay: pushed the text block lower again by increasing the top padding, and halved the remaining vertical gaps between the rows.
 2026-04-21 - continue purchase overlay: pushed the text block lower by increasing the panel's top padding, tightened the vertical gaps between the text pairs, and made the invisible Buy/Back hitboxes taller toward the top.

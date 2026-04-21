@@ -1136,6 +1136,7 @@ na locale to taky funguje v porakdu
 2026-04-21: priprav continue purchase overlay tak, aby po kliknuti na continue pouzival buy_continue_clean.png a mel podobne rozlozeni jako druhy referencni obrazek
 2026-04-21: buy_continue_clean.png soubor jsem upravil. nyní ma opravdu průhledné pozadí. Nezobrazuj text How Many Lives, protoze uz je na pevno na obrazku. Tlačítka buy a back, jak jsi je tam dal ty, tam nejsou potřeba, stačí overlay na místo na obrázku, kde je grafika buy a back. - Stačí kdyz overlay bude o 20% užší a 33% vyšší. Zároven zmenší mezery mezi řádky textu. Celé okno at je responzivn. ja zmenšil jeho velikost.
 2026-04-21: ten obrázek co jsem nahral má strany 256x199 Zachovej ten poměr stran. ted je to uplně nesmyslné
+2026-04-21: release version bumped from 1.0.47 to 1.0.48 and Android versionCode increased to 48 so the next AAB is recognized as newer.
 2026-04-21: pre-run GFX2 shop Buy button now uses assets/gfx2/shop_scr/buy.png and the inline label is hidden.
 2026-04-21: continue purchase overlay text block pushed lower again by increasing top padding, and the remaining row gaps are halved.
 2026-04-21: continue purchase overlay text block moved lower by increasing top padding, the row gaps are tighter, and the invisible Buy/Back hitboxes are taller upward.
