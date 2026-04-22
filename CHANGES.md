@@ -81,3 +81,4 @@
 2026-04-21 - continue purchase overlay: tightened the text spacing, moved the content lower to clear the title area, added pixelated rendering for the panel art, and shifted the Buy/Back hitboxes down by one-third of their height.
 2026-04-21 - continue purchase overlay: resized the card to match the new 433x327 asset ratio and allowed a larger max width so the updated panel scales up without distortion.
 2026-04-21 - continue purchase overlay: constrained the card to the source image ratio (256:199) so the transparent panel no longer stretches vertically on short viewports.
+- 2026-04-22: bumped release metadata to 1.0.51 / versionCode 51 so Android and the Vercel-hosted update check can detect a build newer than the deployed 1.0.50.

@@ -1,6 +1,6 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 48,
-  versionName: "1.0.48",
+  versionCode: 51,
+  versionName: "1.0.51",
   whatsNew: [
   "Release bump to version 1.0.48.",
   "Game-over overlays and skin unlock positioning were cleaned up.",

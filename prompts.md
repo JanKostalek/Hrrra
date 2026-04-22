@@ -1149,3 +1149,4 @@ vytvoř novou větev New a vsechny ostatní z lokalu smaz (samozrejme krome main
 2026-04-22: make the skin unlock overlay use the same fixed centered badge reward positioning so it no longer appears below the game window.
 -------------------
 2026-04-22: bump Android release metadata to 1.0.48 / version code 48 before preparing the next AAB.
+- 2026-04-22: bump release metadata to 1.0.51 / versionCode 51 after confirming the store already has 1.0.50, and keep the Vercel-facing version files in sync for mobile update detection.
