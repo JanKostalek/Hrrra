@@ -1137,3 +1137,15 @@ vytvoř novou větev New a vsechny ostatní z lokalu smaz (samozrejme krome main
 
 -------------------
 2026-04-21 - Keep the continue purchase overlay at the exact 256:199 aspect ratio of buy_continue_clean.png.
+-------------------
+2026-04-22: add a new persistent All Runs badge `Jumper` that counts every successful jump event across all runs with bronze/silver/gold goals at 1000 / 5000 / 10000.
+-------------------
+2026-04-22: double the font sizes on all score tables, including the pre-run Scores page and the game-over top score panels.
+-------------------
+2026-04-22: restore the game-over top score panel fonts to the original size while keeping the Scores page tables enlarged.
+-------------------
+2026-04-22: make the game-over background overlay less transparent so the underlying gameplay shows through less.
+-------------------
+2026-04-22: make the skin unlock overlay use the same fixed centered badge reward positioning so it no longer appears below the game window.
+-------------------
+2026-04-22: bump Android release metadata to 1.0.48 / version code 48 before preparing the next AAB.

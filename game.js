@@ -655,6 +655,17 @@ Main tuning points:
       ]
     },
     {
+      id: "jumper_all_runs",
+      category: "All Runs",
+      name: "Jumper",
+      description: "Count every jump input across all runs.",
+      tiers: [
+        { tier: "Bronze", value: "1000 jumps", sprite: "bronze" },
+        { tier: "Silver", value: "5000 jumps", sprite: "silver" },
+        { tier: "Gold", value: "10000 jumps", sprite: "gold" }
+      ]
+    },
+    {
       id: "fortunate_all_runs",
       category: "All Runs",
       name: "Fortunate",
@@ -838,7 +849,8 @@ Main tuning points:
         shieldTeleports: 0,
         cursedSeconds: 0,
         magnetPickups: 0,
-        runsStarted: 0
+        runsStarted: 0,
+        jumps: 0
       },
       best: {
         singleRunScore: 0,
@@ -3050,6 +3062,8 @@ Main tuning points:
         return [50, 250, 1000][tierIndex] || 0;
       case "unkillable_custommer_all_runs":
         return [1, 5, 25][tierIndex] || 0;
+      case "jumper_all_runs":
+        return [1000, 5000, 10000][tierIndex] || 0;
       case "fortunate_all_runs":
       case "doom_magnet_all_runs":
         return [50, 100, 200][tierIndex] || 0;
@@ -3172,6 +3186,8 @@ Main tuning points:
         return appendBadgeInlineProgress(formatBadgeCompactNumber(target) + " money bags", series, tierIndex);
       case "unkillable_custommer_all_runs":
         return appendBadgeInlineProgress("Use continue " + formatBadgeCompactNumber(target) + " times", series, tierIndex);
+      case "jumper_all_runs":
+        return appendBadgeInlineProgress(formatBadgeCompactNumber(target) + " jumps", series, tierIndex);
       case "lucky_single_run":
       case "fortunate_all_runs":
         return appendBadgeInlineProgress(formatBadgeCompactNumber(target) + " positive ? Coin wins", series, tierIndex);
@@ -3242,6 +3258,8 @@ Main tuning points:
         return "money bags";
       case "unkillable_custommer_all_runs":
         return "continues";
+      case "jumper_all_runs":
+        return "jumps";
       case "lucky_single_run":
       case "fortunate_all_runs":
         return "positive ? Coin wins";
@@ -3319,6 +3337,8 @@ Main tuning points:
         return Math.max(0, Math.floor(Number(economyStats.totalCoinsSpent) || 0));
       case "unkillable_custommer_all_runs":
         return badgeStats.lifetime.continuesUsed;
+      case "jumper_all_runs":
+        return badgeStats.lifetime.jumps;
       case "fortunate_all_runs":
         return badgeStats.lifetime.questionPositive;
       case "doom_magnet_all_runs":
@@ -3370,7 +3390,7 @@ Main tuning points:
 
   function formatBadgeCollectedNumber(series, tierIndex) {
     var value = Math.floor(Math.max(0, getBadgeCollectedValue(series, tierIndex)));
-    if (series.id === "greedy_single_run" || series.id === "endless_greed_all_runs") {
+    if (series.id === "greedy_single_run" || series.id === "endless_greed_all_runs" || series.id === "jumper_all_runs") {
       return value.toLocaleString("en-US");
     }
     return String(value);
@@ -10626,6 +10646,7 @@ Main tuning points:
       state.pendingStoredDoubleJumpTimeLeft = 0;
     }
     if (jumpStarted) {
+      incrementBadgeLifetimeStat("jumps", 1);
       playLevelSfx("levelJumpSoundPath", 45);
     }
     updatePlayerRotation(dt, jumpStartedInAir);

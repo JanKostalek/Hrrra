@@ -1,5 +1,11 @@
 # Hrrra - Working Changes Log
 
+- 2026-04-22: Added the persistent `Jumper` All Runs badge in `game.js`, counting every successful jump event across all runs with bronze/silver/gold goals at 1,000 / 5,000 / 10,000 jumps.
+- 2026-04-22: Doubled the font sizes on all score boards in `style.css`, including the pre-run Scores page tables and the game-over top score panels.
+- 2026-04-22: Restored the game-over top score panel font sizes in `style.css` back to their original scale while keeping the pre-run Scores page tables enlarged.
+- 2026-04-22: Increased the `#game-over` overlay opacity in `style.css` so the underlying gameplay is less visible behind the game-over panels.
+- 2026-04-22: Added the skin reward overlay to the shared badge reward overlay styles in `style.css` so skin unlock messages appear centered on the same fixed screen position as badge unlocks.
+- 2026-04-22: Bumped Android release metadata to `1.0.48` / version code `48` so the next AAB can ship as a newer build.
 - 2026-04-21: Reworked the continue purchase overlay in `index.html` and `style.css` to remove the visible title, keep only the score/wallet/heart rows, and turn Buy/Back into invisible hitboxes aligned to the button art in `buy_continue_clean.png`.
 - 2026-04-21: Restyled the continue purchase overlay in `style.css` to use `buy_continue_clean.png` as the panel background and tightened the inner typography, hearts, and buttons to match the new framed layout.
 - 2026-04-21: Raised and compressed the game over center block in `style.css` by lifting `#final-current-run`, reducing `#final-continue-actions` spacing, and shrinking the Continue/End Run buttons so the score, actions, and cost text fit without vertical scrolling.
