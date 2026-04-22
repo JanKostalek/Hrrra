@@ -1,14 +1,27 @@
 # Hrrra - Working Changes Log
 
-- 2026-04-21 - release version bump: raised the app/web version from 1.0.48 to 1.0.49 and bumped Android versionCode to 49 so the next AAB and update check are treated as newer builds.
-- 2026-04-21 - gameplay start: pre-generated the initial world section during `restartGame()` so the READY preview and the live run use the same first platform instead of growing a new long segment after start.
-- 2026-04-21 - badges layout: changed `.pre-run-badges-gfx2-row` from viewport-width-based sizing to a fixed aspect-ratio box so the trophy art and tier stack scale with the panel itself instead of jumping when the grid switches between one and two columns.
-- 2026-04-21 - game over layout: removed the manual horizontal offset from the Game Over banner so it stays centered naturally instead of drifting to the right.
-- 2026-04-21 - game over layout: centered the Game Over banner on the page by anchoring it to the screen midpoint instead of applying a fixed horizontal offset.
-- 2026-04-21 - game over layout: moved the Game Over banner 10% to the right in `style.css` across the base layout and responsive breakpoints.
-- 2026-04-21 - game over layout: reduced the side score-panel width budget by 25% in `style.css` so the boards no longer intrude into the top Game Over banner.
-- 2026-04-21 - game over layout: doubled the side score-panel width budget in `style.css` so the top-score boards stay in their wider form on large windows instead of collapsing to the previously narrow version.
-- 2026-04-21 - game over layout: replaced the width-changing breakpoint overrides with one fluid `clamp()`-based grid so the top-score panels keep growing with the window and no longer jump back to a narrower width on wider viewports.
+- 2026-04-22: Bumped release metadata to `1.0.52` / `versionCode 52` so the next Android and Vercel-facing build is newer than the deployed store version `1.0.51`.
+- 2026-04-22: Extended the level border overlay in `game.js` so `level1_border.png`, `level2_border.png`, `level3_border.png`, and `level4_border.png` all render above the gameplay while keeping the HUD text on top.
+- 2026-04-22: Shifted the center HUD `Double Jump` block in `game.js` slightly left by 10% of each label's own width, including the `Tripple Jump` and `Curse` lines beneath it.
+- 2026-04-22: Shifted the left-side HUD `Score` and `Max Score` labels in `game.js` 50% of their measured width to the right after shrinking them, keeping the smaller font size but restoring more balanced placement.
+- 2026-04-22: Reduced the left-side HUD `Score` and `Max Score` text in `game.js` by about 33% while keeping their shifted alignment intact.
+
+- 2026-04-22: Shifted the left-side HUD Score and Max Score labels in game.js left by 33% of their measured text width so the top-left block lines up better with the rest of the HUD.
+
+- 2026-04-22: Shifted the right-side HUD Level and Speed labels in game.js left by half of their own measured text width so they sit more centrally without moving the whole column.
+
+- 2026-04-22: Nudged the mode-switch life hearts in style.css one heart-height back up after the larger downward/rightward offset, keeping the rest of the top bar unchanged.
+
+- 2026-04-22: Moved the mode-switch life hearts in style.css down by one heart-height so the HUD lives row sits lower without changing the rest of the top bar.
+
+- 2026-04-22: Added the `Level1_border.png` canvas overlay in `game.js` so Level 1 can show a framed playfield above the gameplay while keeping the HUD text drawn on top.
+
+- 2026-04-22: Added the persistent `Jumper` All Runs badge in `game.js`, counting every successful jump event across all runs with bronze/silver/gold goals at 1,000 / 5,000 / 10,000 jumps.
+- 2026-04-22: Doubled the font sizes on all score boards in `style.css`, including the pre-run Scores page tables and the game-over top score panels.
+- 2026-04-22: Restored the game-over top score panel font sizes in `style.css` back to their original scale while keeping the pre-run Scores page tables enlarged.
+- 2026-04-22: Increased the `#game-over` overlay opacity in `style.css` so the underlying gameplay is less visible behind the game-over panels.
+- 2026-04-22: Added the skin reward overlay to the shared badge reward overlay styles in `style.css` so skin unlock messages appear centered on the same fixed screen position as badge unlocks.
+- 2026-04-22: Bumped Android release metadata to `1.0.48` / version code `48` so the next AAB can ship as a newer build.
 - 2026-04-21: Reworked the continue purchase overlay in `index.html` and `style.css` to remove the visible title, keep only the score/wallet/heart rows, and turn Buy/Back into invisible hitboxes aligned to the button art in `buy_continue_clean.png`.
 - 2026-04-21: Restyled the continue purchase overlay in `style.css` to use `buy_continue_clean.png` as the panel background and tightened the inner typography, hearts, and buttons to match the new framed layout.
 - 2026-04-21: Raised and compressed the game over center block in `style.css` by lifting `#final-current-run`, reducing `#final-continue-actions` spacing, and shrinking the Continue/End Run buttons so the score, actions, and cost text fit without vertical scrolling.

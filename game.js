@@ -1,4 +1,4 @@
-/*
+﻿/*
 README - Hrrra prototype
 Controls:
 - Left Arrow / A: move left
@@ -1065,6 +1065,10 @@ Main tuning points:
   var sceneArt = {
     backgroundSky: null,
     backgroundForeground: null,
+    level1Border: null,
+    level2Border: null,
+    level3Border: null,
+    level4Border: null,
     level2CaveBack: null,
     level2CaveFront: null,
     level3VolcanoBack: null,
@@ -1272,10 +1276,14 @@ Main tuning points:
   }
   var BACKGROUND_SKY_ART_PATH = "assets/level1/background_sky_tile.png";
   var BACKGROUND_FOREGROUND_ART_PATH = "assets/level1/background_foreground_tile.png";
+  var LEVEL1_BORDER_ART_PATH = "assets/level1/level1_border.png";
+  var LEVEL2_BORDER_ART_PATH = "assets/level2/level2_border.png";
   var LEVEL2_CAVE_BACK_ART_PATH = "assets/level2/background_back_tile.png";
   var LEVEL2_CAVE_FRONT_ART_PATH = "assets/level2/background_front_tile.png";
+  var LEVEL3_BORDER_ART_PATH = "assets/level3/level3_border.png";
   var LEVEL3_VOLCANO_BACK_ART_PATH = "assets/level3/background_back_tile.png";
   var LEVEL3_VOLCANO_FRONT_ART_PATH = "assets/level3/background_front_tile.png";
+  var LEVEL4_BORDER_ART_PATH = "assets/level4/level4_border.png";
   var LEVEL4_FOREST_BACK_ART_PATH = "assets/level4/background_back_tile.png";
   var LEVEL4_FOREST_MID_ART_PATH = "assets/level4/background_mid_tile.png";
   var LEVEL4_FOREST_FRONT_ART_PATH = "assets/level4/background_front_tile.png";
@@ -5199,17 +5207,29 @@ Main tuning points:
     loadSceneArtAsset(BACKGROUND_FOREGROUND_ART_PATH, function (image) {
       sceneArt.backgroundForeground = image;
     });
+    loadSceneArtAsset(LEVEL1_BORDER_ART_PATH, function (image) {
+      sceneArt.level1Border = image;
+    });
+    loadSceneArtAsset(LEVEL2_BORDER_ART_PATH, function (image) {
+      sceneArt.level2Border = image;
+    });
     loadSceneArtAsset(LEVEL2_CAVE_BACK_ART_PATH, function (image) {
       sceneArt.level2CaveBack = image;
     });
     loadSceneArtAsset(LEVEL2_CAVE_FRONT_ART_PATH, function (image) {
       sceneArt.level2CaveFront = image;
     });
+    loadSceneArtAsset(LEVEL3_BORDER_ART_PATH, function (image) {
+      sceneArt.level3Border = image;
+    });
     loadSceneArtAsset(LEVEL3_VOLCANO_BACK_ART_PATH, function (image) {
       sceneArt.level3VolcanoBack = image;
     });
     loadSceneArtAsset(LEVEL3_VOLCANO_FRONT_ART_PATH, function (image) {
       sceneArt.level3VolcanoFront = image;
+    });
+    loadSceneArtAsset(LEVEL4_BORDER_ART_PATH, function (image) {
+      sceneArt.level4Border = image;
     });
     loadSceneArtAsset(LEVEL4_FOREST_BACK_ART_PATH, function (image) {
       sceneArt.level4ForestBack = image;
@@ -10957,6 +10977,7 @@ Main tuning points:
     drawDeathLines();
     drawProjectileDeathAnimation();
     drawQuestionCoinAnimation();
+    drawLevelBorderOverlay();
     drawHud();
   }
 
@@ -12630,6 +12651,38 @@ Main tuning points:
     ctx.fillRect(0, C.bottomDeathLineY, canvas.width, 18);
   }
 
+  function getLevelBorderArt(level) {
+    if (level === 1) {
+      return sceneArt.level1Border;
+    }
+    if (level === 2) {
+      return sceneArt.level2Border;
+    }
+    if (level === 3) {
+      return sceneArt.level3Border;
+    }
+    if (level === 4) {
+      return sceneArt.level4Border;
+    }
+    return null;
+  }
+
+  function drawLevelBorderOverlay() {
+    if (state.currentLevel < 1 || state.currentLevel > 4) {
+      return;
+    }
+    if (!state.preRunActive && !state.running && !state.questionCoinAnimActive && !state.teleportFinishAnimActive && !state.projectileDeathAnimActive) {
+      return;
+    }
+
+    var borderArt = getLevelBorderArt(state.currentLevel);
+    if (!borderArt || borderArt.width <= 0 || borderArt.height <= 0) {
+      return;
+    }
+
+    ctx.drawImage(borderArt, 0, 0, canvas.width, canvas.height);
+  }
+
   function drawPlatforms() {
     var platformArt = getCurrentLevelSceneArt("platform");
     for (var i = 0; i < world.platforms.length; i += 1) {
@@ -13754,31 +13807,48 @@ Main tuning points:
     var hudTextColor =
       state.currentLevel === 2 || state.currentLevel === 3 || state.currentLevel === 4 ? "#ffffff" : "#111";
     ctx.fillStyle = hudTextColor;
-    ctx.font = "24px Arial";
-    ctx.fillText("Score: " + state.score, 18, 36);
-    ctx.font = "20px Arial";
-    ctx.fillText("Max Score: " + sessionMaxScore, 18, 64);
+    ctx.font = "16px Arial";
+    var scoreLabel = "Score: " + state.score;
+    var scoreLabelWidth = ctx.measureText(scoreLabel).width;
+    ctx.fillText(scoreLabel, 18 + scoreLabelWidth * 0.5, 36);
+    ctx.font = "13px Arial";
+    var maxScoreLabel = "Max Score: " + sessionMaxScore;
+    var maxScoreLabelWidth = ctx.measureText(maxScoreLabel).width;
+    ctx.fillText(maxScoreLabel, 18 + maxScoreLabelWidth * 0.5, 64);
     ctx.font = "24px Arial";
     ctx.textAlign = "center";
     if (state.gameMode === 2) {
-      ctx.fillText("Double Jump: ON", canvas.width * 0.5, 36);
+      var doubleJumpLabel = "Double Jump: ON";
+      ctx.fillText(doubleJumpLabel, canvas.width * 0.5 - ctx.measureText(doubleJumpLabel).width * 0.1, 36);
     } else if (state.doubleJumpTimeLeft > 0) {
-      ctx.fillText("Double Jump: " + state.doubleJumpTimeLeft.toFixed(1) + "s", canvas.width * 0.5, 36);
+      var doubleJumpCountdownLabel = "Double Jump: " + state.doubleJumpTimeLeft.toFixed(1) + "s";
+      ctx.fillText(
+        doubleJumpCountdownLabel,
+        canvas.width * 0.5 - ctx.measureText(doubleJumpCountdownLabel).width * 0.1,
+        36
+      );
     } else {
-      ctx.fillText("Double Jump: OFF", canvas.width * 0.5, 36);
+      var doubleJumpOffLabel = "Double Jump: OFF";
+      ctx.fillText(doubleJumpOffLabel, canvas.width * 0.5 - ctx.measureText(doubleJumpOffLabel).width * 0.1, 36);
     }
     ctx.font = "20px Arial";
     if (state.tripleJumpTimeLeft > 0) {
-      ctx.fillText("Tripple Jump: " + state.tripleJumpTimeLeft.toFixed(1) + "s", canvas.width * 0.5, 64);
+      var tripleJumpLabel = "Tripple Jump: " + state.tripleJumpTimeLeft.toFixed(1) + "s";
+      ctx.fillText(tripleJumpLabel, canvas.width * 0.5 - ctx.measureText(tripleJumpLabel).width * 0.1, 64);
     }
     if (state.curseTimeLeft > 0) {
-      ctx.fillText("Curse: " + state.curseTimeLeft.toFixed(1) + "s", canvas.width * 0.5, 92);
+      var curseLabel = "Curse: " + state.curseTimeLeft.toFixed(1) + "s";
+      ctx.fillText(curseLabel, canvas.width * 0.5 - ctx.measureText(curseLabel).width * 0.1, 92);
     }
     ctx.textAlign = "right";
     ctx.font = "24px Arial";
-    ctx.fillText(getLevelDisplayName(state.currentLevel), canvas.width - 18, 36);
+    var levelLabel = getLevelDisplayName(state.currentLevel);
+    var levelLabelWidth = ctx.measureText(levelLabel).width;
+    ctx.fillText(levelLabel, canvas.width - 18 - levelLabelWidth * 0.5, 36);
     ctx.font = "20px Arial";
-    ctx.fillText("Speed +" + state.speedPercent + "%", canvas.width - 18, 64);
+    var speedLabel = "Speed +" + state.speedPercent + "%";
+    var speedLabelWidth = ctx.measureText(speedLabel).width;
+    ctx.fillText(speedLabel, canvas.width - 18 - speedLabelWidth * 0.5, 64);
     if (state.shieldCharges > 0) {
       ctx.fillText("Shield: ON", canvas.width - 18, 90);
     }
@@ -13799,3 +13869,4 @@ Main tuning points:
 
   init();
 })();
+

@@ -6444,11 +6444,9 @@ body.visual-theme-retro .brief-live::before {
   display: flex;
   justify-content: center;
   gap: 6px;
+  margin-top: 36px;
+  transform: translateX(57px);
   pointer-events: none;
-}
-
-#mode-2-lives {
-  margin-top: 0;
 }
 
 .life-square {
