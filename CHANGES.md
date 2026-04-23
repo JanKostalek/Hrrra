@@ -1,5 +1,12 @@
 # Hrrra - Working Changes Log
 
+- 2026-04-23: Added a bit more vertical space before the GFX2 pre-run `Goal` section in `style.css` so the board reads more like `Level` followed by a separated goal block.
+- 2026-04-23: Simplified the GFX2 pre-run level board in `index.html` and `style.css` so it now shows only `Level` and `Goal`, with the `Level` and `Goal` text enlarged and extra vertical spacing between them.
+- 2026-04-23: Reduced the `level-finished` artwork to a centered responsive panel in `style.css` so the fullscreen continue hitbox remains invisible but the gameplay behind the completion art is still partially visible for debugging.
+- 2026-04-23: Removed the visible button styling from `#level-finished-continue` so the Level Finished screen keeps only the fullscreen hitbox and the per-level finished image without an extra cream-colored button graphic.
+- 2026-04-23: Replaced the text-based Level Finished screen in `index.html`, `game.js`, and `style.css` with per-level `level1_finished.jpg` through `level4_finished.jpg` overlays plus a fullscreen click target so the completion art now fills the screen responsively without separate HUD text.
+- 2026-04-23: Split the shared platform tile into per-level assets in `game.js` so levels 1 through 5 can each load `level1_platform.png` through `level5_platform.png` from their own folders while still falling back to the shared platform art if needed.
+- 2026-04-23: Restored the level border canvas overlay in `game.js` on branch `New` so `level1_border.png` through `level4_border.png` render above gameplay again while keeping the HUD text on top.
 - 2026-04-22: Bumped release metadata to `1.0.52` / `versionCode 52` so the next Android and Vercel-facing build is newer than the deployed store version `1.0.51`.
 - 2026-04-22: Extended the level border overlay in `game.js` so `level1_border.png`, `level2_border.png`, `level3_border.png`, and `level4_border.png` all render above the gameplay while keeping the HUD text on top.
 - 2026-04-22: Shifted the center HUD `Double Jump` block in `game.js` slightly left by 10% of each label's own width, including the `Tripple Jump` and `Curse` lines beneath it.

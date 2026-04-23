@@ -452,11 +452,7 @@ Main tuning points:
   var mode2Btn = document.getElementById("mode-2-btn");
   var mode2LivesEl = document.getElementById("mode-2-lives");
   var levelFinishedEl = document.getElementById("level-finished");
-  var levelFinishedTitleEl = document.getElementById("level-finished-title");
-  var levelFinishedScoreEl = document.getElementById("level-finished-score");
-  var levelFinishedRuntimeEl = document.getElementById("level-finished-runtime");
-  var levelFinishedCoinsEl = document.getElementById("level-finished-coins");
-  var levelFinishedBagsEl = document.getElementById("level-finished-bags");
+  var levelFinishedArtEl = document.getElementById("level-finished-art");
   var levelFinishedContinueBtn = document.getElementById("level-finished-continue");
   var ADMIN_STORAGE_KEY_PREFIX = "hrrra_admin_config_v3_";
   var LEGACY_ADMIN_STORAGE_KEY_PREFIX = "hrrra_admin_config_v2_";
@@ -1290,6 +1286,12 @@ Main tuning points:
   var LEVEL5_SKY_ART_PATH = "assets/level5/background_sky_tile.png";
   var LEVEL5_FOREGROUND_ART_PATH = "assets/level5/background_foreground_tile.png";
   var PLATFORM_ART_PATH = "assets/platform-tile-clean.png";
+  var LEVEL_FINISHED_ART_PATHS = {
+    1: "assets/level1/level1_finished.jpg",
+    2: "assets/level2/level2_finished.jpg",
+    3: "assets/level3/level3_finished.jpg",
+    4: "assets/level4/level4_finished.jpg"
+  };
   var ELEVATOR_ART_PATH = "assets/vytah01-clean.png";
   var BLOCKER_ART_PATH = "assets/blocker01-clean.png";
   var COIN_ART_PATH = "assets/coin01-clean.png";
@@ -1902,6 +1904,17 @@ Main tuning points:
 
   function getLevelAssetPath(level, fileName) {
     return "assets/level" + String(level) + "/" + fileName;
+  }
+
+  function getLevelFinishedArtPath(level) {
+    return LEVEL_FINISHED_ART_PATHS[level] || "";
+  }
+
+  function getLevelSceneArtFileName(level, key) {
+    if (key === "platform") {
+      return "level" + String(level) + "_platform.png";
+    }
+    return LEVEL_SCENE_ART_FILENAMES[key];
   }
 
   function normalizeSkinName(value) {
@@ -5360,7 +5373,7 @@ Main tuning points:
 
       (function (targetLevel, targetKey) {
         loadSceneArtAsset(
-          getLevelAssetPath(targetLevel, LEVEL_SCENE_ART_FILENAMES[targetKey]),
+          getLevelAssetPath(targetLevel, getLevelSceneArtFileName(targetLevel, targetKey)),
           function (image) {
             if (sceneArt.levelVariants[targetLevel]) {
               sceneArt.levelVariants[targetLevel][targetKey] = image;
@@ -7808,20 +7821,15 @@ Main tuning points:
   }
 
   function updateLevelFinishedSummary() {
-    if (levelFinishedTitleEl) {
-      levelFinishedTitleEl.textContent = getLevelDisplayName(state.currentLevel) + " Finished";
-    }
-    if (levelFinishedScoreEl) {
-      levelFinishedScoreEl.textContent = "Score: " + state.score;
-    }
-    if (levelFinishedRuntimeEl) {
-      levelFinishedRuntimeEl.textContent = "Level Time: " + state.levelRunTimeSeconds.toFixed(1) + "s";
-    }
-    if (levelFinishedCoinsEl) {
-      levelFinishedCoinsEl.textContent = "Coins collected: " + state.levelCollectedCoins;
-    }
-    if (levelFinishedBagsEl) {
-      levelFinishedBagsEl.textContent = "Bags collected: " + state.levelCollectedBags;
+    if (levelFinishedArtEl) {
+      var finishedArtPath = getLevelFinishedArtPath(state.currentLevel);
+      if (finishedArtPath) {
+        levelFinishedArtEl.src = finishedArtPath;
+        levelFinishedArtEl.classList.remove("hidden");
+      } else {
+        levelFinishedArtEl.removeAttribute("src");
+        levelFinishedArtEl.classList.add("hidden");
+      }
     }
   }
 
