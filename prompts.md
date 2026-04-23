@@ -1,9 +1,20 @@
-# Prompts
+﻿# Prompts
 
 -------------------
 
-restore the level border overlay on branch New for levels 1 through 4 so the border art is visible above gameplay while HUD text stays on top
+add one more blank-row worth of vertical space before the GFX2 pre-run Goal section so it sits a bit lower beneath Level
 
+simplify the GFX2 pre-run level board so it only shows Level and Goal, enlarge both texts twofold, and add more spacing between them while keeping the divider line
+
+reduce the level-finished artwork to a centered responsive panel so the fullscreen continue hitbox stays invisible but the gameplay behind the image is still partially visible for debugging
+
+remove the visible button styling from level-finished so only the fullscreen hitbox remains under the per-level finished image
+
+replace the text-based Level Finished screen with responsive per-level finished artwork from level1_finished.jpg through level4_finished.jpg and a fullscreen click target, without separate HUD text
+
+split the shared platform tile into per-level assets so levels 1 through 5 can each load level1_platform.png through level5_platform.png from their own folders, while keeping a shared fallback if needed
+
+restore the level border overlay on branch New for levels 1 through 4 so the border art is visible above gameplay while HUD text stays on top
 pridej stejny frame overlay i pro level 2, 3 a 4 podle obrazku v jejich slozkach, stejne jako level 1, a texty/hud nech stejne
 
 -------------------
@@ -17,29 +28,29 @@ posun text Score a Max Score o 50% jejich sirky doprava
 -------------------
 
 -------------------
-2026-04-18: nic se nezmenilo. zkus jeste jednou, tentokrat vytvoř tlačítko, které bude nad vsemi vrstavami, ktere bude mít overlay - červeny, vzdy viditelný a dej to tlačítko přesne doprostred obrazovky. jeho velikost udelej 512s512 pixelu
-2026-04-18: ano, ted jsem to oveřil. opravdu se to ukazuje v gfx1, ale ma to být v gfx2. vzdy vsechno děláme v gfx2 (pokud neřeknu jinak - zapis to do pravidel). a nyní to tlačítko z gfx1 odstran a udělej ho v gfx2. ale zpátky v horním rohu. velikost odpovídající tlačítku v levé části obrazovky "back"
-2026-04-18: uz to otevírá potvrzovací stranku. ale samozné tlačítko v horním rohu nemá žadný text. mělo by tam byt aspon Change User a nějaké pozadí. ted je tam jen cervený okraj a prohledné pozadí
+2026-04-18: nic se nezmenilo. zkus jeste jednou, tentokrat vytvoÅ™ tlaÄÃ­tko, kterÃ© bude nad vsemi vrstavami, ktere bude mÃ­t overlay - Äerveny, vzdy viditelnÃ½ a dej to tlaÄÃ­tko pÅ™esne doprostred obrazovky. jeho velikost udelej 512s512 pixelu
+2026-04-18: ano, ted jsem to oveÅ™il. opravdu se to ukazuje v gfx1, ale ma to bÃ½t v gfx2. vzdy vsechno dÄ›lÃ¡me v gfx2 (pokud neÅ™eknu jinak - zapis to do pravidel). a nynÃ­ to tlaÄÃ­tko z gfx1 odstran a udÄ›lej ho v gfx2. ale zpÃ¡tky v hornÃ­m rohu. velikost odpovÃ­dajÃ­cÃ­ tlaÄÃ­tku v levÃ© ÄÃ¡sti obrazovky "back"
+2026-04-18: uz to otevÃ­rÃ¡ potvrzovacÃ­ stranku. ale samoznÃ© tlaÄÃ­tko v hornÃ­m rohu nemÃ¡ Å¾adnÃ½ text. mÄ›lo by tam byt aspon Change User a nÄ›jakÃ© pozadÃ­. ted je tam jen cervenÃ½ okraj a prohlednÃ© pozadÃ­
 2026-04-18: udelej ted comming do main do local i do www. potom se vrat na vetev new
 2026-04-20: na webove casti se scores ukazuji dobre, pokud je okno vetsi. kdyz se okno zmensi na velikost, jak je to na mobilu, tak se ramecek zmensi tak, ze se tam nevejdou dva posledni radky. Zvetsi tu "zmensenou verzi" tak, aby byla o 10% vysky okna delsi smerem dolu. tedy nahore zustane na stejnem miste, ale dole se vejdou i ty dva radky, co tam nyni nejsou
 2026-04-20: ted se to zmensuje v poradku, ale chybi tam ten dreveny ramecek. je tam zase jen bile okno. Neni to bile okno overlay, ktery prekresluje ten ramecek?
-2026-04-20: a) tak jak se v urcitou chvíli to okno s rámečkem zmensí. tak tu zmenšenou velikost použij jako standard a at je to okno tak velké vždy b) zvětši okraje textu na pravé straně, aby čísla netekla do do grafiky dřeva (zvětši odsazení o 10% šířky řádku s textem) a změn aby byly v případně "online Top scores" a "Onine top players" vycentrované ty řádky.
+2026-04-20: a) tak jak se v urcitou chvÃ­li to okno s rÃ¡meÄkem zmensÃ­. tak tu zmenÅ¡enou velikost pouÅ¾ij jako standard a at je to okno tak velkÃ© vÅ¾dy b) zvÄ›tÅ¡i okraje textu na pravÃ© stranÄ›, aby ÄÃ­sla netekla do do grafiky dÅ™eva (zvÄ›tÅ¡i odsazenÃ­ o 10% Å¡Ã­Å™ky Å™Ã¡dku s textem) a zmÄ›n aby byly v pÅ™Ã­padnÄ› "online Top scores" a "Onine top players" vycentrovanÃ© ty Å™Ã¡dky.
 2026-04-20: zmen na tom top scores velikost pisma. aby byl vzdy tak velke, jaky je nejmensi ted nastavene. kdyz se postupne zvetsuje, tak to pak vypada osklive. pismo at ma velikost jako ma nastavenou minimalni a nezvetsuje se
-2026-04-20: skladej crossing animace takto: crossing_background uplne v pozadi, pak crossing_foreground a uplne navrchu sekvenční PNG obrazky.
-2026-04-20: crossing scéna se sklada takto: crossing_background dole, clouds nad nim, crossing_foreground nad mraky, shop_house jako dalsi vrstva a sekvenční PNG uplne navrchu.
-2026-04-20: na crossing page, kdyz se 20 vteřin na nic neklikne, prehraj sekvenci ze slozky crossing_wait a opakuj ji kazdych 15 vterin, dokud se neklikne na neco jineho. Sekvence ma 13 frame a bezi o 33% dele.
+2026-04-20: skladej crossing animace takto: crossing_background uplne v pozadi, pak crossing_foreground a uplne navrchu sekvenÄnÃ­ PNG obrazky.
+2026-04-20: crossing scÃ©na se sklada takto: crossing_background dole, clouds nad nim, crossing_foreground nad mraky, shop_house jako dalsi vrstva a sekvenÄnÃ­ PNG uplne navrchu.
+2026-04-20: na crossing page, kdyz se 20 vteÅ™in na nic neklikne, prehraj sekvenci ze slozky crossing_wait a opakuj ji kazdych 15 vterin, dokud se neklikne na neco jineho. Sekvence ma 13 frame a bezi o 33% dele.
 2026-04-20: na Android AAB over, ze frame sekvence entrance, classic_back, settings a settings_back pouzivaji spravny casing souboru, aby se nevynechaval frame 08/09/10 na store verzi.
 2026-04-20: na game over screenu pouzij continue.png a end_run.png z assets/gfx2/game_over_scr jako grafiku tlacitek, odstran celoplosny click fallback na game over overlay a skryj Jump Classic badge tak, aby lives zustaly na jeho miste.
-2026-04-21: tak to tak odted dělej a zapis to i do pravidel k ostatnim. Tam jak je napsano co treba máš dělat, kdyz napíšu vycisti local storage nebo priprav aab. pokud sis ty pravidla nenacetl, udelej tak nyní
+2026-04-21: tak to tak odted dÄ›lej a zapis to i do pravidel k ostatnim. Tam jak je napsano co treba mÃ¡Å¡ dÄ›lat, kdyz napÃ­Å¡u vycisti local storage nebo priprav aab. pokud sis ty pravidla nenacetl, udelej tak nynÃ­
 2026-04-21: uprav game over screen tak, aby misto textu Game Over a nazvu modu/difficulty pouzival jednu responsivni grafiku z assets/gfx2/game_over_scr podle kombinace Classic Easy, Classic Hard, Advanced Easy a Advanced Hard
-2026-04-21: udelej ted sync do www i androidu, at se na to můžu podívat na emulatoru
+2026-04-21: udelej ted sync do www i androidu, at se na to mÅ¯Å¾u podÃ­vat na emulatoru
 2026-04-21: udelat tu grafiku o 50% mensi, protoze zabira prostor, kam potrebuji, aby se vesly grafiky s topscore
-2026-04-21: sync prosím
+2026-04-21: sync prosÃ­m
 2026-04-21: posun ty topscore okna o 10% nahoru. a pak rovnou znovu udelej sync
-2026-04-21: zvedni ten blok s textem o score, tlačítky a spodním textem o ceně trochu nahoru. Přetéká to pod obrazovku a musí se posouvat. chci aby to bylo videt najednou. Případně to můžeš uděla tak, že tlačítka continue a end run zmenšís o 10% čímž se zvedne text each life costs..... a bude to vyřešené. rovnou sync
+2026-04-21: zvedni ten blok s textem o score, tlaÄÃ­tky a spodnÃ­m textem o cenÄ› trochu nahoru. PÅ™etÃ©kÃ¡ to pod obrazovku a musÃ­ se posouvat. chci aby to bylo videt najednou. PÅ™Ã­padnÄ› to mÅ¯Å¾eÅ¡ udÄ›la tak, Å¾e tlaÄÃ­tka continue a end run zmenÅ¡Ã­s o 10% ÄÃ­mÅ¾ se zvedne text each life costs..... a bude to vyÅ™eÅ¡enÃ©. rovnou sync
 2026-04-21: priprav continue purchase overlay tak, aby po kliknuti na continue pouzival buy_continue_clean.png a mel podobne rozlozeni jako druhy referencni obrazek
-2026-04-21: buy_continue_clean.png soubor jsem upravil. nyní ma opravdu průhledné pozadí. Nezobrazuj text How Many Lives, protoze uz je na pevno na obrazku. Tlačítka buy a back, jak jsi je tam dal ty, tam nejsou potřeba, stačí overlay na místo na obrázku, kde je grafika buy a back. - Stačí kdyz overlay bude o 20% užší a 33% vyšší. Zároven zmenší mezery mezi řádky textu. Celé okno at je responzivn. ja zmenšil jeho velikost.
-2026-04-21: ten obrázek co jsem nahral má strany 256x199 Zachovej ten poměr stran. ted je to uplně nesmyslné
+2026-04-21: buy_continue_clean.png soubor jsem upravil. nynÃ­ ma opravdu prÅ¯hlednÃ© pozadÃ­. Nezobrazuj text How Many Lives, protoze uz je na pevno na obrazku. TlaÄÃ­tka buy a back, jak jsi je tam dal ty, tam nejsou potÅ™eba, staÄÃ­ overlay na mÃ­sto na obrÃ¡zku, kde je grafika buy a back. - StaÄÃ­ kdyz overlay bude o 20% uÅ¾Å¡Ã­ a 33% vyÅ¡Å¡Ã­. ZÃ¡roven zmenÅ¡Ã­ mezery mezi Å™Ã¡dky textu. CelÃ© okno at je responzivn. ja zmenÅ¡il jeho velikost.
+2026-04-21: ten obrÃ¡zek co jsem nahral mÃ¡ strany 256x199 Zachovej ten pomÄ›r stran. ted je to uplnÄ› nesmyslnÃ©
 2026-04-21: pre-run GFX2 shop Buy button now uses assets/gfx2/shop_scr/buy.png and the inline label is hidden.
 2026-04-21: continue purchase overlay text block pushed lower again by increasing top padding, and the remaining row gaps are halved.
 2026-04-21: continue purchase overlay text block moved lower by increasing top padding, the row gaps are tighter, and the invisible Buy/Back hitboxes are taller upward.
