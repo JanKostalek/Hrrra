@@ -1,5 +1,22 @@
 # Hrrra - Working Changes Log
 
+- 2026-04-23: Restored the level border canvas overlay in `game.js` on branch `New` so `level1_border.png` through `level4_border.png` render above gameplay again while keeping the HUD text on top.
+- 2026-04-22: Bumped release metadata to `1.0.52` / `versionCode 52` so the next Android and Vercel-facing build is newer than the deployed store version `1.0.51`.
+- 2026-04-22: Extended the level border overlay in `game.js` so `level1_border.png`, `level2_border.png`, `level3_border.png`, and `level4_border.png` all render above the gameplay while keeping the HUD text on top.
+- 2026-04-22: Shifted the center HUD `Double Jump` block in `game.js` slightly left by 10% of each label's own width, including the `Tripple Jump` and `Curse` lines beneath it.
+- 2026-04-22: Shifted the left-side HUD `Score` and `Max Score` labels in `game.js` 50% of their measured width to the right after shrinking them, keeping the smaller font size but restoring more balanced placement.
+- 2026-04-22: Reduced the left-side HUD `Score` and `Max Score` text in `game.js` by about 33% while keeping their shifted alignment intact.
+
+- 2026-04-22: Shifted the left-side HUD Score and Max Score labels in game.js left by 33% of their measured text width so the top-left block lines up better with the rest of the HUD.
+
+- 2026-04-22: Shifted the right-side HUD Level and Speed labels in game.js left by half of their own measured text width so they sit more centrally without moving the whole column.
+
+- 2026-04-22: Nudged the mode-switch life hearts in style.css one heart-height back up after the larger downward/rightward offset, keeping the rest of the top bar unchanged.
+
+- 2026-04-22: Moved the mode-switch life hearts in style.css down by one heart-height so the HUD lives row sits lower without changing the rest of the top bar.
+
+- 2026-04-22: Added the `Level1_border.png` canvas overlay in `game.js` so Level 1 can show a framed playfield above the gameplay while keeping the HUD text drawn on top.
+
 - 2026-04-22: Added the persistent `Jumper` All Runs badge in `game.js`, counting every successful jump event across all runs with bronze/silver/gold goals at 1,000 / 5,000 / 10,000 jumps.
 - 2026-04-22: Doubled the font sizes on all score boards in `style.css`, including the pre-run Scores page tables and the game-over top score panels.
 - 2026-04-22: Restored the game-over top score panel font sizes in `style.css` back to their original scale while keeping the pre-run Scores page tables enlarged.
@@ -72,8 +89,12 @@
 - 2026-04-20: Game over score panels now use the smaller wood-backed frame as the default on web and mobile, with the score list pushed farther from the right edge and the panel headings centered.
 - 2026-04-20: Standardized the GFX2 crossing transition animations to 10 frames each, including entrance, classic, advance, shop, settings, and their back animations, while keeping playback duration unchanged.
 - 2026-04-20: Added a crossing idle wait animation using assets/gfx2/crossing_wait; it now plays after 20 seconds of no input on the GFX2 crossing screen, repeats every 15 seconds until the player clicks or triggers another transition, and now uses 13 frames with playback stretched by 33%.
+- 2026-04-20: Made GFX2 frame loading tolerant to png/PNG casing mismatches so Android WebView can load the same transition sequences as the local web build.
 - 2026-04-20: Fixed Android-only GFX2 frame casing mismatches in entrance, classic_back, settings, and settings_back so the release build no longer skips frame 08/09/10 on the store AAB.
+- 2026-04-20: Removed the full-screen Game Over click fallback so Android now continues only through the actual Continue and End Run buttons, matching the desktop behavior.
 - 2026-04-20: Swapped the game over Continue/End Run buttons to the dedicated gfx2 artwork, removed the full-screen game over click fallback, and hid the Jump Classic badge so the lives row sits in its place.
+2026-04-21 - game over layout: moved the banner 10% left, pushed both top score panels 20% higher, and reduced the Continue/End Run button size by 10% in both dimensions.
+2026-04-21 - release version bump: raised the app/web version from 1.0.47 to 1.0.48 and bumped Android versionCode to 48 so the new AAB is recognized as newer on mobile.
 2026-04-21 - pre-run GFX2 shop: replaced the Buy pill button with the dedicated `assets/gfx2/shop_scr/buy.png` artwork and hid the inline label so only the graphic remains.
 2026-04-21 - continue purchase overlay: pushed the text block lower again by increasing the top padding, and halved the remaining vertical gaps between the rows.
 2026-04-21 - continue purchase overlay: pushed the text block lower by increasing the panel's top padding, tightened the vertical gaps between the text pairs, and made the invisible Buy/Back hitboxes taller toward the top.
@@ -82,3 +103,9 @@
 2026-04-21 - continue purchase overlay: resized the card to match the new 433x327 asset ratio and allowed a larger max width so the updated panel scales up without distortion.
 2026-04-21 - continue purchase overlay: constrained the card to the source image ratio (256:199) so the transparent panel no longer stretches vertically on short viewports.
 - 2026-04-22: bumped release metadata to 1.0.51 / versionCode 51 so Android and the Vercel-hosted update check can detect a build newer than the deployed 1.0.50.
+## 2026-04-21
+- Android splash screen now uses `hrrra_splash` with `fitCenter` so the full image stays visible on mobile instead of being cropped by `centerCrop`.
+- Android resource file was renamed to `hrrra_splash.jpg` because `res/drawable` filenames cannot contain `-`.
+## 2026-04-22
+- Android launcher icon now uses `assets/game_icon.jpg` as the source for all `ic_launcher` and `ic_launcher_foreground` density variants.
+- Release bumped to `1.0.50` so the new Android icon and splash assets can ship as a new bundle.

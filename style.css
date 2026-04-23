@@ -63,6 +63,8 @@ body {
   max-width: 92vw;
   height: auto;
   margin: 0 auto 12px;
+  position: static;
+  transform: none;
   object-fit: contain;
   user-select: none;
   pointer-events: none;
@@ -425,9 +427,9 @@ body {
 }
 
 #game-over-layout {
-  width: min(100%, 980px);
+  width: min(100%, 2200px);
   display: grid;
-  grid-template-columns: minmax(240px, 280px) minmax(180px, 1fr) minmax(240px, 280px);
+  grid-template-columns: clamp(240px, 30vw, 480px) minmax(180px, 1fr) clamp(240px, 30vw, 480px);
   align-items: center;
   gap: 12px;
   margin: 0 0 18px;
@@ -476,7 +478,7 @@ body {
 #final-continue-actions button {
   position: relative;
   display: block;
-  width: clamp(135px, 19.8vw, 306px);
+  width: clamp(122px, 17.82vw, 275px);
   min-width: 0;
   aspect-ratio: 331 / 98;
   min-height: 0;
@@ -741,8 +743,7 @@ body {
   align-self: center;
   display: flex;
   flex-direction: column;
-  transform: none;
-  transform: translateY(-10%);
+  transform: translateY(-20%);
   min-height: min(78vh, 760px);
 }
 
@@ -773,8 +774,7 @@ body {
   align-self: center;
   display: flex;
   flex-direction: column;
-  transform: none;
-  transform: translateY(-10%);
+  transform: translateY(-20%);
   min-height: min(78vh, 760px);
 }
 
@@ -1146,7 +1146,9 @@ body {
 
 .pre-run-badges-gfx2-row {
   width: 100%;
-  min-height: clamp(240px, 36vw, 380px);
+  aspect-ratio: 1024 / 380;
+  min-height: 240px;
+  max-height: 380px;
   background: url("assets/gfx2/badges_single.jpg") center center / 100% 100% no-repeat;
   position: relative;
 }
@@ -4715,16 +4717,12 @@ body.visual-theme-retro .brief-live::before {
 }
 
 @media (max-width: 1280px),
-(max-height: 880px) {
+  (max-height: 880px) {
   .game-over-banner {
     width: min(40vw, 340px);
     margin-bottom: 10px;
-  }
-
-  #game-over-layout {
-    width: min(100%, 980px);
-    grid-template-columns: minmax(240px, 280px) minmax(180px, 1fr) minmax(240px, 280px);
-    gap: 12px;
+    position: static;
+    transform: none;
   }
 
   #final-current-run {
@@ -4742,6 +4740,7 @@ body.visual-theme-retro .brief-live::before {
     border: 0;
     border-radius: 18px;
     background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
+    transform: translateY(-20%);
   }
 
   #final-highscores h2,
@@ -4813,7 +4812,7 @@ body.visual-theme-retro .brief-live::before {
 }
 
 @media (max-width: 1080px),
-(max-height: 760px) {
+  (max-height: 760px) {
   #game-over {
     justify-content: flex-start;
     padding: 14px 10px 18px;
@@ -4822,12 +4821,8 @@ body.visual-theme-retro .brief-live::before {
   .game-over-banner {
     width: min(42vw, 310px);
     margin-bottom: 10px;
-  }
-
-  #game-over-layout {
-    width: min(100%, 980px);
-    grid-template-columns: minmax(170px, 240px) minmax(180px, 1fr) minmax(180px, 250px);
-    gap: 12px;
+    position: static;
+    transform: none;
   }
 
   #final-current-run {
@@ -4854,7 +4849,7 @@ body.visual-theme-retro .brief-live::before {
     border-radius: 18px;
     background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
     align-self: center;
-    transform: translateY(-10%);
+    transform: translateY(-20%);
     min-height: min(78vh, 760px);
   }
 
@@ -4944,6 +4939,8 @@ body.visual-theme-retro .brief-live::before {
   .game-over-banner {
     width: min(44vw, 270px);
     margin-bottom: 8px;
+    position: static;
+    transform: none;
   }
 
   #game-over-layout {
@@ -4988,7 +4985,7 @@ body.visual-theme-retro .brief-live::before {
     border: 0;
     border-radius: 18px;
     background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
-    transform: translateY(-10%);
+    transform: translateY(-20%);
   }
 
   #final-highscores h2 {
@@ -5006,7 +5003,7 @@ body.visual-theme-retro .brief-live::before {
     border: 0;
     border-radius: 18px;
     background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
-    transform: translateY(-10%);
+    transform: translateY(-20%);
   }
 
   #final-online-highscore h2 {
@@ -5273,12 +5270,6 @@ body.visual-theme-retro .brief-live::before {
     margin-bottom: 8px;
   }
 
-  #game-over-layout {
-    width: min(100%, 1120px);
-    grid-template-columns: minmax(240px, 320px) minmax(240px, 1fr) minmax(260px, 360px);
-    gap: 12px;
-  }
-
   #final-current-run {
     padding: 0 0;
     transform: translateY(-6%);
@@ -5336,7 +5327,7 @@ body.visual-theme-retro .brief-live::before {
     border: 0;
     border-radius: 18px;
     background: url("assets/gfx2/gameover_scr_scores_bckg.jpg") center top / 100% 100% no-repeat;
-    transform: translateY(-10%);
+    transform: translateY(-20%);
   }
 
   #final-online-highscore h2 {
@@ -6477,11 +6468,9 @@ body.visual-theme-retro .brief-live::before {
   display: flex;
   justify-content: center;
   gap: 6px;
+  margin-top: 36px;
+  transform: translateX(57px);
   pointer-events: none;
-}
-
-#mode-2-lives {
-  margin-top: 0;
 }
 
 .life-square {
