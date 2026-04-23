@@ -213,6 +213,7 @@ Main tuning points:
   var PRE_RUN_GFX2_BADGE_TROPHY_SLUGS = {
     bag_collector: true,
     big_spender: true,
+    banger: true,
     coin_collector: true,
     doom_magnet: true,
     first_runner: true,
@@ -223,11 +224,13 @@ Main tuning points:
     unkillable_custommer: true,
     lucky: true,
     unlucky: true,
+    unlocker: true,
     untouchable: true
     };
     var BADGE_TROPHY_SLUGS_BY_SERIES_ID = {
     bag_collector_single_run: "bag_collector",
     big_spender_all_runs: "big_spender",
+    banger_all_runs: "banger",
     coin_collector_single_run: "coin_collector",
     doom_magnet_all_runs: "doom_magnet",
     first_runner_legends: "first_runner",
@@ -237,6 +240,7 @@ Main tuning points:
     lucky_single_run: "lucky",
     speed_demon_skills: "speed_demon",
     unkillable_custommer_all_runs: "unkillable_custommer",
+    unlocker_discovery: "unlocker",
     unlucky_single_run: "unlucky",
     untouchable_single_run: "untouchable"
   };
@@ -359,6 +363,7 @@ Main tuning points:
   var preRunClassicGfx2LivesValueEl = document.getElementById("pre-run-classic-gfx2-lives-value");
   var preRunClassicGfx2ControlsCopyEl = document.getElementById("pre-run-classic-gfx2-controls-copy");
   var preRunClassicGfx2GoalValueEl = document.getElementById("pre-run-classic-gfx2-goal-value");
+  var preRunClassicGfx2NoteEl = document.getElementById("pre-run-classic-gfx2-note");
   var preRunClassicGfx2EasyBtn = document.getElementById("pre-run-classic-gfx2-easy-btn");
   var preRunClassicGfx2HardBtn = document.getElementById("pre-run-classic-gfx2-hard-btn");
   var preRunClassicGfx2DifficultyNoteEl = document.getElementById("pre-run-classic-gfx2-difficulty-note");
@@ -383,6 +388,7 @@ Main tuning points:
   var preRunAdvancedGfx2LivesValueEl = document.getElementById("pre-run-advanced-gfx2-lives-value");
   var preRunAdvancedGfx2ControlsCopyEl = document.getElementById("pre-run-advanced-gfx2-controls-copy");
   var preRunAdvancedGfx2GoalValueEl = document.getElementById("pre-run-advanced-gfx2-goal-value");
+  var preRunAdvancedGfx2NoteEl = document.getElementById("pre-run-advanced-gfx2-note");
   var preRunAdvancedGfx2EasyBtn = document.getElementById("pre-run-advanced-gfx2-easy-btn");
   var preRunAdvancedGfx2HardBtn = document.getElementById("pre-run-advanced-gfx2-hard-btn");
   var preRunAdvancedGfx2DifficultyNoteEl = document.getElementById("pre-run-advanced-gfx2-difficulty-note");
@@ -5783,6 +5789,7 @@ Main tuning points:
       livesValueEl: preRunClassicGfx2LivesValueEl,
       controlsCopyEl: preRunClassicGfx2ControlsCopyEl,
       goalValueEl: preRunClassicGfx2GoalValueEl,
+      noteEl: preRunClassicGfx2NoteEl,
       startBtn: preRunClassicGfx2StartBtn,
       easyBtn: preRunClassicGfx2EasyBtn,
       hardBtn: preRunClassicGfx2HardBtn,
@@ -5802,6 +5809,7 @@ Main tuning points:
       livesValueEl: preRunAdvancedGfx2LivesValueEl,
       controlsCopyEl: preRunAdvancedGfx2ControlsCopyEl,
       goalValueEl: preRunAdvancedGfx2GoalValueEl,
+      noteEl: preRunAdvancedGfx2NoteEl,
       startBtn: preRunAdvancedGfx2StartBtn,
       easyBtn: preRunAdvancedGfx2EasyBtn,
       hardBtn: preRunAdvancedGfx2HardBtn,
@@ -5836,6 +5844,11 @@ Main tuning points:
     }
     if (config.goalValueEl) {
       config.goalValueEl.textContent = getFinishScoreGoalText(getCurrentLevelGoalTargetScore());
+    }
+    if (config.noteEl) {
+      var showIntroNote = state.currentLevel === 1;
+      config.noteEl.classList.toggle("hidden", !showIntroNote);
+      config.noteEl.textContent = "Starting with 5 lives and Double Jump always enabled";
     }
     if (config.startBtn) {
       config.startBtn.setAttribute("aria-label", state.currentLevel > 1 ? "Continue run" : "Start run");
@@ -13843,7 +13856,7 @@ Main tuning points:
     ctx.font = "13px Arial";
     var maxScoreLabel = "Max Score: " + sessionMaxScore;
     var maxScoreLabelWidth = ctx.measureText(maxScoreLabel).width;
-    ctx.fillText(maxScoreLabel, 18 + maxScoreLabelWidth * 0.5, 64);
+    ctx.fillText(maxScoreLabel, 18 + scoreLabelWidth * 0.5, 64);
     ctx.font = "24px Arial";
     ctx.textAlign = "center";
     if (state.gameMode === 2) {
@@ -13873,7 +13886,7 @@ Main tuning points:
     ctx.font = "24px Arial";
     var levelLabel = getLevelDisplayName(state.currentLevel);
     var levelLabelWidth = ctx.measureText(levelLabel).width;
-    ctx.fillText(levelLabel, canvas.width - 18 - levelLabelWidth * 0.5, 36);
+    ctx.fillText(levelLabel, canvas.width - 18 - levelLabelWidth * 0.83, 36);
     ctx.font = "20px Arial";
     var speedLabel = "Speed +" + state.speedPercent + "%";
     var speedLabelWidth = ctx.measureText(speedLabel).width;

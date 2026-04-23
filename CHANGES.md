@@ -1,5 +1,12 @@
 # Hrrra - Working Changes Log
 
+- 2026-04-23: Added `banger` and `unlocker` trophy slug mappings in `game.js` so the new `trophy_banger.png` and `trophy_unlocker.png` art files load automatically in the badges UI and unlock overlays.
+- 2026-04-23: Nudged the `trophy_xx` artwork 10% of its own height downward in both the badges overview and badge reward overlay while leaving `trophy_clean` untouched.
+- 2026-04-23: Shifted the badge `trophy_xx` artwork 20% right and 20% up and scaled it down by another 15% so the tighter source art centers more cleanly over `trophy_clean`.
+- 2026-04-23: Restored the badge overview `trophy_clean` artwork to its earlier larger display size and re-centered the new tighter `trophy_xx` art inside the slot, while also enlarging the reward overlay medallion back to its previous size.
+- 2026-04-23: Restored the badge overview `trophy_clean` base art to its original display size while keeping the smaller `trophy_xx` artwork reductions in place.
+- 2026-04-23: Reduced the rendered trophy artwork again so the badges overview and badge reward overlay now use roughly half of the previous display size for the tightened 256x256 trophy PNGs.
+- 2026-04-23: Reduced the rendered trophy artwork sizes in the badges overview and badge reward overlay so the newer tighter 256x256 trophy PNGs still sit inside the existing layout cleanly.
 - 2026-04-23: Bumped release metadata to `1.0.53` / `versionCode 53` so the next Android and Vercel-facing build is newer than the deployed store version `1.0.52`.
 - 2026-04-23: Added a bit more vertical space before the GFX2 pre-run `Goal` section in `style.css` so the board reads more like `Level` followed by a separated goal block.
 - 2026-04-23: Simplified the GFX2 pre-run level board in `index.html` and `style.css` so it now shows only `Level` and `Goal`, with the `Level` and `Goal` text enlarged and extra vertical spacing between them.
@@ -117,3 +124,7 @@
 ## 2026-04-22
 - Android launcher icon now uses `assets/game_icon.jpg` as the source for all `ic_launcher` and `ic_launcher_foreground` density variants.
 - Release bumped to `1.0.50` so the new Android icon and splash assets can ship as a new bundle.
+- 2026-04-23: HUD tuning - aligned Max Score with Score, shifted Level further left, and moved the life hearts row up by one icon height so the mobile top bar reads cleaner.
+- 2026-04-23: Pre-run board tweak - restored an intro-only note on the Level 1 setup board: "Starting with 5 lives and Double Jump always enabled" appears under Goal, while between-level boards stay minimal.
+- 2026-04-23: Level finished overlay - stretched the level finished artwork edge-to-edge again by removing aspect-ratio preservation, so the finish screen fills the whole viewport responsively.
+- 2026-04-23: Release bump - raised Android/web version metadata to 1.0.54 / versionCode 54, synced web + Android public assets, and prepared a new AAB build for release.

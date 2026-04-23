@@ -2,6 +2,20 @@
 
 -------------------
 Bump the release metadata to 1.0.53 / versionCode 53 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.52 release
+
+Add `banger` and `unlocker` trophy slug mappings in `game.js` so `trophy_banger.png` and `trophy_unlocker.png` load automatically in the badges UI and unlock overlays
+
+Nudge the `trophy_xx` artwork 10% of its own height downward in both the badges overview and badge reward overlay, leaving `trophy_clean` untouched
+
+Shift the badge `trophy_xx` artwork 20% right and 20% up and scale it down by another 15% so the tighter source art centers more cleanly over `trophy_clean`
+
+Restore the badge overview `trophy_clean` artwork to its earlier larger display size, re-center the tighter `trophy_xx` art inside the slot, and enlarge the reward overlay medallion back to its previous size
+
+Restore the badge overview `trophy_clean` base art to its original display size while keeping the smaller `trophy_xx` artwork reductions in place
+
+Reduce the rendered trophy artwork again so the badges overview and badge reward overlay use roughly half of the previous display size for the tightened 256x256 trophy PNGs
+
+Reduce the rendered trophy artwork sizes in the badges overview and badge reward overlay so the newer tighter 256x256 trophy PNGs still fit the existing layout cleanly
 add one more blank-row worth of vertical space before the GFX2 pre-run Goal section so it sits a bit lower beneath Level
 
 simplify the GFX2 pre-run level board so it only shows Level and Goal, enlarge both texts twofold, and add more spacing between them while keeping the divider line
@@ -74,3 +88,7 @@ posun text Score a Max Score o 50% jejich sirky doprava
 2026-04-22: bump Android release metadata to 1.0.48 / version code 48 before preparing the next AAB.
 - 2026-04-22: bump release metadata to 1.0.51 / versionCode 51 after confirming the store already has 1.0.50, and keep the Vercel-facing version files in sync for mobile update detection.
 zmensi text Score a Max Score o 33%
+- 2026-04-23: HUD tuning - aligned Max Score with Score, shifted Level further left, and moved the life hearts row up by one icon height so the mobile top bar reads cleaner.
+- 2026-04-23: Pre-run board tweak - restored an intro-only note on the Level 1 setup board: "Starting with 5 lives and Double Jump always enabled" appears under Goal, while between-level boards stay minimal.
+- 2026-04-23: Level finished overlay - stretched the level finished artwork edge-to-edge again by removing aspect-ratio preservation, so the finish screen fills the whole viewport responsively.
+- 2026-04-23: Release bump - raised Android/web version metadata to 1.0.54 / versionCode 54, synced web + Android public assets, and prepared a new AAB build for release.
