@@ -113,7 +113,6 @@ Main tuning points:
   var playerNameGuestBtn = document.getElementById("player-name-guest");
   var playerNameSaveBtn = document.getElementById("player-name-save");
   var preRunSelectScreenEl = document.getElementById("pre-run-select-screen");
-  var preRunSelectGfx1El = document.getElementById("pre-run-select-gfx1");
   var preRunSelectGfx2El = document.getElementById("pre-run-select-gfx2");
   var preRunGfx2SceneEl = preRunSelectGfx2El ? preRunSelectGfx2El.querySelector(".pre-run-gfx2-scene") : null;
   var preRunGfx2CloudRulesEl = preRunSelectGfx2El ? preRunSelectGfx2El.querySelector(".pre-run-gfx2-static-cloud-rules") : null;
@@ -298,7 +297,6 @@ Main tuning points:
   var preRunCreditsBackBtn = document.getElementById("pre-run-credits-back-btn");
   var preRunShopBackBtn = document.getElementById("pre-run-shop-back-btn");
   var preRunSettingsBackBtn = document.getElementById("pre-run-settings-back-btn");
-  var preRunSettingsGfx1El = document.getElementById("pre-run-settings-gfx1");
   var preRunSettingsGfx2El = document.getElementById("pre-run-settings-gfx2");
   var preRunSettingsGfx2BackBtn = document.getElementById("pre-run-settings-gfx2-back-btn");
   var preRunSettingsGfx2MusicBtn = document.getElementById("pre-run-settings-gfx2-music-btn");
@@ -325,7 +323,6 @@ Main tuning points:
   var preRunShopBuyKrobBtn = document.getElementById("pre-run-shop-buy-krob-btn");
   var preRunShopKrobStatusEl = document.getElementById("pre-run-shop-krob-status");
   var preRunShopSpecialLevelStatusEl = document.getElementById("pre-run-shop-special-level-status");
-  var preRunShopGfx1El = document.getElementById("pre-run-shop-gfx1");
   var preRunShopGfx2El = document.getElementById("pre-run-shop-gfx2");
   var preRunShopGfx2ExitBtn = document.getElementById("pre-run-shop-gfx2-exit-btn");
   var preRunShopGfx2NewLevelBtn = document.getElementById("pre-run-shop-gfx2-new-level-btn");
@@ -997,9 +994,6 @@ Main tuning points:
       // ignore storage read failures
     }
 
-    C.startScreenStyle = "gfx2";
-    saveGlobalAdminField("startScreenStyle", "gfx2");
-
     try {
       window.localStorage.setItem(START_SCREEN_GFX2_MIGRATION_STORAGE_KEY, "1");
     } catch (error) {
@@ -1083,6 +1077,9 @@ Main tuning points:
     level2Border: null,
     level3Border: null,
     level4Border: null,
+    levelxBack: null,
+    levelxFront: null,
+    levelxBorder: null,
     level2CaveBack: null,
     level2CaveFront: null,
     level3VolcanoBack: null,
@@ -1292,17 +1289,20 @@ Main tuning points:
   var BACKGROUND_FOREGROUND_ART_PATH = "assets/level1/background_foreground_tile.png";
   var LEVEL1_BORDER_ART_PATH = "assets/level1/level1_border.png";
   var LEVEL2_BORDER_ART_PATH = "assets/level2/level2_border.png";
-  var LEVEL2_CAVE_BACK_ART_PATH = "assets/level2/background_back_tile.png";
+  var LEVEL2_CAVE_BACK_ART_PATH = "assets/level2/background_back_tile.jpg";
   var LEVEL2_CAVE_FRONT_ART_PATH = "assets/level2/background_front_tile.png";
   var LEVEL3_BORDER_ART_PATH = "assets/level3/level3_border.png";
-  var LEVEL3_VOLCANO_BACK_ART_PATH = "assets/level3/background_back_tile.png";
+  var LEVEL3_VOLCANO_BACK_ART_PATH = "assets/level3/background_back_tile.jpg";
   var LEVEL3_VOLCANO_FRONT_ART_PATH = "assets/level3/background_front_tile.png";
   var LEVEL4_BORDER_ART_PATH = "assets/level4/level4_border.png";
-  var LEVEL4_FOREST_BACK_ART_PATH = "assets/level4/background_back_tile.png";
+  var LEVEL4_FOREST_BACK_ART_PATH = "assets/level4/background_back_tile.jpg";
   var LEVEL4_FOREST_MID_ART_PATH = "assets/level4/background_mid_tile.png";
   var LEVEL4_FOREST_FRONT_ART_PATH = "assets/level4/background_front_tile.png";
   var LEVEL5_SKY_ART_PATH = "assets/level5/background_sky_tile.png";
   var LEVEL5_FOREGROUND_ART_PATH = "assets/level5/background_foreground_tile.png";
+  var LEVELX_BACK_ART_PATH = "assets/levelx/background_back_tile.jpg";
+  var LEVELX_FRONT_ART_PATH = "assets/levelx/background_front_tile.png";
+  var LEVELX_BORDER_ART_PATH = "assets/levelx/levelx_border.png";
   var PLATFORM_ART_PATH = "assets/platform-tile-clean.png";
   var LEVEL_FINISHED_ART_PATHS = {
     1: "assets/level1/level1_finished.jpg",
@@ -1730,12 +1730,8 @@ Main tuning points:
   }
 
   function renderPreRunSettingsScreen() {
-    var useGfx2Settings = isGfx2StartScreenEnabled();
-    if (preRunSettingsGfx1El) {
-      preRunSettingsGfx1El.classList.toggle("hidden", useGfx2Settings);
-    }
     if (preRunSettingsGfx2El) {
-      preRunSettingsGfx2El.classList.toggle("hidden", !useGfx2Settings);
+      preRunSettingsGfx2El.classList.remove("hidden");
       preRunSettingsGfx2El.classList.toggle("is-music-off", !C.audioMusicEnabled);
       preRunSettingsGfx2El.classList.toggle("is-sfx-off", !C.audioSfxEnabled);
     }
@@ -1957,6 +1953,7 @@ Main tuning points:
         },
       selectedSkin: "Skin01",
       highestLevelReached: 1,
+      levelXUnlocked: false,
       hardModeOverride: "default",
       fullModeOverride: "default"
     };
@@ -2001,6 +1998,7 @@ Main tuning points:
         unlockedSkins: cloneSkinUnlocks(parsed.unlockedSkins),
         selectedSkin: normalizeSkinName(parsed.selectedSkin),
         highestLevelReached: sanitizeHighestLevelReached(parsed.highestLevelReached),
+        levelXUnlocked: Boolean(parsed.levelXUnlocked),
         hardModeOverride: parsed.hardModeOverride === "locked" || parsed.hardModeOverride === "unlocked"
           ? parsed.hardModeOverride
           : "default",
@@ -2021,6 +2019,7 @@ Main tuning points:
           unlockedSkins: cloneSkinUnlocks(state.unlockedSkins),
           selectedSkin: normalizeOwnedSkinName(C.selectedSkin),
           highestLevelReached: sanitizeHighestLevelReached(state.highestLevelReached),
+          levelXUnlocked: Boolean(state.levelXUnlocked),
           hardModeOverride: state.hardModeOverride === "locked" || state.hardModeOverride === "unlocked"
             ? state.hardModeOverride
             : "default",
@@ -2042,6 +2041,10 @@ Main tuning points:
     return Boolean(state.unlockedSkins[normalized]);
   }
 
+  function isLevelXUnlocked() {
+    return Boolean(state.levelXUnlocked);
+  }
+
   function normalizeOwnedSkinName(value) {
     var normalized = normalizeSkinName(value);
     return isSkinUnlocked(normalized) ? normalized : "Skin01";
@@ -2052,6 +2055,7 @@ Main tuning points:
     state.unlockedSkins = cloneSkinUnlocks(progress.unlockedSkins);
     C.selectedSkin = normalizeOwnedSkinName(progress.selectedSkin);
     state.highestLevelReached = sanitizeHighestLevelReached(progress.highestLevelReached);
+    state.levelXUnlocked = Boolean(progress.levelXUnlocked);
     state.hardModeOverride = progress.hardModeOverride;
     state.fullModeOverride = progress.fullModeOverride;
     writePlayerSkinProgress();
@@ -2352,11 +2356,11 @@ Main tuning points:
   }
 
   function getStartScreenStyle() {
-    return String(C.startScreenStyle || "gfx1").toLowerCase() === "gfx2" ? "gfx2" : "gfx1";
+    return "gfx2";
   }
 
   function isGfx2StartScreenEnabled() {
-    return getStartScreenStyle() === "gfx2";
+    return true;
   }
 
   function loadPreRunGfx2Frame(src) {
@@ -4422,7 +4426,8 @@ Main tuning points:
   function getLevelAudioPathOverrides(level) {
     var normalizedLevel = Math.max(1, Math.min(LEVEL_COUNT, Math.floor(Number(level) || 1)));
     var prefix = "l" + String(normalizedLevel);
-    var basePath = "assets/level" + String(normalizedLevel) + "/sound/" + prefix;
+    var audioLevelFolder = normalizedLevel === 5 && isLevelXUnlocked() ? "levelx" : "level" + String(normalizedLevel);
+    var basePath = "assets/" + audioLevelFolder + "/sound/" + prefix;
     return {
       levelMusicLoopPath: basePath + "-music-loop.wav",
       levelJumpSoundPath: basePath + "-sfx-jump.wav",
@@ -4647,6 +4652,7 @@ Main tuning points:
     playerAuthPending: false,
     currentLevel: 1,
     highestLevelReached: 1,
+    levelXUnlocked: false,
     hardModeOverride: "default",
     fullModeOverride: "default",
     updateNoticeActive: false,
@@ -4949,15 +4955,6 @@ Main tuning points:
       fields: [
         { key: "fullscreenAutoEnabled", label: "Auto fullscreen on mobile", type: "checkbox" },
         { key: "modernVisualsEnabled", label: "Modern visuals", type: "checkbox" },
-        {
-          key: "startScreenStyle",
-          label: "Start screen style",
-          type: "select",
-          options: [
-            { value: "gfx1", label: "GFX1" },
-            { value: "gfx2", label: "GFX2" }
-          ]
-        },
         { key: "selectedSkin", label: "Skin", type: "select", options: SKIN_OPTIONS },
         { key: "skinPickupLevels", label: "Skin Pickup Level", type: "skin-pickup-levels" },
         { key: "hardModeUnlockLevel", label: "Jump Classic Hard unlock at Level", type: "number", min: 1, max: LEVEL_COUNT, step: 1 },
@@ -4981,7 +4978,7 @@ Main tuning points:
         { key: "shopContinuePrice1", label: "Continue Price", type: "number", min: 0, step: 1 },
         { key: "shopContinueLivesGranted", label: "Continue Lives Granted", type: "number", min: 1, step: 1 },
         { key: "shopKrobPrice", label: "Krob Price", type: "number", min: 0, step: 1 },
-        { key: "shopSpecialLevelPrice", label: "Special Level Placeholder Price", type: "number", min: 0, step: 1 }
+        { key: "shopSpecialLevelPrice", label: "New Level Price", type: "number", min: 0, step: 1 }
       ]
     },
     {
@@ -5278,6 +5275,15 @@ Main tuning points:
     });
     loadSceneArtAsset(LEVEL4_FOREST_FRONT_ART_PATH, function (image) {
       sceneArt.level4ForestFront = image;
+    });
+    loadSceneArtAsset(LEVELX_BACK_ART_PATH, function (image) {
+      sceneArt.levelxBack = image;
+    });
+    loadSceneArtAsset(LEVELX_FRONT_ART_PATH, function (image) {
+      sceneArt.levelxFront = image;
+    });
+    loadSceneArtAsset(LEVELX_BORDER_ART_PATH, function (image) {
+      sceneArt.levelxBorder = image;
     });
     loadSceneArtAsset(LEVEL5_SKY_ART_PATH, function (image) {
       sceneArt.level5Sky = image;
@@ -5948,7 +5954,6 @@ Main tuning points:
     var showAdvancedGfx2Inside = isPreRunGfx2AdvancedInsideActive();
     var showGfx2Inside = showClassicGfx2Inside || showAdvancedGfx2Inside;
     var compactLevelBriefing = state.preRunStep === "details" && state.currentLevel > 1 && !showGfx2Inside;
-    var useGfx2StartScreen = isGfx2StartScreenEnabled();
 
     normalizeUnlockedPreRunSelection();
     syncPlayerNameUi();
@@ -5956,11 +5961,8 @@ Main tuning points:
     if (preRunSelectScreenEl) {
       preRunSelectScreenEl.classList.toggle("hidden", state.preRunStep !== "select");
     }
-    if (preRunSelectGfx1El) {
-      preRunSelectGfx1El.classList.toggle("hidden", useGfx2StartScreen);
-    }
     if (preRunSelectGfx2El) {
-      preRunSelectGfx2El.classList.toggle("hidden", !useGfx2StartScreen);
+      preRunSelectGfx2El.classList.toggle("hidden", state.preRunStep !== "select");
     }
     if (preRunBadgesScreenEl) {
       preRunBadgesScreenEl.classList.toggle("hidden", state.preRunStep !== "badges");
@@ -7620,6 +7622,7 @@ Main tuning points:
     var scorePerCoin = sanitizeGlobalAdminNumber("shopScorePerCoin", C.shopScorePerCoin);
     var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
     var specialLevelPrice = sanitizeGlobalAdminNumber("shopSpecialLevelPrice", C.shopSpecialLevelPrice);
+    var levelXUnlocked = isLevelXUnlocked();
 
     return {
       "coin-one": {
@@ -7640,10 +7643,10 @@ Main tuning points:
       },
       "new-level": {
         key: "new-level",
-        label: "New Level (Placeholder)",
+        label: levelXUnlocked ? "New Level (Owned)" : "New Level",
         cost: specialLevelPrice,
         costUnit: "coins",
-        type: "placeholder"
+        type: "special-level"
       },
       "skin-cat": {
         key: "skin-cat",
@@ -7680,6 +7683,9 @@ Main tuning points:
     if (!item) {
       return "-";
     }
+    if (item.type === "special-level" && isLevelXUnlocked()) {
+      return "Owned";
+    }
     var unitText = item.costUnit === "score" ? "score" : "coins";
     return Math.max(0, Math.floor(Number(item.cost) || 0)).toLocaleString("en-US") + " " + unitText;
   }
@@ -7705,7 +7711,7 @@ Main tuning points:
 
   function handlePreRunShopBackNavigation() {
     resetPreRunGfx2ShopVisitState();
-    if (isGfx2StartScreenEnabled()) {
+    if (isGfx2StartScreenEnabled() && arePreRunGfx2FramesReady(PRE_RUN_GFX2_SHOP_BACK_FRAMES)) {
       startPreRunGfx2BackAnimation(PRE_RUN_GFX2_SHOP_BACK_FRAMES);
       return;
     }
@@ -7740,7 +7746,24 @@ Main tuning points:
       return;
     }
 
-    state.preRunGfx2ShopStatus = "Placeholder item. This purchase will be enabled later.";
+    if (selectedItem.type === "special-level") {
+      if (isLevelXUnlocked()) {
+        state.preRunGfx2ShopStatus = "Bonus level already unlocked.";
+        state.preRunGfx2ShopStatusTone = "success";
+      } else if (!spendCoinsFromWallet(selectedItem.cost)) {
+        state.preRunGfx2ShopStatus = "Not enough coins for the bonus level.";
+        state.preRunGfx2ShopStatusTone = "error";
+      } else {
+        state.levelXUnlocked = true;
+        writePlayerSkinProgress();
+        state.preRunGfx2ShopStatus = "Bonus level unlocked. See the new visuals in level 5. Have a nice psilocytime!";
+        state.preRunGfx2ShopStatusTone = "success";
+      }
+      renderPreRunShopScreen();
+      return;
+    }
+
+    state.preRunGfx2ShopStatus = "This purchase is not available yet.";
     state.preRunGfx2ShopStatusTone = "info";
     renderPreRunShopScreen();
   }
@@ -7754,13 +7777,8 @@ Main tuning points:
     var canBuyOneCoin = persistentScore >= scorePerCoin;
     var canBuyTenCoins = persistentScore >= scorePerCoin * 10;
     var krobOwned = isSkinUnlocked("Skin04");
-    var useGfx2StartScreen = isGfx2StartScreenEnabled();
-
-    if (preRunShopGfx1El) {
-      preRunShopGfx1El.classList.toggle("hidden", useGfx2StartScreen);
-    }
     if (preRunShopGfx2El) {
-      preRunShopGfx2El.classList.toggle("hidden", !useGfx2StartScreen);
+      preRunShopGfx2El.classList.remove("hidden");
     }
 
     if (preRunShopWalletEl) {
@@ -7799,11 +7817,12 @@ Main tuning points:
         : "Price: " + krobPrice.toLocaleString("en-US") + " coins.";
     }
     if (preRunShopSpecialLevelStatusEl) {
-      preRunShopSpecialLevelStatusEl.textContent =
-        "Placeholder only. Future price: " + specialLevelPrice.toLocaleString("en-US") + " coins.";
+      preRunShopSpecialLevelStatusEl.textContent = isLevelXUnlocked()
+        ? "Bonus level unlocked. See the new visuals in level 5. Have a nice psilocytime!"
+        : "Unlock the bonus Level 5 pack for " + specialLevelPrice.toLocaleString("en-US") + " coins.";
     }
 
-    if (!useGfx2StartScreen) {
+    if (!isGfx2StartScreenEnabled()) {
       return;
     }
 
@@ -7851,6 +7870,11 @@ Main tuning points:
       var isSelected = state.preRunGfx2ShopSelection === entry.key;
       entry.button.setAttribute("aria-pressed", isSelected ? "true" : "false");
     });
+    if (preRunShopGfx2BuyBtn) {
+      var selectedIsSpecialLevel = selectedItem && selectedItem.type === "special-level";
+      preRunShopGfx2BuyBtn.disabled = Boolean(selectedIsSpecialLevel && (isLevelXUnlocked() || walletBalance < selectedItem.cost));
+      preRunShopGfx2BuyBtn.textContent = selectedIsSpecialLevel && isLevelXUnlocked() ? "Owned" : "Buy";
+    }
   }
 
   function updateLevelFinishedSummary() {
@@ -9110,8 +9134,6 @@ Main tuning points:
               C.selectedSkin = normalizeSkinName(nextValue);
               refreshPreRunSkinSelection();
               renderAdminForm();
-            } else if (key === "startScreenStyle") {
-              renderPreRunScreen();
             } else if (key === "hardModeUnlockLevel" || key === "fullModeUnlockJumpHardScore") {
               normalizeUnlockedPreRunSelection();
               refreshPreRunBriefValues();
@@ -12671,8 +12693,11 @@ Main tuning points:
       drawParallaxStrip(sceneArt.level4ForestMid, 0.14, C.topDeathLineY, playableHeight);
       drawParallaxStrip(sceneArt.level4ForestFront, 0.24, C.topDeathLineY, playableHeight);
     } else if (state.currentLevel === 5) {
-      drawParallaxStrip(sceneArt.level5Sky, 0.12, C.topDeathLineY, playableHeight);
-      drawParallaxStrip(sceneArt.level5Foreground, 0.32, C.topDeathLineY, playableHeight);
+      var levelXUnlocked = isLevelXUnlocked();
+      var level5BackArt = levelXUnlocked && sceneArt.levelxBack ? sceneArt.levelxBack : sceneArt.level5Sky;
+      var level5FrontArt = levelXUnlocked && sceneArt.levelxFront ? sceneArt.levelxFront : sceneArt.level5Foreground;
+      drawParallaxStrip(level5BackArt, 0.12, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(level5FrontArt, 0.32, C.topDeathLineY, playableHeight);
     } else {
       drawParallaxStrip(sceneArt.backgroundSky, 0.12, C.topDeathLineY, playableHeight);
       drawParallaxStrip(sceneArt.backgroundForeground, 0.32, C.topDeathLineY, playableHeight);
@@ -12706,11 +12731,17 @@ Main tuning points:
     if (level === 4) {
       return sceneArt.level4Border;
     }
+    if (level === 5 && isLevelXUnlocked()) {
+      return sceneArt.levelxBorder;
+    }
     return null;
   }
 
   function drawLevelBorderOverlay() {
-    if (state.currentLevel < 1 || state.currentLevel > 4) {
+    if (state.currentLevel < 1 || state.currentLevel > 5) {
+      return;
+    }
+    if (state.currentLevel === 5 && !isLevelXUnlocked()) {
       return;
     }
     if (!state.preRunActive && !state.running && !state.questionCoinAnimActive && !state.teleportFinishAnimActive && !state.projectileDeathAnimActive) {

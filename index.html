@@ -111,44 +111,7 @@
     <div id="pre-run-screen" class="hidden" aria-label="Run instructions">
       <div class="pre-run-card">
         <div id="pre-run-select-screen" class="pre-run-stage">
-          <div id="pre-run-select-gfx1" class="pre-run-select-variant">
-            <div class="pre-run-select-topbar">
-              <button id="pre-run-rules-btn" class="pre-run-side-btn pre-run-rules-btn" aria-label="Open rules overview">Rules</button>
-              <button id="pre-run-credits-btn" class="pre-run-side-btn pre-run-credits-btn" aria-label="Open credits">Credits</button>
-              <button id="pre-run-shop-btn" class="pre-run-side-btn pre-run-shop-btn" aria-label="Open shop">Shop</button>
-              <button id="pre-run-settings-btn" class="pre-run-side-btn pre-run-settings-btn" aria-label="Open settings">Settings</button>
-            </div>
-            <div class="pre-run-brand">HRRRA</div>
-            <div class="pre-run-select-layout">
-              <button id="pre-run-jump-btn" class="pre-run-mode-card" aria-label="Choose Jump Classic">
-                <span class="pre-run-mode-title">Jump Classic</span>
-                <span class="pre-run-mode-copy">Tap To Jump</span>
-                <span class="pre-run-mode-copy"><strong>Double Jump</strong> is always enabled</span>
-              </button>
-              <div class="pre-run-difficulty-column" aria-label="Difficulty selection">
-                <button id="pre-run-difficulty-toggle" class="pre-run-difficulty-toggle easy-active" aria-label="Toggle difficulty">
-                  <span class="pre-run-difficulty-side pre-run-difficulty-side-easy">
-                    <span class="pre-run-difficulty-side-label">Easy</span>
-                  </span>
-                  <span class="pre-run-difficulty-side pre-run-difficulty-side-hard">
-                    <span class="pre-run-difficulty-side-label">Hard</span>
-                  </span>
-                  <span id="pre-run-difficulty-lock" class="pre-run-difficulty-toggle-lock hidden"></span>
-                </button>
-                <button id="pre-run-badges-btn" class="pre-run-badges-btn" aria-label="Open badges overview">Badges</button>
-                <button id="pre-run-scores-btn" class="pre-run-scores-btn" aria-label="Open online top players">Scores</button>
-                <button id="pre-run-player-name-btn" class="pre-run-player-name-btn" aria-label="Open sign in">Sign In</button>
-              </div>
-              <button id="pre-run-full-btn" class="pre-run-mode-card" aria-label="Choose Jump Advanced">
-                <span class="pre-run-mode-title">Jump Advanced</span>
-                <span id="pre-run-full-lock" class="pre-run-lock-note hidden"></span>
-                <span class="pre-run-phone-art" aria-hidden="true">
-                  <img src="assets/start_phone.png" alt="" />
-                </span>
-              </button>
-            </div>
-          </div>
-          <div id="pre-run-select-gfx2" class="pre-run-select-variant hidden">
+          <div id="pre-run-select-gfx2" class="pre-run-select-variant">
             <div class="pre-run-gfx2-scene" aria-label="Crossroads start screen">
               <div class="pre-run-gfx2-sky" aria-hidden="true"></div>
               <button id="pre-run-gfx2-classic-corner-btn" class="pre-run-gfx2-hotspot pre-run-gfx2-hotspot-classic-corner" aria-label="Choose Jump Classic"></button>
@@ -268,85 +231,8 @@
               </div>
             </div>
           </div>
-          <div id="pre-run-settings-gfx1" class="pre-run-settings-gfx1">
-            <div class="pre-run-scores-header">
-              <div class="pre-run-scores-topbar">
-                <button id="pre-run-settings-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
-                <div class="pre-run-scores-heading">
-                  <h2>Settings</h2>
-                </div>
-              </div>
-            </div>
-            <div class="pre-run-settings-list">
-              <section class="pre-run-settings-row" aria-label="Sound effects setting">
-                <div class="pre-run-settings-copy">
-                  <h3>Sound</h3>
-                  <p>All sound effects</p>
-                </div>
-                <button id="pre-run-toggle-sfx-btn" class="pre-run-settings-toggle" type="button" aria-pressed="true">ON</button>
-              </section>
-              <section class="pre-run-settings-row" aria-label="Music setting">
-                <div class="pre-run-settings-copy">
-                  <h3>Music</h3>
-                  <p>All music loops</p>
-                </div>
-                <button id="pre-run-toggle-music-btn" class="pre-run-settings-toggle" type="button" aria-pressed="true">ON</button>
-              </section>
-            </div>
-          </div>
         </div>
         <div id="pre-run-shop-screen" class="pre-run-stage hidden" aria-label="Shop overview">
-          <div id="pre-run-shop-gfx1" class="pre-run-shop-legacy">
-            <div class="pre-run-scores-header">
-              <div class="pre-run-scores-topbar">
-                <button id="pre-run-shop-back-btn" class="pre-run-back-btn" aria-label="Back to mode selection">Back</button>
-                <div class="pre-run-scores-heading">
-                  <h2>Shop</h2>
-                </div>
-              </div>
-            </div>
-            <div class="pre-run-shop-summary">
-              <section class="pre-run-shop-summary-card">
-                <strong id="pre-run-shop-wallet">0</strong>
-                <span>Coin Wallet</span>
-              </section>
-              <section class="pre-run-shop-summary-card">
-                <strong id="pre-run-shop-total-score">0</strong>
-                <span>Persistent Total Score</span>
-              </section>
-              <section class="pre-run-shop-summary-card">
-                <strong id="pre-run-shop-rate">1000 : 1</strong>
-                <span>Score to spend</span>
-              </section>
-            </div>
-            <div class="pre-run-shop-grid">
-              <section class="pre-run-shop-card" aria-label="Score exchange">
-                <h3>Exchange Score</h3>
-                <p id="pre-run-shop-exchange-copy">Convert persistent total score into coins.</p>
-                <div class="pre-run-shop-actions">
-                  <button id="pre-run-shop-exchange-one-btn" class="pre-run-shop-action-btn" type="button">Buy 1 Coin</button>
-                  <button id="pre-run-shop-exchange-ten-btn" class="pre-run-shop-action-btn" type="button">Buy 10 Coins</button>
-                </div>
-                <p id="pre-run-shop-exchange-status" class="pre-run-shop-status">Need 1,000 score for 1 coin.</p>
-              </section>
-              <section class="pre-run-shop-card" aria-label="Krob skin offer">
-                <h3>Krob</h3>
-                <p>Unlock Krob as a shop skin for testing.</p>
-                <div class="pre-run-shop-actions">
-                  <button id="pre-run-shop-buy-krob-btn" class="pre-run-shop-action-btn" type="button">Buy Krob</button>
-                </div>
-                <p id="pre-run-shop-krob-status" class="pre-run-shop-status">Price: 150 coins.</p>
-              </section>
-              <section class="pre-run-shop-card" aria-label="Special level placeholder">
-                <h3>Special Level</h3>
-                <p>Placeholder only. A purchasable special level will be added here later.</p>
-                <div class="pre-run-shop-actions">
-                  <button id="pre-run-shop-special-level-btn" class="pre-run-shop-action-btn" type="button" disabled>Coming Later</button>
-                </div>
-                <p id="pre-run-shop-special-level-status" class="pre-run-shop-status">Future placeholder for a special level unlock.</p>
-              </section>
-            </div>
-          </div>
           <div id="pre-run-shop-gfx2" class="pre-run-shop-gfx2 hidden">
             <div class="pre-run-shop-gfx2-scene" aria-label="GFX2 shop interior">
               <button id="pre-run-shop-gfx2-exit-btn" class="pre-run-shop-gfx2-hitbox pre-run-shop-gfx2-hitbox-exit" aria-label="Back to mode selection"></button>

@@ -92,3 +92,11 @@ zmensi text Score a Max Score o 33%
 - 2026-04-23: Pre-run board tweak - restored an intro-only note on the Level 1 setup board: "Starting with 5 lives and Double Jump always enabled" appears under Goal, while between-level boards stay minimal.
 - 2026-04-23: Level finished overlay - stretched the level finished artwork edge-to-edge again by removing aspect-ratio preservation, so the finish screen fills the whole viewport responsively.
 - 2026-04-23: Release bump - raised Android/web version metadata to 1.0.54 / versionCode 54, synced web + Android public assets, and prepared a new AAB build for release.
+- 2026-04-23: Badge reward reveal - kept the trophy base/art hidden until the shake phase so the badge medal only appears during the actual reveal animation.
+- 2026-04-23: Removed legacy GFX1 start-screen/settings/shop code path so the app now uses GFX2 only and no longer keeps the admin start-screen switch.
+- 2026-04-23: Switched the parallax back-layer assets for Levels 2 to 4 from PNG to JPG in `game.js` so the release bundle can drop the larger duplicate PNG files.
+- 2026-04-23: Added the LevelX bonus pack for Level 5 with its own border, parallax layers, copied sound folder, and a persistent shop unlock that defaults to 10,000 coins but remains admin-editable.
+- 2026-04-23: Fixed the GFX2 shop layering so the hitboxes sit above the decorative board/status text again, and guarded the shop exit back animation so it falls back cleanly instead of getting stuck when the frames are not ready.
+- 2026-04-23: Fixed a leftover `useGfx2StartScreen` check in the GFX2 shop renderer that was throwing at runtime and blanking the shop values / click handling.
+- 2026-04-23: Updated the LevelX unlock messaging to say: "Bonus level unlocked. See the new visuals in level 5. Have a nice psilocytime!"
+- 2026-04-23: Version bump to 1.0.55 / versionCode 55, with sync to `www` and Android public assets so the current build is detected as newer by the mobile update check.
