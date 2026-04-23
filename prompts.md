@@ -1,7 +1,7 @@
 ﻿# Prompts
 
 -------------------
-
+Bump the release metadata to 1.0.53 / versionCode 53 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.52 release
 add one more blank-row worth of vertical space before the GFX2 pre-run Goal section so it sits a bit lower beneath Level
 
 simplify the GFX2 pre-run level board so it only shows Level and Goal, enlarge both texts twofold, and add more spacing between them while keeping the divider line

@@ -1,5 +1,6 @@
 # Hrrra - Working Changes Log
 
+- 2026-04-23: Bumped release metadata to `1.0.53` / `versionCode 53` so the next Android and Vercel-facing build is newer than the deployed store version `1.0.52`.
 - 2026-04-23: Added a bit more vertical space before the GFX2 pre-run `Goal` section in `style.css` so the board reads more like `Level` followed by a separated goal block.
 - 2026-04-23: Simplified the GFX2 pre-run level board in `index.html` and `style.css` so it now shows only `Level` and `Goal`, with the `Level` and `Goal` text enlarged and extra vertical spacing between them.
 - 2026-04-23: Reduced the `level-finished` artwork to a centered responsive panel in `style.css` so the fullscreen continue hitbox remains invisible but the gameplay behind the completion art is still partially visible for debugging.
