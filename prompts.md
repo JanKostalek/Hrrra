@@ -6,6 +6,7 @@ Bump the release metadata to 1.0.53 / versionCode 53 so Android and the Vercel-f
 Change the GFX2 shop `New Level` state so once the bonus Level 5 skin is purchased, the cost field and status copy say `Already purchased - enjoy new level 5 skin` instead of showing a price again
 Make the GFX2 shop status row show `You don´t have enough coins to buy it.` when `New Level` is selected but the wallet cannot afford it, instead of falling back to the generic buy prompt
 Wire `assets/levelx/levelx_platform.png` into the Level 5 platform resolver so the bonus LevelX skin can swap the endless level platform art the same way it already swaps background and border art
+Level 5 now prefers `assets/levelx/levelx_platform.png` before the generic Level 5 platform fallback, so the bonus skin no longer gets masked by the old platform art once it is unlocked
 Reduce the top-left `Max Score` HUD label font size by 50% in `game.js` while keeping the `Score` line unchanged
 
 Add `banger` and `unlocker` trophy slug mappings in `game.js` so `trophy_banger.png` and `trophy_unlocker.png` load automatically in the badges UI and unlock overlays
@@ -104,6 +105,11 @@ Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-f
 2026-04-22: bump Android release metadata to 1.0.48 / version code 48 before preparing the next AAB.
 - 2026-04-22: bump release metadata to 1.0.51 / versionCode 51 after confirming the store already has 1.0.50, and keep the Vercel-facing version files in sync for mobile update detection.
 zmensi text Score a Max Score o 33%
+- 2026-04-24: Release bump - raised Android/web version metadata to 1.0.57 / versionCode 57 so the next store/web build is seen as newer.
+- 2026-04-24: HUD polish - moved the upper-left Score and Max Score labels 20px back to the left after the previous right shift, keeping them aligned inside the plaque.
+- 2026-04-24: HUD polish - shifted the upper-left Score and Max Score labels 50px to the right so both lines sit fully inside the scoreboard plaque.
+- 2026-04-24: HUD polish - reduced the upper-left Score and Max Score fonts again and switched both labels to left-aligned placement so the text no longer shifts as the score grows.
+- 2026-04-24: HUD polish - made all gameplay top-bar text black again and enlarged Score and Max Score in the upper-left HUD so the values read more clearly.
 - 2026-04-23: HUD tuning - aligned Max Score with Score, shifted Level further left, and moved the life hearts row up by one icon height so the mobile top bar reads cleaner.
 - 2026-04-23: Pre-run board tweak - restored an intro-only note on the Level 1 setup board: "Starting with 5 lives and Double Jump always enabled" appears under Goal, while between-level boards stay minimal.
 - 2026-04-23: Level finished overlay - stretched the level finished artwork edge-to-edge again by removing aspect-ratio preservation, so the finish screen fills the whole viewport responsively.

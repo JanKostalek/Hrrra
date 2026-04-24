@@ -1,11 +1,12 @@
-# Hrrra - Working Changes Log
+﻿# Hrrra - Working Changes Log
 
 - 2026-04-24: Bumped the release metadata to `1.0.56` / `versionCode 56` after adding the `levelx` packaging path and the LevelX platform hookup.
+- 2026-04-24: Level 5 now prefers `assets/levelx/levelx_platform.png` before the generic Level 5 platform fallback, so the bonus skin no longer gets masked by the old platform art once it is unlocked.
 
 - 2026-04-24: Wired `assets/levelx/levelx_platform.png` into the Level 5 platform resolver so the bonus LevelX skin can swap the endless level platform art the same way it already swaps background and border art.
 - 2026-04-24: Reduced the top-left `Max Score` HUD label font size by 50% in `game.js` while keeping the `Score` line unchanged.
 
-- 2026-04-24: Made the GFX2 shop status row show `You don´t have enough coins to buy it.` when `New Level` is selected but the wallet cannot afford it, instead of falling back to the generic buy prompt.
+- 2026-04-24: Made the GFX2 shop status row show `You donÂ´t have enough coins to buy it.` when `New Level` is selected but the wallet cannot afford it, instead of falling back to the generic buy prompt.
 - 2026-04-24: Changed the GFX2 shop `New Level` state so once the bonus Level 5 skin is purchased, the cost field and status copy now say `Already purchased - enjoy new level 5 skin` instead of showing a price again.
 - 2026-04-23: Added `banger` and `unlocker` trophy slug mappings in `game.js` so the new `trophy_banger.png` and `trophy_unlocker.png` art files load automatically in the badges UI and unlock overlays.
 - 2026-04-23: Nudged the `trophy_xx` artwork 10% of its own height downward in both the badges overview and badge reward overlay while leaving `trophy_clean` untouched.
@@ -131,6 +132,11 @@
 ## 2026-04-22
 - Android launcher icon now uses `assets/game_icon.jpg` as the source for all `ic_launcher` and `ic_launcher_foreground` density variants.
 - Release bumped to `1.0.50` so the new Android icon and splash assets can ship as a new bundle.
+- 2026-04-24: Release bump - raised Android/web version metadata to 1.0.57 / versionCode 57 so the next store/web build is seen as newer.
+- 2026-04-24: HUD polish - moved the upper-left Score and Max Score labels 20px back to the left after the previous right shift, keeping them aligned inside the plaque.
+- 2026-04-24: HUD polish - shifted the upper-left Score and Max Score labels 50px to the right so both lines sit fully inside the scoreboard plaque.
+- 2026-04-24: HUD polish - reduced the upper-left Score and Max Score fonts again and switched both labels to left-aligned placement so the text no longer shifts as the score grows.
+- 2026-04-24: HUD polish - made all gameplay top-bar text black again and enlarged Score and Max Score in the upper-left HUD so the values read more clearly.
 - 2026-04-23: HUD tuning - aligned Max Score with Score, shifted Level further left, and moved the life hearts row up by one icon height so the mobile top bar reads cleaner.
 - 2026-04-23: Pre-run board tweak - restored an intro-only note on the Level 1 setup board: "Starting with 5 lives and Double Jump always enabled" appears under Goal, while between-level boards stay minimal.
 - 2026-04-23: Level finished overlay - stretched the level finished artwork edge-to-edge again by removing aspect-ratio preservation, so the finish screen fills the whole viewport responsively.

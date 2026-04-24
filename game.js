@@ -5436,12 +5436,12 @@ Main tuning points:
   }
 
   function getCurrentLevelSceneArt(key) {
+    if (key === "platform" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxPlatform) {
+      return sceneArt.levelxPlatform;
+    }
     var levelEntry = sceneArt.levelVariants[state.currentLevel];
     if (levelEntry && levelEntry[key]) {
       return levelEntry[key];
-    }
-    if (key === "platform" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxPlatform) {
-      return sceneArt.levelxPlatform;
     }
     return sceneArt[key] || null;
   }
@@ -13888,17 +13888,14 @@ Main tuning points:
   }
 
   function drawHud() {
-    var hudTextColor =
-      state.currentLevel === 2 || state.currentLevel === 3 || state.currentLevel === 4 ? "#ffffff" : "#111";
-    ctx.fillStyle = hudTextColor;
-    ctx.font = "16px Arial";
+    ctx.fillStyle = "#111";
+    ctx.textAlign = "left";
+    ctx.font = "22px Arial";
     var scoreLabel = "Score: " + state.score;
-    var scoreLabelWidth = ctx.measureText(scoreLabel).width;
-    ctx.fillText(scoreLabel, 18 + scoreLabelWidth * 0.5, 36);
-    ctx.font = "7px Arial";
+    ctx.fillText(scoreLabel, 54, 36);
+    ctx.font = "15px Arial";
     var maxScoreLabel = "Max Score: " + sessionMaxScore;
-    var maxScoreLabelWidth = ctx.measureText(maxScoreLabel).width;
-    ctx.fillText(maxScoreLabel, 18 + scoreLabelWidth * 0.5, 64);
+    ctx.fillText(maxScoreLabel, 54, 64);
     ctx.font = "24px Arial";
     ctx.textAlign = "center";
     if (state.gameMode === 2) {

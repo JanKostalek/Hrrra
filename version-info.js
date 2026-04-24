@@ -1,6 +1,6 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 56,
-  versionName: "1.0.56",
+  versionCode: 57,
+  versionName: "1.0.57",
   whatsNew: [
   "Release bump to version 1.0.56.",
   "Level 1 to 4 now use canvas border overlays above gameplay.",
