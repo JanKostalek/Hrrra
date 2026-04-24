@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 55,
-  versionName: "1.0.55",
+  versionCode: 56,
+  versionName: "1.0.56",
   whatsNew: [
-  "Release bump to version 1.0.55.",
+  "Release bump to version 1.0.56.",
   "Level 1 to 4 now use canvas border overlays above gameplay.",
   "Launcher icon now uses assets/game_icon.jpg.",
   "Android splash uses the responsive JPG splash asset.",

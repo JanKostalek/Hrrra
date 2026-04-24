@@ -53,7 +53,8 @@ const assetDirectoriesToCopy = [
   "assets/level2",
   "assets/level3",
   "assets/level4",
-  "assets/level5"
+  "assets/level5",
+  "assets/levelx"
 ];
 
 function collectFilesRecursively(dirPath) {

@@ -1,7 +1,12 @@
 ﻿# Prompts
 
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 Bump the release metadata to 1.0.53 / versionCode 53 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.52 release
+Change the GFX2 shop `New Level` state so once the bonus Level 5 skin is purchased, the cost field and status copy say `Already purchased - enjoy new level 5 skin` instead of showing a price again
+Make the GFX2 shop status row show `You don´t have enough coins to buy it.` when `New Level` is selected but the wallet cannot afford it, instead of falling back to the generic buy prompt
+Wire `assets/levelx/levelx_platform.png` into the Level 5 platform resolver so the bonus LevelX skin can swap the endless level platform art the same way it already swaps background and border art
+Reduce the top-left `Max Score` HUD label font size by 50% in `game.js` while keeping the `Score` line unchanged
 
 Add `banger` and `unlocker` trophy slug mappings in `game.js` so `trophy_banger.png` and `trophy_unlocker.png` load automatically in the badges UI and unlock overlays
 
@@ -32,16 +37,20 @@ restore the level border overlay on branch New for levels 1 through 4 so the bor
 pridej stejny frame overlay i pro level 2, 3 a 4 podle obrazku v jejich slozkach, stejne jako level 1, a texty/hud nech stejne
 
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 
 posun text Double Jump a radky pod nim o 10% jejich sirky doleva
 
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 
 posun text Score a Max Score o 50% jejich sirky doprava
 
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 2026-04-18: nic se nezmenilo. zkus jeste jednou, tentokrat vytvoÅ™ tlaÄÃ­tko, kterÃ© bude nad vsemi vrstavami, ktere bude mÃ­t overlay - Äerveny, vzdy viditelnÃ½ a dej to tlaÄÃ­tko pÅ™esne doprostred obrazovky. jeho velikost udelej 512s512 pixelu
 2026-04-18: ano, ted jsem to oveÅ™il. opravdu se to ukazuje v gfx1, ale ma to bÃ½t v gfx2. vzdy vsechno dÄ›lÃ¡me v gfx2 (pokud neÅ™eknu jinak - zapis to do pravidel). a nynÃ­ to tlaÄÃ­tko z gfx1 odstran a udÄ›lej ho v gfx2. ale zpÃ¡tky v hornÃ­m rohu. velikost odpovÃ­dajÃ­cÃ­ tlaÄÃ­tku v levÃ© ÄÃ¡sti obrazovky "back"
 2026-04-18: uz to otevÃ­rÃ¡ potvrzovacÃ­ stranku. ale samoznÃ© tlaÄÃ­tko v hornÃ­m rohu nemÃ¡ Å¾adnÃ½ text. mÄ›lo by tam byt aspon Change User a nÄ›jakÃ© pozadÃ­. ted je tam jen cervenÃ½ okraj a prohlednÃ© pozadÃ­
@@ -73,18 +82,25 @@ posun text Score a Max Score o 50% jejich sirky doprava
 2026-04-21: continue purchase overlay now matches the updated 433x327 buy_continue_clean.png ratio and can scale larger without distortion.
 
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 2026-04-21 - Keep the continue purchase overlay at the exact 256:199 aspect ratio of buy_continue_clean.png.
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 2026-04-22: add a new persistent All Runs badge `Jumper` that counts every successful jump event across all runs with bronze/silver/gold goals at 1000 / 5000 / 10000.
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 2026-04-22: double the font sizes on all score tables, including the pre-run Scores page and the game-over top score panels.
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 2026-04-22: restore the game-over top score panel fonts to the original size while keeping the Scores page tables enlarged.
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 2026-04-22: make the game-over background overlay less transparent so the underlying gameplay shows through less.
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 2026-04-22: make the skin unlock overlay use the same fixed centered badge reward positioning so it no longer appears below the game window.
 -------------------
+Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 2026-04-22: bump Android release metadata to 1.0.48 / version code 48 before preparing the next AAB.
 - 2026-04-22: bump release metadata to 1.0.51 / versionCode 51 after confirming the store already has 1.0.50, and keep the Vercel-facing version files in sync for mobile update detection.
 zmensi text Score a Max Score o 33%
@@ -100,3 +116,4 @@ zmensi text Score a Max Score o 33%
 - 2026-04-23: Fixed a leftover `useGfx2StartScreen` check in the GFX2 shop renderer that was throwing at runtime and blanking the shop values / click handling.
 - 2026-04-23: Updated the LevelX unlock messaging to say: "Bonus level unlocked. See the new visuals in level 5. Have a nice psilocytime!"
 - 2026-04-23: Version bump to 1.0.55 / versionCode 55, with sync to `www` and Android public assets so the current build is detected as newer by the mobile update check.
+

@@ -1,5 +1,12 @@
 # Hrrra - Working Changes Log
 
+- 2026-04-24: Bumped the release metadata to `1.0.56` / `versionCode 56` after adding the `levelx` packaging path and the LevelX platform hookup.
+
+- 2026-04-24: Wired `assets/levelx/levelx_platform.png` into the Level 5 platform resolver so the bonus LevelX skin can swap the endless level platform art the same way it already swaps background and border art.
+- 2026-04-24: Reduced the top-left `Max Score` HUD label font size by 50% in `game.js` while keeping the `Score` line unchanged.
+
+- 2026-04-24: Made the GFX2 shop status row show `You don´t have enough coins to buy it.` when `New Level` is selected but the wallet cannot afford it, instead of falling back to the generic buy prompt.
+- 2026-04-24: Changed the GFX2 shop `New Level` state so once the bonus Level 5 skin is purchased, the cost field and status copy now say `Already purchased - enjoy new level 5 skin` instead of showing a price again.
 - 2026-04-23: Added `banger` and `unlocker` trophy slug mappings in `game.js` so the new `trophy_banger.png` and `trophy_unlocker.png` art files load automatically in the badges UI and unlock overlays.
 - 2026-04-23: Nudged the `trophy_xx` artwork 10% of its own height downward in both the badges overview and badge reward overlay while leaving `trophy_clean` untouched.
 - 2026-04-23: Shifted the badge `trophy_xx` artwork 20% right and 20% up and scaled it down by another 15% so the tighter source art centers more cleanly over `trophy_clean`.

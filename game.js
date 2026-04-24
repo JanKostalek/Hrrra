@@ -1080,6 +1080,7 @@ Main tuning points:
     levelxBack: null,
     levelxFront: null,
     levelxBorder: null,
+    levelxPlatform: null,
     level2CaveBack: null,
     level2CaveFront: null,
     level3VolcanoBack: null,
@@ -1303,6 +1304,7 @@ Main tuning points:
   var LEVELX_BACK_ART_PATH = "assets/levelx/background_back_tile.jpg";
   var LEVELX_FRONT_ART_PATH = "assets/levelx/background_front_tile.png";
   var LEVELX_BORDER_ART_PATH = "assets/levelx/levelx_border.png";
+  var LEVELX_PLATFORM_ART_PATH = "assets/levelx/levelx_platform.png";
   var PLATFORM_ART_PATH = "assets/platform-tile-clean.png";
   var LEVEL_FINISHED_ART_PATHS = {
     1: "assets/level1/level1_finished.jpg",
@@ -5285,6 +5287,9 @@ Main tuning points:
     loadSceneArtAsset(LEVELX_BORDER_ART_PATH, function (image) {
       sceneArt.levelxBorder = image;
     });
+    loadSceneArtAsset(LEVELX_PLATFORM_ART_PATH, function (image) {
+      sceneArt.levelxPlatform = image;
+    });
     loadSceneArtAsset(LEVEL5_SKY_ART_PATH, function (image) {
       sceneArt.level5Sky = image;
     });
@@ -5434,6 +5439,9 @@ Main tuning points:
     var levelEntry = sceneArt.levelVariants[state.currentLevel];
     if (levelEntry && levelEntry[key]) {
       return levelEntry[key];
+    }
+    if (key === "platform" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxPlatform) {
+      return sceneArt.levelxPlatform;
     }
     return sceneArt[key] || null;
   }
@@ -7684,7 +7692,7 @@ Main tuning points:
       return "-";
     }
     if (item.type === "special-level" && isLevelXUnlocked()) {
-      return "Owned";
+      return "Already purchased - enjoy new level 5 skin";
     }
     var unitText = item.costUnit === "score" ? "score" : "coins";
     return Math.max(0, Math.floor(Number(item.cost) || 0)).toLocaleString("en-US") + " " + unitText;
@@ -7818,7 +7826,7 @@ Main tuning points:
     }
     if (preRunShopSpecialLevelStatusEl) {
       preRunShopSpecialLevelStatusEl.textContent = isLevelXUnlocked()
-        ? "Bonus level unlocked. See the new visuals in level 5. Have a nice psilocytime!"
+        ? "Already purchased - enjoy new level 5 skin"
         : "Unlock the bonus Level 5 pack for " + specialLevelPrice.toLocaleString("en-US") + " coins.";
     }
 
@@ -7849,6 +7857,9 @@ Main tuning points:
     }
     if (preRunShopGfx2StatusEl) {
       var statusText = state.preRunGfx2ShopStatus || "Select an item and press Buy.";
+      if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "special-level" && !isLevelXUnlocked() && walletBalance < selectedItem.cost) {
+        statusText = "You don´t have enough coins to buy it.";
+      }
       preRunShopGfx2StatusEl.textContent = statusText;
       preRunShopGfx2StatusEl.classList.toggle("is-error", state.preRunGfx2ShopStatusTone === "error");
       preRunShopGfx2StatusEl.classList.toggle("is-success", state.preRunGfx2ShopStatusTone === "success");
@@ -13884,7 +13895,7 @@ Main tuning points:
     var scoreLabel = "Score: " + state.score;
     var scoreLabelWidth = ctx.measureText(scoreLabel).width;
     ctx.fillText(scoreLabel, 18 + scoreLabelWidth * 0.5, 36);
-    ctx.font = "13px Arial";
+    ctx.font = "7px Arial";
     var maxScoreLabel = "Max Score: " + sessionMaxScore;
     var maxScoreLabelWidth = ctx.measureText(maxScoreLabel).width;
     ctx.fillText(maxScoreLabel, 18 + scoreLabelWidth * 0.5, 64);
