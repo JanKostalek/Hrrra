@@ -2453,17 +2453,43 @@ body {
 }
 
 .pre-run-credits-version {
-  justify-self: end;
-  align-self: start;
   padding: 8px 14px;
   border-radius: 999px;
-  background: rgba(8, 41, 58, 0.12);
-  color: #123c5d;
-  font-size: clamp(13px, 1.4vw, 18px);
+  background: rgba(8, 41, 58, 0.26);
+  color: #fff;
+  font-size: clamp(18px, 2vw, 28px);
   font-weight: 800;
   letter-spacing: 0.04em;
   line-height: 1;
   white-space: nowrap;
+  text-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.35),
+    0 3px 10px rgba(0, 0, 0, 0.18);
+}
+
+.pre-run-credits-update-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.52);
+  background: linear-gradient(180deg, rgba(18, 60, 93, 0.92), rgba(7, 33, 53, 0.94));
+  color: #fff;
+  font-size: clamp(15px, 1.55vw, 21px);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-decoration: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 8px 16px rgba(8, 41, 58, 0.16);
+}
+
+.pre-run-credits-update-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.76);
 }
 
 .pre-run-credits-card p {
@@ -3590,6 +3616,14 @@ body {
   grid-template-columns: 132px 1fr 132px;
   gap: 16px;
   align-items: center;
+}
+
+.pre-run-credits-meta {
+  grid-column: 3;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .pre-run-scores-heading {

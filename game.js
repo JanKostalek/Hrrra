@@ -84,7 +84,8 @@ Main tuning points:
   var skinRewardKickerEl = document.getElementById("skin-reward-kicker");
   var skinRewardNameEl = document.getElementById("skin-reward-name");
   var skinRewardTierEl = document.getElementById("skin-reward-tier");
-  var skinRewardIconEl = document.getElementById("skin-reward-icon");
+  var skinRewardTrophyBaseEl = document.getElementById("skin-reward-trophy-base");
+  var skinRewardTrophyArtEl = document.getElementById("skin-reward-trophy-art");
   var skinRewardGoalEl = document.getElementById("skin-reward-goal");
   var skinRewardProgressEl = document.getElementById("skin-reward-progress");
   var skinRewardPromptEl = document.getElementById("skin-reward-prompt");
@@ -1081,6 +1082,7 @@ Main tuning points:
     levelxFront: null,
     levelxBorder: null,
     levelxPlatform: null,
+    levelxBlocker: null,
     level2CaveBack: null,
     level2CaveFront: null,
     level3VolcanoBack: null,
@@ -1305,6 +1307,7 @@ Main tuning points:
   var LEVELX_FRONT_ART_PATH = "assets/levelx/background_front_tile.png";
   var LEVELX_BORDER_ART_PATH = "assets/levelx/levelx_border.png";
   var LEVELX_PLATFORM_ART_PATH = "assets/levelx/levelx_platform.png";
+  var LEVELX_BLOCKER_ART_PATH = "assets/levelx/levelx_blocker.png";
   var PLATFORM_ART_PATH = "assets/platform-tile-clean.png";
   var LEVEL_FINISHED_ART_PATHS = {
     1: "assets/level1/level1_finished.jpg",
@@ -1930,6 +1933,9 @@ Main tuning points:
     if (key === "platform") {
       return "level" + String(level) + "_platform.png";
     }
+    if (key === "blocker") {
+      return "level" + String(level) + "_blocker.png";
+    }
     return LEVEL_SCENE_ART_FILENAMES[key];
   }
 
@@ -1943,6 +1949,17 @@ Main tuning points:
       }
     }
     return "Skin01";
+  }
+
+  var SKIN_REWARD_TROPHY_ART_PATHS = {
+    Skin02: "assets/gfx2/trophy_pics/trophy_vexi.png",
+    Skin03: "assets/gfx2/trophy_pics/trophy_nemu.png",
+    Skin04: "assets/gfx2/trophy_pics/trophy_krob.png"
+  };
+
+  function getSkinRewardTrophyArtPath(skinName) {
+    var normalized = normalizeSkinName(skinName);
+    return SKIN_REWARD_TROPHY_ART_PATHS[normalized] || "";
   }
 
   function createDefaultSkinProgress() {
@@ -3538,6 +3555,7 @@ Main tuning points:
       return;
     }
     var displayName = getSkinDisplayName(skinName);
+    var trophyArtPath = getSkinRewardTrophyArtPath(skinName);
     state.pendingSkinRewardName = normalizeSkinName(skinName);
     state.pendingSkinRewardDeferred = Boolean(nextAction);
     state.pendingSkinRewardNextAction = nextAction || "";
@@ -3550,8 +3568,26 @@ Main tuning points:
     if (skinRewardTierEl) {
       skinRewardTierEl.textContent = "Unlocked";
     }
-    if (skinRewardIconEl) {
-      skinRewardIconEl.src = "assets/gfx2/trophy_pics/trophy_clean.png";
+    if (skinRewardTrophyBaseEl) {
+      skinRewardTrophyBaseEl.src = "assets/gfx2/trophy_pics/trophy_clean.png";
+    }
+    if (skinRewardTrophyArtEl) {
+      skinRewardTrophyArtEl.classList.remove("is-visible");
+      skinRewardTrophyArtEl.removeAttribute("src");
+      if (trophyArtPath) {
+        skinRewardTrophyArtEl.onload = function () {
+          if (skinRewardTrophyArtEl && skinRewardTrophyArtEl.getAttribute("src") === trophyArtPath) {
+            skinRewardTrophyArtEl.classList.add("is-visible");
+          }
+        };
+        skinRewardTrophyArtEl.onerror = function () {
+          if (skinRewardTrophyArtEl && skinRewardTrophyArtEl.getAttribute("src") === trophyArtPath) {
+            skinRewardTrophyArtEl.classList.remove("is-visible");
+            skinRewardTrophyArtEl.removeAttribute("src");
+          }
+        };
+        skinRewardTrophyArtEl.setAttribute("src", trophyArtPath);
+      }
     }
     if (skinRewardGoalEl) {
       skinRewardGoalEl.textContent = displayName + " is now available.";
@@ -3614,8 +3650,12 @@ Main tuning points:
     if (skinRewardTierEl) {
       skinRewardTierEl.textContent = subtitle;
     }
-    if (skinRewardIconEl) {
-      skinRewardIconEl.src = "assets/gfx2/trophy_pics/trophy_clean.png";
+    if (skinRewardTrophyBaseEl) {
+      skinRewardTrophyBaseEl.src = "assets/gfx2/trophy_pics/trophy_clean.png";
+    }
+    if (skinRewardTrophyArtEl) {
+      skinRewardTrophyArtEl.classList.remove("is-visible");
+      skinRewardTrophyArtEl.removeAttribute("src");
     }
     if (skinRewardGoalEl) {
       skinRewardGoalEl.textContent = message;
@@ -3684,7 +3724,7 @@ Main tuning points:
       badgeRewardPromptEl.textContent = "Tap or press Space to continue";
     }
     if (badgeRewardTrophyBaseEl) {
-      badgeRewardTrophyBaseEl.src = "assets/gfx2/trophy_pics/trophy_clean.png";
+      badgeRewardTrophyBaseEl.removeAttribute("src");
     }
     if (badgeRewardTrophyArtEl) {
       badgeRewardTrophyArtEl.classList.remove("is-visible");
@@ -5290,6 +5330,9 @@ Main tuning points:
     loadSceneArtAsset(LEVELX_PLATFORM_ART_PATH, function (image) {
       sceneArt.levelxPlatform = image;
     });
+    loadSceneArtAsset(LEVELX_BLOCKER_ART_PATH, function (image) {
+      sceneArt.levelxBlocker = image;
+    });
     loadSceneArtAsset(LEVEL5_SKY_ART_PATH, function (image) {
       sceneArt.level5Sky = image;
     });
@@ -5438,6 +5481,9 @@ Main tuning points:
   function getCurrentLevelSceneArt(key) {
     if (key === "platform" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxPlatform) {
       return sceneArt.levelxPlatform;
+    }
+    if (key === "blocker" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxBlocker) {
+      return sceneArt.levelxBlocker;
     }
     var levelEntry = sceneArt.levelVariants[state.currentLevel];
     if (levelEntry && levelEntry[key]) {
@@ -13930,9 +13976,6 @@ Main tuning points:
     var speedLabel = "Speed +" + state.speedPercent + "%";
     var speedLabelWidth = ctx.measureText(speedLabel).width;
     ctx.fillText(speedLabel, canvas.width - 18 - speedLabelWidth * 0.5, 64);
-    if (state.shieldCharges > 0) {
-      ctx.fillText("Shield: ON", canvas.width - 18, 90);
-    }
     if (state.magnetTimeLeft > 0) {
       ctx.fillText("Magnet: " + state.magnetTimeLeft.toFixed(1) + "s", canvas.width - 18, 116);
     }

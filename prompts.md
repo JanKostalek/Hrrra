@@ -105,6 +105,12 @@ Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-f
 2026-04-22: bump Android release metadata to 1.0.48 / version code 48 before preparing the next AAB.
 - 2026-04-22: bump release metadata to 1.0.51 / versionCode 51 after confirming the store already has 1.0.50, and keep the Vercel-facing version files in sync for mobile update detection.
 zmensi text Score a Max Score o 33%
+- 2026-04-25: Release bump - raised Android/web version metadata to 1.0.58 / versionCode 58 so the next store/web build is seen as newer.
+- 2026-04-25: Badge reward overlay - removed the `trophy_clean` base from the post-run badge unlock card so only the unlocked badge art appears there; the trophy screen stays unchanged.
+- 2026-04-25: Level blocker art - switched blocker loading to per-level files (`level1_blocker.png` through `levelx_blocker.png`) and made LevelX override Level 5 with its own blocker art.
+- 2026-04-25: Skin unlock overlay - added per-skin trophy art for Vexi, Nemu, and Krob so each skin reward now shows `trophy_clean` plus the matching character trophy.
+- 2026-04-25: HUD cleanup - removed the always-on shield status label from the in-game top-right HUD so only the useful runtime info remains visible there.
+- 2026-04-25: Credits screen - enlarged the version label, switched it to white, and added a direct Update link to the Google Play testing page beside it.
 - 2026-04-24: Release bump - raised Android/web version metadata to 1.0.57 / versionCode 57 so the next store/web build is seen as newer.
 - 2026-04-24: HUD polish - moved the upper-left Score and Max Score labels 20px back to the left after the previous right shift, keeping them aligned inside the plaque.
 - 2026-04-24: HUD polish - shifted the upper-left Score and Max Score labels 50px to the right so both lines sit fully inside the scoreboard plaque.
