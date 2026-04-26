@@ -3,32 +3,48 @@ package cz.hrrra.game;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.view.Gravity;
+import android.graphics.SurfaceTexture;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Surface;
+import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import java.io.IOException;
+
 public class SplashActivity extends AppCompatActivity {
     private static final long POST_VIDEO_SPLASH_DURATION_MS = 2600L;
     private static final long VIDEO_FALLBACK_TIMEOUT_MS = 20000L;
+
     private final Handler handler = new Handler(Looper.getMainLooper());
     private AnimatorSet titleAnimator;
-    private VideoView introVideoView;
+    private TextureView introVideoView;
+    private MediaPlayer introMediaPlayer;
+    private Surface introVideoSurface;
     private View splashImageView;
     private TextView titleView;
     private boolean splashArtworkVisible = false;
+    private boolean introVideoStarted = false;
+    private int introVideoWidth = 0;
+    private int introVideoHeight = 0;
+
     private final Runnable launchGameRunnable = new Runnable() {
         @Override
         public void run() {
@@ -38,6 +54,7 @@ public class SplashActivity extends AppCompatActivity {
             overridePendingTransition(0, 0);
         }
     };
+
     private final Runnable videoFallbackRunnable = new Runnable() {
         @Override
         public void run() {
@@ -64,13 +81,18 @@ public class SplashActivity extends AppCompatActivity {
             titleView.setVisibility(View.GONE);
         }
 
-        playIntroVideo();
+        if (introVideoView != null) {
+            introVideoView.setSurfaceTextureListener(surfaceTextureListener);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         hideSystemBars();
+        if (introVideoView != null && introVideoView.isAvailable() && !introVideoStarted) {
+            playIntroVideo();
+        }
     }
 
     @Override
@@ -80,9 +102,7 @@ public class SplashActivity extends AppCompatActivity {
         if (titleAnimator != null) {
             titleAnimator.cancel();
         }
-        if (introVideoView != null) {
-            introVideoView.stopPlayback();
-        }
+        releaseIntroVideo();
         super.onDestroy();
     }
 
@@ -93,6 +113,30 @@ public class SplashActivity extends AppCompatActivity {
             hideSystemBars();
         }
     }
+
+    private final TextureView.SurfaceTextureListener surfaceTextureListener =
+        new TextureView.SurfaceTextureListener() {
+            @Override
+            public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
+                playIntroVideo();
+            }
+
+            @Override
+            public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int width, int height) {
+                applyVideoStretch();
+            }
+
+            @Override
+            public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+                releaseIntroVideo();
+                return true;
+            }
+
+            @Override
+            public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+                // No-op.
+            }
+        };
 
     private void hideSystemBars() {
         WindowInsetsControllerCompat controller =
@@ -117,21 +161,91 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void playIntroVideo() {
-        if (introVideoView == null) {
-            revealSplashArtwork();
+        if (introVideoStarted || introVideoView == null || !introVideoView.isAvailable()) {
             return;
         }
 
-        Uri introVideoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.intro_video);
-        introVideoView.setVideoURI(introVideoUri);
-        introVideoView.setOnPreparedListener(mediaPlayer -> introVideoView.start());
-        introVideoView.setOnCompletionListener(mediaPlayer -> revealSplashArtwork());
-        introVideoView.setOnErrorListener((mediaPlayer, what, extra) -> {
-            revealSplashArtwork();
-            return true;
-        });
-        introVideoView.requestFocus();
+        introVideoStarted = true;
         handler.postDelayed(videoFallbackRunnable, VIDEO_FALLBACK_TIMEOUT_MS);
+
+        try {
+            SurfaceTexture surfaceTexture = introVideoView.getSurfaceTexture();
+            if (surfaceTexture == null) {
+                revealSplashArtwork();
+                return;
+            }
+
+            introVideoSurface = new Surface(surfaceTexture);
+            introMediaPlayer = new MediaPlayer();
+            introMediaPlayer.setAudioAttributes(
+                new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
+                    .build()
+            );
+            introMediaPlayer.setSurface(introVideoSurface);
+            introMediaPlayer.setOnPreparedListener(mediaPlayer -> {
+                introVideoWidth = mediaPlayer.getVideoWidth();
+                introVideoHeight = mediaPlayer.getVideoHeight();
+                applyVideoStretch();
+                mediaPlayer.start();
+            });
+            introMediaPlayer.setOnVideoSizeChangedListener((mediaPlayer, width, height) -> {
+                introVideoWidth = width;
+                introVideoHeight = height;
+                applyVideoStretch();
+            });
+            introMediaPlayer.setOnCompletionListener(mediaPlayer -> revealSplashArtwork());
+            introMediaPlayer.setOnErrorListener((mediaPlayer, what, extra) -> {
+                revealSplashArtwork();
+                return true;
+            });
+            introMediaPlayer.setDataSource(
+                this,
+                Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.intro_video)
+            );
+            introMediaPlayer.prepareAsync();
+        } catch (IOException | IllegalStateException error) {
+            revealSplashArtwork();
+        }
+    }
+
+    private void applyVideoStretch() {
+        if (introVideoView == null || introVideoWidth <= 0 || introVideoHeight <= 0) {
+            return;
+        }
+
+        SurfaceTexture surfaceTexture = introVideoView.getSurfaceTexture();
+        if (surfaceTexture != null) {
+            surfaceTexture.setDefaultBufferSize(introVideoWidth, introVideoHeight);
+        }
+
+        ViewGroup.LayoutParams params = introVideoView.getLayoutParams();
+        if (params != null) {
+            params.width = Math.max(1, (int) (introVideoWidth * 1.5f));
+            params.height = Math.max(1, (int) (introVideoHeight * 1.5f));
+            if (params instanceof FrameLayout.LayoutParams) {
+                ((FrameLayout.LayoutParams) params).gravity = Gravity.CENTER;
+            }
+            introVideoView.setLayoutParams(params);
+        }
+    }
+
+    private void releaseIntroVideo() {
+        handler.removeCallbacks(videoFallbackRunnable);
+        if (introMediaPlayer != null) {
+            try {
+                introMediaPlayer.stop();
+            } catch (IllegalStateException ignored) {
+                // Player may already be stopped or not started yet.
+            }
+            introMediaPlayer.release();
+            introMediaPlayer = null;
+        }
+        if (introVideoSurface != null) {
+            introVideoSurface.release();
+            introVideoSurface = null;
+        }
     }
 
     private void revealSplashArtwork() {
@@ -140,8 +254,9 @@ public class SplashActivity extends AppCompatActivity {
         }
         splashArtworkVisible = true;
         handler.removeCallbacks(videoFallbackRunnable);
+        releaseIntroVideo();
+
         if (introVideoView != null) {
-            introVideoView.stopPlayback();
             introVideoView.setVisibility(View.GONE);
         }
         if (splashImageView != null) {
@@ -175,18 +290,8 @@ public class SplashActivity extends AppCompatActivity {
         rotate.setDuration(700);
         rotate.setInterpolator(new AccelerateDecelerateInterpolator());
 
-        ObjectAnimator explodeScaleX = ObjectAnimator.ofFloat(titleView, "scaleX", 1.35f, 600f);
-        explodeScaleX.setStartDelay(1700);
-        explodeScaleX.setDuration(1000);
-        explodeScaleX.setInterpolator(new AccelerateDecelerateInterpolator());
-
-        ObjectAnimator explodeScaleY = ObjectAnimator.ofFloat(titleView, "scaleY", 1.35f, 600f);
-        explodeScaleY.setStartDelay(1700);
-        explodeScaleY.setDuration(1000);
-        explodeScaleY.setInterpolator(new AccelerateDecelerateInterpolator());
-
         titleAnimator = new AnimatorSet();
-        titleAnimator.playTogether(fadeIn, scaleX, scaleY, rotate, explodeScaleX, explodeScaleY);
+        titleAnimator.playTogether(fadeIn, scaleX, scaleY, rotate);
         titleAnimator.start();
     }
 }

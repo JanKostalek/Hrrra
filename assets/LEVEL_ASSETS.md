@@ -22,5 +22,5 @@ Supported level-specific filenames:
 - `coin.png`
 - `moneybag.png`
 - `heart.png`
-- `projectile1.png`
-- `projectile2.png`
+- `rocket01.png`
+- `rocket02.png`

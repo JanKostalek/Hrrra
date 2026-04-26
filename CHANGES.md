@@ -160,3 +160,9 @@
 - Synced intro assets into web and Android native resources so the startup flow can use the new intro video and splash image.
 # 2026-04-26
 - Bumped release metadata to `1.0.59` / `versionCode 59` and synced the new intro splash/video assets into web and Android packaging.
+# 2026-04-26
+- Reworked Android intro splash playback to use a full-screen `TextureView` + `MediaPlayer`, so the intro MP4 and splash JPG can fill the whole screen instead of letterboxing or showing a black placeholder.
+
+- 2026-04-26: Switched projectile rocket art loading to per-level filenames (level*_rocket01.png / level*_rocket02.png) and added LevelX rocket overrides so each level can own its own projectile visuals.
+
+- 2026-04-26: Release bump to 1.0.60 / versionCode 60 after syncing the per-level rocket art update and the latest splash assets.

@@ -1083,6 +1083,8 @@ Main tuning points:
     levelxBorder: null,
     levelxPlatform: null,
     levelxBlocker: null,
+    levelxRocket1: null,
+    levelxRocket2: null,
     level2CaveBack: null,
     level2CaveFront: null,
     level3VolcanoBack: null,
@@ -1308,6 +1310,8 @@ Main tuning points:
   var LEVELX_BORDER_ART_PATH = "assets/levelx/levelx_border.png";
   var LEVELX_PLATFORM_ART_PATH = "assets/levelx/levelx_platform.png";
   var LEVELX_BLOCKER_ART_PATH = "assets/levelx/levelx_blocker.png";
+  var LEVELX_ROCKET1_ART_PATH = "assets/levelx/levelx_rocket01.png";
+  var LEVELX_ROCKET2_ART_PATH = "assets/levelx/levelx_rocket02.png";
   var PLATFORM_ART_PATH = "assets/platform-tile-clean.png";
   var LEVEL_FINISHED_ART_PATHS = {
     1: "assets/level1/level1_finished.jpg",
@@ -1328,8 +1332,8 @@ Main tuning points:
     coin: "coin.png",
     moneybag: "moneybag.png",
     heart: "heart.png",
-    rocket1: "projectile1.png",
-    rocket2: "projectile2.png"
+    rocket1: "rocket01.png",
+    rocket2: "rocket02.png"
   };
   var TELEPORT_ART_PATHS = [
     "assets/teleport01.png",
@@ -1935,6 +1939,12 @@ Main tuning points:
     }
     if (key === "blocker") {
       return "level" + String(level) + "_blocker.png";
+    }
+    if (key === "rocket1") {
+      return "level" + String(level) + "_rocket01.png";
+    }
+    if (key === "rocket2") {
+      return "level" + String(level) + "_rocket02.png";
     }
     return LEVEL_SCENE_ART_FILENAMES[key];
   }
@@ -5333,6 +5343,12 @@ Main tuning points:
     loadSceneArtAsset(LEVELX_BLOCKER_ART_PATH, function (image) {
       sceneArt.levelxBlocker = image;
     });
+    loadSceneArtAsset(LEVELX_ROCKET1_ART_PATH, function (image) {
+      sceneArt.levelxRocket1 = image;
+    });
+    loadSceneArtAsset(LEVELX_ROCKET2_ART_PATH, function (image) {
+      sceneArt.levelxRocket2 = image;
+    });
     loadSceneArtAsset(LEVEL5_SKY_ART_PATH, function (image) {
       sceneArt.level5Sky = image;
     });
@@ -5484,6 +5500,12 @@ Main tuning points:
     }
     if (key === "blocker" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxBlocker) {
       return sceneArt.levelxBlocker;
+    }
+    if (key === "rocket1" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxRocket1) {
+      return sceneArt.levelxRocket1;
+    }
+    if (key === "rocket2" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxRocket2) {
+      return sceneArt.levelxRocket2;
     }
     var levelEntry = sceneArt.levelVariants[state.currentLevel];
     if (levelEntry && levelEntry[key]) {

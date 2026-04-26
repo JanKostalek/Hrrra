@@ -4,18 +4,17 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
-    <VideoView
+    <TextureView
         android:id="@+id/splash_video"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#000000" />
+        android:layout_height="match_parent" />
 
     <ImageView
         android:id="@+id/splash_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/hrrra_splash"
-        android:scaleType="fitCenter"
+        android:scaleType="fitXY"
         android:visibility="gone"
         android:contentDescription="@string/app_name" />
 

@@ -133,3 +133,9 @@ zmensi text Score a Max Score o 33%
 - Added Android startup intro video flow before the splash artwork/text effect, using `assets/intro/intro_video.mp4` and `assets/intro/hrrra-splash.jpg`.
 # 2026-04-26
 - Release bump to `1.0.59` with synced intro video splash assets and updated Android/web packaging.
+# 2026-04-26
+- Android intro splash now uses `TextureView` + `MediaPlayer` for the MP4 video and stretches the splash JPG to full screen.
+
+Switched projectile rocket art loading to per-level filenames (level*_rocket01.png / level*_rocket02.png) and added LevelX rocket overrides so each level can own its own projectile visuals.
+
+Release bump to 1.0.60 / versionCode 60 after syncing the per-level rocket art update and the latest splash assets.
