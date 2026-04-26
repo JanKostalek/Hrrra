@@ -155,3 +155,8 @@
 - 2026-04-23: Fixed a leftover `useGfx2StartScreen` check in the GFX2 shop renderer that was throwing at runtime and blanking the shop values / click handling.
 - 2026-04-23: Updated the LevelX unlock messaging to say: "Bonus level unlocked. See the new visuals in level 5. Have a nice psilocytime!"
 - 2026-04-23: Bumped release metadata to 1.0.55 / versionCode 55 and synced the updated version files into `www` and Android public assets so mobile update checks can see the new build.
+# 2026-04-26
+- Added Android intro flow: play `assets/intro/intro_video.mp4` before the splash artwork/text effect, and switched the splash image source to `assets/intro/hrrra-splash.jpg`.
+- Synced intro assets into web and Android native resources so the startup flow can use the new intro video and splash image.
+# 2026-04-26
+- Bumped release metadata to `1.0.59` / `versionCode 59` and synced the new intro splash/video assets into web and Android packaging.

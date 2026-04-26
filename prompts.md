@@ -129,3 +129,7 @@ zmensi text Score a Max Score o 33%
 - 2026-04-23: Updated the LevelX unlock messaging to say: "Bonus level unlocked. See the new visuals in level 5. Have a nice psilocytime!"
 - 2026-04-23: Version bump to 1.0.55 / versionCode 55, with sync to `www` and Android public assets so the current build is detected as newer by the mobile update check.
 
+# 2026-04-26
+- Added Android startup intro video flow before the splash artwork/text effect, using `assets/intro/intro_video.mp4` and `assets/intro/hrrra-splash.jpg`.
+# 2026-04-26
+- Release bump to `1.0.59` with synced intro video splash assets and updated Android/web packaging.

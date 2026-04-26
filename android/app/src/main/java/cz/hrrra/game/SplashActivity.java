@@ -3,14 +3,17 @@ package cz.hrrra.game;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.os.Bundle;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
@@ -18,9 +21,14 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 public class SplashActivity extends AppCompatActivity {
-    private static final long SPLASH_DURATION_MS = 2600L;
+    private static final long POST_VIDEO_SPLASH_DURATION_MS = 2600L;
+    private static final long VIDEO_FALLBACK_TIMEOUT_MS = 20000L;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private AnimatorSet titleAnimator;
+    private VideoView introVideoView;
+    private View splashImageView;
+    private TextView titleView;
+    private boolean splashArtworkVisible = false;
     private final Runnable launchGameRunnable = new Runnable() {
         @Override
         public void run() {
@@ -28,6 +36,12 @@ public class SplashActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
             overridePendingTransition(0, 0);
+        }
+    };
+    private final Runnable videoFallbackRunnable = new Runnable() {
+        @Override
+        public void run() {
+            revealSplashArtwork();
         }
     };
 
@@ -38,8 +52,19 @@ public class SplashActivity extends AppCompatActivity {
         configureEdgeToEdgeWindow();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         hideSystemBars();
-        animateTitle();
-        handler.postDelayed(launchGameRunnable, SPLASH_DURATION_MS);
+
+        introVideoView = findViewById(R.id.splash_video);
+        splashImageView = findViewById(R.id.splash_image);
+        titleView = findViewById(R.id.splash_title);
+
+        if (splashImageView != null) {
+            splashImageView.setVisibility(View.GONE);
+        }
+        if (titleView != null) {
+            titleView.setVisibility(View.GONE);
+        }
+
+        playIntroVideo();
     }
 
     @Override
@@ -51,8 +76,12 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         handler.removeCallbacks(launchGameRunnable);
+        handler.removeCallbacks(videoFallbackRunnable);
         if (titleAnimator != null) {
             titleAnimator.cancel();
+        }
+        if (introVideoView != null) {
+            introVideoView.stopPlayback();
         }
         super.onDestroy();
     }
@@ -87,8 +116,46 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    private void playIntroVideo() {
+        if (introVideoView == null) {
+            revealSplashArtwork();
+            return;
+        }
+
+        Uri introVideoUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.intro_video);
+        introVideoView.setVideoURI(introVideoUri);
+        introVideoView.setOnPreparedListener(mediaPlayer -> introVideoView.start());
+        introVideoView.setOnCompletionListener(mediaPlayer -> revealSplashArtwork());
+        introVideoView.setOnErrorListener((mediaPlayer, what, extra) -> {
+            revealSplashArtwork();
+            return true;
+        });
+        introVideoView.requestFocus();
+        handler.postDelayed(videoFallbackRunnable, VIDEO_FALLBACK_TIMEOUT_MS);
+    }
+
+    private void revealSplashArtwork() {
+        if (splashArtworkVisible) {
+            return;
+        }
+        splashArtworkVisible = true;
+        handler.removeCallbacks(videoFallbackRunnable);
+        if (introVideoView != null) {
+            introVideoView.stopPlayback();
+            introVideoView.setVisibility(View.GONE);
+        }
+        if (splashImageView != null) {
+            splashImageView.setVisibility(View.VISIBLE);
+        }
+        if (titleView != null) {
+            titleView.setVisibility(View.VISIBLE);
+        }
+        animateTitle();
+        handler.postDelayed(launchGameRunnable, POST_VIDEO_SPLASH_DURATION_MS);
+    }
+
     private void animateTitle() {
-        TextView titleView = findViewById(R.id.splash_title);
+        TextView titleView = this.titleView;
         if (titleView == null) {
             return;
         }

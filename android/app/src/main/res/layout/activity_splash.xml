@@ -4,11 +4,19 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
+    <VideoView
+        android:id="@+id/splash_video"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000" />
+
     <ImageView
+        android:id="@+id/splash_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/hrrra_splash"
         android:scaleType="fitCenter"
+        android:visibility="gone"
         android:contentDescription="@string/app_name" />
 
     <TextView
@@ -16,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:visibility="gone"
         android:alpha="0"
         android:rotation="-10"
         android:scaleX="0.18"

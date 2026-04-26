@@ -49,6 +49,7 @@ const assetDirectoriesToCopy = [
   "assets/ui-sound",
   "assets/skins",
   "assets/Bubble_burst",
+  "assets/intro",
   "assets/level1",
   "assets/level2",
   "assets/level3",
