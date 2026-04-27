@@ -31,6 +31,7 @@
     uiSoundPageOpenPath: "assets/ui-sound/ui-page-open.wav",
     uiSoundBadgesPagePath: "assets/ui-sound/ui-badges-page.wav",
     uiSoundBadgeRevealPath: "assets/ui-sound/ui-badge-reveal.wav",
+    uiCrossingMusicPath: "assets/gfx2/crossing_page/crossing-music-loop.mp3",
     uiPreRunMusicPath: "assets/ui-sound/ui-prerun-loop.wav",
     uiLevelFinishedMusicPath: "assets/ui-sound/ui-level-finished-loop.wav",
     uiGameOverMusicPath: "assets/ui-sound/ui-game-over-loop.wav",

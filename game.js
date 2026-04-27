@@ -523,6 +523,7 @@ Main tuning points:
     "uiSoundPageOpenPath",
     "uiSoundBadgesPagePath",
     "uiSoundBadgeRevealPath",
+    "uiCrossingMusicPath",
     "uiPreRunMusicPath",
     "uiLevelFinishedMusicPath",
     "uiGameOverMusicPath"
@@ -1423,6 +1424,10 @@ Main tuning points:
     return getNormalizedGlobalAudioPath("uiSoundBadgeRevealPath");
   }
 
+  function getUiCrossingMusicPath() {
+    return getNormalizedGlobalAudioPath("uiCrossingMusicPath");
+  }
+
   function getUiPreRunMusicPath() {
     return getNormalizedGlobalAudioPath("uiPreRunMusicPath");
   }
@@ -1462,8 +1467,14 @@ Main tuning points:
       return "";
     }
     if (state.preRunActive) {
-      if (state.preRunStep === "badges") {
-        return getUiBadgesPageSoundPath();
+      if (
+        state.preRunStep === "select" ||
+        state.preRunStep === "badges" ||
+        state.preRunStep === "scores" ||
+        state.preRunStep === "shop" ||
+        state.preRunStep === "settings"
+      ) {
+        return getUiCrossingMusicPath();
       }
       return getUiPreRunMusicPath();
     }
@@ -4483,11 +4494,11 @@ Main tuning points:
 
   function getLevelAudioPathOverrides(level) {
     var normalizedLevel = Math.max(1, Math.min(LEVEL_COUNT, Math.floor(Number(level) || 1)));
-    var prefix = "l" + String(normalizedLevel);
     var audioLevelFolder = normalizedLevel === 5 && isLevelXUnlocked() ? "levelx" : "level" + String(normalizedLevel);
+    var prefix = audioLevelFolder === "levelx" ? "lx" : "l" + String(normalizedLevel);
     var basePath = "assets/" + audioLevelFolder + "/sound/" + prefix;
     return {
-      levelMusicLoopPath: basePath + "-music-loop.wav",
+      levelMusicLoopPath: basePath + "-music-loop.mp3",
       levelJumpSoundPath: basePath + "-sfx-jump.wav",
       levelCoinSoundPath: basePath + "-sfx-coin.wav",
       levelBagSoundPath: basePath + "-sfx-bag.wav",

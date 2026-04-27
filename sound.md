@@ -25,14 +25,16 @@ Short `SFX` are currently played through `Web Audio API` for lower latency. Long
 - Background audio for the pre-run `Badges` page while that page stays open
 - Stops immediately when leaving the `Badges` page
 
+`assets/gfx2/crossing_page/crossing-music-loop.mp3`
+- Background audio for the GFX2 crossing page / main pre-run select screen
+- Also used while the pre-run `Badges`, `Scores`, `Shop`, and `Settings` pages are open
+
 `assets/ui-sound/ui-badge-reveal.wav`
 - Badge reward reveal moment after the intro pause, when the new badge pops in
 
 `assets/ui-sound/ui-prerun-loop.wav`
 - Pre-run flow background loop
-- Main mode selection
 - Difficulty / detail briefing
-- Badges page inside pre-run
 - Also covers startup overlays shown before the run while pre-run is active
 
 `assets/ui-sound/ui-level-finished-loop.wav`
@@ -47,7 +49,7 @@ Short `SFX` are currently played through `Web Audio API` for lower latency. Long
 
 ## Level 1 Audio
 
-`assets/level1/sound/l1-music-loop.wav`
+`assets/level1/sound/l1-music-loop.mp3`
 - Main gameplay loop for Level 1 while the run is active
 - Also stays active during gameplay-tied sequences like Question Coin, teleport finish, death animation, and badge reward flow until a screen loop takes over
 
@@ -101,7 +103,7 @@ Short `SFX` are currently played through `Web Audio API` for lower latency. Long
 ## Levels 2-5 Audio
 
 - `assets/level2/sound/`, `assets/level3/sound/`, `assets/level4/sound/`, and `assets/level5/sound/` now mirror the same file structure as `Level 1`.
-- Each level now has its own level-specific filenames (`l2-...`, `l3-...`, `l4-...`, `l5-...`) for:
+- Each level now has its own level-specific filenames (`l2-...`, `l3-...`, `l4-...`, `l5-...`, and `lx-...` for `levelx`) for:
   - gameplay loop
   - jump
   - coin
@@ -117,7 +119,7 @@ Short `SFX` are currently played through `Web Audio API` for lower latency. Long
   - slow
   - teleport
   - death
-- For now, Levels `2-5` use cloned copies of the current Level 1 sound files so routing is ready immediately.
+- For now, Levels `2-5` use cloned copies of the current Level 1 sound files so routing is ready immediately, with `levelx` using the `lx-...` prefix.
 - This is only a structural placeholder step: the files can now be replaced gradually level by level without changing code or tuning paths again.
 
 -------------------
