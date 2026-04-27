@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Hrrra Prototype</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -228,8 +228,16 @@
               <div class="pre-run-settings-gfx2-off-layer pre-run-settings-gfx2-off-sfx" aria-hidden="true"></div>
               <button id="pre-run-settings-gfx2-back-btn" class="pre-run-settings-gfx2-hitbox pre-run-settings-gfx2-hitbox-exit" aria-label="Back to mode selection"></button>
               <button id="pre-run-settings-gfx2-account-btn" class="pre-run-settings-gfx2-hitbox pre-run-settings-gfx2-hitbox-account" aria-label="Change user">Change User</button>
-              <button id="pre-run-settings-gfx2-music-btn" class="pre-run-settings-gfx2-hitbox pre-run-settings-gfx2-hitbox-music" type="button" aria-pressed="true" aria-label="Music on"></button>
-              <button id="pre-run-settings-gfx2-sfx-btn" class="pre-run-settings-gfx2-hitbox pre-run-settings-gfx2-hitbox-sfx" type="button" aria-pressed="true" aria-label="Sound effects on"></button>
+              <div class="pre-run-settings-gfx2-volume pre-run-settings-gfx2-volume-music" aria-label="Music volume control">
+                <input id="pre-run-settings-gfx2-music-btn" class="pre-run-settings-gfx2-volume-range pre-run-settings-gfx2-volume-range-vertical" type="range" min="0" max="100" step="1" value="10" aria-label="Music volume" aria-orientation="vertical">
+              </div>
+              <div class="pre-run-settings-gfx2-volume pre-run-settings-gfx2-volume-sfx" aria-label="Sound effects volume control">
+                <input id="pre-run-settings-gfx2-sfx-btn" class="pre-run-settings-gfx2-volume-range pre-run-settings-gfx2-volume-range-vertical" type="range" min="0" max="100" step="1" value="85" aria-label="Sound effects volume" aria-orientation="vertical">
+              </div>
+              <div class="pre-run-settings-gfx2-volume pre-run-settings-gfx2-volume-global" aria-label="Global volume control">
+                <div class="pre-run-settings-gfx2-volume-caption">Global</div>
+                <input id="pre-run-settings-gfx2-global-volume" class="pre-run-settings-gfx2-volume-range pre-run-settings-gfx2-volume-range-horizontal" type="range" min="0" max="100" step="1" value="75" aria-label="Global volume" aria-orientation="horizontal">
+              </div>
               <div id="pre-run-account-confirm" class="admin-reset-confirm hidden" aria-label="Change user confirmation">
                 <div class="admin-reset-confirm-card">
                   <h3>Change user?</h3>

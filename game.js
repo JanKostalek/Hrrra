@@ -308,6 +308,11 @@ Main tuning points:
   var preRunSettingsGfx2BackBtn = document.getElementById("pre-run-settings-gfx2-back-btn");
   var preRunSettingsGfx2MusicBtn = document.getElementById("pre-run-settings-gfx2-music-btn");
   var preRunSettingsGfx2SfxBtn = document.getElementById("pre-run-settings-gfx2-sfx-btn");
+  var preRunSettingsGfx2GlobalVolumeBtn = document.getElementById("pre-run-settings-gfx2-global-volume");
+  var preRunSettingsGfx2DebugBoxMusicEl = document.getElementById("pre-run-settings-gfx2-debug-box-music");
+  var preRunSettingsGfx2DebugBoxSfxEl = document.getElementById("pre-run-settings-gfx2-debug-box-sfx");
+  var preRunSettingsGfx2MusicVolumeEl = preRunSettingsGfx2MusicBtn ? preRunSettingsGfx2MusicBtn.parentElement : null;
+  var preRunSettingsGfx2SfxVolumeEl = preRunSettingsGfx2SfxBtn ? preRunSettingsGfx2SfxBtn.parentElement : null;
   var preRunSettingsGfx2AccountBtn = document.getElementById("pre-run-settings-gfx2-account-btn");
   var preRunAccountConfirmEl = document.getElementById("pre-run-account-confirm");
   var preRunAccountConfirmNoBtn = document.getElementById("pre-run-account-confirm-no");
@@ -320,6 +325,8 @@ Main tuning points:
   var preRunScoresGridEl = document.getElementById("pre-run-scores-grid");
   var preRunToggleSfxBtn = document.getElementById("pre-run-toggle-sfx-btn");
   var preRunToggleMusicBtn = document.getElementById("pre-run-toggle-music-btn");
+  var preRunSettingsGfx2MusicRestoreVolumePercent = null;
+  var preRunSettingsGfx2SfxRestoreVolumePercent = null;
   var preRunShopWalletEl = document.getElementById("pre-run-shop-wallet");
   var preRunShopTotalScoreEl = document.getElementById("pre-run-shop-total-score");
   var preRunShopRateEl = document.getElementById("pre-run-shop-rate");
@@ -1380,7 +1387,17 @@ Main tuning points:
   }
 
   function getMusicAudioVolumeRatio() {
-    return getMasterAudioVolumeRatio() * getAudioVolumeRatio(C.audioMusicVolumePercent, 10) * 0.33;
+    return getMasterAudioVolumeRatio() * getAudioVolumeRatio(C.audioMusicVolumePercent, 10) * 0.33 * getMusicSceneVolumeMultiplier();
+  }
+
+  function getMusicSceneVolumeMultiplier() {
+    if (state.levelFinishedActive) {
+      return 0.75;
+    }
+    if (state.preRunActive && state.preRunStep === "details" && (isPreRunGfx2ClassicInsideActive() || isPreRunGfx2AdvancedInsideActive())) {
+      return 0.75;
+    }
+    return 1;
   }
 
   function getMusicFadeRatio() {
@@ -1472,7 +1489,9 @@ Main tuning points:
         state.preRunStep === "badges" ||
         state.preRunStep === "scores" ||
         state.preRunStep === "shop" ||
-        state.preRunStep === "settings"
+        state.preRunStep === "settings" ||
+        state.preRunStep === "rules" ||
+        state.preRunStep === "credits"
       ) {
         return getUiCrossingMusicPath();
       }
@@ -1755,23 +1774,76 @@ Main tuning points:
     refreshMusicPlayback();
   }
 
+  function applyGlobalVolumeSetting(key, nextValue) {
+    var normalizedValue = sanitizeGlobalAdminNumber(key, nextValue);
+    saveGlobalAdminField(key, normalizedValue);
+    C[key] = normalizedValue;
+    refreshSfxOutputGain();
+    warmCurrentSfxBuffers();
+    refreshMusicPlayback();
+  }
+
+  function getStoredMusicRestoreVolumePercent() {
+    if (!Number.isFinite(preRunSettingsGfx2MusicRestoreVolumePercent)) {
+      preRunSettingsGfx2MusicRestoreVolumePercent = sanitizeGlobalAdminNumber("audioMusicRestoreVolumePercent", C.audioMusicRestoreVolumePercent);
+    }
+    return preRunSettingsGfx2MusicRestoreVolumePercent;
+  }
+
+  function getStoredSfxRestoreVolumePercent() {
+    if (!Number.isFinite(preRunSettingsGfx2SfxRestoreVolumePercent)) {
+      preRunSettingsGfx2SfxRestoreVolumePercent = sanitizeGlobalAdminNumber("audioSfxRestoreVolumePercent", C.audioSfxRestoreVolumePercent);
+    }
+    return preRunSettingsGfx2SfxRestoreVolumePercent;
+  }
+
+  function rememberMusicRestoreVolumePercent(nextValue) {
+    var normalizedValue = sanitizeGlobalAdminNumber("audioMusicVolumePercent", nextValue);
+    if (normalizedValue > 0) {
+      preRunSettingsGfx2MusicRestoreVolumePercent = normalizedValue;
+      saveGlobalAdminField("audioMusicRestoreVolumePercent", normalizedValue);
+      C.audioMusicRestoreVolumePercent = normalizedValue;
+    }
+  }
+
+  function rememberSfxRestoreVolumePercent(nextValue) {
+    var normalizedValue = sanitizeGlobalAdminNumber("audioSfxVolumePercent", nextValue);
+    if (normalizedValue > 0) {
+      preRunSettingsGfx2SfxRestoreVolumePercent = normalizedValue;
+      saveGlobalAdminField("audioSfxRestoreVolumePercent", normalizedValue);
+      C.audioSfxRestoreVolumePercent = normalizedValue;
+    }
+  }
+
   function renderPreRunSettingsScreen() {
     if (preRunSettingsGfx2El) {
       preRunSettingsGfx2El.classList.remove("hidden");
-      preRunSettingsGfx2El.classList.toggle("is-music-off", !C.audioMusicEnabled);
-      preRunSettingsGfx2El.classList.toggle("is-sfx-off", !C.audioSfxEnabled);
+      preRunSettingsGfx2El.classList.toggle("is-music-off", !C.audioMusicEnabled || getMusicAudioVolumeRatio() <= 0);
+      preRunSettingsGfx2El.classList.toggle("is-sfx-off", !C.audioSfxEnabled || getSfxAudioVolumeRatio() <= 0);
     }
     if (preRunSettingsGfx2MusicBtn) {
-      var gfx2MusicEnabled = Boolean(C.audioMusicEnabled);
-      preRunSettingsGfx2MusicBtn.setAttribute("aria-pressed", gfx2MusicEnabled ? "true" : "false");
-      preRunSettingsGfx2MusicBtn.setAttribute("aria-label", gfx2MusicEnabled ? "Music on" : "Music off");
-      preRunSettingsGfx2MusicBtn.title = gfx2MusicEnabled ? "Music ON" : "Music OFF";
+      var gfx2MusicVolume = sanitizeGlobalAdminNumber("audioMusicVolumePercent", C.audioMusicVolumePercent);
+      var gfx2MusicDisplayVolume = C.audioMusicEnabled ? gfx2MusicVolume : 0;
+      preRunSettingsGfx2MusicBtn.value = String(gfx2MusicDisplayVolume);
+      preRunSettingsGfx2MusicBtn.setAttribute("aria-valuenow", String(gfx2MusicDisplayVolume));
+      preRunSettingsGfx2MusicBtn.title = C.audioMusicEnabled
+        ? "Music volume " + String(gfx2MusicDisplayVolume) + "%"
+        : "Music muted";
     }
     if (preRunSettingsGfx2SfxBtn) {
-      var gfx2SfxEnabled = Boolean(C.audioSfxEnabled);
-      preRunSettingsGfx2SfxBtn.setAttribute("aria-pressed", gfx2SfxEnabled ? "true" : "false");
-      preRunSettingsGfx2SfxBtn.setAttribute("aria-label", gfx2SfxEnabled ? "Sound effects on" : "Sound effects off");
-      preRunSettingsGfx2SfxBtn.title = gfx2SfxEnabled ? "Sound ON" : "Sound OFF";
+      var gfx2SfxVolume = sanitizeGlobalAdminNumber("audioSfxVolumePercent", C.audioSfxVolumePercent);
+      var gfx2SfxDisplayVolume = C.audioSfxEnabled ? gfx2SfxVolume : 0;
+      preRunSettingsGfx2SfxBtn.value = String(gfx2SfxDisplayVolume);
+      preRunSettingsGfx2SfxBtn.setAttribute("aria-valuenow", String(gfx2SfxDisplayVolume));
+      preRunSettingsGfx2SfxBtn.title = C.audioSfxEnabled
+        ? "Sound effects volume " + String(gfx2SfxDisplayVolume) + "%"
+        : "Sound effects muted";
+    }
+    if (preRunSettingsGfx2GlobalVolumeBtn) {
+      var gfx2GlobalVolume = sanitizeGlobalAdminNumber("audioMasterVolumePercent", C.audioMasterVolumePercent);
+      preRunSettingsGfx2GlobalVolumeBtn.value = String(gfx2GlobalVolume);
+      preRunSettingsGfx2GlobalVolumeBtn.setAttribute("aria-valuenow", String(gfx2GlobalVolume));
+      preRunSettingsGfx2GlobalVolumeBtn.title = "Global volume " + String(gfx2GlobalVolume) + "%";
     }
     if (preRunToggleSfxBtn) {
       var sfxEnabled = Boolean(C.audioSfxEnabled);
@@ -1806,19 +1878,46 @@ Main tuning points:
     if (C.audioSfxEnabled) {
       playUiButtonSound();
     }
-    applyGlobalAudioSetting("audioMusicEnabled", !C.audioMusicEnabled);
+    if (C.audioMusicEnabled) {
+      rememberMusicRestoreVolumePercent(C.audioMusicVolumePercent);
+      applyGlobalVolumeSetting("audioMusicVolumePercent", 0);
+      applyGlobalAudioSetting("audioMusicEnabled", false);
+    } else {
+      var musicRestoreVolume = getStoredMusicRestoreVolumePercent();
+      if (musicRestoreVolume <= 0) {
+        musicRestoreVolume = sanitizeGlobalAdminNumber("audioMusicVolumePercent", C.audioMusicVolumePercent);
+      }
+      if (musicRestoreVolume <= 0) {
+        musicRestoreVolume = 10;
+      }
+      applyGlobalVolumeSetting("audioMusicVolumePercent", musicRestoreVolume);
+      applyGlobalAudioSetting("audioMusicEnabled", true);
+    }
     renderPreRunSettingsScreen();
   }
 
   function togglePreRunSfxSetting() {
     unlockAudioIfNeeded();
-    var nextValue = !C.audioSfxEnabled;
     if (C.audioSfxEnabled) {
       playUiButtonSound();
     }
-    applyGlobalAudioSetting("audioSfxEnabled", nextValue);
-    if (nextValue) {
-      playUiButtonSound();
+    if (C.audioSfxEnabled) {
+      rememberSfxRestoreVolumePercent(C.audioSfxVolumePercent);
+      applyGlobalVolumeSetting("audioSfxVolumePercent", 0);
+      applyGlobalAudioSetting("audioSfxEnabled", false);
+    } else {
+      var sfxRestoreVolume = getStoredSfxRestoreVolumePercent();
+      if (sfxRestoreVolume <= 0) {
+        sfxRestoreVolume = sanitizeGlobalAdminNumber("audioSfxVolumePercent", C.audioSfxVolumePercent);
+      }
+      if (sfxRestoreVolume <= 0) {
+        sfxRestoreVolume = 85;
+      }
+      applyGlobalVolumeSetting("audioSfxVolumePercent", sfxRestoreVolume);
+      applyGlobalAudioSetting("audioSfxEnabled", true);
+      if (C.audioSfxEnabled) {
+        playUiButtonSound();
+      }
     }
     renderPreRunSettingsScreen();
   }
@@ -5017,6 +5116,8 @@ Main tuning points:
   var baseCanvasWidth = C.canvasWidth;
   var baseCanvasHeight = C.canvasHeight;
   var fullscreenRequested = false;
+  var responsiveLayoutRefreshFrameId = 0;
+  var responsiveLayoutRefreshTimeoutId = 0;
   var sessionMaxScore = 0;
   var globalAdminSections = [
     {
@@ -5247,8 +5348,8 @@ Main tuning points:
     canvas.width = baseCanvasWidth;
     canvas.height = baseCanvasHeight;
     primeSceneArt();
-    applyResponsiveLayout();
-    window.addEventListener("resize", applyResponsiveLayout);
+    scheduleResponsiveLayoutRefresh();
+    window.addEventListener("resize", scheduleResponsiveLayoutRefresh);
     document.addEventListener("visibilitychange", function () {
       setAudioAppActive(!document.hidden);
       if (!document.hidden) {
@@ -5261,6 +5362,7 @@ Main tuning points:
     });
     window.addEventListener("pageshow", function () {
       setAudioAppActive(true);
+      scheduleResponsiveLayoutRefresh();
     });
     window.addEventListener("blur", function () {
       if (document.hidden) {
@@ -5272,8 +5374,18 @@ Main tuning points:
         setAudioAppActive(true);
       }
     });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", scheduleResponsiveLayoutRefresh);
+      window.visualViewport.addEventListener("scroll", scheduleResponsiveLayoutRefresh);
+    }
+    window.addEventListener("pointerdown", function () {
+      if (state.preRunActive && state.preRunStep === "select") {
+        unlockAudioIfNeeded();
+      }
+    }, true);
     document.addEventListener("fullscreenchange", function () {
       fullscreenRequested = Boolean(document.fullscreenElement);
+      scheduleResponsiveLayoutRefresh();
     });
     applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
     loadGlobalAdminConfig();
@@ -7561,6 +7673,7 @@ Main tuning points:
     }
     renderPreRunScreen();
     updateOverlayUiVisibility();
+    unlockAudioIfNeeded();
     refreshMusicPlayback();
   }
 
@@ -8415,14 +8528,72 @@ Main tuning points:
         togglePreRunMusicSetting();
       });
     }
-    if (preRunSettingsGfx2MusicBtn) {
-      preRunSettingsGfx2MusicBtn.addEventListener("click", function () {
+    if (preRunSettingsGfx2MusicVolumeEl) {
+      preRunSettingsGfx2MusicVolumeEl.addEventListener("click", function (event) {
+        if (event.target === preRunSettingsGfx2MusicBtn) {
+          return;
+        }
         togglePreRunMusicSetting();
       });
     }
-    if (preRunSettingsGfx2SfxBtn) {
-      preRunSettingsGfx2SfxBtn.addEventListener("click", function () {
+    if (preRunSettingsGfx2DebugBoxMusicEl) {
+      preRunSettingsGfx2DebugBoxMusicEl.addEventListener("click", function () {
+        togglePreRunMusicSetting();
+      });
+    }
+    if (preRunSettingsGfx2MusicBtn) {
+      preRunSettingsGfx2MusicBtn.addEventListener("input", function (event) {
+        var nextMusicVolume = sanitizeGlobalAdminNumber("audioMusicVolumePercent", event.currentTarget.value);
+        applyGlobalVolumeSetting("audioMusicVolumePercent", nextMusicVolume);
+        rememberMusicRestoreVolumePercent(nextMusicVolume);
+        applyGlobalAudioSetting("audioMusicEnabled", nextMusicVolume > 0);
+        renderPreRunSettingsScreen();
+      });
+      preRunSettingsGfx2MusicBtn.addEventListener("change", function (event) {
+        var nextMusicVolume = sanitizeGlobalAdminNumber("audioMusicVolumePercent", event.currentTarget.value);
+        applyGlobalVolumeSetting("audioMusicVolumePercent", nextMusicVolume);
+        rememberMusicRestoreVolumePercent(nextMusicVolume);
+        applyGlobalAudioSetting("audioMusicEnabled", nextMusicVolume > 0);
+        renderPreRunSettingsScreen();
+      });
+    }
+    if (preRunSettingsGfx2SfxVolumeEl) {
+      preRunSettingsGfx2SfxVolumeEl.addEventListener("click", function (event) {
+        if (event.target === preRunSettingsGfx2SfxBtn) {
+          return;
+        }
         togglePreRunSfxSetting();
+      });
+    }
+    if (preRunSettingsGfx2DebugBoxSfxEl) {
+      preRunSettingsGfx2DebugBoxSfxEl.addEventListener("click", function () {
+        togglePreRunSfxSetting();
+      });
+    }
+    if (preRunSettingsGfx2SfxBtn) {
+      preRunSettingsGfx2SfxBtn.addEventListener("input", function (event) {
+        var nextSfxVolume = sanitizeGlobalAdminNumber("audioSfxVolumePercent", event.currentTarget.value);
+        applyGlobalVolumeSetting("audioSfxVolumePercent", nextSfxVolume);
+        rememberSfxRestoreVolumePercent(nextSfxVolume);
+        applyGlobalAudioSetting("audioSfxEnabled", nextSfxVolume > 0);
+        renderPreRunSettingsScreen();
+      });
+      preRunSettingsGfx2SfxBtn.addEventListener("change", function (event) {
+        var nextSfxVolume = sanitizeGlobalAdminNumber("audioSfxVolumePercent", event.currentTarget.value);
+        applyGlobalVolumeSetting("audioSfxVolumePercent", nextSfxVolume);
+        rememberSfxRestoreVolumePercent(nextSfxVolume);
+        applyGlobalAudioSetting("audioSfxEnabled", nextSfxVolume > 0);
+        renderPreRunSettingsScreen();
+      });
+    }
+    if (preRunSettingsGfx2GlobalVolumeBtn) {
+      preRunSettingsGfx2GlobalVolumeBtn.addEventListener("input", function (event) {
+        applyGlobalVolumeSetting("audioMasterVolumePercent", event.currentTarget.value);
+        renderPreRunSettingsScreen();
+      });
+      preRunSettingsGfx2GlobalVolumeBtn.addEventListener("change", function (event) {
+        applyGlobalVolumeSetting("audioMasterVolumePercent", event.currentTarget.value);
+        renderPreRunSettingsScreen();
       });
     }
     if (preRunSettingsGfx2AccountBtn) {
@@ -9820,6 +9991,29 @@ Main tuning points:
     applyGameModeToUi();
     updatePreRunClassicGfx2BoardMetrics();
     updatePreRunGfx2InsideBoardMetrics(preRunAdvancedGfx2BoardEl);
+  }
+
+  function scheduleResponsiveLayoutRefresh() {
+    if (responsiveLayoutRefreshFrameId) {
+      window.cancelAnimationFrame(responsiveLayoutRefreshFrameId);
+      responsiveLayoutRefreshFrameId = 0;
+    }
+    if (responsiveLayoutRefreshTimeoutId) {
+      window.clearTimeout(responsiveLayoutRefreshTimeoutId);
+      responsiveLayoutRefreshTimeoutId = 0;
+    }
+
+    applyResponsiveLayout();
+
+    responsiveLayoutRefreshFrameId = window.requestAnimationFrame(function () {
+      responsiveLayoutRefreshFrameId = 0;
+      applyResponsiveLayout();
+    });
+
+    responsiveLayoutRefreshTimeoutId = window.setTimeout(function () {
+      responsiveLayoutRefreshTimeoutId = 0;
+      applyResponsiveLayout();
+    }, 80);
   }
 
   function tryForceFullscreen() {

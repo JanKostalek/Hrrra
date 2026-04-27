@@ -83,6 +83,8 @@
     audioMasterVolumePercent: 75,
     audioMusicVolumePercent: 10,
     audioSfxVolumePercent: 85,
+    audioMusicRestoreVolumePercent: 10,
+    audioSfxRestoreVolumePercent: 85,
     uiSoundButtonPath: "assets/ui-sound/ui-button-tap.wav",
     uiSoundPageOpenPath: "assets/ui-sound/ui-page-open.wav",
     uiSoundBadgesPagePath: "assets/ui-sound/ui-badges-page.wav",
