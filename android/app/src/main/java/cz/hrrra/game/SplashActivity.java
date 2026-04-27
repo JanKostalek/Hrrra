@@ -30,7 +30,8 @@ import androidx.core.view.WindowInsetsControllerCompat;
 import java.io.IOException;
 
 public class SplashActivity extends AppCompatActivity {
-    private static final long POST_VIDEO_SPLASH_DURATION_MS = 2600L;
+    private static final long TITLE_HOLD_DURATION_MS = 1000L;
+    private static final long TITLE_GROW_DURATION_MS = 1000L;
     private static final long VIDEO_FALLBACK_TIMEOUT_MS = 20000L;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -222,12 +223,14 @@ public class SplashActivity extends AppCompatActivity {
 
         ViewGroup.LayoutParams params = introVideoView.getLayoutParams();
         if (params != null) {
-            params.width = Math.max(1, (int) (introVideoWidth * 1.5f));
-            params.height = Math.max(1, (int) (introVideoHeight * 1.5f));
+            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
             if (params instanceof FrameLayout.LayoutParams) {
                 ((FrameLayout.LayoutParams) params).gravity = Gravity.CENTER;
             }
             introVideoView.setLayoutParams(params);
+            introVideoView.setScaleX(1f);
+            introVideoView.setScaleY(1f);
         }
     }
 
@@ -266,7 +269,6 @@ public class SplashActivity extends AppCompatActivity {
             titleView.setVisibility(View.VISIBLE);
         }
         animateTitle();
-        handler.postDelayed(launchGameRunnable, POST_VIDEO_SPLASH_DURATION_MS);
     }
 
     private void animateTitle() {
@@ -275,23 +277,37 @@ public class SplashActivity extends AppCompatActivity {
             return;
         }
 
+        titleView.setAlpha(0f);
+        titleView.setScaleX(0.18f);
+        titleView.setScaleY(0.18f);
+        titleView.setRotation(-10f);
+
         ObjectAnimator fadeIn = ObjectAnimator.ofFloat(titleView, "alpha", 0f, 1f);
         fadeIn.setDuration(320);
 
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(titleView, "scaleX", 0.18f, 1.7f, 1.35f);
-        scaleX.setDuration(700);
-        scaleX.setInterpolator(new OvershootInterpolator(1.05f));
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(titleView, "scaleX", 0.18f, 1.8f);
+        scaleX.setStartDelay(TITLE_HOLD_DURATION_MS);
+        scaleX.setDuration(TITLE_GROW_DURATION_MS);
+        scaleX.setInterpolator(new OvershootInterpolator(1.0f));
 
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(titleView, "scaleY", 0.18f, 1.7f, 1.35f);
-        scaleY.setDuration(700);
-        scaleY.setInterpolator(new OvershootInterpolator(1.05f));
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(titleView, "scaleY", 0.18f, 1.8f);
+        scaleY.setStartDelay(TITLE_HOLD_DURATION_MS);
+        scaleY.setDuration(TITLE_GROW_DURATION_MS);
+        scaleY.setInterpolator(new OvershootInterpolator(1.0f));
 
-        ObjectAnimator rotate = ObjectAnimator.ofFloat(titleView, "rotation", -10f, 2f, 0f);
-        rotate.setDuration(700);
+        ObjectAnimator rotate = ObjectAnimator.ofFloat(titleView, "rotation", -10f, 0f);
+        rotate.setStartDelay(TITLE_HOLD_DURATION_MS);
+        rotate.setDuration(TITLE_GROW_DURATION_MS);
         rotate.setInterpolator(new AccelerateDecelerateInterpolator());
 
         titleAnimator = new AnimatorSet();
         titleAnimator.playTogether(fadeIn, scaleX, scaleY, rotate);
+        titleAnimator.addListener(new android.animation.AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(android.animation.Animator animation) {
+                handler.post(launchGameRunnable);
+            }
+        });
         titleAnimator.start();
     }
 }
