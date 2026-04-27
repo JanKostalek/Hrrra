@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 62,
-  versionName: "1.0.62",
+  versionCode: 63,
+  versionName: "1.0.63",
   whatsNew: [
-  "Release bump to version 1.0.62.",
+  "Release bump to version 1.0.63.",
   "Per-level rocket art now loads from level-specific folders, including the LevelX bonus rocket art.",
   "Intro now plays a startup video before the splash artwork.",
   "Release bump to version 1.0.56.",
