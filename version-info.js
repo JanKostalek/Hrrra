@@ -1,8 +1,9 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 64,
-  versionName: "1.0.64",
+  versionCode: 65,
+  versionName: "1.0.65",
   whatsNew: [
-  "Release bump to version 1.0.64.",
+  "Release bump to version 1.0.65.",
+  "Settings page now keeps the music and SFX toggle hitboxes aligned with the guitar and Zzzap graphics again.",
   "Per-level rocket art now loads from level-specific folders, including the LevelX bonus rocket art.",
   "Intro now plays a startup video before the splash artwork.",
   "Release bump to version 1.0.56.",

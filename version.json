@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 64,
-  "latestVersionName": "1.0.64",
+  "latestVersionCode": 65,
+  "latestVersionName": "1.0.65",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.64 build is available. Update now to get the latest startup video intro, splash asset update, border overlays, and Android packaging refresh.",
+  "message": "A new Hrrra 1.0.65 build is available. Update now to get the latest startup video intro, splash asset update, border overlays, and Android packaging refresh.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }
