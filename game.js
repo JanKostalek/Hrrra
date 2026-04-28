@@ -306,6 +306,8 @@ Main tuning points:
   var preRunSettingsBackBtn = document.getElementById("pre-run-settings-back-btn");
   var preRunSettingsGfx2El = document.getElementById("pre-run-settings-gfx2");
   var preRunSettingsGfx2BackBtn = document.getElementById("pre-run-settings-gfx2-back-btn");
+  var preRunSettingsGfx2MusicGraphicBtn = document.getElementById("pre-run-settings-gfx2-music-graphic-btn");
+  var preRunSettingsGfx2SfxGraphicBtn = document.getElementById("pre-run-settings-gfx2-sfx-graphic-btn");
   var preRunSettingsGfx2MusicBtn = document.getElementById("pre-run-settings-gfx2-music-btn");
   var preRunSettingsGfx2SfxBtn = document.getElementById("pre-run-settings-gfx2-sfx-btn");
   var preRunSettingsGfx2GlobalVolumeBtn = document.getElementById("pre-run-settings-gfx2-global-volume");
@@ -1830,6 +1832,12 @@ Main tuning points:
         ? "Music volume " + String(gfx2MusicDisplayVolume) + "%"
         : "Music muted";
     }
+    if (preRunSettingsGfx2MusicGraphicBtn) {
+      var musicGraphicEnabled = Boolean(C.audioMusicEnabled);
+      preRunSettingsGfx2MusicGraphicBtn.setAttribute("aria-pressed", musicGraphicEnabled ? "true" : "false");
+      preRunSettingsGfx2MusicGraphicBtn.setAttribute("aria-label", musicGraphicEnabled ? "Mute music" : "Unmute music");
+      preRunSettingsGfx2MusicGraphicBtn.title = musicGraphicEnabled ? "Mute music" : "Unmute music";
+    }
     if (preRunSettingsGfx2SfxBtn) {
       var gfx2SfxVolume = sanitizeGlobalAdminNumber("audioSfxVolumePercent", C.audioSfxVolumePercent);
       var gfx2SfxDisplayVolume = C.audioSfxEnabled ? gfx2SfxVolume : 0;
@@ -1838,6 +1846,12 @@ Main tuning points:
       preRunSettingsGfx2SfxBtn.title = C.audioSfxEnabled
         ? "Sound effects volume " + String(gfx2SfxDisplayVolume) + "%"
         : "Sound effects muted";
+    }
+    if (preRunSettingsGfx2SfxGraphicBtn) {
+      var sfxGraphicEnabled = Boolean(C.audioSfxEnabled);
+      preRunSettingsGfx2SfxGraphicBtn.setAttribute("aria-pressed", sfxGraphicEnabled ? "true" : "false");
+      preRunSettingsGfx2SfxGraphicBtn.setAttribute("aria-label", sfxGraphicEnabled ? "Mute sound effects" : "Unmute sound effects");
+      preRunSettingsGfx2SfxGraphicBtn.title = sfxGraphicEnabled ? "Mute sound effects" : "Unmute sound effects";
     }
     if (preRunSettingsGfx2GlobalVolumeBtn) {
       var gfx2GlobalVolume = sanitizeGlobalAdminNumber("audioMasterVolumePercent", C.audioMasterVolumePercent);
@@ -8536,6 +8550,11 @@ Main tuning points:
         togglePreRunMusicSetting();
       });
     }
+    if (preRunSettingsGfx2MusicGraphicBtn) {
+      preRunSettingsGfx2MusicGraphicBtn.addEventListener("click", function () {
+        togglePreRunMusicSetting();
+      });
+    }
     if (preRunSettingsGfx2DebugBoxMusicEl) {
       preRunSettingsGfx2DebugBoxMusicEl.addEventListener("click", function () {
         togglePreRunMusicSetting();
@@ -8562,6 +8581,11 @@ Main tuning points:
         if (event.target === preRunSettingsGfx2SfxBtn) {
           return;
         }
+        togglePreRunSfxSetting();
+      });
+    }
+    if (preRunSettingsGfx2SfxGraphicBtn) {
+      preRunSettingsGfx2SfxGraphicBtn.addEventListener("click", function () {
         togglePreRunSfxSetting();
       });
     }

@@ -139,3 +139,5 @@ zmensi text Score a Max Score o 33%
 Switched projectile rocket art loading to per-level filenames (level*_rocket01.png / level*_rocket02.png) and added LevelX rocket overrides so each level can own its own projectile visuals.
 
 Release bump to 1.0.60 / versionCode 60 after syncing the per-level rocket art update and the latest splash assets.
+na strance settings je ovládání zvuku, je to tak? jsou tam posuvníky a je tam i tlačítko na ztlumení, které kdyz tapneme, se ztlumí zvuk / muzika, kdyz tapneme znovu, vrátí se do stavu, kde byl původne.\r\n\r\n-------------------\r\n
+ale kdyz se klikne ne grafiku kitary nebo zzzap, tak by se mělo ztlumit a po dalsím kliku opet pustit / samostatně zvuk / sfx\r\n\r\n-------------------\r\n

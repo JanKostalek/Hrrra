@@ -2587,13 +2587,28 @@ body {
   z-index: 2;
 }
 
+.pre-run-settings-gfx2-hitbox-music-graphic {
+  left: 14.5%;
+  top: 15.5%;
+  width: 28%;
+  height: 46%;
+}
+
+.pre-run-settings-gfx2-hitbox-sfx-graphic {
+  right: 15%;
+  top: 16%;
+  width: 28%;
+  height: 44%;
+}
+
 .pre-run-settings-gfx2-hitbox:hover {
   box-shadow: none;
   background: transparent;
 }
 
 .pre-run-settings-gfx2-hitbox:focus-visible {
-  outline: none;
+  outline: 3px solid rgba(255, 228, 168, 0.72);
+  outline-offset: 4px;
 }
 
 .pre-run-settings-gfx2-volume {
@@ -3738,6 +3753,20 @@ body {
     height: min(520px, calc(100dvh - 22px));
     min-height: 320px;
     border-radius: 18px;
+  }
+
+  .pre-run-settings-gfx2-hitbox-music-graphic {
+    left: 12.8%;
+    top: 15.2%;
+    width: 30%;
+    height: 45%;
+  }
+
+  .pre-run-settings-gfx2-hitbox-sfx-graphic {
+    right: 13%;
+    top: 15.7%;
+    width: 30%;
+    height: 43%;
   }
 
   .pre-run-shop-gfx2-hitbox:hover {
