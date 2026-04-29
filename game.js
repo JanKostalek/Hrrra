@@ -5087,6 +5087,8 @@ Main tuning points:
     },
     shieldRespawnTimer: 0,
     shieldCharges: 0,
+    continueShieldActive: false,
+    continueShieldTimeLeft: 0,
     shieldBurstActive: false,
     shieldBurstElapsed: 0,
     shieldBurstDuration: 0.5,
@@ -10348,6 +10350,8 @@ Main tuning points:
       C.shieldRespawnMaxSeconds
     );
     state.shieldCharges = carriedShieldCharges;
+    state.continueShieldActive = false;
+    state.continueShieldTimeLeft = 0;
     state.shieldBurstActive = false;
     state.shieldBurstElapsed = 0;
     state.shieldBurstDuration = 0.5;
@@ -10736,8 +10740,10 @@ Main tuning points:
     state.teleportFinishAnimActive = false;
     state.questionCoinAnimActive = false;
     state.lifeLossFlashTimeLeft = 0;
-    state.lifeLossInvulnerabilityTimeLeft = 0;
+    state.lifeLossInvulnerabilityTimeLeft = 3;
     state.shieldBurstActive = false;
+    state.continueShieldActive = true;
+    state.continueShieldTimeLeft = 3;
     state.livesLeft = grantedLives;
     input.left = false;
     input.right = false;
@@ -10764,6 +10770,16 @@ Main tuning points:
   }
 
   function consumeShield(cause) {
+    if (state.continueShieldActive && cause === "bottomDeathZone") {
+      if (!rescuePlayerFromBottomDeathZone()) {
+        return false;
+      }
+      state.lifeLossFlashTimeLeft = 0.25;
+      playLevelSfx("levelShieldBreakSoundPath", 120);
+      recordShieldSave();
+      return true;
+    }
+
     if (state.shieldCharges <= 0 || !isShieldProtectableCause(cause)) {
       return false;
     }
@@ -11196,6 +11212,7 @@ Main tuning points:
       state.skinUnlockToastTimeLeft = Math.max(0, state.skinUnlockToastTimeLeft - dt);
     }
     updateShieldBurstEffect(dt);
+    updateContinueShieldEffect(dt);
     updateDoubleJumpEffect(dt);
     updateSlowEffect(dt);
     updateMagnetEffect(dt);
@@ -11363,6 +11380,17 @@ Main tuning points:
     }
   }
 
+  function updateContinueShieldEffect(dt) {
+    if (!state.continueShieldActive) {
+      return;
+    }
+
+    state.continueShieldTimeLeft = Math.max(0, state.continueShieldTimeLeft - dt);
+    if (state.continueShieldTimeLeft <= 0) {
+      state.continueShieldActive = false;
+    }
+  }
+
   function finishRunAndShowGameOver() {
     closeInGameSettings();
     state.running = false;
@@ -11398,7 +11426,7 @@ Main tuning points:
     closeInGameSettings();
     var heroRenderMetrics = getHeroRenderMetrics();
     playLevelSfx("levelTeleportSoundPath", 160);
-    recordTeleportUse(state.shieldCharges > 0);
+    recordTeleportUse(state.shieldCharges > 0 || state.continueShieldActive);
     state.running = false;
     state.teleportFinishAnimActive = true;
     state.teleportFinishAnimElapsed = 0;
@@ -12158,7 +12186,7 @@ Main tuning points:
 
   function trySpawnShieldIcon() {
     var icon = state.shieldIcon;
-    if (icon.active || state.shieldCharges > 0) {
+    if (icon.active || state.shieldCharges > 0 || state.continueShieldActive) {
       return false;
     }
 
@@ -12345,7 +12373,7 @@ Main tuning points:
       return;
     }
 
-    if (state.shieldCharges > 0) {
+    if (state.shieldCharges > 0 || state.continueShieldActive) {
       icon.active = false;
       return;
     }
@@ -13315,9 +13343,15 @@ Main tuning points:
     var cx = x + player.width * 0.5;
     var cy = y + player.height * 0.5;
     var heroFrame = useModernVisuals() ? getCurrentHeroFrame() : null;
+    var continueShieldBlinkAlpha = state.continueShieldActive
+      ? 0.42 + 0.58 * (0.5 + 0.5 * Math.sin(state.runTimeSeconds * 18))
+      : null;
 
     ctx.save();
     ctx.translate(cx, cy);
+    if (continueShieldBlinkAlpha !== null) {
+      ctx.globalAlpha = continueShieldBlinkAlpha;
+    }
     if (heroFrame) {
       var heroRenderMetrics = getHeroRenderMetrics();
       var heroSourceRect = getHeroFrameSourceRect(heroFrame);
@@ -13965,13 +13999,15 @@ Main tuning points:
     var radius = player.width * 0.62;
     var time = state.runTimeSeconds;
 
-    if (state.shieldCharges > 0) {
+    if (state.shieldCharges > 0 || state.continueShieldActive) {
       var shieldFrame = sceneArt.shieldIdleFrame || sceneArt.shieldBurstFrames[0] || null;
+      var isContinueShield = state.continueShieldActive;
+      var shieldAlpha = isContinueShield ? (0.7 + 0.3 * (0.5 + 0.5 * Math.sin(state.runTimeSeconds * 14))) : 0.5;
       if (shieldFrame) {
-        var shieldSize = player.width * 2.18;
+        var shieldSize = player.width * (isContinueShield ? 2.34 : 2.18);
         var shieldCenterY = centerY - player.height * 0.10;
         ctx.save();
-        ctx.globalAlpha = 0.5;
+        ctx.globalAlpha = shieldAlpha;
         ctx.drawImage(
           shieldFrame,
           centerX - shieldSize * 0.5,
@@ -13982,13 +14018,20 @@ Main tuning points:
         ctx.restore();
       } else {
         ctx.save();
-        ctx.strokeStyle = "rgba(79, 215, 255, 0.25)";
-        ctx.lineWidth = Math.max(3, player.width * 0.06);
-        ctx.shadowColor = "rgba(79, 215, 255, 0.18)";
-        ctx.shadowBlur = player.width * 0.18;
+        ctx.strokeStyle = isContinueShield ? "rgba(141, 235, 255, 0.75)" : "rgba(79, 215, 255, 0.25)";
+        ctx.lineWidth = Math.max(3, player.width * (isContinueShield ? 0.085 : 0.06));
+        ctx.shadowColor = isContinueShield ? "rgba(141, 235, 255, 0.48)" : "rgba(79, 215, 255, 0.18)";
+        ctx.shadowBlur = player.width * (isContinueShield ? 0.28 : 0.18);
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
         ctx.stroke();
+        if (isContinueShield) {
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
+          ctx.lineWidth = Math.max(2, player.width * 0.035);
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius * 0.8, 0, Math.PI * 2);
+          ctx.stroke();
+        }
         ctx.restore();
       }
     }
