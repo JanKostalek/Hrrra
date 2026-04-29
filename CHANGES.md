@@ -1,7 +1,10 @@
 ﻿# Hrrra - Working Changes Log
 
+- 2026-04-29: Bumped release metadata to `1.0.67` / `versionCode 67` and prepared the current crossing and gameplay debug/layout cleanup work for the next build.
 - 2026-04-28: Bumped release metadata to `1.0.66` / `versionCode 66` and prepared the Settings artwork mute hitboxes so tapping the guitar or `Zzzzap` graphic toggles music and SFX directly from the image.
 - 2026-04-28: Synced the `1.0.66` release metadata into the web root and Android public assets so the packaged app and update check stay on the same version.
+- 2026-04-29: Added an in-game pause hitbox in the top-left corner for all gameplay levels, wired Settings to return back into the paused run, and kept the current level music playing while paused.
+- 2026-04-29: Switched Level 5 to its dedicated `assets/level5/level5_border.png` artwork and included the updated border PNGs from the level folders in the next release work.
 - 2026-04-24: Bumped the release metadata to `1.0.56` / `versionCode 56` after adding the `levelx` packaging path and the LevelX platform hookup.
 - 2026-04-24: Level 5 now prefers `assets/levelx/levelx_platform.png` before the generic Level 5 platform fallback, so the bonus skin no longer gets masked by the old platform art once it is unlocked.
 

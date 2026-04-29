@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 66,
-  versionName: "1.0.66",
+  versionCode: 67,
+  versionName: "1.0.67",
   whatsNew: [
-  "Release bump to version 1.0.66.",
+  "Release bump to version 1.0.67.",
   "Settings screen mute hitboxes now sit on the guitar and Zzzap graphics, so music and SFX can be toggled directly from the artwork.",
   "Settings page now keeps the music and SFX toggle hitboxes aligned with the guitar and Zzzap graphics again.",
   "Per-level rocket art now loads from level-specific folders, including the LevelX bonus rocket art.",

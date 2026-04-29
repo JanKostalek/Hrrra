@@ -128,6 +128,7 @@ Main tuning points:
   var preRunCreditsVersionEl = document.getElementById("pre-run-credits-version");
   var preRunShopScreenEl = document.getElementById("pre-run-shop-screen");
   var preRunSettingsScreenEl = document.getElementById("pre-run-settings-screen");
+  var gamePauseHitboxBtn = document.getElementById("game-pause-hitbox");
   var preRunDetailScreenEl = document.getElementById("pre-run-detail-screen");
   var preRunJumpBtn = document.getElementById("pre-run-jump-btn");
   var preRunFullBtn = document.getElementById("pre-run-full-btn");
@@ -1094,6 +1095,7 @@ Main tuning points:
     level2Border: null,
     level3Border: null,
     level4Border: null,
+    level5Border: null,
     levelxBack: null,
     levelxFront: null,
     levelxBorder: null,
@@ -1321,6 +1323,7 @@ Main tuning points:
   var LEVEL4_FOREST_FRONT_ART_PATH = "assets/level4/background_front_tile.png";
   var LEVEL5_SKY_ART_PATH = "assets/level5/background_sky_tile.png";
   var LEVEL5_FOREGROUND_ART_PATH = "assets/level5/background_foreground_tile.png";
+  var LEVEL5_BORDER_ART_PATH = "assets/level5/level5_border.png";
   var LEVELX_BACK_ART_PATH = "assets/levelx/background_back_tile.jpg";
   var LEVELX_FRONT_ART_PATH = "assets/levelx/background_front_tile.png";
   var LEVELX_BORDER_ART_PATH = "assets/levelx/levelx_border.png";
@@ -1878,6 +1881,10 @@ Main tuning points:
   }
 
   function handlePreRunSettingsBackNavigation() {
+    if (state.inGameSettingsActive) {
+      closeInGameSettings();
+      return;
+    }
     if (isGfx2StartScreenEnabled()) {
       startPreRunGfx2BackAnimation(PRE_RUN_GFX2_SETTINGS_BACK_FRAMES);
       return;
@@ -1885,6 +1892,58 @@ Main tuning points:
     playUiPageOpenSound();
     state.preRunStep = "select";
     renderPreRunScreen();
+  }
+
+  function openInGameSettings() {
+    if (state.gamePauseActive || state.inGameSettingsActive || state.preRunActive || state.levelFinishedActive || isGameOverScreenVisible()) {
+      return;
+    }
+
+    unlockAudioIfNeeded();
+    playUiPageOpenSound();
+    state.inGameSettingsPreviousPreRunStep = state.preRunStep;
+    state.preRunStep = "settings";
+    state.gamePauseActive = true;
+    state.inGameSettingsActive = true;
+    state.adminPaused = true;
+    if (preRunScreenEl) {
+      preRunScreenEl.classList.remove("hidden");
+    }
+    input.left = false;
+    input.right = false;
+    input.jumpDown = false;
+    input.jumpPressed = false;
+    renderPreRunScreen();
+    renderPreRunSettingsScreen();
+    updateGamePauseUiVisibility();
+    refreshMusicPlayback();
+  }
+
+  function closeInGameSettings() {
+    if (!state.inGameSettingsActive) {
+      return;
+    }
+
+    if (state.inGameSettingsPreviousPreRunStep !== null) {
+      state.preRunStep = state.inGameSettingsPreviousPreRunStep;
+      state.inGameSettingsPreviousPreRunStep = null;
+    }
+    state.inGameSettingsActive = false;
+    state.gamePauseActive = false;
+    state.adminPaused = false;
+    if (preRunScreenEl && !state.preRunActive) {
+      preRunScreenEl.classList.add("hidden");
+    }
+    if (preRunSettingsScreenEl) {
+      preRunSettingsScreenEl.classList.add("hidden");
+      preRunSettingsScreenEl.classList.remove("in-game-pause");
+    }
+    input.left = false;
+    input.right = false;
+    input.jumpDown = false;
+    input.jumpPressed = false;
+    updateGamePauseUiVisibility();
+    refreshMusicPlayback();
   }
 
   function togglePreRunMusicSetting() {
@@ -4821,6 +4880,9 @@ Main tuning points:
   var state = {
     running: true,
     adminPaused: false,
+    gamePauseActive: false,
+    inGameSettingsActive: false,
+    inGameSettingsPreviousPreRunStep: null,
     preRunActive: false,
     preRunStep: "select",
     preRunGfx2FullLockNoticeActive: false,
@@ -5470,6 +5532,9 @@ Main tuning points:
     });
     loadSceneArtAsset(LEVEL4_FOREST_FRONT_ART_PATH, function (image) {
       sceneArt.level4ForestFront = image;
+    });
+    loadSceneArtAsset(LEVEL5_BORDER_ART_PATH, function (image) {
+      sceneArt.level5Border = image;
     });
     loadSceneArtAsset(LEVELX_BACK_ART_PATH, function (image) {
       sceneArt.levelxBack = image;
@@ -7597,6 +7662,7 @@ Main tuning points:
   }
 
   function prepareRunSetup(mode, difficulty) {
+    closeInGameSettings();
     state.preRunLaunchActive = false;
     state.preRunLaunchElapsed = 0;
     state.preRunLaunchPhase = "ready";
@@ -7633,6 +7699,7 @@ Main tuning points:
   }
 
   function prepareLevelContinuation(level) {
+    closeInGameSettings();
     var carryDoubleJumpTime = 0;
     var carryTripleJumpTime = 0;
     var carryStoredDoubleJumpTime = 0;
@@ -7677,6 +7744,7 @@ Main tuning points:
   }
 
   function openPreRunScreen() {
+    closeInGameSettings();
     resetPreRunGfx2SelectScene();
     state.preRunStep = "select";
     setAdminOpen(false);
@@ -7746,6 +7814,7 @@ Main tuning points:
   }
 
   function closePreRunScreenAndStartRun() {
+    closeInGameSettings();
     setAdminOpen(false);
     unlockAudioIfNeeded();
     recordFreshRunStartIfNeeded();
@@ -8513,6 +8582,14 @@ Main tuning points:
         handlePreRunSettingsBackNavigation();
       });
     }
+    window.addEventListener("pointerdown", handleGamePauseHitboxCapture, true);
+    if (gamePauseHitboxBtn) {
+      gamePauseHitboxBtn.addEventListener("pointerdown", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        openInGameSettings();
+      });
+    }
     if (preRunSettingsGfx2BackBtn) {
       preRunSettingsGfx2BackBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
@@ -9071,8 +9148,72 @@ Main tuning points:
       adminToggle.classList.toggle("hidden", state.preRunActive || state.levelFinishedActive);
     }
     if (state.preRunActive || state.levelFinishedActive) {
+      if (state.inGameSettingsActive) {
+        closeInGameSettings();
+      }
       setAdminOpen(false);
     }
+    updateGamePauseUiVisibility();
+  }
+
+  function updateGamePauseUiVisibility() {
+    var showPauseHitbox =
+      Boolean(gamePauseHitboxBtn) &&
+      state.running &&
+      !state.adminPaused &&
+      !state.preRunActive &&
+      !state.levelFinishedActive &&
+      !state.gamePauseActive &&
+      !isGameOverScreenVisible() &&
+      !state.questionCoinAnimActive &&
+      !state.teleportFinishAnimActive &&
+      !state.projectileDeathAnimActive &&
+      !state.badgeRewardActive;
+
+    if (gamePauseHitboxBtn) {
+      gamePauseHitboxBtn.classList.toggle("hidden", !showPauseHitbox);
+    }
+
+    if (preRunSettingsScreenEl) {
+      var showSettingsOverlay = (state.preRunActive && state.preRunStep === "settings") || state.inGameSettingsActive;
+      preRunSettingsScreenEl.classList.toggle("hidden", !showSettingsOverlay);
+      preRunSettingsScreenEl.classList.toggle("in-game-pause", state.inGameSettingsActive);
+    }
+    if (preRunScreenEl) {
+      preRunScreenEl.classList.toggle("hidden", !state.preRunActive && !state.inGameSettingsActive);
+    }
+  }
+
+  function handleGamePauseHitboxCapture(event) {
+    if (
+      !gamePauseHitboxBtn ||
+      gamePauseHitboxBtn.classList.contains("hidden") ||
+      state.gamePauseActive ||
+      state.inGameSettingsActive ||
+      state.preRunActive ||
+      state.levelFinishedActive ||
+      isGameOverScreenVisible() ||
+      state.questionCoinAnimActive ||
+      state.teleportFinishAnimActive ||
+      state.projectileDeathAnimActive ||
+      state.badgeRewardActive
+    ) {
+      return;
+    }
+
+    var rect = gamePauseHitboxBtn.getBoundingClientRect();
+    var withinX = event.clientX >= rect.left && event.clientX <= rect.right;
+    var withinY = event.clientY >= rect.top && event.clientY <= rect.bottom;
+    if (!withinX || !withinY) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.stopImmediatePropagation) {
+      event.stopImmediatePropagation();
+    }
+    openInGameSettings();
   }
 
   function renderAdminForm() {
@@ -10997,7 +11138,7 @@ Main tuning points:
         updatePreRunGfx2EntranceAnimation(dt);
       }
       updatePreRunGfx2WaitAnimation(dt);
-    } else if (state.running && !state.adminPaused && !state.preRunActive) {
+    } else if (state.running && !state.adminPaused && !state.preRunActive && !state.gamePauseActive) {
       update(dt);
     } else if (state.questionCoinAnimActive && !state.adminPaused && !state.preRunActive) {
       updateQuestionCoinAnimation(dt);
@@ -11199,6 +11340,7 @@ Main tuning points:
   }
 
   function finishRunAndShowGameOver() {
+    closeInGameSettings();
     state.running = false;
     if (shouldShowContinueForCurrentRun()) {
       state.continueOfferActive = true;
@@ -11209,6 +11351,7 @@ Main tuning points:
   }
 
   function finishCurrentLevel() {
+    closeInGameSettings();
     state.running = false;
     state.levelFinishedActive = true;
     state.teleport.active = false;
@@ -11228,6 +11371,7 @@ Main tuning points:
       return;
     }
 
+    closeInGameSettings();
     var heroRenderMetrics = getHeroRenderMetrics();
     playLevelSfx("levelTeleportSoundPath", 160);
     recordTeleportUse(state.shieldCharges > 0);
@@ -11253,6 +11397,7 @@ Main tuning points:
   }
 
   function startProjectileDeathAnimation() {
+    closeInGameSettings();
     playLevelSfx("levelDeathSoundPath", 200);
     state.running = false;
     state.projectile.active = false;
@@ -11357,6 +11502,7 @@ Main tuning points:
     drawQuestionCoinAnimation();
     drawLevelBorderOverlay();
     drawHud();
+    updateGamePauseUiVisibility();
   }
 
   function findPlatformAtX(worldX) {
@@ -13045,8 +13191,8 @@ Main tuning points:
     if (level === 4) {
       return sceneArt.level4Border;
     }
-    if (level === 5 && isLevelXUnlocked()) {
-      return sceneArt.levelxBorder;
+    if (level === 5) {
+      return sceneArt.levelxBorder || sceneArt.level5Border;
     }
     return null;
   }

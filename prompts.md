@@ -141,3 +141,56 @@ Switched projectile rocket art loading to per-level filenames (level*_rocket01.p
 Release bump to 1.0.60 / versionCode 60 after syncing the per-level rocket art update and the latest splash assets.
 na strance settings je ovládání zvuku, je to tak? jsou tam posuvníky a je tam i tlačítko na ztlumení, které kdyz tapneme, se ztlumí zvuk / muzika, kdyz tapneme znovu, vrátí se do stavu, kde byl původne.\r\n\r\n-------------------\r\n
 ale kdyz se klikne ne grafiku kitary nebo zzzap, tak by se mělo ztlumit a po dalsím kliku opet pustit / samostatně zvuk / sfx\r\n\r\n-------------------\r\n
+nejdřív přepni na new branch. ve vsech úrovníc jsem upravil _border.png obrázky. Je to v pořádku a zahrn je do přístího commit. přidal jsem level5_border do level5, protoze tam nebyl. asi tam byl fallback. tak pouzivej nyní ten obrázek. potom implementuj. dle toho co jsi psal výše\r\n\r\n-------------------\r\n
+a) cervený rámeček vidím. posun ho o výšku toho rámečku dolu a rozšiř ho o šířku toho rámečku do prava. b) kdyz na rámeček kliknu, nic se nestane. respektive postavička vyskočí. to znamená, že na celé obrazovce je touchpoing -> skok a tlačítko pause je asi pod tou vrstvou?\r\n\r\n-------------------\r\n
+hra nebere v levelx levelx_border.png. je tam fallback na level1. proc?
+
+-------------------
+ nyni odstran debug rámeček. uz není potreba
+
+-------------------
+na crossing page zůstává ještě jeden debug border u instructions, smaž ho úplně
+
+-------------------
+do tlačítka classic  tu část co jsi vrátil  jsi pridal nějaký šedivý overlay
+
+-------------------
+ověř, že muzika a zvuky se berou taky z levelx/sounds a nikoliv level5
+
+-------------------
+nyní odstran červený debug rámeček z ingame a naopak jej přidej do crossing page
+
+-------------------
+posun tlačítko credits o 20% šířky toho tlačítka do leva
+
+-------------------
+dej debu rámeček i nad tlačítko instructions a nad obě tlačtíka classic
+
+-------------------
+zmenši velikost levého classic tlačítka (to co je v levém horním rohu) o 50% výšky toho tlačítka - uber horní polovinu a zároven o 50% šířky toho tlačítka z prava. uber jeho pravou polovinu
+
+-------------------
+ted posun tlačítko credits jeste jednou o 20% šířky toho tlačítka do leva
+
+-------------------
+zviditelni debug rámeček i nad instructions
+
+-------------------
+není tam videt
+
+-------------------
+udělej to tak, že nad všemi tlačítky na crossing page pust debug rámeček
+
+-------------------
+zmenši tlačítko nad settings (pravý horní roh) o 60% z levé strany, potom o 33% zhora
+
+-------------------
+ted jeste uber 20% ze spodu
+
+-------------------
+u tlačítka instructions uber 30% z leva
+
+-------------------
+ubral jsi classic tlačítko (v obrazovce jsou dvě, ty jsi ubral tomu v levém horním rohu). a) vrat to zpátky b) tlačítko instructions je ještě v obrazovce nad ním. uplně v levém rohu. tomu uber 30%jeho šířky z leva
+
+-------------------
