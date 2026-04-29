@@ -197,3 +197,7 @@ u tlačítka instructions uber 30% z leva
 ubral jsi classic tlačítko (v obrazovce jsou dvě, ty jsi ubral tomu v levém horním rohu). a) vrat to zpátky b) tlačítko instructions je ještě v obrazovce nad ním. uplně v levém rohu. tomu uber 30%jeho šířky z leva
 
 -------------------
+ted udelej debug overlay nad obema tlačítky classic
+pridal jsi to jen na pravy. pridej to i na ten druhy na levem kraji
+nyní zvets o 50% velikost toho levého tlačítka smerem nahoru
+nyní opet vypni debul overlay

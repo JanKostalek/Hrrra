@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 68,
-  "latestVersionName": "1.0.68",
+  "latestVersionCode": 69,
+  "latestVersionName": "1.0.69",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.68 build is available. Update now to get the latest settings mute hitboxes, startup video intro, splash asset update, border overlays, and Android packaging refresh.",
+  "message": "A new Hrrra 1.0.69 build is available. Update now to get the latest settings mute hitboxes, startup video intro, splash asset update, border overlays, continue shield protection, and Android packaging refresh.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

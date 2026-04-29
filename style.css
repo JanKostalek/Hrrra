@@ -1904,11 +1904,10 @@ body {
 
 .pre-run-gfx2-hotspot-classic-corner {
   left: 0;
-  top: 128px;
+  top: 64px;
   width: 128px;
-  height: 128px;
+  height: 192px;
   z-index: 8;
-  box-sizing: border-box;
 }
 
 .pre-run-gfx2-hotspot-settings-corner {
@@ -1926,6 +1925,11 @@ body {
   background: transparent !important;
   box-shadow: none !important;
   outline: none !important;
+}
+
+.pre-run-gfx2-hotspot-classic,
+.pre-run-gfx2-hotspot-house-classic {
+  box-sizing: border-box;
 }
 
 .pre-run-gfx2-hotspot-classic:hover,

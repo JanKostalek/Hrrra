@@ -1,5 +1,6 @@
 ﻿# Hrrra - Working Changes Log
 
+- 2026-04-29: Bumped release metadata to `1.0.69` / `versionCode 69` and prepared the current continue shield protection and crossing overlay cleanup work for the next build.
 - 2026-04-29: Bumped release metadata to `1.0.68` / `versionCode 68` and prepared the latest gameplay pause and settings polish work for the next build.
 - 2026-04-29: Bumped release metadata to `1.0.67` / `versionCode 67` and prepared the current crossing and gameplay debug/layout cleanup work for the next build.
 - 2026-04-28: Bumped release metadata to `1.0.66` / `versionCode 66` and prepared the Settings artwork mute hitboxes so tapping the guitar or `Zzzzap` graphic toggles music and SFX directly from the image.
