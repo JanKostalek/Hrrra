@@ -1906,6 +1906,7 @@ Main tuning points:
     state.gamePauseActive = true;
     state.inGameSettingsActive = true;
     state.adminPaused = true;
+    state.inGameSettingsInputLockUntil = performance.now() + 500;
     if (preRunScreenEl) {
       preRunScreenEl.classList.remove("hidden");
     }
@@ -1931,6 +1932,7 @@ Main tuning points:
     state.inGameSettingsActive = false;
     state.gamePauseActive = false;
     state.adminPaused = false;
+    state.inGameSettingsInputLockUntil = 0;
     if (preRunScreenEl && !state.preRunActive) {
       preRunScreenEl.classList.add("hidden");
     }
@@ -1998,6 +2000,22 @@ Main tuning points:
   function openChangeUserConfirm() {
     if (preRunAccountConfirmEl) {
       preRunAccountConfirmEl.classList.remove("hidden");
+    }
+  }
+
+  function isInGameSettingsInputLocked() {
+    return state.inGameSettingsActive && performance.now() < state.inGameSettingsInputLockUntil;
+  }
+
+  function suppressInGameSettingsTapDuringCooldown(event) {
+    if (!isInGameSettingsInputLocked()) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.stopImmediatePropagation) {
+      event.stopImmediatePropagation();
     }
   }
 
@@ -4883,6 +4901,7 @@ Main tuning points:
     gamePauseActive: false,
     inGameSettingsActive: false,
     inGameSettingsPreviousPreRunStep: null,
+    inGameSettingsInputLockUntil: 0,
     preRunActive: false,
     preRunStep: "select",
     preRunGfx2FullLockNoticeActive: false,
@@ -8581,6 +8600,11 @@ Main tuning points:
         playUiButtonSound();
         handlePreRunSettingsBackNavigation();
       });
+    }
+    if (preRunSettingsScreenEl) {
+      preRunSettingsScreenEl.addEventListener("pointerdown", suppressInGameSettingsTapDuringCooldown, true);
+      preRunSettingsScreenEl.addEventListener("click", suppressInGameSettingsTapDuringCooldown, true);
+      preRunSettingsScreenEl.addEventListener("touchstart", suppressInGameSettingsTapDuringCooldown, true);
     }
     window.addEventListener("pointerdown", handleGamePauseHitboxCapture, true);
     if (gamePauseHitboxBtn) {

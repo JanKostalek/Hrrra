@@ -146,10 +146,13 @@ a) cervený rámeček vidím. posun ho o výšku toho rámečku dolu a rozšiř 
 hra nebere v levelx levelx_border.png. je tam fallback na level1. proc?
 
 -------------------
- nyni odstran debug rámeček. uz není potreba
+nyni odstran debug rámeček. uz není potreba
 
 -------------------
 na crossing page zůstává ještě jeden debug border u instructions, smaž ho úplně
+
+-------------------
+když na androidu tapnu na tlačítko pause ve hře, tak se přepne settings stranka a settings stále reagují na tapnutí z predchozí obrazovky a jelikoz na stejném místě v nové obrazovce je posuvník na muziku, tak se okamzite změní její nastavení. myslím, že by to chtělo, aby při objevení se settings obrazovky hra neregistrovala tapnutí, alespon po dobu 0,5s. udělat tam nějaký delay
 
 -------------------
 do tlačítka classic  tu část co jsi vrátil  jsi pridal nějaký šedivý overlay
