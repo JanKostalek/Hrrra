@@ -201,3 +201,44 @@ ted udelej debug overlay nad obema tlačítky classic
 pridal jsi to jen na pravy. pridej to i na ten druhy na levem kraji
 nyní zvets o 50% velikost toho levého tlačítka smerem nahoru
 nyní opet vypni debul overlay
+kdyz se objeví game over screen, tak v pozadí je videt obrazovka ze hry, ale chybí ji _boarder vrstva. vzdy by měla být videt k príslušnému level / game over i v pozadí level boarder
+v shopu, kdyz uz je nejaký z predmětů koupen, treba new level (ostatní jsou zatím placeholder), tak bych chtěl, aby se psalo pres nej SOLD
+o 20% tu tabulku zmensi
+zvetsi trochu uhel naklonení ty tabulky - viz obrázek
+zmensi jeste o 20% tabulku a posun jeste o 8 stupnů na -25deg
+posun tu cedulku o dvacet pixelů nahoru
+posun o deset pixelů dolů
+implementuj skin05: shop, admin cena 1000 coins, animace walk/jump, napojení na assets/skins/Skin05 a gfx2 layout skin05
+hero-icon.png jsem do slozky skin05 ted pridal
+
+-------------------
+pust nad skin05 v shop screeen debug rámecek, abychom videli, kde je tlačítko pro nákup / select skinu
+
+-------------------
+zuž/zmenší hitbox o 10% z levé i pravé strany
+
+-------------------
+uber jeste jednou 10%
+
+-------------------
+pokud zmensujes hitbox, tak by se mel zmensovat i debut rámeček, je to tak? ale ten je stále stejny...
+
+-------------------
+muzes odstranit debug ramecek
+
+-------------------
+velikosti
+
+-------------------
+pridal jsem jeste jeden frame do sekvecne jump. měla by se prehrávat tak, ze kdyz tapnu, tak bude frame1, následně bude frame2 po celou dobu, co postavicka bude stoupat. ve chvíli kdy začne klesat, bude frame3. ve chvíli kdy se dotkne země, prehraje se frame 4 a 5. uprav to tak
+
+-------------------
+prejmenuj v administraci skin 05 na Grey
+
+-------------------
+ano a vsude kde je to relevantní. jako kdyz se odemkne skin v průběhu rhy, tak aby to napsalo jak banner, tak na konci runu, ze byl odemnut novy skin - Grey - místo skin 05
+
+-------------------
+zvy verzi na 70, udělej sync www a android, udelej commit, push, priprav aab, potom se vrat dn new a rovnej main s new, aby obě verze byly shodne
+
+zvy verzi na 70, udělej sync www a android, udelej commit, push, priprav aab, potom se vrat dn new a rovnej main s new, aby obě verze byly shodne

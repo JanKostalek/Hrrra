@@ -1,5 +1,7 @@
 ﻿# Hrrra - Working Changes Log
 
+- 2026-04-30: Bumped release metadata to `1.0.70` / `versionCode 70` and prepared the current Skin 05 / Grey polish work for the next build.
+- 2026-04-30: Added Skin 05 as a purchasable shop skin with a 1000-coin admin price, wired its hero walk/jump frame sets and selection artwork into the GFX2 skin system, and repurposed the classic/advanced slot 5 preview into Skin 05.
 - 2026-04-29: Bumped release metadata to `1.0.69` / `versionCode 69` and prepared the current continue shield protection and crossing overlay cleanup work for the next build.
 - 2026-04-29: Bumped release metadata to `1.0.68` / `versionCode 68` and prepared the latest gameplay pause and settings polish work for the next build.
 - 2026-04-29: Bumped release metadata to `1.0.67` / `versionCode 67` and prepared the current crossing and gameplay debug/layout cleanup work for the next build.

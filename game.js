@@ -1226,11 +1226,27 @@ Main tuning points:
     "hero-jump-06.png",
     "hero-jump-07.png"
   ];
+  var HERO_WALK_FRAME_FILENAMES_SKIN05 = [
+    "hero-walk-01.png",
+    "hero-walk-02.png",
+    "hero-walk-03.png",
+    "hero-walk-04.png",
+    "hero-walk-05.png",
+    "hero-walk-06.png"
+  ];
+  var HERO_JUMP_FRAME_FILENAMES_SKIN05 = [
+    "hero-jump-01.png",
+    "hero-jump-02.png",
+    "hero-jump-03.png",
+    "hero-jump-04.png",
+    "hero-jump-05.png"
+  ];
   var SKIN_DISPLAY_NAMES = {
     Skin01: "Zyro",
     Skin02: "Vexi",
     Skin03: "Nemu",
-    Skin04: "Krob"
+    Skin04: "Krob",
+    Skin05: "Grey"
   };
   var FUTURE_SKIN_SLOT_COUNT = 2;
   var FUTURE_SKIN_ICON_PATH = "assets/hero-question-mark-icon.png";
@@ -1240,9 +1256,10 @@ Main tuning points:
     { value: "Skin01", label: "Zyro" },
     { value: "Skin02", label: "Vexi" },
     { value: "Skin03", label: "Nemu" },
-    { value: "Skin04", label: "Krob" }
+    { value: "Skin04", label: "Krob" },
+    { value: "Skin05", label: "Grey" }
   ];
-  var DISCOVERABLE_SKIN_OPTIONS = ["Skin02", "Skin03", "Skin04"];
+  var DISCOVERABLE_SKIN_OPTIONS = ["Skin02", "Skin03", "Skin04", "Skin05"];
   var SKIN_UI_CONFIGS = {
     Skin01: {
       label: "Zyro",
@@ -1263,6 +1280,11 @@ Main tuning points:
       label: "Krob",
       previewAssetPath: "assets/skins/Skin04/hero-icon.png",
       pickupAssetPath: "assets/skins/Skin04/hero-icon.png"
+    },
+    Skin05: {
+      label: "Grey",
+      previewAssetPath: "assets/skins/Skin05/hero-icon.png",
+      pickupAssetPath: "assets/skins/Skin05/hero-icon.png"
     }
   };
   for (var skinOptionIndex = 0; skinOptionIndex < SKIN_OPTIONS.length; skinOptionIndex += 1) {
@@ -1294,6 +1316,11 @@ Main tuning points:
       usesFullFrameSourceRects: true,
       renderScale: 1.1,
       walkFrameSeconds: 0.032
+    },
+    Skin05: {
+      walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN05,
+      jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN05,
+      usesFullFrameSourceRects: true
     }
   };
   for (var sceneArtLevel = 1; sceneArtLevel <= LEVEL_COUNT; sceneArtLevel += 1) {
@@ -2185,7 +2212,8 @@ Main tuning points:
           Skin01: true,
           Skin02: false,
           Skin03: false,
-          Skin04: false
+          Skin04: false,
+          Skin05: false
         },
       selectedSkin: "Skin01",
       highestLevelReached: 1,
@@ -2319,6 +2347,7 @@ Main tuning points:
       key === "shopRewardedAdCoins" ||
       key === "shopContinuePrice1" ||
       key === "shopKrobPrice" ||
+      key === "shopSkin05Price" ||
       key === "shopSpecialLevelPrice"
     ) {
       return Math.max(0, parsed);
@@ -2875,7 +2904,7 @@ Main tuning points:
       { button: preRunClassicGfx2Skin2Btn, skin: "Skin02" },
       { button: preRunClassicGfx2Skin3Btn, skin: "Skin03" },
       { button: preRunClassicGfx2Skin4Btn, skin: "Skin04" },
-      { button: preRunClassicGfx2SkinFuture1Btn, skin: "" },
+      { button: preRunClassicGfx2SkinFuture1Btn, skin: "Skin05" },
       { button: preRunClassicGfx2SkinFuture2Btn, skin: "" }
     ];
   }
@@ -2886,7 +2915,7 @@ Main tuning points:
       { img: preRunClassicGfx2Skin2Img, skin: "Skin02", slotIndex: 2 },
       { img: preRunClassicGfx2Skin3Img, skin: "Skin03", slotIndex: 3 },
       { img: preRunClassicGfx2Skin4Img, skin: "Skin04", slotIndex: 4 },
-      { img: preRunClassicGfx2Skin5Img, skin: "", slotIndex: 5, isFuture: true },
+      { img: preRunClassicGfx2Skin5Img, skin: "Skin05", slotIndex: 5 },
       { img: preRunClassicGfx2Skin6Img, skin: "", slotIndex: 6, isFuture: true }
     ];
   }
@@ -2902,7 +2931,7 @@ Main tuning points:
       { button: preRunAdvancedGfx2Skin2Btn, skin: "Skin02" },
       { button: preRunAdvancedGfx2Skin3Btn, skin: "Skin03" },
       { button: preRunAdvancedGfx2Skin4Btn, skin: "Skin04" },
-      { button: preRunAdvancedGfx2SkinFuture1Btn, skin: "" },
+      { button: preRunAdvancedGfx2SkinFuture1Btn, skin: "Skin05" },
       { button: preRunAdvancedGfx2SkinFuture2Btn, skin: "" }
     ];
   }
@@ -2913,7 +2942,7 @@ Main tuning points:
       { img: preRunAdvancedGfx2Skin2Img, skin: "Skin02", slotIndex: 2 },
       { img: preRunAdvancedGfx2Skin3Img, skin: "Skin03", slotIndex: 3 },
       { img: preRunAdvancedGfx2Skin4Img, skin: "Skin04", slotIndex: 4 },
-      { img: preRunAdvancedGfx2Skin5Img, skin: "", slotIndex: 5, isFuture: true },
+      { img: preRunAdvancedGfx2Skin5Img, skin: "Skin05", slotIndex: 5 },
       { img: preRunAdvancedGfx2Skin6Img, skin: "", slotIndex: 6, isFuture: true }
     ];
   }
@@ -5245,6 +5274,7 @@ Main tuning points:
         { key: "shopContinuePrice1", label: "Continue Price", type: "number", min: 0, step: 1 },
         { key: "shopContinueLivesGranted", label: "Continue Lives Granted", type: "number", min: 1, step: 1 },
         { key: "shopKrobPrice", label: "Krob Price", type: "number", min: 0, step: 1 },
+        { key: "shopSkin05Price", label: "Grey Price", type: "number", min: 0, step: 1 },
         { key: "shopSpecialLevelPrice", label: "New Level Price", type: "number", min: 0, step: 1 }
       ]
     },
@@ -7931,8 +7961,10 @@ Main tuning points:
   function getPreRunGfx2ShopItems() {
     var scorePerCoin = sanitizeGlobalAdminNumber("shopScorePerCoin", C.shopScorePerCoin);
     var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
+    var skin05Price = sanitizeGlobalAdminNumber("shopSkin05Price", C.shopSkin05Price);
     var specialLevelPrice = sanitizeGlobalAdminNumber("shopSpecialLevelPrice", C.shopSpecialLevelPrice);
     var levelXUnlocked = isLevelXUnlocked();
+    var skin05Owned = isSkinUnlocked("Skin05");
 
     return {
       "coin-one": {
@@ -7957,6 +7989,13 @@ Main tuning points:
         cost: specialLevelPrice,
         costUnit: "coins",
         type: "special-level"
+      },
+      "skin-05": {
+        key: "skin-05",
+        label: skin05Owned ? "Grey (Owned)" : "Grey",
+        cost: skin05Price,
+        costUnit: "coins",
+        type: "skin-05"
       },
       "skin-cat": {
         key: "skin-cat",
@@ -7995,6 +8034,9 @@ Main tuning points:
     }
     if (item.type === "special-level" && isLevelXUnlocked()) {
       return "Already purchased - enjoy new level 5 skin";
+    }
+    if (item.type === "skin-05" && isSkinUnlocked("Skin05")) {
+      return "Already purchased - enjoy Grey";
     }
     var unitText = item.costUnit === "score" ? "score" : "coins";
     return Math.max(0, Math.floor(Number(item.cost) || 0)).toLocaleString("en-US") + " " + unitText;
@@ -8073,6 +8115,24 @@ Main tuning points:
       return;
     }
 
+    if (selectedItem.type === "skin-05") {
+      if (isSkinUnlocked("Skin05")) {
+        state.preRunGfx2ShopStatus = "Grey already unlocked.";
+        state.preRunGfx2ShopStatusTone = "success";
+      } else if (!spendCoinsFromWallet(selectedItem.cost)) {
+        state.preRunGfx2ShopStatus = "Not enough coins for Grey.";
+        state.preRunGfx2ShopStatusTone = "error";
+      } else {
+        unlockSkin("Skin05");
+        state.preRunGfx2ShopStatus = "Grey unlocked. Use it from the skin select.";
+        state.preRunGfx2ShopStatusTone = "success";
+        refreshPreRunSkinSelection();
+        renderAdminForm();
+      }
+      renderPreRunShopScreen();
+      return;
+    }
+
     state.preRunGfx2ShopStatus = "This purchase is not available yet.";
     state.preRunGfx2ShopStatusTone = "info";
     renderPreRunShopScreen();
@@ -8081,12 +8141,14 @@ Main tuning points:
   function renderPreRunShopScreen() {
     var scorePerCoin = sanitizeGlobalAdminNumber("shopScorePerCoin", C.shopScorePerCoin);
     var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
+    var skin05Price = sanitizeGlobalAdminNumber("shopSkin05Price", C.shopSkin05Price);
     var specialLevelPrice = sanitizeGlobalAdminNumber("shopSpecialLevelPrice", C.shopSpecialLevelPrice);
     var persistentScore = getPersistentTotalScore();
     var walletBalance = getCoinWalletBalance();
     var canBuyOneCoin = persistentScore >= scorePerCoin;
     var canBuyTenCoins = persistentScore >= scorePerCoin * 10;
     var krobOwned = isSkinUnlocked("Skin04");
+    var skin05Owned = isSkinUnlocked("Skin05");
     if (preRunShopGfx2El) {
       preRunShopGfx2El.classList.remove("hidden");
     }
@@ -8137,6 +8199,9 @@ Main tuning points:
     }
 
     var gfx2Items = getPreRunGfx2ShopItems();
+    if (state.preRunGfx2ShopSelection === "skin-cat" && gfx2Items["skin-05"]) {
+      state.preRunGfx2ShopSelection = "skin-05";
+    }
     if (!gfx2Items[state.preRunGfx2ShopSelection]) {
       state.preRunGfx2ShopSelection = "coin-one";
     }
@@ -8161,6 +8226,12 @@ Main tuning points:
       var statusText = state.preRunGfx2ShopStatus || "Select an item and press Buy.";
       if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "special-level" && !isLevelXUnlocked() && walletBalance < selectedItem.cost) {
         statusText = "You don´t have enough coins to buy it.";
+      } else if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "skin-05" && !skin05Owned && walletBalance < selectedItem.cost) {
+        statusText = "You don´t have enough coins to buy it.";
+      } else if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "skin-05") {
+        statusText = skin05Owned
+          ? "Grey is already unlocked."
+          : "Unlock Grey for " + skin05Price.toLocaleString("en-US") + " coins.";
       }
       preRunShopGfx2StatusEl.textContent = statusText;
       preRunShopGfx2StatusEl.classList.toggle("is-error", state.preRunGfx2ShopStatusTone === "error");
@@ -8171,7 +8242,7 @@ Main tuning points:
       { button: preRunShopGfx2CoinOneBtn, key: "coin-one" },
       { button: preRunShopGfx2CoinTenBtn, key: "coin-ten" },
       { button: preRunShopGfx2NewLevelBtn, key: "new-level" },
-      { button: preRunShopGfx2SkinCatBtn, key: "skin-cat" },
+      { button: preRunShopGfx2SkinCatBtn, key: "skin-05" },
       { button: preRunShopGfx2SkinGhostBtn, key: "skin-ghost" },
       { button: preRunShopGfx2SkinWizardBtn, key: "skin-wizard" },
       { button: preRunShopGfx2ChestBtn, key: "chest" }
@@ -8183,10 +8254,23 @@ Main tuning points:
       var isSelected = state.preRunGfx2ShopSelection === entry.key;
       entry.button.setAttribute("aria-pressed", isSelected ? "true" : "false");
     });
+    if (preRunShopGfx2NewLevelBtn) {
+      preRunShopGfx2NewLevelBtn.classList.toggle("is-sold", isLevelXUnlocked());
+    }
+    if (preRunShopGfx2SkinCatBtn) {
+      preRunShopGfx2SkinCatBtn.classList.toggle("is-sold", skin05Owned);
+    }
     if (preRunShopGfx2BuyBtn) {
       var selectedIsSpecialLevel = selectedItem && selectedItem.type === "special-level";
-      preRunShopGfx2BuyBtn.disabled = Boolean(selectedIsSpecialLevel && (isLevelXUnlocked() || walletBalance < selectedItem.cost));
-      preRunShopGfx2BuyBtn.textContent = selectedIsSpecialLevel && isLevelXUnlocked() ? "Owned" : "Buy";
+      var selectedIsSkin05 = selectedItem && selectedItem.type === "skin-05";
+      preRunShopGfx2BuyBtn.disabled = Boolean(
+        (selectedIsSpecialLevel && (isLevelXUnlocked() || walletBalance < selectedItem.cost)) ||
+        (selectedIsSkin05 && (skin05Owned || walletBalance < selectedItem.cost))
+      );
+      preRunShopGfx2BuyBtn.textContent =
+        (selectedIsSpecialLevel && isLevelXUnlocked()) || (selectedIsSkin05 && skin05Owned)
+          ? "Owned"
+          : "Buy";
     }
   }
 
@@ -8814,7 +8898,7 @@ Main tuning points:
       preRunShopGfx2SkinCatBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
-        selectPreRunGfx2ShopItem("skin-cat");
+        selectPreRunGfx2ShopItem("skin-05");
       });
     }
     if (preRunShopGfx2SkinGhostBtn) {
@@ -13256,7 +13340,14 @@ Main tuning points:
     if (state.currentLevel === 5 && !isLevelXUnlocked()) {
       return;
     }
-    if (!state.preRunActive && !state.running && !state.questionCoinAnimActive && !state.teleportFinishAnimActive && !state.projectileDeathAnimActive) {
+    if (
+      !state.preRunActive &&
+      !state.running &&
+      !state.questionCoinAnimActive &&
+      !state.teleportFinishAnimActive &&
+      !state.projectileDeathAnimActive &&
+      !isGameOverScreenVisible()
+    ) {
       return;
     }
 
@@ -13520,6 +13611,29 @@ Main tuning points:
       return null;
     }
 
+    var selectedSkinName = getSelectedHeroSkinName();
+    if (selectedSkinName === "Skin05" && loadedFrames.length >= 5) {
+      if (state.heroJumpAnimStarted && state.heroJumpAnimTime < HERO_JUMP_FRAME_SECONDS) {
+        return {
+          image: loadedFrames[0] || null,
+          index: 0,
+          type: "jump"
+        };
+      }
+      if (!player.isGrounded && player.velocityY < 0) {
+        return {
+          image: loadedFrames[1] || loadedFrames[0] || null,
+          index: Math.min(1, loadedFrames.length - 1),
+          type: "jump"
+        };
+      }
+      return {
+        image: loadedFrames[2] || loadedFrames[1] || loadedFrames[0] || null,
+        index: Math.min(2, loadedFrames.length - 1),
+        type: "jump"
+      };
+    }
+
     var apexFrameIndex = loadedFrames.length >= 9 ? 4 : Math.min(loadedFrames.length - 1, Math.max(0, Math.floor((loadedFrames.length - 1) * 0.5)));
     var ascentFrameCount = Math.max(1, Math.min(apexFrameIndex, 4));
     var frameIndex = apexFrameIndex;
@@ -13547,6 +13661,16 @@ Main tuning points:
       return null;
     }
 
+    var selectedSkinName = getSelectedHeroSkinName();
+    if (selectedSkinName === "Skin05" && loadedFrames.length >= 5) {
+      var landingFrameIndexSkin05 = 3 + Math.min(1, Math.floor(state.heroLandingAnimTime / HERO_JUMP_FRAME_SECONDS));
+      return {
+        image: loadedFrames[landingFrameIndexSkin05] || loadedFrames[loadedFrames.length - 1] || null,
+        index: Math.min(landingFrameIndexSkin05, loadedFrames.length - 1),
+        type: "jump"
+      };
+    }
+
     var landingStartIndex = loadedFrames.length >= 9 ? 5 : Math.max(0, loadedFrames.length - 3);
     var landingFrameCount = Math.max(1, loadedFrames.length - landingStartIndex);
     var landingFrameIndex = landingStartIndex + Math.min(landingFrameCount - 1, Math.floor(state.heroLandingAnimTime / HERO_JUMP_FRAME_SECONDS));
@@ -13568,6 +13692,10 @@ Main tuning points:
     });
     if (!loadedFrames.length) {
       return 1;
+    }
+
+    if (getSelectedHeroSkinName() === "Skin05" && loadedFrames.length >= 5) {
+      return 2;
     }
 
     var landingStartIndex = loadedFrames.length >= 9 ? 5 : Math.max(0, loadedFrames.length - 3);
