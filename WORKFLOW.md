@@ -64,6 +64,8 @@ This file captures standing project workflow conventions so they do not get lost
 - Do not clear `hrrra_economy_v1`, player name, player id, or max score unless the user explicitly asks for those too.
 - Reusable helper scripts: `reset-local-storage.cmd` and `reset-local-storage.ps1` in the repo root. Prefer the `.cmd` launcher when you want a one-click reset.
 - The helper reset clears the local `file://` Hrrra storage branch and its backup copies in the current Firefox profiles, but only removes the Hrrra skin/badge progress data.
+- Before clearing Hrrra local storage, make sure the relevant Hrrra tab is closed. If the tab is still open, it can rewrite the progress back into storage after the reset.
+- Always tell the user this tab-closed requirement when they ask to clear Hrrra local storage.
 - One-shot reset command for the current Firefox profile:
 
 ```powershell

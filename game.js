@@ -1134,6 +1134,7 @@ Main tuning points:
     musicPath: "",
     musicAudio: null,
     musicStarted: false,
+    musicFailedPath: "",
     audioElementCache: {},
     audioContext: null,
     sfxOutputGain: null,
@@ -1457,6 +1458,31 @@ Main tuning points:
     return sanitizeAudioPathValue(C[configKey]);
   }
 
+  function getAudioExtensionFallbackPaths(path) {
+    var normalizedPath = sanitizeAudioPathValue(path);
+    if (!normalizedPath) {
+      return [];
+    }
+
+    var fallbackPaths = [normalizedPath];
+    var alternatePath = "";
+    if (/\.mp3$/i.test(normalizedPath)) {
+      alternatePath = normalizedPath.replace(/\.mp3$/i, ".ogg");
+    } else if (/\.ogg$/i.test(normalizedPath)) {
+      alternatePath = normalizedPath.replace(/\.ogg$/i, ".mp3");
+    }
+
+    if (alternatePath && alternatePath !== normalizedPath) {
+      fallbackPaths.push(alternatePath);
+    }
+
+    if (/\/level[234x]\/sound\/(?:l[234]|lx)-music-loop\.(mp3|ogg)$/i.test(normalizedPath)) {
+      fallbackPaths.push("assets/level1/sound/l1-music-loop.mp3");
+    }
+
+    return fallbackPaths;
+  }
+
   function getUiButtonSoundPath() {
     return getNormalizedGlobalAudioPath("uiSoundButtonPath");
   }
@@ -1512,7 +1538,7 @@ Main tuning points:
   }
 
   function getCurrentMusicPath() {
-    if (state.adminPaused) {
+    if (state.adminPaused && !state.inGameSettingsActive) {
       return "";
     }
     if (state.preRunActive) {
@@ -1684,7 +1710,7 @@ Main tuning points:
     }
   }
 
-  function getAudioCachedElement(path, loop) {
+  function getAudioCachedElement(path, loop, fallbackPaths) {
     var normalizedPath = sanitizeAudioPathValue(path);
     if (!normalizedPath) {
       return null;
@@ -1695,6 +1721,42 @@ Main tuning points:
       cached.preload = "auto";
       cached.loop = Boolean(loop);
       audioState.audioElementCache[normalizedPath] = cached;
+      if (Boolean(loop) && fallbackPaths && fallbackPaths.length > 1) {
+        cached._hrrraFallbackPaths = fallbackPaths.slice(0);
+        cached._hrrraFallbackIndex = 0;
+        cached.addEventListener("error", function () {
+          var paths = cached._hrrraFallbackPaths;
+          if (!paths || cached._hrrraFallbackIndex >= paths.length - 1) {
+            if (audioState.musicAudio === cached) {
+              audioState.musicStarted = false;
+              audioState.musicFailedPath = audioState.musicPath;
+            }
+            try {
+              cached.pause();
+              cached.currentTime = 0;
+            } catch (pauseError) {}
+            return;
+          }
+
+          cached._hrrraFallbackIndex += 1;
+          var nextPath = paths[cached._hrrraFallbackIndex];
+          try {
+            cached.src = nextPath;
+            cached.load();
+          } catch (loadError) {}
+          if (audioState.musicAudio === cached) {
+            audioState.musicStarted = false;
+            audioState.musicFailedPath = "";
+            var playResult = cached.play();
+            audioState.musicStarted = true;
+            if (playResult && typeof playResult.catch === "function") {
+              playResult.catch(function () {
+                audioState.musicStarted = false;
+              });
+            }
+          }
+        });
+      }
     }
     cached.loop = Boolean(loop);
     return cached;
@@ -1720,6 +1782,7 @@ Main tuning points:
     if (!audioState.musicAudio) {
       audioState.musicPath = "";
       audioState.musicStarted = false;
+      audioState.musicFailedPath = "";
       return;
     }
     try {
@@ -1729,6 +1792,7 @@ Main tuning points:
     audioState.musicAudio = null;
     audioState.musicPath = "";
     audioState.musicStarted = false;
+    audioState.musicFailedPath = "";
   }
 
   function setAudioAppActive(isActive) {
@@ -1760,10 +1824,14 @@ Main tuning points:
       return;
     }
 
+    if (audioState.musicFailedPath === nextPath) {
+      return;
+    }
+
     if (audioState.musicPath !== nextPath) {
       stopCurrentMusic();
       audioState.musicPath = nextPath;
-      audioState.musicAudio = getAudioCachedElement(nextPath, true);
+      audioState.musicAudio = getAudioCachedElement(nextPath, true, getAudioExtensionFallbackPaths(nextPath));
       audioState.musicStarted = false;
     }
 
@@ -1932,7 +2000,6 @@ Main tuning points:
     state.preRunStep = "settings";
     state.gamePauseActive = true;
     state.inGameSettingsActive = true;
-    state.adminPaused = true;
     state.inGameSettingsInputLockUntil = performance.now() + 500;
     if (preRunScreenEl) {
       preRunScreenEl.classList.remove("hidden");
@@ -1958,7 +2025,6 @@ Main tuning points:
     }
     state.inGameSettingsActive = false;
     state.gamePauseActive = false;
-    state.adminPaused = false;
     state.inGameSettingsInputLockUntil = 0;
     if (preRunScreenEl && !state.preRunActive) {
       preRunScreenEl.classList.add("hidden");
@@ -3815,7 +3881,7 @@ Main tuning points:
       skinRewardTierEl.textContent = "Unlocked";
     }
     if (skinRewardTrophyBaseEl) {
-      skinRewardTrophyBaseEl.src = "assets/gfx2/trophy_pics/trophy_clean.png";
+      skinRewardTrophyBaseEl.removeAttribute("src");
     }
     if (skinRewardTrophyArtEl) {
       skinRewardTrophyArtEl.classList.remove("is-visible");
@@ -13328,16 +13394,13 @@ Main tuning points:
       return sceneArt.level4Border;
     }
     if (level === 5) {
-      return sceneArt.levelxBorder || sceneArt.level5Border;
+      return sceneArt.level5Border || sceneArt.levelxBorder;
     }
     return null;
   }
 
   function drawLevelBorderOverlay() {
     if (state.currentLevel < 1 || state.currentLevel > 5) {
-      return;
-    }
-    if (state.currentLevel === 5 && !isLevelXUnlocked()) {
       return;
     }
     if (

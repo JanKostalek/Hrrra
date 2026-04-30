@@ -1,7 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 70,
-  versionName: "1.0.70",
+  versionCode: 71,
+  versionName: "1.0.71",
   whatsNew: [
+  "Release bump to version 1.0.71.",
   "Release bump to version 1.0.70.",
   "Settings screen mute hitboxes now sit on the guitar and Zzzap graphics, so music and SFX can be toggled directly from the artwork.",
   "Settings page now keeps the music and SFX toggle hitboxes aligned with the guitar and Zzzap graphics again.",

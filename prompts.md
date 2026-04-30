@@ -241,4 +241,16 @@ ano a vsude kde je to relevantní. jako kdyz se odemkne skin v průběhu rhy, ta
 -------------------
 zvy verzi na 70, udělej sync www a android, udelej commit, push, priprav aab, potom se vrat dn new a rovnej main s new, aby obě verze byly shodne
 
+a můžeš v kodu změnit, aby to bralo .mp3 nebo .ogg - podle toho co bude ve slozce? aby to hledalo jeden, případně druhý a teprve pak fallback
+
+a) presto ze tam ten obb soubor je, tak ho to neprehraje a padne to do fallback b) změn ještě, aby fallback byl na muziku z levela1
+
 zvy verzi na 70, udělej sync www a android, udelej commit, push, priprav aab, potom se vrat dn new a rovnej main s new, aby obě verze byly shodne
+
+kdyz se otevírá na konci po odemčení nový skin, tak nyní zobrazujes trophy_clean a trophy_skinname. O new skin odstran zobrazovaní trophy_clean a nech tam jen _skinname
+
+ted je to v pořádku.  zapis to k informaci, kde mazat i to, ze musí být tam zavřčený a tuto informaci mi vzdy říci
+
+kdyz se z jakéhokoliv levelu otevře přes tlačítko pause settings stránka, tak přestane hrát muzika. což je špatně, protože pak při měnění hlasitosti nevím, jak hlasitá muzika / global je. Nefunguje ani sfx. Vzdy by měla pokračovat hrát muzika z té které úrovně. dřív to tak fungovalo
+
+povyš verzi na 71. udělej sync na www a android. udělej commit do main, ověř, že v main jsou všechny předchozí změny a i změny co jsme nyní dělali v něw. připrav aab. pak se vrat na new a ověř, že jsou obě verze shodné.
