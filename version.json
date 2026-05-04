@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 71,
-  "latestVersionName": "1.0.71",
+  "latestVersionCode": 72,
+  "latestVersionName": "1.0.72",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.71 build is available. Update now to get the latest settings pause audio polish, Level 5 border fixes, skin reward cleanup, and Android packaging refresh.",
+  "message": "A new Hrrra 1.0.72 build is available. Update now to get the latest badges trophy visibility, reward overlay, and Android packaging refresh.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

@@ -215,6 +215,7 @@ Main tuning points:
     bag_collector: true,
     big_spender: true,
     banger: true,
+    bubble_saver: true,
     coin_collector: true,
     doom_magnet: true,
     first_runner: true,
@@ -222,19 +223,54 @@ Main tuning points:
     greedy: true,
     heart_hunter: true,
     cursed: true,
+    martyr: true,
+    purist: true,
+    shield_bubble: true,
     speed_demon: true,
     survivor: true,
     jumper: true,
     unkillable_custommer: true,
     lucky: true,
+    teleporter: true,
     unlucky: true,
     unlocker: true,
-    untouchable: true
+    untouchable: true,
+    still_runing: true
     };
-    var BADGE_TROPHY_SLUGS_BY_SERIES_ID = {
+  var PRE_RUN_GFX2_BADGE_TROPHY_SLUGS_V2 = {
+    bag_collector: true,
+    banger: true,
+    big_spender: true,
+    bubble_saver: true,
+    coin_collector: true,
+    cursed: true,
+    doom_magnet: true,
+    endless_greed: true,
+    first_runner: true,
+    fortunate: true,
+    greedy: true,
+    heart_hunter: true,
+    jumper: true,
+    lucky: true,
+    magneto: true,
+    martyr: true,
+    purist: true,
+    speed_demon: true,
+    starter: true,
+    still_runing: true,
+    shield_teleporter: true,
+    survivor: true,
+    teleporter: true,
+    unkillable_custommer: true,
+    unlocker: true,
+    unlucky: true,
+    untouchable: true
+  };
+  var BADGE_TROPHY_SLUGS_BY_SERIES_ID = {
     bag_collector_single_run: "bag_collector",
     big_spender_all_runs: "big_spender",
     banger_all_runs: "banger",
+    bubble_saver_legends: "bubble_saver",
     coin_collector_single_run: "coin_collector",
     doom_magnet_all_runs: "doom_magnet",
     first_runner_legends: "first_runner",
@@ -243,9 +279,42 @@ Main tuning points:
     heart_hunter_legends: "heart_hunter",
     cursed_legends: "cursed",
     lucky_single_run: "lucky",
+    martyr_skills: "martyr",
+    purist_skills: "purist",
+    shield_teleporter_skills: "shield_bubble",
+    teleporter_legends: "teleporter",
     survivor_skills: "survivor",
     speed_demon_skills: "speed_demon",
     jumper_all_runs: "jumper",
+    unkillable_custommer_all_runs: "unkillable_custommer",
+    unlocker_discovery: "unlocker",
+    unlucky_single_run: "unlucky",
+    untouchable_single_run: "untouchable",
+    still_running_legends: "still_runing"
+  };
+  var BADGE_TROPHY_SLUGS_BY_SERIES_ID_V2 = {
+    bag_collector_single_run: "bag_collector",
+    big_spender_all_runs: "big_spender",
+    banger_all_runs: "banger",
+    bubble_saver_legends: "bubble_saver",
+    coin_collector_single_run: "coin_collector",
+    doom_magnet_all_runs: "doom_magnet",
+    endless_greed_all_runs: "endless_greed",
+    first_runner_legends: "first_runner",
+    fortunate_all_runs: "fortunate",
+    greedy_single_run: "greedy",
+    heart_hunter_legends: "heart_hunter",
+    jumper_all_runs: "jumper",
+    lucky_single_run: "lucky",
+    magneto_legends: "magneto",
+    martyr_skills: "martyr",
+    purist_skills: "purist",
+    shield_teleporter_skills: "shield_teleporter",
+    speed_demon_skills: "speed_demon",
+    starter_legends: "starter",
+    still_running_legends: "still_runing",
+    survivor_skills: "survivor",
+    teleporter_legends: "teleporter",
     unkillable_custommer_all_runs: "unkillable_custommer",
     unlocker_discovery: "unlocker",
     unlucky_single_run: "unlucky",
@@ -2264,7 +2333,8 @@ Main tuning points:
   var SKIN_REWARD_TROPHY_ART_PATHS = {
     Skin02: "assets/gfx2/trophy_pics/trophy_vexi.png",
     Skin03: "assets/gfx2/trophy_pics/trophy_nemu.png",
-    Skin04: "assets/gfx2/trophy_pics/trophy_krob.png"
+    Skin04: "assets/gfx2/trophy_pics/trophy_krob.png",
+    Skin05: "assets/gfx2/trophy_pics/trophy_grey.png"
   };
 
   function getSkinRewardTrophyArtPath(skinName) {
@@ -3406,16 +3476,17 @@ Main tuning points:
 
   function getBadgeTrophySlug(series) {
     var seriesId = String(series && series.id || "");
-    var mappedSlug = BADGE_TROPHY_SLUGS_BY_SERIES_ID[seriesId];
-    if (mappedSlug && PRE_RUN_GFX2_BADGE_TROPHY_SLUGS[mappedSlug]) {
+    var mappedSlug = (useBadgesV2() ? BADGE_TROPHY_SLUGS_BY_SERIES_ID_V2 : BADGE_TROPHY_SLUGS_BY_SERIES_ID)[seriesId];
+    var allowedSlugs = useBadgesV2() ? PRE_RUN_GFX2_BADGE_TROPHY_SLUGS_V2 : PRE_RUN_GFX2_BADGE_TROPHY_SLUGS;
+    if (mappedSlug && allowedSlugs[mappedSlug]) {
       return mappedSlug;
     }
     var derivedSlug = seriesId.replace(/_(single_run|all_runs|skills|legends|discovery)$/, "");
-    if (derivedSlug && PRE_RUN_GFX2_BADGE_TROPHY_SLUGS[derivedSlug]) {
+    if (derivedSlug && allowedSlugs[derivedSlug]) {
       return derivedSlug;
     }
     var nameSlug = slugifyBadgeTrophyName(getBadgeSeriesName(series));
-    if (nameSlug && PRE_RUN_GFX2_BADGE_TROPHY_SLUGS[nameSlug]) {
+    if (nameSlug && allowedSlugs[nameSlug]) {
       return nameSlug;
     }
     return "";
@@ -3424,9 +3495,9 @@ Main tuning points:
   function getPreRunBadgeTrophyPath(series) {
     var trophySlug = getBadgeTrophySlug(series);
     if (!trophySlug) {
-      return "";
+      return getBadgeTrophyFallbackPath();
     }
-    return "assets/gfx2/trophy_pics/trophy_" + trophySlug + ".png";
+    return getBadgeTrophyBasePath() + "/" + getBadgeTrophyFileName(trophySlug);
   }
 
   function getDefaultBadgeTierTarget(series, tierIndex) {
@@ -3882,19 +3953,13 @@ Main tuning points:
     }
     if (skinRewardTrophyBaseEl) {
       skinRewardTrophyBaseEl.removeAttribute("src");
+      skinRewardTrophyBaseEl.style.display = "none";
     }
     if (skinRewardTrophyArtEl) {
-      skinRewardTrophyArtEl.classList.remove("is-visible");
       skinRewardTrophyArtEl.removeAttribute("src");
       if (trophyArtPath) {
-        skinRewardTrophyArtEl.onload = function () {
-          if (skinRewardTrophyArtEl && skinRewardTrophyArtEl.getAttribute("src") === trophyArtPath) {
-            skinRewardTrophyArtEl.classList.add("is-visible");
-          }
-        };
         skinRewardTrophyArtEl.onerror = function () {
           if (skinRewardTrophyArtEl && skinRewardTrophyArtEl.getAttribute("src") === trophyArtPath) {
-            skinRewardTrophyArtEl.classList.remove("is-visible");
             skinRewardTrophyArtEl.removeAttribute("src");
           }
         };
@@ -3964,6 +4029,7 @@ Main tuning points:
     }
     if (skinRewardTrophyBaseEl) {
       skinRewardTrophyBaseEl.src = "assets/gfx2/trophy_pics/trophy_clean.png";
+      skinRewardTrophyBaseEl.style.display = "";
     }
     if (skinRewardTrophyArtEl) {
       skinRewardTrophyArtEl.classList.remove("is-visible");
@@ -4037,20 +4103,19 @@ Main tuning points:
     }
     if (badgeRewardTrophyBaseEl) {
       badgeRewardTrophyBaseEl.removeAttribute("src");
+      badgeRewardTrophyBaseEl.style.display = "none";
     }
     if (badgeRewardTrophyArtEl) {
-      badgeRewardTrophyArtEl.classList.remove("is-visible");
       badgeRewardTrophyArtEl.removeAttribute("src");
       if (item.trophyArtPath) {
         var artPath = item.trophyArtPath;
-        badgeRewardTrophyArtEl.onload = function () {
-          if (badgeRewardTrophyArtEl && badgeRewardTrophyArtEl.getAttribute("src") === artPath) {
-            badgeRewardTrophyArtEl.classList.add("is-visible");
-          }
-        };
+        var fallbackPath = getBadgeTrophyFallbackPath();
         badgeRewardTrophyArtEl.onerror = function () {
           if (badgeRewardTrophyArtEl && badgeRewardTrophyArtEl.getAttribute("src") === artPath) {
-            badgeRewardTrophyArtEl.classList.remove("is-visible");
+            if (artPath !== fallbackPath) {
+              badgeRewardTrophyArtEl.setAttribute("src", fallbackPath);
+              return;
+            }
             badgeRewardTrophyArtEl.removeAttribute("src");
           }
         };
@@ -4488,6 +4553,59 @@ Main tuning points:
 
   function useModernVisuals() {
     return Boolean(C.modernVisualsEnabled);
+  }
+
+  function useBadgesV2() {
+    return Boolean(C.badgesV2Enabled);
+  }
+
+  var BADGE_TROPHY_V2_FILE_NAMES_BY_SLUG = {
+    bag_collector: "trophy_bag_collector.png",
+    banger: "trophy_banger.png",
+    big_spender: "trophy_big_spender.png",
+    bubble_saver: "bubble_saver.png",
+    coin_collector: "trophy_coin_collector.png",
+    cursed: "trophy_cursed.png",
+    doom_magnet: "trophy_doom_magnet.png",
+    endless_greed: "endless_greed.png",
+    first_runner: "trophy_first_runner.png",
+    fortunate: "trophy_fortunate.png",
+    greedy: "trophy_greedy.png",
+    heart_hunter: "trophy_heart_hunter.png",
+    jumper: "trophy_jumper.png",
+    lucky: "trophy_lucky.png",
+    magneto: "trophy_magneto.png",
+    martyr: "trophy_martyr.png",
+    purist: "trophy_purist.png",
+    speed_demon: "trophy_speed_demon.png",
+    starter: "trophy_starter.png",
+    still_runing: "trophy_still_runing.png",
+    survivor: "trophy_survivor.png",
+    shield_teleporter: "trophy_shield_teleporter.png",
+    teleporter: "trophy_teleporter.png",
+    unkillable_custommer: "trophy_unkillable_custommer.png",
+    unlocker: "trophy_unlocker.png",
+    unlucky: "trophy_unlucky.png",
+    untouchable: "trophy_untouchable.png"
+  };
+
+  function getBadgeTrophyBasePath() {
+    return useBadgesV2() ? "assets/gfx2/trophy_pics/v2" : "assets/gfx2/trophy_pics";
+  }
+
+  function getBadgeTrophyFallbackPath() {
+    return getBadgeTrophyBasePath() + "/trophy_clean.png";
+  }
+
+  function getBadgeTrophyFileName(slug) {
+    var normalizedSlug = String(slug || "");
+    if (!normalizedSlug) {
+      return "";
+    }
+    if (useBadgesV2()) {
+      return BADGE_TROPHY_V2_FILE_NAMES_BY_SLUG[normalizedSlug] || ("trophy_" + normalizedSlug + ".png");
+    }
+    return "trophy_" + normalizedSlug + ".png";
   }
 
   function applyVisualThemeToUi() {
@@ -5317,6 +5435,7 @@ Main tuning points:
       fields: [
         { key: "fullscreenAutoEnabled", label: "Auto fullscreen on mobile", type: "checkbox" },
         { key: "modernVisualsEnabled", label: "Modern visuals", type: "checkbox" },
+        { key: "badgesV2Enabled", label: "Badges v2", type: "checkbox" },
         { key: "selectedSkin", label: "Skin", type: "select", options: SKIN_OPTIONS },
         { key: "skinPickupLevels", label: "Skin Pickup Level", type: "skin-pickup-levels" },
         { key: "hardModeUnlockLevel", label: "Jump Classic Hard unlock at Level", type: "number", min: 1, max: LEVEL_COUNT, step: 1 },
@@ -7015,7 +7134,14 @@ Main tuning points:
 
       var rowsMarkup = seriesForCategory.map(function (series) {
         var trophyPath = getPreRunBadgeTrophyPath(series);
-        var trophyCleanPath = "assets/gfx2/trophy_pics/trophy_clean.png";
+        var trophyCleanPath = getBadgeTrophyFallbackPath();
+        var seriesHasCollectedBadge = false;
+        for (var seriesTierIndex = 0; seriesTierIndex < series.tiers.length; seriesTierIndex += 1) {
+          if (isBadgeTierCollected(series, seriesTierIndex)) {
+            seriesHasCollectedBadge = true;
+            break;
+          }
+        }
         var tierMarkup = series.tiers.map(function (tier, tierIndex) {
           var tierPositionClass = "pre-run-badges-gfx2-tier-shelf-bottom";
           var badgeUnlockDate = getBadgeUnlockDate(series, tierIndex);
@@ -7058,13 +7184,12 @@ Main tuning points:
           '<div class="pre-run-badges-gfx2-row">',
           [
             '<div class="pre-run-badges-gfx2-trophy-slot">',
-            '<img class="pre-run-badges-gfx2-trophy-base" src="',
-            trophyCleanPath,
-            '" alt="" loading="lazy">',
-            trophyPath ? [
+            seriesHasCollectedBadge ? [
               '<img class="pre-run-badges-gfx2-trophy-art" src="',
               trophyPath,
-              '" alt="" loading="lazy">'
+              '" alt="" loading="lazy"',
+              trophyPath !== trophyCleanPath ? ' onerror="this.onerror=null;this.src=\'' + trophyCleanPath + '\';"' : "",
+              '>'
             ].join("") : "",
             "</div>"
           ].join(""),
@@ -9738,6 +9863,8 @@ Main tuning points:
             if (key === "modernVisualsEnabled") {
               applyVisualThemeToUi();
               updateLivesUi();
+            } else if (key === "badgesV2Enabled") {
+              renderPreRunScreen();
             } else if (key === "selectedSkin") {
               C.selectedSkin = normalizeSkinName(nextValue);
               refreshPreRunSkinSelection();

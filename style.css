@@ -266,6 +266,7 @@ body {
   width: min(20vw, 152px);
   height: min(20vw, 152px);
   margin: 16px auto 10px;
+  overflow: visible;
 }
 
 .badge-reward-trophy {
@@ -285,17 +286,18 @@ body {
 .badge-reward-trophy-base {
   opacity: 0;
   z-index: 1;
-  filter: drop-shadow(0 12px 22px rgba(8, 41, 58, 0.26));
+  filter: none;
 }
 
 .badge-reward-trophy-art {
   opacity: 0;
   z-index: 2;
-  transform: translate(-30%, -60%) scale(0.85);
+  transform: translate(-50%, -50%) scale(1);
+  filter: none;
 }
 
 .badge-reward-trophy-art.is-visible {
-  opacity: 0;
+  opacity: 1;
 }
 
 .badge-reward-goal {
@@ -353,14 +355,17 @@ body {
   animation: badge-reward-copy-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) 150ms forwards;
 }
 
+#badge-reward-overlay.is-revealing .badge-reward-trophy-art,
+#badge-reward-overlay.is-ready .badge-reward-trophy-art,
+#skin-reward-overlay.is-revealing .badge-reward-trophy-art,
+#skin-reward-overlay.is-ready .badge-reward-trophy-art {
+  opacity: 1;
+}
+
 #badge-reward-overlay.is-revealing .badge-reward-trophy-base,
 #badge-reward-overlay.is-ready .badge-reward-trophy-base,
-#badge-reward-overlay.is-revealing .badge-reward-trophy-art.is-visible,
-#badge-reward-overlay.is-ready .badge-reward-trophy-art.is-visible,
 #skin-reward-overlay.is-revealing .badge-reward-trophy-base,
-#skin-reward-overlay.is-ready .badge-reward-trophy-base,
-#skin-reward-overlay.is-revealing .badge-reward-trophy-art.is-visible,
-#skin-reward-overlay.is-ready .badge-reward-trophy-art.is-visible {
+#skin-reward-overlay.is-ready .badge-reward-trophy-base {
   animation: badge-reward-medal-pop 760ms cubic-bezier(0.18, 0.82, 0.22, 1) 280ms forwards;
 }
 
@@ -1291,15 +1296,15 @@ body {
 }
 
 .pre-run-badges-gfx2-trophy-art {
-  left: 50%;
-  top: 50%;
-  max-width: 92%;
-  max-height: 92%;
+  top: auto;
+  bottom: 6%;
+  max-width: 102.96%;
+  max-height: 116.16%;
   width: auto;
   height: auto;
   object-position: center center;
-  transform: translate(-30%, -60%) scale(0.4114);
-  filter: drop-shadow(0 6px 14px rgba(24, 12, 4, 0.28));
+  transform: translate(0, 15%);
+  filter: drop-shadow(0 5px 10px rgba(24, 12, 4, 0.18));
 }
 
 .pre-run-badges-gfx2-row-icon {

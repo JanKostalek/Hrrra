@@ -1,5 +1,14 @@
 ﻿# Hrrra - Working Changes Log
 
+- 2026-05-04: Made the post-run badge reward overlay follow the same `Badges v2` trophy source as the badges screen, so unlocked badges use the v2 set in all modes/difficulties when the toggle is enabled.
+- 2026-05-04: Removed the shadow filter from the reward trophy image layers so the badge/skin unlock card no longer shows the dark framed outline around the icon.
+- 2026-05-04: Forced the post-run badge reward overlay to use the v1 root `assets/gfx2/trophy_pics/trophy_xxx.png` set, independent of the `Badges v2` admin toggle, so new badges no longer inherit the v2 mapping or clean fallback.
+- 2026-05-04: Added `trophy_shield_teleporter.png` to the `Badges v2` trophy map in `game.js` so Shield Teleporter uses its dedicated v2 art instead of the clean fallback.
+- 2026-05-04: Fixed the `Badges v2` trophy map so `magneto` points to `assets/gfx2/trophy_pics/v2/trophy_magneto.png` instead of the non-prefixed filename fallback.
+- 2026-05-04: Fixed the admin `Badges v2` checkbox placement so it renders directly under `Modern visuals` in the Global section instead of only existing in config/state.
+- 2026-05-04: Added a `Badges v2` admin toggle under Modern visuals, defaulted it off in `config.js`, and switched the badges trophy renderer in `game.js` to swap between the root trophy art and the new `assets/gfx2/trophy_pics/v2` set with a mode-specific clean fallback.
+- 2026-05-04: Added an explicit `teleporter_legends -> trophy_teleporter.png` mapping in `game.js` so the Teleporter badge uses its new root trophy art instead of relying only on slug fallback.
+- 2026-05-04: Switched the badges trophy slot to render a single `trophy_xxx` image per badge series with `trophy_clean` as fallback only, mapped the new root `assets/gfx2/trophy_pics` badge art files in `game.js`, and resized the slot art in `style.css` so each badge keeps the previous clean footprint.
 - 2026-04-30: Bumped release metadata to `1.0.71` / `versionCode 71` and prepared the latest pause-audio, border, and skin-reward cleanup work for the next build.
 - 2026-04-30: Bumped release metadata to `1.0.70` / `versionCode 70` and prepared the current Skin 05 / Grey polish work for the next build.
 - 2026-04-30: Added Skin 05 as a purchasable shop skin with a 1000-coin admin price, wired its hero walk/jump frame sets and selection artwork into the GFX2 skin system, and repurposed the classic/advanced slot 5 preview into Skin 05.
@@ -176,3 +185,8 @@
 - 2026-04-26: Switched projectile rocket art loading to per-level filenames (level*_rocket01.png / level*_rocket02.png) and added LevelX rocket overrides so each level can own its own projectile visuals.
 
 - 2026-04-26: Release bump to 1.0.60 / versionCode 60 after syncing the per-level rocket art update and the latest splash assets.
+- 2026-05-04: Removed the animated fade-in/reveal from the badge/skin reward trophy art so the unlock card no longer flashes the square frame during load.
+- 2026-05-04: Made the badge/skin reward trophy art stay visible immediately instead of toggling through a separate onload fade-in state.
+- 2026-05-04: Hid the unused clean trophy layer in badge/skin reward overlays so only the badge art is rendered there; mode unlocks keep the clean base layer.
+- 2026-05-04: Hid the badge/skin reward trophy art during the opening intro state so it now appears together with the reward text during the reveal.
+- 2026-05-04: Hid trophy art on the badges screen for series with no collected tiers, so empty badge rows keep their slot but do not show the trophy image until the first badge is earned.

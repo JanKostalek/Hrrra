@@ -22,6 +22,7 @@
     projectile2SpeedMultiplier: 2,
     fullscreenAutoEnabled: true,
     modernVisualsEnabled: true,
+    badgesV2Enabled: false,
     audioMusicEnabled: true,
     audioSfxEnabled: true,
     audioMasterVolumePercent: 75,

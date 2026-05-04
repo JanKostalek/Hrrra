@@ -1,6 +1,25 @@
 ﻿# Prompts
 
 -------------------
+Ted chci další změnu. na stránce badges se vykreslují trophy_xxx (badge name). Jsou tam bez ohledu na to, zda je už badge získaný. Změn to tak, aby pokud nemám žádny badge (bronze / silver / gold), tak se tam ta trophy obrázek nebude zobrazovat. Teprve po získání badge se objeví tady trophy
+
+-------------------
+
+Přepínač `Badges v2` má platit nejen pro stránku badges, ale i pro badge reward po ukončení runu, a to pro všechny mody i obtížnosti.
+
+V unlock okně je vidět černý rámeček kolem badge/skin trophy. Pokud je to shadowing, odstraň ho ve stylu tak, aby reward art vypadal čistě bez černého okraje.
+
+U nových badge / skin reward overlayů po runu se má vždy používat v1 `assets/gfx2/trophy_pics/trophy_xxx.png` bez `trophy_clean`, i když je zapnuté `Badges v2`. Chci to pro classic i advanced a pro easy i hard tak, aby se nová odměna vždy brala z v1 sady.
+
+Přidal jsem do v2 ještě `trophy_shield_teleporter.png`, tak ho namapuj taky v badges v2 režimu, aby Shield Teleporter nepadal na fallback.
+
+Upřesni v2 mapping badges: `trophy_magneto.png` v `assets/gfx2/trophy_pics/v2/` je potřeba mapovat přímo, ne přes bare `magneto.png`, protože jinak badge padá na fallback.
+Ve složce je ještě podskložka `v2` s dalšími trophy badges. Přidej do administrace přepínač `Badges v2` hned pod `Modern visuals`, defaultně vypnutý, a po jeho zapnutí přemapuj badge trophy artwork na soubory z `assets/gfx2/trophy_pics/v2/` stejným systémem jako dosud. Pokud konkrétní v2 trophy chybí, použij jako fallback `trophy_clean` z v2.
+
+Jen jsi nepoužil `trophy_teleporter.png`, která je taky ve složce.
+
+Nyní změň badges tak, aby se v trophy slotu vykresloval jen `trophy_xxx` podle názvu badge. `trophy_clean` tam nedávej, ale nech ho jako fallback, když konkrétní `trophy_xxx` v root `assets/gfx2/trophy_pics/` neexistuje. Projdi root složku `trophy_pics` a namapuj obrázky pro jednotlivé badge, včetně nových souborů.
+
 Bump the release metadata to 1.0.56 / versionCode 56 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.55 release
 Bump the release metadata to 1.0.53 / versionCode 53 so Android and the Vercel-facing update check see a build newer than the deployed 1.0.52 release
 Change the GFX2 shop `New Level` state so once the bonus Level 5 skin is purchased, the cost field and status copy say `Already purchased - enjoy new level 5 skin` instead of showing a price again
@@ -254,3 +273,17 @@ ted je to v pořádku.  zapis to k informaci, kde mazat i to, ze musí být tam 
 kdyz se z jakéhokoliv levelu otevře přes tlačítko pause settings stránka, tak přestane hrát muzika. což je špatně, protože pak při měnění hlasitosti nevím, jak hlasitá muzika / global je. Nefunguje ani sfx. Vzdy by měla pokračovat hrát muzika z té které úrovně. dřív to tak fungovalo
 
 povyš verzi na 71. udělej sync na www a android. udělej commit do main, ověř, že v main jsou všechny předchozí změny a i změny co jsme nyní dělali v něw. připrav aab. pak se vrat na new a ověř, že jsou obě verze shodné.
+
+odstran ten černý rámeček v badge/skin unlock overlayi; nech slot stejně velký, ale ořež okraje artu, aby v card nebyl vidět frame kolem trophy image.
+
+ten čtvereček se objevuje s fade-in efektem; vypni animovaný reveal trophy artu, ať se square/frame neukazuje během načítání.
+
+vrat poslední crop změnu trophy artu v unlock overlayi, protože ořezával horní i spodní část trophy.
+
+reward trophy art se zobrazuje dvakrát (nejdřív bez frame a pak s frame); zruš onload fade-in a nech art viditelný hned po nastavení src.
+
+skrytím clean trophy vrstvy v badge/skin reward overlayích by se mohl odstranit pozdější rostoucí rámeček; clean base nech jen pro mode unlock overlay.
+
+badge/skin trophy art má být v úvodu skrytý a objevit se až spolu s textem ve fázi reveal, ne hned v prázdném rámečku.
+
+na badges stránce se trophy image nemá zobrazovat u série, která nemá žádný získaný bronze/silver/gold tier; slot má zůstat, ale img až po prvním získaném badge.
