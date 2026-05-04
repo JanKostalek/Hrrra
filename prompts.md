@@ -380,6 +380,10 @@ jeste o deset do leva
 
 -------------------
 -------------------
+-------------------
+změn číslo 8: You can upgrade storage size in the Shop
+
+-------------------
 ted udělej bump navysení verze, sync do www a android, commit do main, priprav aab, over, ze jsou verze ve vetvích shodne a vrat se na new
 
 -------------------
@@ -387,3 +391,37 @@ ted do administrace pod shop sekci pridej sekci mine. dej tam zatím dve polozky
 
 -------------------
 ted odstran debug ramecek v mine screen i v crossing screen
+
+-------------------
+tak jak jsi mi hlasky vypsal v poradí. udělej si někde záznam, / tabulku / kde budou ty hlášky a jejich poradové číslo. tak abychom v budoucnu mohi nějaké pridávat. Zároven na číslo hlášky bude navázaná grafika. bude uložena ve slozce gfx2/mine_scr a vzdy se bude jmenovat mine_face_xx (císlo hlášky) s tím, že _00 je fallback. cili kdyz není k hlášce príslušna grafika, tak se zobrazi _00
+
+-------------------
+Zkus navrhnout jeste nějaké 4 hlášky
+
+-------------------
+Posun ten text s grafikou o tri procenta dolů a o deset procent do leva
+
+-------------------
+ted posun o pet procen zpatky do prava
+
+-------------------
+hlaška číslo 6 by se měla objevit, kdyz kliknut na transfer, ale to se nedeje. mela by pak zůstat pet vterin a pak se objevit hlaska 3, která by měla taky zůstat pět vterin. Pokud kliknu na transfer v dobe, kdyz nemám zadné coins pripravene k transfer, mela by se objevit hlaska 5 a taky zůstat pet vterin
+
+-------------------
+kdyz je storage 0 / 50 (cili je prázdna) a kliknu na transfer, nezobrazi se zadna hlaska. měla by se na pět vterin objevit hláska číslo 5
+
+-------------------
+grafika mine_inside není roztažená na celou obrazovku. dole je kousek prázdny
+
+-------------------
+kdyz je v storage 6 / 50 coins a kliknu na transfer, tak se objeví hlaska 3. měla by se objevi hlaska 6 s počtem převedených coins (v tomto případě 6). a zůstat pet vterin a pak by se měla objevit hlaska 3.
+
+-------------------
+uprav hlasku číslo 12 z "A bigger storage means fewer trips to the wallet." na A bigger storage means fewer trips to the mine."
+
+
+-------------------
+ted uděláme bod číslo 7 z plánu na mine ekonomiku a to je upgrade storage skrz nakup v shopu. k tomu pouzijeme grafiku truhli v shopu. kdyz na ni klikneme, měl by se objevit text - tam co je ted "placeholder" neco ve smyslu Storage capacity update (Level 2) a cenu. kdyz si koupime tento, objeví se tam Level 3 a pak Level 4. zároven do admin části je potřeba přidat v shop tuto polozku, jednotlivé levely a jejich ceny. V tuto chvili je dej na 1000 coins, 3000 coins a 6000 coins. Kdyz se koupí level 4, tak se objeví pres grafiku truhly sold
+
+-------------------
+udelej bump verze, sync do www a android, commit to main a priprav aab. potom se vrat do new a over, ze jsou verze srovnane.

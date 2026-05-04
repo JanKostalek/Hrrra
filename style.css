@@ -2033,8 +2033,8 @@ body {
 .pre-run-mine-gfx2-scene {
   position: relative;
   width: 100%;
-  height: min(720px, calc(100dvh - 36px));
-  min-height: 420px;
+  height: 100%;
+  min-height: 100%;
   overflow: hidden;
   border-radius: 28px;
   background: url("assets/gfx2/mine_inside.jpg") center center / 100% 100% no-repeat;
@@ -2165,13 +2165,15 @@ body {
 
 .pre-run-mine-gfx2-message {
   position: absolute;
-  left: calc(13.8% + 10%);
-  bottom: 11.8%;
+  left: 18.8%;
+  bottom: 8.8%;
   width: 43.6%;
   min-height: 0;
   padding: 0;
   z-index: 2;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   border: 0;
   border-radius: 0;
   background: transparent;
@@ -2184,6 +2186,21 @@ body {
     0 2px 0 rgba(0, 0, 0, 0.55),
     0 0 10px rgba(0, 0, 0, 0.18);
   box-shadow: none;
+}
+
+.pre-run-mine-gfx2-message-face {
+  display: block;
+  flex: 0 0 auto;
+  width: clamp(42px, 4.4vw, 64px);
+  height: clamp(42px, 4.4vw, 64px);
+  object-fit: contain;
+  image-rendering: auto;
+}
+
+.pre-run-mine-gfx2-message-text {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .pre-run-mine-gfx2-message.is-success {
@@ -2203,6 +2220,11 @@ body {
     border-radius: 22px;
     height: clamp(340px, 56vh, 620px);
     max-height: min(58dvh, 620px);
+  }
+
+  .pre-run-mine-gfx2-scene {
+    height: calc(100dvh - 46px);
+    min-height: calc(100dvh - 46px);
   }
 
   .pre-run-gfx2-foreground {
@@ -2248,8 +2270,8 @@ body {
   }
 
   .pre-run-mine-gfx2-scene {
-    height: min(640px, calc(100dvh - 30px));
-    min-height: 380px;
+    height: 100%;
+    min-height: 100%;
   }
 
   .pre-run-mine-gfx2-hitbox-exit {

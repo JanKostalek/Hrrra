@@ -254,3 +254,16 @@
 
 2026-05-04 - Added a new global Mine admin section under Shop with Coin Timer, Storage, and Storage L2-L4 tuning fields, plus mine config defaults and validation for those values.
 2026-05-04 - Added the Mine admin tuning section under Shop, bumped the release metadata to 1.0.73 / versionCode 73, and ignored the local gfx2 temp export folder.
+2026-05-04 - Updated the mine idle tip text in `getMineIdleTip()` so the storage upgrade hint now says you can upgrade storage size in the Shop.
+2026-05-04 - Expanded the mine idle tip rotation in `getMineIdleTip()` with four new Shop/storage-themed hints.
+2026-05-04 - Added numbered mine face mapping for the message box, switched the lower mine panel to icon-plus-text layout, and documented the 01-14 face files with `_00` fallback in `mine_todo.md`.
+2026-05-04 - Shifted the mine message box with its face graphic 3% lower and 10% left in `style.css` so the icon/text block sits closer to the lower-left placement the user requested.
+2026-05-04 - Shifted the mine message box with its face graphic 5% back to the right in `style.css`, keeping the icon/text block aligned as a single unit.
+2026-05-04 - Made mine transfer feedback time-based: successful transfer now shows message 06 for 5 seconds, then message 03 for 5 seconds; empty transfer shows message 05 for 5 seconds.
+2026-05-04 - Kept the mine transfer button clickable even at 0 / capacity so empty transfers can show the 05 message for 5 seconds instead of being disabled.
+2026-05-05 - Expanded the mine_inside scene to fill the viewport height more tightly so the bottom gap disappears and the background reaches the card edge.
+2026-05-05 - Switched the mine_inside background panel back to full-height 100% sizing so the bottom white gap disappears inside the full-bleed pre-run card.
+2026-05-05 - Reworked mine transfer feedback into an explicit time-locked message phase so 06 shows for 5 seconds, then 03 for 5 seconds, and empty transfer stays on 05 for 5 seconds.
+2026-05-05 - Reworded mine idle tip 12 so it now says a bigger storage means fewer trips to the mine, and kept the face map table in sync.
+2026-05-05 - Added the Shop admin storage-upgrade pricing fields for mine chest upgrades and tightened mine storage capacity syncing so the active capacity follows the current upgrade level.
+2026-05-05 - Bumped the release metadata to 1.0.74 / versionCode 74 and prepared the next web/Android sync plus AAB build around the mine shop storage upgrade work.

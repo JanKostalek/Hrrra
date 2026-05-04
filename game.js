@@ -433,6 +433,8 @@ Main tuning points:
   var preRunMineGfx2CountdownEl = document.getElementById("pre-run-mine-gfx2-countdown");
   var preRunMineGfx2TransferBtn = document.getElementById("pre-run-mine-gfx2-transfer-btn");
   var preRunMineGfx2MessageEl = document.getElementById("pre-run-mine-gfx2-message");
+  var preRunMineGfx2MessageFaceEl = document.getElementById("pre-run-mine-gfx2-message-face");
+  var preRunMineGfx2MessageTextEl = document.getElementById("pre-run-mine-gfx2-message-text");
   var preRunClassicGfx2El = document.getElementById("pre-run-classic-gfx2");
   var preRunClassicGfx2ExitBtn = document.getElementById("pre-run-classic-gfx2-exit-btn");
   var preRunClassicGfx2AdminBtn = document.getElementById("pre-run-classic-gfx2-admin-btn");
@@ -1029,6 +1031,7 @@ Main tuning points:
       totalCoinsSpent: 0,
       mineStorageCoins: 0,
       mineStorageCapacity: defaultMineStorageCapacity,
+      mineStorageUpgradeLevel: 1,
       mineMineIntervalMs: defaultMineIntervalMs,
       mineNextCoinAt: 0,
       mineFrozenRemainingMs: 0,
@@ -1047,6 +1050,7 @@ Main tuning points:
     out.totalCoinsSpent = Number.isFinite(raw.totalCoinsSpent) ? Math.max(0, Math.floor(Number(raw.totalCoinsSpent))) : defaults.totalCoinsSpent;
     out.mineStorageCoins = Number.isFinite(raw.mineStorageCoins) ? Math.max(0, Math.floor(Number(raw.mineStorageCoins))) : defaults.mineStorageCoins;
     out.mineStorageCapacity = Number.isFinite(raw.mineStorageCapacity) ? Math.max(1, Math.floor(Number(raw.mineStorageCapacity))) : defaults.mineStorageCapacity;
+    out.mineStorageUpgradeLevel = Number.isFinite(raw.mineStorageUpgradeLevel) ? Math.max(1, Math.min(4, Math.floor(Number(raw.mineStorageUpgradeLevel)))) : defaults.mineStorageUpgradeLevel;
     out.mineMineIntervalMs = Number.isFinite(raw.mineMineIntervalMs) ? Math.max(1000, Math.floor(Number(raw.mineMineIntervalMs))) : defaults.mineMineIntervalMs;
     out.mineNextCoinAt = Number.isFinite(raw.mineNextCoinAt) ? Math.max(0, Math.floor(Number(raw.mineNextCoinAt))) : defaults.mineNextCoinAt;
     out.mineFrozenRemainingMs = Number.isFinite(raw.mineFrozenRemainingMs) ? Math.max(0, Math.floor(Number(raw.mineFrozenRemainingMs))) : defaults.mineFrozenRemainingMs;
@@ -2507,7 +2511,10 @@ Main tuning points:
       key === "shopContinuePrice1" ||
       key === "shopKrobPrice" ||
       key === "shopSkin05Price" ||
-      key === "shopSpecialLevelPrice"
+      key === "shopSpecialLevelPrice" ||
+      key === "shopMineStorageLevel2Price" ||
+      key === "shopMineStorageLevel3Price" ||
+      key === "shopMineStorageLevel4Price"
     ) {
       return Math.max(0, parsed);
     }
@@ -2558,6 +2565,68 @@ Main tuning points:
 
   function isMineUnlocked() {
     return !economyStats || typeof economyStats.mineUnlocked !== "boolean" ? true : Boolean(economyStats.mineUnlocked);
+  }
+
+  function getMineStorageCapacityForLevel(level) {
+    var safeLevel = Math.max(1, Math.min(4, Math.floor(Number(level) || 1)));
+    if (safeLevel === 2) {
+      return sanitizeGlobalAdminNumber("mineStorageCapacityL2", C.mineStorageCapacityL2);
+    }
+    if (safeLevel === 3) {
+      return sanitizeGlobalAdminNumber("mineStorageCapacityL3", C.mineStorageCapacityL3);
+    }
+    if (safeLevel === 4) {
+      return sanitizeGlobalAdminNumber("mineStorageCapacityL4", C.mineStorageCapacityL4);
+    }
+    return sanitizeGlobalAdminNumber("mineStorageCapacity", C.mineStorageCapacity);
+  }
+
+  function getMineStorageUpgradePriceForLevel(level) {
+    var safeLevel = Math.max(1, Math.min(4, Math.floor(Number(level) || 1)));
+    if (safeLevel === 2) {
+      return sanitizeGlobalAdminNumber("shopMineStorageLevel2Price", C.shopMineStorageLevel2Price);
+    }
+    if (safeLevel === 3) {
+      return sanitizeGlobalAdminNumber("shopMineStorageLevel3Price", C.shopMineStorageLevel3Price);
+    }
+    if (safeLevel === 4) {
+      return sanitizeGlobalAdminNumber("shopMineStorageLevel4Price", C.shopMineStorageLevel4Price);
+    }
+    return 0;
+  }
+
+  function getMineStorageUpgradeLevel() {
+    var storedLevel = Math.floor(Number(economyStats && economyStats.mineStorageUpgradeLevel) || 1);
+    if (storedLevel >= 1 && storedLevel <= 4) {
+      return storedLevel;
+    }
+    var currentCapacity = getMineStorageCapacity();
+    if (currentCapacity >= getMineStorageCapacityForLevel(4)) {
+      return 4;
+    }
+    if (currentCapacity >= getMineStorageCapacityForLevel(3)) {
+      return 3;
+    }
+    if (currentCapacity >= getMineStorageCapacityForLevel(2)) {
+      return 2;
+    }
+    return 1;
+  }
+
+  function getMineStorageUpgradeMeta() {
+    var currentLevel = getMineStorageUpgradeLevel();
+    var maxLevel = 4;
+    var isMaxed = currentLevel >= maxLevel;
+    var nextLevel = isMaxed ? maxLevel : currentLevel + 1;
+    var nextCapacity = getMineStorageCapacityForLevel(nextLevel);
+    var nextPrice = isMaxed ? 0 : getMineStorageUpgradePriceForLevel(nextLevel);
+    return {
+      currentLevel: currentLevel,
+      nextLevel: nextLevel,
+      nextCapacity: nextCapacity,
+      nextPrice: nextPrice,
+      isMaxed: isMaxed
+    };
   }
 
   function getPendingRunCoinSpend() {
@@ -2637,6 +2706,11 @@ Main tuning points:
     }
     if (!Number.isFinite(economyStats.mineStorageCapacity) || economyStats.mineStorageCapacity < 1) {
       economyStats.mineStorageCapacity = storageCapacity;
+      changed = true;
+    }
+    var expectedStorageCapacity = getMineStorageCapacityForLevel(getMineStorageUpgradeLevel());
+    if (economyStats.mineStorageCapacity !== expectedStorageCapacity) {
+      economyStats.mineStorageCapacity = expectedStorageCapacity;
       changed = true;
     }
     if (!Number.isFinite(economyStats.mineMineIntervalMs) || economyStats.mineMineIntervalMs < 1000) {
@@ -5406,7 +5480,13 @@ Main tuning points:
     preRunGfx2ShopStatusTone: "info",
     mineMessageText: "",
     mineMessageTone: "info",
+    mineMessageKey: "",
     mineMessageExpiresAt: 0,
+    mineMessageFollowUpText: "",
+    mineMessageFollowUpTone: "info",
+    mineMessageFollowUpKey: "",
+    mineMessageFollowUpDurationMs: 0,
+    mineTransferMessagePhase: null,
     mineHalfFullAnnounced: false,
     mineIntroShown: false,
     preRunScores: createInitialPreRunScoresState(),
@@ -5646,7 +5726,10 @@ Main tuning points:
         { key: "shopContinueLivesGranted", label: "Continue Lives Granted", type: "number", min: 1, step: 1 },
         { key: "shopKrobPrice", label: "Krob Price", type: "number", min: 0, step: 1 },
         { key: "shopSkin05Price", label: "Grey Price", type: "number", min: 0, step: 1 },
-        { key: "shopSpecialLevelPrice", label: "New Level Price", type: "number", min: 0, step: 1 }
+        { key: "shopSpecialLevelPrice", label: "New Level Price", type: "number", min: 0, step: 1 },
+        { key: "shopMineStorageLevel2Price", label: "Mine Storage Level 2 Price", type: "number", min: 0, step: 1 },
+        { key: "shopMineStorageLevel3Price", label: "Mine Storage Level 3 Price", type: "number", min: 0, step: 1 },
+        { key: "shopMineStorageLevel4Price", label: "Mine Storage Level 4 Price", type: "number", min: 0, step: 1 }
       ]
     },
     {
@@ -8356,6 +8439,7 @@ Main tuning points:
     var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
     var skin05Price = sanitizeGlobalAdminNumber("shopSkin05Price", C.shopSkin05Price);
     var specialLevelPrice = sanitizeGlobalAdminNumber("shopSpecialLevelPrice", C.shopSpecialLevelPrice);
+    var mineStorageMeta = getMineStorageUpgradeMeta();
     var levelXUnlocked = isLevelXUnlocked();
     var skin05Owned = isSkinUnlocked("Skin05");
 
@@ -8413,10 +8497,15 @@ Main tuning points:
       },
       chest: {
         key: "chest",
-        label: "Chest Item (Placeholder)",
-        cost: specialLevelPrice,
+        label: mineStorageMeta.isMaxed
+          ? "Storage Capacity Update (Sold)"
+          : "Storage Capacity Update (Level " + mineStorageMeta.nextLevel + ")",
+        cost: mineStorageMeta.nextPrice,
         costUnit: "coins",
-        type: "placeholder"
+        type: "storage-upgrade",
+        storageLevel: mineStorageMeta.nextLevel,
+        storageCapacity: mineStorageMeta.nextCapacity,
+        isSold: mineStorageMeta.isMaxed
       }
     };
   }
@@ -8430,6 +8519,9 @@ Main tuning points:
     }
     if (item.type === "skin-05" && isSkinUnlocked("Skin05")) {
       return "Already purchased - enjoy Grey";
+    }
+    if (item.type === "storage-upgrade" && item.isSold) {
+      return "Sold";
     }
     var unitText = item.costUnit === "score" ? "score" : "coins";
     return Math.max(0, Math.floor(Number(item.cost) || 0)).toLocaleString("en-US") + " " + unitText;
@@ -8465,21 +8557,82 @@ Main tuning points:
     renderPreRunScreen();
   }
 
-  function setMineMessage(text, tone, durationMs) {
+  function setMineMessage(text, tone, durationMs, messageKey) {
     state.mineMessageText = String(text || "");
     state.mineMessageTone = tone || "info";
+    state.mineMessageKey = String(messageKey || "");
     state.mineMessageExpiresAt = Date.now() + Math.max(1200, Math.floor(Number(durationMs) || 0));
   }
 
+  function queueMineMessageFollowUp(text, tone, durationMs, messageKey) {
+    state.mineMessageFollowUpText = String(text || "");
+    state.mineMessageFollowUpTone = tone || "info";
+    state.mineMessageFollowUpKey = String(messageKey || "");
+    state.mineMessageFollowUpDurationMs = Math.max(1200, Math.floor(Number(durationMs) || 0));
+  }
+
+  function clearMineMessageFollowUp() {
+    state.mineMessageFollowUpText = "";
+    state.mineMessageFollowUpTone = "info";
+    state.mineMessageFollowUpKey = "";
+    state.mineMessageFollowUpDurationMs = 0;
+  }
+
+  function clearMineTransferMessagePhase() {
+    state.mineTransferMessagePhase = null;
+  }
+
+  function startMineTransferMessagePhase(transferAmount) {
+    var safeTransferAmount = Math.max(0, Math.floor(Number(transferAmount) || 0));
+    state.mineTransferMessagePhase = {
+      firstText: "Transferred " + safeTransferAmount.toLocaleString("en-US") + " coin" + (safeTransferAmount === 1 ? "" : "s") + " to the wallet.",
+      firstTone: "success",
+      firstKey: "06",
+      firstExpiresAt: Date.now() + 5000,
+      secondText: "The mine is warming up. Your first coin is on the way.",
+      secondTone: "info",
+      secondKey: "03",
+      secondExpiresAt: Date.now() + 10000
+    };
+  }
+
+  function startMineEmptyTransferMessagePhase() {
+    state.mineTransferMessagePhase = {
+      firstText: "There are no stored coins to transfer yet.",
+      firstTone: "info",
+      firstKey: "05",
+      firstExpiresAt: Date.now() + 5000,
+      secondText: "",
+      secondTone: "info",
+      secondKey: "",
+      secondExpiresAt: 0
+    };
+  }
+
+  var MINE_IDLE_TIPS = [
+    { key: "07", text: "Transfer coins whenever storage is ready." },
+    { key: "08", text: "You can upgrade storage size in the Shop." },
+    { key: "09", text: "The mine keeps counting even when you leave and come back." },
+    { key: "10", text: "A full storage freezes the mine until you transfer." },
+    { key: "11", text: "Transfer early if you want the mine to keep flowing." },
+    { key: "12", text: "A bigger storage means fewer trips to the mine." },
+    { key: "13", text: "The mine rewards patience, but full storage stops the clock." },
+    { key: "14", text: "Shop upgrades will make each visit worth more." }
+  ];
+
+  var MINE_MESSAGE_FACE_FALLBACK_SRC = "assets/gfx2/mine_scr/mine_face_00.png";
+
+  function getMineMessageFaceSrc(messageKey) {
+    var key = String(messageKey || "").trim();
+    if (!key) {
+      return MINE_MESSAGE_FACE_FALLBACK_SRC;
+    }
+    return "assets/gfx2/mine_scr/mine_face_" + key + ".png";
+  }
+
   function getMineIdleTip(now) {
-    var tips = [
-      "Transfer coins whenever storage is ready.",
-      "Storage upgrades will come through the shop chest.",
-      "The mine keeps counting even when you leave and come back.",
-      "A full storage freezes the mine until you transfer."
-    ];
     var safeNow = Number.isFinite(now) ? Math.max(0, Math.floor(now)) : Date.now();
-    return tips[Math.floor(safeNow / 30000) % tips.length];
+    return MINE_IDLE_TIPS[Math.floor(safeNow / 30000) % MINE_IDLE_TIPS.length];
   }
 
   function renderPreRunMineScreen() {
@@ -8492,38 +8645,83 @@ Main tuning points:
     var isFull = storageCoins >= storageCapacity;
     var messageText = state.mineMessageText;
     var messageTone = state.mineMessageTone || "info";
+    var messageKey = state.mineMessageKey || "";
+    var transferPhase = state.mineTransferMessagePhase;
+    var transferPhaseActive = false;
 
-    if (isFull && (!state.mineMessageText || state.mineMessageTone !== "warning" || now > state.mineMessageExpiresAt)) {
-      setMineMessage("Storage is full. Transfer the coins to your wallet.", "warning", 5200);
+    if (transferPhase) {
+      if (now < transferPhase.firstExpiresAt) {
+        messageText = transferPhase.firstText;
+        messageTone = transferPhase.firstTone;
+        messageKey = transferPhase.firstKey;
+        transferPhaseActive = true;
+      } else if (transferPhase.secondText && now < transferPhase.secondExpiresAt) {
+        messageText = transferPhase.secondText;
+        messageTone = transferPhase.secondTone;
+        messageKey = transferPhase.secondKey;
+        transferPhaseActive = true;
+      } else {
+        clearMineTransferMessagePhase();
+        transferPhase = null;
+      }
+    }
+
+    if (!transferPhaseActive && isFull && (!state.mineMessageText || state.mineMessageTone !== "warning" || now > state.mineMessageExpiresAt)) {
+      setMineMessage("Storage is full. Transfer the coins to your wallet.", "warning", 5200, "01");
       messageText = state.mineMessageText;
       messageTone = state.mineMessageTone;
-    } else if (mineState.minedCoins > 0) {
+      messageKey = state.mineMessageKey;
+    } else if (!transferPhaseActive && mineState.minedCoins > 0) {
       setMineMessage(
         "Mined " + mineState.minedCoins.toLocaleString("en-US") + " coin" + (mineState.minedCoins === 1 ? "" : "s") + " into storage.",
         "success",
-        3600
+        3600,
+        "02"
       );
       messageText = state.mineMessageText;
       messageTone = state.mineMessageTone;
-    } else if (!state.mineIntroShown && storageCoins === 0) {
+      messageKey = state.mineMessageKey;
+    } else if (!transferPhaseActive && !state.mineIntroShown && storageCoins === 0) {
       state.mineIntroShown = true;
-      setMineMessage("The mine is warming up. Your first coin is on the way.", "info", 4200);
+      setMineMessage("The mine is warming up. Your first coin is on the way.", "info", 4200, "03");
       messageText = state.mineMessageText;
       messageTone = state.mineMessageTone;
-    } else if (!isFull && storageCoins >= Math.ceil(storageCapacity * 0.5) && !state.mineHalfFullAnnounced) {
+      messageKey = state.mineMessageKey;
+    } else if (!transferPhaseActive && !isFull && storageCoins >= Math.ceil(storageCapacity * 0.5) && !state.mineHalfFullAnnounced) {
       state.mineHalfFullAnnounced = true;
-      setMineMessage("Storage is half full. Transfer soon if you want to keep the mine flowing.", "info", 4200);
+      setMineMessage("Storage is half full. Transfer soon if you want to keep the mine flowing.", "info", 4200, "04");
       messageText = state.mineMessageText;
       messageTone = state.mineMessageTone;
-    } else if (state.mineMessageText && now > state.mineMessageExpiresAt) {
-      state.mineMessageText = "";
-      state.mineMessageTone = "info";
-      state.mineMessageExpiresAt = 0;
-      messageText = getMineIdleTip(now);
+      messageKey = state.mineMessageKey;
+    } else if (!transferPhaseActive && state.mineMessageText && now > state.mineMessageExpiresAt) {
+      if (state.mineMessageFollowUpText) {
+        setMineMessage(
+          state.mineMessageFollowUpText,
+          state.mineMessageFollowUpTone,
+          state.mineMessageFollowUpDurationMs,
+          state.mineMessageFollowUpKey
+        );
+        clearMineMessageFollowUp();
+        messageText = state.mineMessageText;
+        messageTone = state.mineMessageTone;
+        messageKey = state.mineMessageKey;
+      } else {
+        state.mineMessageText = "";
+        state.mineMessageTone = "info";
+        state.mineMessageKey = "";
+        state.mineMessageExpiresAt = 0;
+        var idleTipAfterExpire = getMineIdleTip(now);
+        messageText = idleTipAfterExpire.text;
+        messageTone = "info";
+        messageKey = idleTipAfterExpire.key;
+        state.mineMessageKey = messageKey;
+      }
+    } else if (!transferPhaseActive && !state.mineMessageText) {
+      var idleTip = getMineIdleTip(now);
+      messageText = idleTip.text;
       messageTone = "info";
-    } else if (!state.mineMessageText) {
-      messageText = getMineIdleTip(now);
-      messageTone = "info";
+      messageKey = idleTip.key;
+      state.mineMessageKey = messageKey;
     }
 
     if (preRunMineGfx2WalletValueEl) {
@@ -8539,15 +8737,41 @@ Main tuning points:
       preRunMineGfx2CountdownEl.classList.toggle("is-full", isFull);
     }
     if (preRunMineGfx2TransferBtn) {
-      preRunMineGfx2TransferBtn.disabled = storageCoins <= 0;
-      preRunMineGfx2TransferBtn.setAttribute("aria-disabled", storageCoins <= 0 ? "true" : "false");
+      preRunMineGfx2TransferBtn.disabled = false;
+      preRunMineGfx2TransferBtn.setAttribute("aria-disabled", "false");
     }
     if (preRunMineGfx2MessageEl) {
-      preRunMineGfx2MessageEl.textContent = messageText;
       preRunMineGfx2MessageEl.classList.remove("is-info", "is-success", "is-warning");
       preRunMineGfx2MessageEl.classList.add(
         messageTone === "success" ? "is-success" : messageTone === "warning" ? "is-warning" : "is-info"
       );
+    }
+    if (preRunMineGfx2MessageFaceEl) {
+      var nextMineMessageFaceSrc = getMineMessageFaceSrc(messageKey);
+      var nextMineMessageFaceKey = String(messageKey || "");
+      if (
+        preRunMineGfx2MessageFaceEl.dataset.faceKey !== nextMineMessageFaceKey ||
+        (
+          preRunMineGfx2MessageFaceEl.dataset.faceSrc !== nextMineMessageFaceSrc &&
+          preRunMineGfx2MessageFaceEl.dataset.fallbackApplied !== "1"
+        )
+      ) {
+        preRunMineGfx2MessageFaceEl.dataset.faceKey = nextMineMessageFaceKey;
+        preRunMineGfx2MessageFaceEl.dataset.faceSrc = nextMineMessageFaceSrc;
+        preRunMineGfx2MessageFaceEl.dataset.fallbackApplied = "0";
+        preRunMineGfx2MessageFaceEl.onerror = function () {
+          if (!preRunMineGfx2MessageFaceEl || preRunMineGfx2MessageFaceEl.dataset.fallbackApplied === "1") {
+            return;
+          }
+          preRunMineGfx2MessageFaceEl.dataset.fallbackApplied = "1";
+          preRunMineGfx2MessageFaceEl.dataset.faceSrc = MINE_MESSAGE_FACE_FALLBACK_SRC;
+          preRunMineGfx2MessageFaceEl.src = MINE_MESSAGE_FACE_FALLBACK_SRC;
+        };
+        preRunMineGfx2MessageFaceEl.src = nextMineMessageFaceSrc;
+      }
+    }
+    if (preRunMineGfx2MessageTextEl) {
+      preRunMineGfx2MessageTextEl.textContent = messageText;
     }
   }
 
@@ -8556,7 +8780,10 @@ Main tuning points:
     playUiPageOpenSound();
     state.mineMessageText = "";
     state.mineMessageTone = "info";
+    state.mineMessageKey = "";
     state.mineMessageExpiresAt = 0;
+    clearMineMessageFollowUp();
+    clearMineTransferMessagePhase();
     state.mineHalfFullAnnounced = false;
     state.mineIntroShown = false;
     state.preRunStep = "mine";
@@ -8573,15 +8800,21 @@ Main tuning points:
     ensureMineEconomyState(Date.now());
     var transferAmount = transferMineStorageToWallet();
     if (transferAmount <= 0) {
-      setMineMessage("There are no stored coins to transfer yet.", "info", 3200);
+      clearMineMessageFollowUp();
+      clearMineTransferMessagePhase();
+      startMineEmptyTransferMessagePhase();
+      setMineMessage("There are no stored coins to transfer yet.", "info", 5000, "05");
       renderPreRunScreen();
       return;
     }
     state.mineHalfFullAnnounced = false;
+    clearMineMessageFollowUp();
+    startMineTransferMessagePhase(transferAmount);
     setMineMessage(
       "Transferred " + transferAmount.toLocaleString("en-US") + " coin" + (transferAmount === 1 ? "" : "s") + " to the wallet.",
       "success",
-      4600
+      5000,
+      "06"
     );
     renderPreRunScreen();
   }
@@ -8647,6 +8880,33 @@ Main tuning points:
       return;
     }
 
+    if (selectedItem.type === "storage-upgrade") {
+      var mineMeta = getMineStorageUpgradeMeta();
+      if (mineMeta.isMaxed || selectedItem.isSold) {
+        state.preRunGfx2ShopStatus = "Storage capacity is already fully upgraded.";
+        state.preRunGfx2ShopStatusTone = "success";
+      } else if (!spendCoinsFromWallet(selectedItem.cost)) {
+        state.preRunGfx2ShopStatus = "Not enough coins for the storage upgrade.";
+        state.preRunGfx2ShopStatusTone = "error";
+      } else {
+        economyStats.mineStorageUpgradeLevel = Math.min(4, mineMeta.nextLevel);
+        economyStats.mineStorageCapacity = Math.max(1, Math.floor(Number(selectedItem.storageCapacity) || mineMeta.nextCapacity));
+        if (economyStats.mineStorageCoins > economyStats.mineStorageCapacity) {
+          economyStats.mineStorageCoins = economyStats.mineStorageCapacity;
+        }
+        writeEconomyStats();
+        state.preRunGfx2ShopStatus =
+          "Storage capacity upgraded to Level " +
+          mineMeta.nextLevel +
+          ". Capacity is now " +
+          economyStats.mineStorageCapacity.toLocaleString("en-US") +
+          " coins.";
+        state.preRunGfx2ShopStatusTone = "success";
+      }
+      renderPreRunShopScreen();
+      return;
+    }
+
     state.preRunGfx2ShopStatus = "This purchase is not available yet.";
     state.preRunGfx2ShopStatusTone = "info";
     renderPreRunShopScreen();
@@ -8657,6 +8917,7 @@ Main tuning points:
     var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
     var skin05Price = sanitizeGlobalAdminNumber("shopSkin05Price", C.shopSkin05Price);
     var specialLevelPrice = sanitizeGlobalAdminNumber("shopSpecialLevelPrice", C.shopSpecialLevelPrice);
+    var mineStorageMeta = getMineStorageUpgradeMeta();
     var persistentScore = getPersistentTotalScore();
     var walletBalance = getCoinWalletBalance();
     var canBuyOneCoin = persistentScore >= scorePerCoin;
@@ -8746,6 +9007,10 @@ Main tuning points:
         statusText = skin05Owned
           ? "Grey is already unlocked."
           : "Unlock Grey for " + skin05Price.toLocaleString("en-US") + " coins.";
+      } else if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "storage-upgrade") {
+        statusText = mineStorageMeta.isMaxed
+          ? "Storage capacity is fully upgraded."
+          : "Upgrade storage capacity to Level " + mineStorageMeta.nextLevel + " for " + selectedItem.cost.toLocaleString("en-US") + " coins.";
       }
       preRunShopGfx2StatusEl.textContent = statusText;
       preRunShopGfx2StatusEl.classList.toggle("is-error", state.preRunGfx2ShopStatusTone === "error");
@@ -8774,17 +9039,25 @@ Main tuning points:
     if (preRunShopGfx2SkinCatBtn) {
       preRunShopGfx2SkinCatBtn.classList.toggle("is-sold", skin05Owned);
     }
+    if (preRunShopGfx2ChestBtn) {
+      preRunShopGfx2ChestBtn.classList.toggle("is-sold", mineStorageMeta.isMaxed);
+    }
     if (preRunShopGfx2BuyBtn) {
       var selectedIsSpecialLevel = selectedItem && selectedItem.type === "special-level";
       var selectedIsSkin05 = selectedItem && selectedItem.type === "skin-05";
+      var selectedIsStorageUpgrade = selectedItem && selectedItem.type === "storage-upgrade";
       preRunShopGfx2BuyBtn.disabled = Boolean(
         (selectedIsSpecialLevel && (isLevelXUnlocked() || walletBalance < selectedItem.cost)) ||
-        (selectedIsSkin05 && (skin05Owned || walletBalance < selectedItem.cost))
+        (selectedIsSkin05 && (skin05Owned || walletBalance < selectedItem.cost)) ||
+        (selectedIsStorageUpgrade && (mineStorageMeta.isMaxed || walletBalance < selectedItem.cost))
       );
       preRunShopGfx2BuyBtn.textContent =
-        (selectedIsSpecialLevel && isLevelXUnlocked()) || (selectedIsSkin05 && skin05Owned)
+        (selectedIsSpecialLevel && isLevelXUnlocked()) || (selectedIsSkin05 && skin05Owned) || (selectedIsStorageUpgrade && mineStorageMeta.isMaxed)
           ? "Owned"
           : "Buy";
+      if (selectedIsStorageUpgrade && mineStorageMeta.isMaxed) {
+        preRunShopGfx2BuyBtn.textContent = "Sold";
+      }
     }
   }
 

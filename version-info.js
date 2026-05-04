@@ -1,9 +1,11 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 73,
-  versionName: "1.0.73",
+  versionCode: 74,
+  versionName: "1.0.74",
   whatsNew: [
-  "Release bump to version 1.0.73.",
+  "Release bump to version 1.0.74.",
+  "Mine storage upgrades now appear in the Shop chest with admin-tuned Level 2 to 4 prices.",
   "Mine economy admin tuning fields were added for coin timer and storage capacity presets.",
+  "Release bump to version 1.0.73.",
   "Release bump to version 1.0.72.",
   "Release bump to version 1.0.70.",
   "Settings screen mute hitboxes now sit on the guitar and Zzzap graphics, so music and SFX can be toggled directly from the artwork.",

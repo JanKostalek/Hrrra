@@ -119,6 +119,33 @@ This should feel like a meaningful upgrade, so capacity changes should be clearl
 
 ## Future Additions
 
+## Mine Face Map
+
+The lower mine message box uses numbered face graphics from `assets/gfx2/mine_scr/`.
+
+Naming rule:
+
+- `mine_face_01.png` through `mine_face_14.png` map to the numbered message entries below
+- `mine_face_00.png` is the fallback when a specific face file does not exist yet
+
+| # | Message | Face file |
+|---|---|---|
+| 01 | Storage is full. Transfer the coins to your wallet. | mine_face_01.png |
+| 02 | Mined X coin(s) into storage. | mine_face_02.png |
+| 03 | The mine is warming up. Your first coin is on the way. | mine_face_03.png |
+| 04 | Storage is half full. Transfer soon if you want to keep the mine flowing. | mine_face_04.png |
+| 05 | There are no stored coins to transfer yet. | mine_face_05.png |
+| 06 | Transferred X coin(s) to the wallet. | mine_face_06.png |
+| 07 | Transfer coins whenever storage is ready. | mine_face_07.png |
+| 08 | You can upgrade storage size in the Shop. | mine_face_08.png |
+| 09 | The mine keeps counting even when you leave and come back. | mine_face_09.png |
+| 10 | A full storage freezes the mine until you transfer. | mine_face_10.png |
+| 11 | Transfer early if you want the mine to keep flowing. | mine_face_11.png |
+| 12 | A bigger storage means fewer trips to the mine. | mine_face_12.png |
+| 13 | The mine rewards patience, but full storage stops the clock. | mine_face_13.png |
+| 14 | Shop upgrades will make each visit worth more. | mine_face_14.png |
+
+
 Possible follow-up items:
 
 - different mine themes or levels
