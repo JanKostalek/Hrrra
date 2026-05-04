@@ -8,3 +8,4 @@ android/build/
 android/app/build/
 UPLOAD_KEYSTORE_INFO.txt
 android/upload_certificate.pem
+assets/gfx2/.temp/

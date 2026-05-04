@@ -1882,6 +1882,25 @@ body {
   height: 15.4%;
 }
 
+.pre-run-gfx2-cloud-hitbox-fortune {
+  left: 48.8%;
+  top: 1.9%;
+  width: 15.8%;
+  height: 15.4%;
+}
+
+.pre-run-gfx2-cloud-hitbox-mine {
+  left: 0%;
+  top: 46%;
+  width: 17.5%;
+  height: 54%;
+  z-index: 7;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .pre-run-gfx2-static-cloud-shop {
   right: 3.4%;
   top: 2.2%;
@@ -2011,6 +2030,174 @@ body {
   box-shadow: 0 12px 24px rgba(49, 7, 7, 0.24);
 }
 
+.pre-run-mine-gfx2-scene {
+  position: relative;
+  width: 100%;
+  height: min(720px, calc(100dvh - 36px));
+  min-height: 420px;
+  overflow: hidden;
+  border-radius: 28px;
+  background: url("assets/gfx2/mine_inside.jpg") center center / 100% 100% no-repeat;
+  box-shadow:
+    inset 0 0 0 6px rgba(8, 41, 58, 0.86),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    0 18px 34px rgba(8, 41, 58, 0.16);
+}
+
+.pre-run-mine-gfx2-hitbox-exit {
+  display: block;
+  position: absolute;
+  left: 4.2%;
+  top: 18%;
+  width: 17%;
+  height: 12%;
+  z-index: 999;
+  border: 0 !important;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  opacity: 1;
+}
+
+.pre-run-mine-gfx2-wallet {
+  position: absolute;
+  z-index: 4;
+  left: 67.8%;
+  top: 8.6%;
+  width: 25.8%;
+  height: 31.5%;
+  color: #f7e3b2;
+  text-align: left;
+  text-shadow:
+    0 2px 0 rgba(35, 17, 3, 0.75),
+    0 0 14px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+.pre-run-mine-gfx2-storage {
+  position: absolute;
+  z-index: 5;
+  left: 34.6%;
+  top: 16.7%;
+  width: 21.2%;
+  height: 14.2%;
+  color: #ffe9a7;
+  text-align: center;
+  text-shadow:
+    0 2px 0 rgba(35, 17, 3, 0.75),
+    0 0 12px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+.pre-run-mine-gfx2-storage-value {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(20px, 2.15vw, 31px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.pre-run-mine-gfx2-countdown-wrap {
+  position: absolute;
+  z-index: 6;
+  left: 38.9%;
+  top: 71.2%;
+  width: 15.9%;
+  height: 7.4%;
+  pointer-events: none;
+}
+
+.pre-run-mine-gfx2-countdown {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(13px, 1.15vw, 16px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: #ffe9a7;
+  text-shadow:
+    0 2px 0 rgba(35, 17, 3, 0.75),
+    0 0 12px rgba(0, 0, 0, 0.18);
+}
+
+.pre-run-mine-gfx2-countdown.is-full {
+  color: #fff0ab;
+}
+
+.pre-run-mine-gfx2-wallet-value {
+  position: absolute;
+  left: 46.5%;
+  top: 76.5%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(13px, 1.8vw, 24px);
+  font-weight: 900;
+  line-height: 1;
+  color: #fff1bf;
+}
+
+.pre-run-mine-gfx2-transfer-btn {
+  position: absolute;
+  left: 68.2%;
+  top: 49.6%;
+  width: 16.8%;
+  height: 17.8%;
+  z-index: 8;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  box-shadow: none;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pre-run-mine-gfx2-message {
+  position: absolute;
+  left: calc(13.8% + 10%);
+  bottom: 11.8%;
+  width: 43.6%;
+  min-height: 0;
+  padding: 0;
+  z-index: 2;
+  display: block;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #ffe8b2;
+  font-size: clamp(13px, 1.35vw, 20px);
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.55),
+    0 0 10px rgba(0, 0, 0, 0.18);
+  box-shadow: none;
+}
+
+.pre-run-mine-gfx2-message.is-success {
+  color: #d6ff9a;
+}
+
+.pre-run-mine-gfx2-message.is-warning {
+  color: #ffd36a;
+}
+
+.pre-run-mine-gfx2-message.is-info {
+  color: #ffe8b2;
+}
+
 @media (max-width: 980px) {
   .pre-run-gfx2-scene {
     border-radius: 22px;
@@ -2039,6 +2226,14 @@ body {
     height: 15.8%;
   }
 
+  .pre-run-gfx2-static-cloud-fortune,
+  .pre-run-gfx2-cloud-hitbox-fortune {
+    left: 48.2%;
+    top: 1.8%;
+    width: 16.2%;
+    height: 15.8%;
+  }
+
   .pre-run-gfx2-static-cloud-shop {
     right: 3%;
     top: 2%;
@@ -2050,6 +2245,45 @@ body {
     right: 0.8%;
     top: 40.6%;
     width: 12.2%;
+  }
+
+  .pre-run-mine-gfx2-scene {
+    height: min(640px, calc(100dvh - 30px));
+    min-height: 380px;
+  }
+
+  .pre-run-mine-gfx2-hitbox-exit {
+    left: 4%;
+    top: 18.5%;
+    width: 18%;
+    height: 12.5%;
+  }
+
+  .pre-run-mine-gfx2-wallet {
+    left: 67.4%;
+    top: 8.7%;
+    width: 26.2%;
+    height: 31%;
+  }
+
+  .pre-run-mine-gfx2-storage {
+    left: 35%;
+    top: 16%;
+    width: 18%;
+    height: 13.2%;
+  }
+
+  .pre-run-mine-gfx2-storage-value {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .pre-run-mine-gfx2-countdown-wrap {
+    left: 39%;
+    top: 71.4%;
+    width: 16.1%;
+    height: 7.6%;
   }
 
   .pre-run-gfx2-hotspot-scores {
@@ -2175,10 +2409,58 @@ body {
     height: 16.6%;
   }
 
+  .pre-run-gfx2-static-cloud-fortune,
+  .pre-run-gfx2-cloud-hitbox-fortune {
+    left: 48.4%;
+    top: 1.6%;
+    width: 16.4%;
+    height: 16.2%;
+  }
+
   .pre-run-gfx2-house-shop {
     right: 0.6%;
     top: 40.3%;
     width: 12.8%;
+  }
+
+  .pre-run-mine-gfx2-scene {
+    height: 100%;
+    min-height: 0;
+    border-radius: 0;
+  }
+
+  .pre-run-mine-gfx2-hitbox-exit {
+    left: 4%;
+    top: 18.4%;
+    width: 19%;
+    height: 13%;
+  }
+
+  .pre-run-mine-gfx2-wallet {
+    left: 67.2%;
+    top: 8.8%;
+    width: 26.8%;
+    height: 30.4%;
+  }
+
+  .pre-run-mine-gfx2-storage {
+    left: 35.2%;
+    top: 16.2%;
+    width: 18.3%;
+    height: 13.4%;
+  }
+
+  .pre-run-mine-gfx2-storage-value {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .pre-run-mine-gfx2-countdown-wrap {
+    left: 39.1%;
+    top: 71.7%;
+    width: 16.4%;
+    height: 7.8%;
   }
 
   .pre-run-gfx2-lock-note {

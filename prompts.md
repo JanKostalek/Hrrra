@@ -287,3 +287,103 @@ skrytím clean trophy vrstvy v badge/skin reward overlayích by se mohl odstrani
 badge/skin trophy art má být v úvodu skrytý a objevit se až spolu s textem ve fázi reveal, ne hned v prázdném rámečku.
 
 na badges stránce se trophy image nemá zobrazovat u série, která nemá žádný získaný bronze/silver/gold tier; slot má zůstat, ale img až po prvním získaném badge.
+
+-------------------
+ted jen odpovídej. Chtěl bych udělat novou economy funkcionalitu. Ve hře máme zatím na crossing page "vstup do zlatého důlu". Já připravím obrazovku mine_inside. Chtěl bych, aby to fungovalo následně. v určeném intervalu (například jednou za minutu) přibude do storage jedna (nevo určený počet) coins. Storage ale bude mít jen určitou velikost (například 50 coins). Potom bude potřeba kliknout na "transfer", čímž se ze storage přenesou mince k standardním incím (wallet) a začnou se znovu v pravidelném intervalu těžit. Informace, kdy se vytěží další mince tam taky bude znázorněna. ve chvíli kdy bude storage plna, tak tam místo času bude "full". Jak by to mělo vypadat graficky je videt na druhém obrázku mine_you can.....  Ve spodním okně potom budou připravené "informace", které se budou nějaký způsobem na nějaké trigery (mozná náhodně) objevovat. V dalším kole bych potom chtěl připravit v shop možnost, že si bude možno koupit zvětšení místa ve storage. To se bude dělat přez grafiku truhly v shop screen. Promysli, jak toto nejlépe udělat, jaké jsou rizika, na co si dát pozor, případné návrhy na to, jak to udělat jinak
+
+-------------------
+ted to postupně doladíme a) tlačítko exit nemusís vykreslovat. stačí udělat overlay pro zpustení nad existující grafikou Exit (viz obrázek) b) slovo wallet nemusís psát, protoze je taky v grafice. číslo jako takové trochu zmenšíme a posuneme do leva dolů. c) udělej, aby se mine_inside rozšířoval do všech stran aby vyplnil okno (stejně jako se to děje v shop_inside)
+
+-------------------
+jeste je posun o polovinu vysky dolů
+
+-------------------
+udelej debug overlay nad tlačítko exit
+
+-------------------
+debug obdelnik neni videt
+
+-------------------
+posun ten hitbox o poloviny výsky hitboxu smerem dolů
+
+-------------------
+jeste jednou udelej totez
+
+-------------------
+podle obrázku posun čas za kdyz bude dalsí mince podle sipky. text "next coin..." tam je zbytecny, protoze uz je v grafice. stejne tak posun to 0/50 podle obrázku a sipky
+
+-------------------
+posun cislo timeru podle sipky na obrazku
+
+-------------------
+to 14/50 posun podle siky dolu a doprava. dolní panel s textem uprav. ten panel tam je zbytecny. je tam na to pripravena grafika. takze ponech jenom text. pozici upravime potom. a ted nevidim ten timer, asi se schoval za ten spodní panel?
+
+-------------------
+timer posun o dvacet pixelů dolů. počet coins posun o tricet pixellů dolů
+
+-------------------
+timer posun o deset pixelů dolů. počet coins posun o dvacet pixellů dolů
+
+-------------------
+ted posun počet coins o 40 pixelů do leva a timer o dvacet pixelů do leva
+
+-------------------
+ted jsi to zůžil nebo jak. udělej ten text box výrazně šiřší, aby se tam veslo celé číslo b) timer posun o výšku toho textu nahorů a o šířku textu do prava
+
+-------------------
+ted je pozice v pořádku. ted zkus znovu ukotvení pozice v rámci obrazovky / background obrazku. Predtim jsi to udělal dobře pro počet mincí ve wallet. tak to udělej stejně
+
+-------------------
+císlo u valet je presne ukotvené na jednom místě vzhledem k obrázku pozadí bez ohledu na velikost okna. pocet coins ve storage se poloha meni, kdyz menim velikost okna. neni ukotvené stejným způsobem
+
+-------------------
+posun pocet coins o 50 pixelů dolů
+
+-------------------
+ted o deset do prava
+
+-------------------
+jeste jednou o deset pixelů do prava
+
+-------------------
+tak tedy posun o pet procent dolů
+
+-------------------
+jeste posun dolů o tri procenta
+
+-------------------
+ted o tri procenta do prava
+
+-------------------
+ted timer posun o osm procent do prava a o patnact procent dolů
+
+-------------------
+posun timer o jedno procento dolů a o jedno procento do leva
+
+-------------------
+ten text dole "mined xx coins" posun o pet procent nahoru a o dvacet do prava
+
+-------------------
+posun jej o 3 procenta nahoru a o tricet do prava
+
+-------------------
+posun ten text o tricent procent do prava
+
+-------------------
+ted o deset do leva
+
+-------------------
+timer se aktualizuje jen pri reloadu stranky (pri vstupu do mine). můzes udělat, aby se nacetlo pri vstupu do stranky stav jaký má být a pak bezel "zivě"?
+
+-------------------
+jeste o deset do leva
+
+-------------------
+-------------------
+ted udělej bump navysení verze, sync do www a android, commit do main, priprav aab, over, ze jsou verze ve vetvích shodne a vrat se na new
+
+-------------------
+ted do administrace pod shop sekci pridej sekci mine. dej tam zatím dve polozky Coin Timer - ted nastaveny na jednu minutu, cili kdy se objevi dalsi mince a Storage - ted nastaveny na padesat. A rovnou i Storage L2 Storage L3 a Storage L4. zatim nastaveny na 60, 70, 80. na ty pak navazeme v shopu prikuování zvetsení storage
+
+-------------------
+ted odstran debug ramecek v mine screen i v crossing screen

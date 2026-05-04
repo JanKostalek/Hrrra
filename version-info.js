@@ -1,9 +1,10 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 72,
-  versionName: "1.0.72",
+  versionCode: 73,
+  versionName: "1.0.73",
   whatsNew: [
+  "Release bump to version 1.0.73.",
+  "Mine economy admin tuning fields were added for coin timer and storage capacity presets.",
   "Release bump to version 1.0.72.",
-  "Release bump to version 1.0.71.",
   "Release bump to version 1.0.70.",
   "Settings screen mute hitboxes now sit on the guitar and Zzzap graphics, so music and SFX can be toggled directly from the artwork.",
   "Settings page now keeps the music and SFX toggle hitboxes aligned with the guitar and Zzzap graphics again.",

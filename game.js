@@ -141,6 +141,7 @@ Main tuning points:
   var preRunScoresBtn = document.getElementById("pre-run-scores-btn");
   var preRunGfx2RulesBtn = document.getElementById("pre-run-gfx2-rules-btn");
   var preRunGfx2CreditsBtn = document.getElementById("pre-run-gfx2-credits-btn");
+  var preRunGfx2MineBtn = document.getElementById("pre-run-gfx2-mine-btn");
   var preRunGfx2ShopBtn = document.getElementById("pre-run-gfx2-shop-btn");
   var preRunGfx2ClassicCornerBtn = document.getElementById("pre-run-gfx2-classic-corner-btn");
   var preRunGfx2SettingsCornerBtn = document.getElementById("pre-run-gfx2-settings-corner-btn");
@@ -425,6 +426,13 @@ Main tuning points:
   var preRunShopGfx2CostValueEl = document.getElementById("pre-run-shop-gfx2-cost-value");
   var preRunShopGfx2StatusEl = document.getElementById("pre-run-shop-gfx2-status");
   var preRunShopGfx2BuyBtn = document.getElementById("pre-run-shop-gfx2-buy-btn");
+  var preRunMineInsideEl = document.getElementById("pre-run-mine-screen");
+  var preRunMineGfx2ExitBtn = document.getElementById("pre-run-mine-gfx2-exit-btn");
+  var preRunMineGfx2WalletValueEl = document.getElementById("pre-run-mine-gfx2-wallet-value");
+  var preRunMineGfx2StorageValueEl = document.getElementById("pre-run-mine-gfx2-storage-value");
+  var preRunMineGfx2CountdownEl = document.getElementById("pre-run-mine-gfx2-countdown");
+  var preRunMineGfx2TransferBtn = document.getElementById("pre-run-mine-gfx2-transfer-btn");
+  var preRunMineGfx2MessageEl = document.getElementById("pre-run-mine-gfx2-message");
   var preRunClassicGfx2El = document.getElementById("pre-run-classic-gfx2");
   var preRunClassicGfx2ExitBtn = document.getElementById("pre-run-classic-gfx2-exit-btn");
   var preRunClassicGfx2AdminBtn = document.getElementById("pre-run-classic-gfx2-admin-btn");
@@ -1013,10 +1021,18 @@ Main tuning points:
   var badgeStats = readBadgeStats();
 
   function createDefaultEconomyStats() {
+    var defaultMineStorageCapacity = sanitizeGlobalAdminNumber("mineStorageCapacity", C.mineStorageCapacity);
+    var defaultMineIntervalMs = sanitizeGlobalAdminNumber("mineCoinTimerMs", C.mineCoinTimerMs);
     return {
       coinsBalance: 0,
       totalCoinsEarned: 0,
-      totalCoinsSpent: 0
+      totalCoinsSpent: 0,
+      mineStorageCoins: 0,
+      mineStorageCapacity: defaultMineStorageCapacity,
+      mineMineIntervalMs: defaultMineIntervalMs,
+      mineNextCoinAt: 0,
+      mineFrozenRemainingMs: 0,
+      mineUnlocked: true
     };
   }
 
@@ -1029,6 +1045,13 @@ Main tuning points:
     out.coinsBalance = Number.isFinite(raw.coinsBalance) ? Math.max(0, Math.floor(Number(raw.coinsBalance))) : defaults.coinsBalance;
     out.totalCoinsEarned = Number.isFinite(raw.totalCoinsEarned) ? Math.max(0, Math.floor(Number(raw.totalCoinsEarned))) : defaults.totalCoinsEarned;
     out.totalCoinsSpent = Number.isFinite(raw.totalCoinsSpent) ? Math.max(0, Math.floor(Number(raw.totalCoinsSpent))) : defaults.totalCoinsSpent;
+    out.mineStorageCoins = Number.isFinite(raw.mineStorageCoins) ? Math.max(0, Math.floor(Number(raw.mineStorageCoins))) : defaults.mineStorageCoins;
+    out.mineStorageCapacity = Number.isFinite(raw.mineStorageCapacity) ? Math.max(1, Math.floor(Number(raw.mineStorageCapacity))) : defaults.mineStorageCapacity;
+    out.mineMineIntervalMs = Number.isFinite(raw.mineMineIntervalMs) ? Math.max(1000, Math.floor(Number(raw.mineMineIntervalMs))) : defaults.mineMineIntervalMs;
+    out.mineNextCoinAt = Number.isFinite(raw.mineNextCoinAt) ? Math.max(0, Math.floor(Number(raw.mineNextCoinAt))) : defaults.mineNextCoinAt;
+    out.mineFrozenRemainingMs = Number.isFinite(raw.mineFrozenRemainingMs) ? Math.max(0, Math.floor(Number(raw.mineFrozenRemainingMs))) : defaults.mineFrozenRemainingMs;
+    out.mineUnlocked = typeof raw.mineUnlocked === "boolean" ? raw.mineUnlocked : defaults.mineUnlocked;
+    out.mineStorageCoins = Math.min(out.mineStorageCoins, out.mineStorageCapacity);
     return out;
   }
 
@@ -2491,6 +2514,17 @@ Main tuning points:
     if (key === "shopScorePerCoin" || key === "shopContinueLivesGranted") {
       return Math.max(1, parsed);
     }
+    if (key === "mineCoinTimerMs") {
+      return Math.max(1000, parsed);
+    }
+    if (
+      key === "mineStorageCapacity" ||
+      key === "mineStorageCapacityL2" ||
+      key === "mineStorageCapacityL3" ||
+      key === "mineStorageCapacityL4"
+    ) {
+      return Math.max(1, parsed);
+    }
     return parsed;
   }
 
@@ -2500,6 +2534,30 @@ Main tuning points:
 
   function getCoinWalletBalance() {
     return Math.max(0, Math.floor((economyStats && economyStats.coinsBalance) || 0));
+  }
+
+  function getMineStorageCoins() {
+    return Math.max(0, Math.floor((economyStats && economyStats.mineStorageCoins) || 0));
+  }
+
+  function getMineStorageCapacity() {
+    return Math.max(1, Math.floor((economyStats && economyStats.mineStorageCapacity) || 50));
+  }
+
+  function getMineIntervalMs() {
+    return Math.max(1000, Math.floor((economyStats && economyStats.mineMineIntervalMs) || 60000));
+  }
+
+  function getMineNextCoinAt() {
+    return Math.max(0, Math.floor((economyStats && economyStats.mineNextCoinAt) || 0));
+  }
+
+  function getMineFrozenRemainingMs() {
+    return Math.max(0, Math.floor((economyStats && economyStats.mineFrozenRemainingMs) || 0));
+  }
+
+  function isMineUnlocked() {
+    return !economyStats || typeof economyStats.mineUnlocked !== "boolean" ? true : Boolean(economyStats.mineUnlocked);
   }
 
   function getPendingRunCoinSpend() {
@@ -2565,6 +2623,129 @@ Main tuning points:
     state.pendingRunCoinSpend = getPendingRunCoinSpend() + pendingDeduction;
     writeEconomyStats();
     return true;
+  }
+
+  function ensureMineEconomyState(now) {
+    var changed = false;
+    var safeNow = Number.isFinite(now) ? Math.max(0, Math.floor(now)) : Date.now();
+    var intervalMs = getMineIntervalMs();
+    var storageCapacity = getMineStorageCapacity();
+
+    if (!Number.isFinite(economyStats.mineStorageCoins)) {
+      economyStats.mineStorageCoins = 0;
+      changed = true;
+    }
+    if (!Number.isFinite(economyStats.mineStorageCapacity) || economyStats.mineStorageCapacity < 1) {
+      economyStats.mineStorageCapacity = storageCapacity;
+      changed = true;
+    }
+    if (!Number.isFinite(economyStats.mineMineIntervalMs) || economyStats.mineMineIntervalMs < 1000) {
+      economyStats.mineMineIntervalMs = intervalMs;
+      changed = true;
+    }
+    if (!Number.isFinite(economyStats.mineNextCoinAt) || economyStats.mineNextCoinAt < 0) {
+      economyStats.mineNextCoinAt = 0;
+      changed = true;
+    }
+    if (!Number.isFinite(economyStats.mineFrozenRemainingMs) || economyStats.mineFrozenRemainingMs < 0) {
+      economyStats.mineFrozenRemainingMs = 0;
+      changed = true;
+    }
+    if (typeof economyStats.mineUnlocked !== "boolean") {
+      economyStats.mineUnlocked = true;
+      changed = true;
+    }
+
+    if (!isMineUnlocked()) {
+      if (changed) {
+        writeEconomyStats();
+      }
+      return {
+        minedCoins: 0,
+        becameFull: false,
+        isFull: false,
+        nextCoinInMs: 0
+      };
+    }
+
+    var minedCoins = 0;
+    var becameFull = false;
+    if (economyStats.mineStorageCoins >= storageCapacity) {
+      if (economyStats.mineFrozenRemainingMs <= 0 && economyStats.mineNextCoinAt > 0) {
+        economyStats.mineFrozenRemainingMs = Math.max(0, economyStats.mineNextCoinAt - safeNow);
+        economyStats.mineNextCoinAt = 0;
+        changed = true;
+      }
+      if (changed) {
+        writeEconomyStats();
+      }
+      return {
+        minedCoins: 0,
+        becameFull: false,
+        isFull: true,
+        nextCoinInMs: economyStats.mineFrozenRemainingMs
+      };
+    }
+
+    if (economyStats.mineNextCoinAt <= 0) {
+      var frozenDelay = getMineFrozenRemainingMs();
+      economyStats.mineNextCoinAt = safeNow + (frozenDelay > 0 ? frozenDelay : intervalMs);
+      economyStats.mineFrozenRemainingMs = 0;
+      changed = true;
+    }
+
+    while (economyStats.mineStorageCoins < storageCapacity && economyStats.mineNextCoinAt > 0 && safeNow >= economyStats.mineNextCoinAt) {
+      economyStats.mineStorageCoins += 1;
+      minedCoins += 1;
+      economyStats.mineNextCoinAt += intervalMs;
+      changed = true;
+      if (economyStats.mineStorageCoins >= storageCapacity) {
+        economyStats.mineFrozenRemainingMs = Math.max(0, economyStats.mineNextCoinAt - safeNow);
+        economyStats.mineNextCoinAt = 0;
+        becameFull = true;
+        break;
+      }
+    }
+
+    if (changed) {
+      writeEconomyStats();
+    }
+
+    return {
+      minedCoins: minedCoins,
+      becameFull: becameFull,
+      isFull: false,
+      nextCoinInMs: Math.max(0, getMineNextCoinAt() - safeNow)
+    };
+  }
+
+  function transferMineStorageToWallet() {
+    var transferAmount = getMineStorageCoins();
+    if (transferAmount <= 0) {
+      return 0;
+    }
+    var now = Date.now();
+    var intervalMs = getMineIntervalMs();
+    var nextAt = getMineNextCoinAt();
+    var resumeDelay = getMineFrozenRemainingMs();
+    if (resumeDelay <= 0 && nextAt > 0) {
+      resumeDelay = Math.max(0, nextAt - now);
+    }
+    economyStats.coinsBalance = getCoinWalletBalance() + transferAmount;
+    economyStats.totalCoinsEarned = Math.max(0, Math.floor(Number(economyStats.totalCoinsEarned) || 0) + transferAmount);
+    economyStats.mineStorageCoins = 0;
+    economyStats.mineFrozenRemainingMs = 0;
+    economyStats.mineNextCoinAt = now + (resumeDelay > 0 ? resumeDelay : intervalMs);
+    writeEconomyStats();
+    return transferAmount;
+  }
+
+  function formatMineCountdown(millisecondsLeft) {
+    var safeMs = Math.max(0, Math.floor(Number(millisecondsLeft) || 0));
+    var totalSeconds = Math.ceil(safeMs / 1000);
+    var minutes = Math.floor(totalSeconds / 60);
+    var seconds = totalSeconds % 60;
+    return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
   }
 
   function exchangePersistentScoreForCoins(coinCount) {
@@ -5223,6 +5404,11 @@ Main tuning points:
     preRunGfx2ShopVisitCoinTotal: 0,
     preRunGfx2ShopStatus: "",
     preRunGfx2ShopStatusTone: "info",
+    mineMessageText: "",
+    mineMessageTone: "info",
+    mineMessageExpiresAt: 0,
+    mineHalfFullAnnounced: false,
+    mineIntroShown: false,
     preRunScores: createInitialPreRunScoresState(),
     onlineHighscore: {
       loading: false,
@@ -5461,6 +5647,16 @@ Main tuning points:
         { key: "shopKrobPrice", label: "Krob Price", type: "number", min: 0, step: 1 },
         { key: "shopSkin05Price", label: "Grey Price", type: "number", min: 0, step: 1 },
         { key: "shopSpecialLevelPrice", label: "New Level Price", type: "number", min: 0, step: 1 }
+      ]
+    },
+    {
+      title: "Mine",
+      fields: [
+        { key: "mineCoinTimerMs", label: "Coin Timer (ms)", type: "number", min: 1000, step: 1000 },
+        { key: "mineStorageCapacity", label: "Storage", type: "number", min: 1, step: 1 },
+        { key: "mineStorageCapacityL2", label: "Storage L2", type: "number", min: 1, step: 1 },
+        { key: "mineStorageCapacityL3", label: "Storage L3", type: "number", min: 1, step: 1 },
+        { key: "mineStorageCapacityL4", label: "Storage L4", type: "number", min: 1, step: 1 }
       ]
     },
     {
@@ -6499,6 +6695,9 @@ Main tuning points:
     if (preRunShopScreenEl) {
       preRunShopScreenEl.classList.toggle("hidden", state.preRunStep !== "shop");
     }
+    if (preRunMineInsideEl) {
+      preRunMineInsideEl.classList.toggle("hidden", state.preRunStep !== "mine");
+    }
     if (preRunSettingsScreenEl) {
       preRunSettingsScreenEl.classList.toggle("hidden", state.preRunStep !== "settings");
     }
@@ -6583,6 +6782,9 @@ Main tuning points:
     }
     if (state.preRunStep === "shop") {
       renderPreRunShopScreen();
+    }
+    if (state.preRunStep === "mine") {
+      renderPreRunMineScreen();
     }
     if (preRunCreditsVersionEl) {
       preRunCreditsVersionEl.textContent = "v" + String((APP_VERSION_INFO && APP_VERSION_INFO.versionName) || "0.0.0");
@@ -8263,6 +8465,127 @@ Main tuning points:
     renderPreRunScreen();
   }
 
+  function setMineMessage(text, tone, durationMs) {
+    state.mineMessageText = String(text || "");
+    state.mineMessageTone = tone || "info";
+    state.mineMessageExpiresAt = Date.now() + Math.max(1200, Math.floor(Number(durationMs) || 0));
+  }
+
+  function getMineIdleTip(now) {
+    var tips = [
+      "Transfer coins whenever storage is ready.",
+      "Storage upgrades will come through the shop chest.",
+      "The mine keeps counting even when you leave and come back.",
+      "A full storage freezes the mine until you transfer."
+    ];
+    var safeNow = Number.isFinite(now) ? Math.max(0, Math.floor(now)) : Date.now();
+    return tips[Math.floor(safeNow / 30000) % tips.length];
+  }
+
+  function renderPreRunMineScreen() {
+    var now = Date.now();
+    var mineState = ensureMineEconomyState(now);
+    var walletBalance = getCoinWalletBalance();
+    var storageCoins = getMineStorageCoins();
+    var storageCapacity = getMineStorageCapacity();
+    var intervalMs = getMineIntervalMs();
+    var isFull = storageCoins >= storageCapacity;
+    var messageText = state.mineMessageText;
+    var messageTone = state.mineMessageTone || "info";
+
+    if (isFull && (!state.mineMessageText || state.mineMessageTone !== "warning" || now > state.mineMessageExpiresAt)) {
+      setMineMessage("Storage is full. Transfer the coins to your wallet.", "warning", 5200);
+      messageText = state.mineMessageText;
+      messageTone = state.mineMessageTone;
+    } else if (mineState.minedCoins > 0) {
+      setMineMessage(
+        "Mined " + mineState.minedCoins.toLocaleString("en-US") + " coin" + (mineState.minedCoins === 1 ? "" : "s") + " into storage.",
+        "success",
+        3600
+      );
+      messageText = state.mineMessageText;
+      messageTone = state.mineMessageTone;
+    } else if (!state.mineIntroShown && storageCoins === 0) {
+      state.mineIntroShown = true;
+      setMineMessage("The mine is warming up. Your first coin is on the way.", "info", 4200);
+      messageText = state.mineMessageText;
+      messageTone = state.mineMessageTone;
+    } else if (!isFull && storageCoins >= Math.ceil(storageCapacity * 0.5) && !state.mineHalfFullAnnounced) {
+      state.mineHalfFullAnnounced = true;
+      setMineMessage("Storage is half full. Transfer soon if you want to keep the mine flowing.", "info", 4200);
+      messageText = state.mineMessageText;
+      messageTone = state.mineMessageTone;
+    } else if (state.mineMessageText && now > state.mineMessageExpiresAt) {
+      state.mineMessageText = "";
+      state.mineMessageTone = "info";
+      state.mineMessageExpiresAt = 0;
+      messageText = getMineIdleTip(now);
+      messageTone = "info";
+    } else if (!state.mineMessageText) {
+      messageText = getMineIdleTip(now);
+      messageTone = "info";
+    }
+
+    if (preRunMineGfx2WalletValueEl) {
+      preRunMineGfx2WalletValueEl.textContent = walletBalance.toLocaleString("en-US");
+    }
+    if (preRunMineGfx2StorageValueEl) {
+      preRunMineGfx2StorageValueEl.textContent = storageCoins.toLocaleString("en-US") + " / " + storageCapacity.toLocaleString("en-US");
+    }
+    if (preRunMineGfx2CountdownEl) {
+      preRunMineGfx2CountdownEl.textContent = isFull
+        ? "FULL"
+        : formatMineCountdown(mineState.nextCoinInMs > 0 ? mineState.nextCoinInMs : intervalMs);
+      preRunMineGfx2CountdownEl.classList.toggle("is-full", isFull);
+    }
+    if (preRunMineGfx2TransferBtn) {
+      preRunMineGfx2TransferBtn.disabled = storageCoins <= 0;
+      preRunMineGfx2TransferBtn.setAttribute("aria-disabled", storageCoins <= 0 ? "true" : "false");
+    }
+    if (preRunMineGfx2MessageEl) {
+      preRunMineGfx2MessageEl.textContent = messageText;
+      preRunMineGfx2MessageEl.classList.remove("is-info", "is-success", "is-warning");
+      preRunMineGfx2MessageEl.classList.add(
+        messageTone === "success" ? "is-success" : messageTone === "warning" ? "is-warning" : "is-info"
+      );
+    }
+  }
+
+  function openPreRunMineScreen() {
+    unlockAudioIfNeeded();
+    playUiPageOpenSound();
+    state.mineMessageText = "";
+    state.mineMessageTone = "info";
+    state.mineMessageExpiresAt = 0;
+    state.mineHalfFullAnnounced = false;
+    state.mineIntroShown = false;
+    state.preRunStep = "mine";
+    renderPreRunScreen();
+  }
+
+  function handlePreRunMineBackNavigation() {
+    playUiPageOpenSound();
+    state.preRunStep = "select";
+    renderPreRunScreen();
+  }
+
+  function handleMineTransfer() {
+    ensureMineEconomyState(Date.now());
+    var transferAmount = transferMineStorageToWallet();
+    if (transferAmount <= 0) {
+      setMineMessage("There are no stored coins to transfer yet.", "info", 3200);
+      renderPreRunScreen();
+      return;
+    }
+    state.mineHalfFullAnnounced = false;
+    setMineMessage(
+      "Transferred " + transferAmount.toLocaleString("en-US") + " coin" + (transferAmount === 1 ? "" : "s") + " to the wallet.",
+      "success",
+      4600
+    );
+    renderPreRunScreen();
+  }
+
   function handlePreRunGfx2ShopPurchase() {
     var items = getPreRunGfx2ShopItems();
     var selectedItem = items[state.preRunGfx2ShopSelection] || items["coin-one"];
@@ -8723,6 +9046,16 @@ Main tuning points:
         renderPreRunScreen();
       });
     }
+    if (preRunGfx2MineBtn) {
+      preRunGfx2MineBtn.addEventListener("click", function () {
+        if (isPreRunGfx2SceneTransitionActive()) {
+          return;
+        }
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        openPreRunMineScreen();
+      });
+    }
     function openPreRunShop() {
       unlockAudioIfNeeded();
       playUiButtonSound();
@@ -9062,6 +9395,20 @@ Main tuning points:
         unlockAudioIfNeeded();
         playUiButtonSound();
         handlePreRunShopBackNavigation();
+      });
+    }
+    if (preRunMineGfx2ExitBtn) {
+      preRunMineGfx2ExitBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        handlePreRunMineBackNavigation();
+      });
+    }
+    if (preRunMineGfx2TransferBtn) {
+      preRunMineGfx2TransferBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        handleMineTransfer();
       });
     }
     if (preRunShopGfx2CoinOneBtn) {
@@ -11467,6 +11814,9 @@ Main tuning points:
       updateBadgeRewardSequence(dt);
     }
     updatePreRunGfx2CloudMotion(dt);
+    if (state.preRunActive && state.preRunStep === "mine" && !state.adminPaused) {
+      renderPreRunMineScreen();
+    }
     flushBadgeStatsStorage(false, dt);
     render();
 

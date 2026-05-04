@@ -1,4 +1,34 @@
-﻿# Hrrra - Working Changes Log
+# Hrrra - Working Changes Log
+
+- 2026-05-04: Removed the visible debug styling from the mine exit hotspot and the crossing mine entrance hotspot, leaving both as invisible clickable areas only.
+- 2026-05-04: Added a live mine screen refresh in the main frame loop so the storage countdown updates continuously after entering `mine_inside` instead of waiting for a page reload.
+- 2026-05-04: Shifted the mine bottom message text another 10 percentage points left, bringing the horizontal offset down to 10% from the original anchor.
+- 2026-05-04: Shifted the mine bottom message text 10 percentage points left from the previous 30% right offset, keeping the same vertical placement.
+- 2026-05-04: Moved the mine bottom message text 30% to the right relative to its current anchor so the status line can be evaluated against a much stronger horizontal offset.
+- 2026-05-04: Moved the mine bottom message text another 3 percentage points up and 30px to the right so the status line sits more naturally in the open lower artwork area.
+- 2026-05-04: Moved the mine bottom message text 5 percentage points up and 20px to the right so the "Mined xx coins" line sits closer to the intended artwork area.
+- 2026-05-04: Nudged the mine countdown wrapper 1 percentage point left and 1 percentage point down for a finer artwork-relative alignment.
+- 2026-05-04: Shifted the mine countdown wrapper 8 percentage points right and 15 percentage points down so the timer anchor follows the current artwork-relative layout.
+- 2026-05-04: Shifted the mine storage anchor 3 percentage points to the right while preserving its current vertical placement.
+- 2026-05-04: Shifted the mine storage anchor another 3 percentage points lower in the mine scene while keeping the countdown unchanged.
+- 2026-05-04: Shifted the mine storage anchor 5 percentage points lower in the mine scene while keeping the countdown unchanged.
+- 2026-05-04: Removed the remaining pixel nudges from the mine storage coin total so it now stays anchored with pure percentage positioning like the wallet value.
+- 2026-05-04: Nudged the mine storage coin total another 10px to the right, bringing the total horizontal offset to 20px inside the fixed overlay box.
+- 2026-05-04: Nudged the mine storage coin total 10px to the right while preserving its 50px downward offset inside the fixed overlay box.
+- 2026-05-04: Nudged the mine storage coin total 50px lower inside its fixed overlay box while leaving the countdown anchor untouched.
+- 2026-05-04: Reapplied artwork-relative anchoring for the mine storage total and countdown using fixed overlay boxes, matching the wallet-style placement instead of pixel offset tuning.
+- 2026-05-04: Reverted the fixed countdown wrapper experiment and restored the earlier mine storage/countdown anchoring so the values sit back in the previous artwork-relative layout.
+- 2026-05-04: Re-anchored the mine storage total and countdown into fixed overlay boxes so both sit in stable positions relative to the mine artwork, like the wallet value.
+- 2026-05-04: Shifted the mine storage total 40px left and the countdown 20px left while preserving their vertical offsets in the mine artwork.
+- 2026-05-04: Nudged the mine storage total 20px lower and the countdown 10px lower to tighten the alignment in the lower mine artwork.
+- 2026-05-04: Moved the mine storage total 30px lower and the countdown 20px lower so both labels sit farther down in the mine artwork.
+- 2026-05-04: Expanded the mine storage banner so the full `14 / 50` value fits cleanly, and moved the countdown farther up/right into the open lower scene area.
+- 2026-05-04: Repositioned the mine storage total deeper into the storage banner and confirmed the countdown sits above the lower text region with its own visible color and stacking.
+- 2026-05-04: Gave the mine countdown its own readable color and moved it further down/right into the lower mine area so it stays visible above the bottom text region.
+- 2026-05-04: Moved the mine storage value lower and slightly right to follow the arrow-marked placement, and simplified the bottom mine message area to text only without the decorative panel frame.
+- 2026-05-04: Moved the mine countdown out of the storage panel and anchored it as a separate plaque in the lower part of the mine scene so it sits in the red-box area beneath the chest.
+- 2026-05-04: Moved the mine countdown text lower under the storage total so it sits closer to the arrow-marked placement in the mine artwork.
+- 2026-05-04: Simplified the mine storage readout so the screen now shows only the raw `0 / 50` value and countdown time inside the artwork, removing the duplicate `COINS` and `NEXT COIN IN` labels from the mine UI.
 
 - 2026-05-04: Made the post-run badge reward overlay follow the same `Badges v2` trophy source as the badges screen, so unlocked badges use the v2 set in all modes/difficulties when the toggle is enabled.
 - 2026-05-04: Removed the shadow filter from the reward trophy image layers so the badge/skin unlock card no longer shows the dark framed outline around the icon.
@@ -25,7 +55,7 @@
 - 2026-04-24: Wired `assets/levelx/levelx_platform.png` into the Level 5 platform resolver so the bonus LevelX skin can swap the endless level platform art the same way it already swaps background and border art.
 - 2026-04-24: Reduced the top-left `Max Score` HUD label font size by 50% in `game.js` while keeping the `Score` line unchanged.
 
-- 2026-04-24: Made the GFX2 shop status row show `You donÂ´t have enough coins to buy it.` when `New Level` is selected but the wallet cannot afford it, instead of falling back to the generic buy prompt.
+- 2026-04-24: Made the GFX2 shop status row show `You don´t have enough coins to buy it.` when `New Level` is selected but the wallet cannot afford it, instead of falling back to the generic buy prompt.
 - 2026-04-24: Changed the GFX2 shop `New Level` state so once the bonus Level 5 skin is purchased, the cost field and status copy now say `Already purchased - enjoy new level 5 skin` instead of showing a price again.
 - 2026-04-23: Added `banger` and `unlocker` trophy slug mappings in `game.js` so the new `trophy_banger.png` and `trophy_unlocker.png` art files load automatically in the badges UI and unlock overlays.
 - 2026-04-23: Nudged the `trophy_xx` artwork 10% of its own height downward in both the badges overview and badge reward overlay while leaving `trophy_clean` untouched.
@@ -190,3 +220,37 @@
 - 2026-05-04: Hid the unused clean trophy layer in badge/skin reward overlays so only the badge art is rendered there; mode unlocks keep the clean base layer.
 - 2026-05-04: Hid the badge/skin reward trophy art during the opening intro state so it now appears together with the reward text during the reveal.
 - 2026-05-04: Hid trophy art on the badges screen for series with no collected tiers, so empty badge rows keep their slot but do not show the trophy image until the first badge is earned.
+- 2026-05-04: Added the first `mine_inside` screen shell: new mine entrance hotspot on the crossing page, a dedicated mine scene with exit/back navigation, and a wallet total display in the top-right so the economy flow has a landing page to build on.
+- 2026-05-04: Moved the mine entrance hotspot to the lower-left crossing area and gave it a visible debug frame so the intended click zone can be verified against the mine entrance art.
+- 2026-05-04: Refined the mine screen layout so the exit is only a clickable overlay over the existing EXIT art, the wallet label is removed in favor of the graphic, and the mine scene stretches like the shop interior to fill the available window.
+- 2026-05-04: Re-anchored the mine wallet number directly inside the wallet artwork so it scales with the scene instead of drifting with flex layout changes.
+- 2026-05-04: Moved the mine wallet number lower by roughly one digit height and reduced its scale by about one third to better fit the wallet graphic.
+- 2026-05-04: Nudged the mine wallet number a further half-digit height lower for tighter alignment with the wallet cutout.
+- 2026-05-04: Added a visible debug frame to the mine exit hotspot so the clickable overlay can be checked directly against the EXIT artwork.
+- 2026-05-04: Made the mine exit debug overlay more aggressive with an explicit block display, very high z-index, and visible outline so it cannot disappear behind scene styling.
+- 2026-05-04: Shifted the mine exit hitbox down by half of its own height so the clickable area sits more naturally on the EXIT artwork.
+- 2026-05-04: Shifted the mine exit hitbox down by another half of its own height to continue aligning the overlay with the lower EXIT art.
+- 2026-05-04: Added mine transfer logic and the mine info panel: storage now accumulates coins on a timestamped cycle, `Transfer` moves the stored coins into the wallet, and the bottom message box shows status/tip text for the mine screen.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2026-05-04 - Added a new global Mine admin section under Shop with Coin Timer, Storage, and Storage L2-L4 tuning fields, plus mine config defaults and validation for those values.
+2026-05-04 - Added the Mine admin tuning section under Shop, bumped the release metadata to 1.0.73 / versionCode 73, and ignored the local gfx2 temp export folder.
