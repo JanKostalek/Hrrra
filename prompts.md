@@ -425,3 +425,6 @@ ted uděláme bod číslo 7 z plánu na mine ekonomiku a to je upgrade storage s
 
 -------------------
 udelej bump verze, sync do www a android, commit to main a priprav aab. potom se vrat do new a over, ze jsou verze srovnane.
+
+-------------------
+udělej bump verze, sync do www i do android, commit to main, připrav aab, vrat se na new - ověř, že verze jsou vyčistene

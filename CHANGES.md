@@ -267,3 +267,4 @@
 2026-05-05 - Reworded mine idle tip 12 so it now says a bigger storage means fewer trips to the mine, and kept the face map table in sync.
 2026-05-05 - Added the Shop admin storage-upgrade pricing fields for mine chest upgrades and tightened mine storage capacity syncing so the active capacity follows the current upgrade level.
 2026-05-05 - Bumped the release metadata to 1.0.74 / versionCode 74 and prepared the next web/Android sync plus AAB build around the mine shop storage upgrade work.
+2026-05-05 - Bumped the release metadata to 1.0.75 / versionCode 75 and included the full mine face graphic set in the release sync so the mine message box can map all faces with fallback support.

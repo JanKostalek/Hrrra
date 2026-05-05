@@ -1,9 +1,12 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 74,
-  versionName: "1.0.74",
+  versionCode: 75,
+  versionName: "1.0.75",
   whatsNew: [
-  "Release bump to version 1.0.74.",
+  "Release bump to version 1.0.75.",
+  "Mine face graphics in the mine message box now cover the full 01 to 14 set with fallback support.",
+  "Mine storage shop upgrades stay synced with admin-tuned Level 2 to 4 prices.",
   "Mine storage upgrades now appear in the Shop chest with admin-tuned Level 2 to 4 prices.",
+  "Release bump to version 1.0.74.",
   "Mine economy admin tuning fields were added for coin timer and storage capacity presets.",
   "Release bump to version 1.0.73.",
   "Release bump to version 1.0.72.",
