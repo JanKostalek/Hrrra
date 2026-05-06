@@ -48,10 +48,9 @@ Main tuning points:
   var touchControls = document.getElementById("touch-controls");
   var ctx = canvas.getContext("2d");
   var gameOverEl = document.getElementById("game-over");
-  var gameOverBannerEl = document.getElementById("game-over-banner");
-  var finalScoreEl = document.getElementById("final-score");
-  var finalRuntimeEl = document.getElementById("final-runtime");
-  var finalCoinsEarnedEl = document.getElementById("final-coins-earned");
+    var gameOverBannerEl = document.getElementById("game-over-banner");
+    var finalScoreEl = document.getElementById("final-score");
+    var finalCoinsEarnedEl = document.getElementById("final-coins-earned");
   var finalWalletBalanceEl = document.getElementById("final-wallet-balance");
   var finalContinueStatusEl = document.getElementById("final-continue-status");
   var finalContinueActionsEl = document.getElementById("final-continue-actions");
@@ -8555,9 +8554,6 @@ Main tuning points:
 
     if (finalScoreEl) {
       finalScoreEl.textContent = "Score: " + state.score;
-    }
-    if (finalRuntimeEl) {
-      finalRuntimeEl.textContent = "Run Time: " + state.runTimeSeconds.toFixed(1) + "s";
     }
     if (finalCoinsEarnedEl) {
       finalCoinsEarnedEl.textContent = "Coins Collected: " + state.collectedCoins.toLocaleString("en-US");

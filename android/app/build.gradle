@@ -3,14 +3,27 @@ apply plugin: 'com.android.application'
 def keystorePropertiesFile = rootProject.file('key.properties')
 def keystoreProperties = new Properties()
 def hasReleaseKeystore = keystorePropertiesFile.exists()
+def admobPropertiesFile = rootProject.file('../.key/admob.properties')
+def admobProperties = new Properties()
+def hasAdmobProperties = admobPropertiesFile.exists()
 
 if (hasReleaseKeystore) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+if (hasAdmobProperties) {
+    admobProperties.load(new FileInputStream(admobPropertiesFile))
+}
+
+def admobAppId = admobProperties.getProperty('admobAppId', 'ca-app-pub-6900731066060353~5995679934')
+def admobRewardedAdUnitId = admobProperties.getProperty('admobRewardedAdUnitId', 'ca-app-pub-3940256099942544/5224354917')
+
 android {
     namespace = "cz.hrrra.game"
     compileSdk = rootProject.ext.compileSdkVersion
+    buildFeatures {
+        buildConfig = true
+    }
     signingConfigs {
         if (hasReleaseKeystore) {
             release {
@@ -25,9 +38,11 @@ android {
         applicationId "cz.hrrra.game"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 76
-        versionName "1.0.76"
+        versionCode 77
+        versionName "1.0.77"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [admobAppId: admobAppId]
+        buildConfigField "String", "ADMOB_REWARDED_AD_UNIT_ID", "\"${admobRewardedAdUnitId}\""
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61

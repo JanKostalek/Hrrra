@@ -116,7 +116,7 @@ body {
 
 .game-over-banner {
   display: block;
-  width: min(37vw, 380px);
+  width: min(31.5vw, 323px);
   max-width: 92vw;
   height: auto;
   margin: 0 auto 12px;
@@ -522,7 +522,7 @@ body {
   width: min(100%, 2200px);
   display: grid;
   grid-template-columns: clamp(240px, 30vw, 480px) minmax(180px, 1fr) clamp(240px, 30vw, 480px);
-  align-items: center;
+  align-items: start;
   gap: 12px;
   margin: 0 0 18px;
 }
@@ -531,12 +531,12 @@ body {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 0 4px;
   width: 100%;
   text-align: center;
-  transform: translateY(-6%);
+  transform: translateY(-4px);
 }
 
 #final-current-run p {
@@ -5455,14 +5455,14 @@ body.visual-theme-retro .brief-live::before {
 @media (max-width: 1280px),
 (max-height: 880px) {
   .game-over-banner {
-    width: min(40vw, 340px);
+    width: min(34vw, 289px);
     margin-bottom: 10px;
     position: static;
     transform: none;
   }
 
   #final-current-run {
-    padding: 2px 4px;
+    padding: 0 4px;
   }
 
   #final-current-run p {
@@ -5555,7 +5555,7 @@ body.visual-theme-retro .brief-live::before {
   }
 
   .game-over-banner {
-    width: min(42vw, 310px);
+    width: min(35.7vw, 264px);
     margin-bottom: 10px;
     position: static;
     transform: none;
@@ -5564,7 +5564,7 @@ body.visual-theme-retro .brief-live::before {
   #final-current-run {
     order: 0;
     padding: 0 4px;
-    transform: translateY(-6%);
+    transform: translateY(-2px);
   }
 
   #final-current-run p {
@@ -5673,7 +5673,7 @@ body.visual-theme-retro .brief-live::before {
   }
 
   .game-over-banner {
-    width: min(44vw, 270px);
+    width: min(37.4vw, 230px);
     margin-bottom: 8px;
     position: static;
     transform: none;
@@ -5687,8 +5687,8 @@ body.visual-theme-retro .brief-live::before {
 
   #final-current-run {
     order: -1;
-    padding: 2px 0 0;
-    transform: translateY(-4%);
+    padding: 0;
+    transform: translateY(-2px);
   }
 
   #final-current-run p {
@@ -6010,13 +6010,13 @@ body.visual-theme-retro .brief-live::before {
   }
 
   .game-over-banner {
-    width: min(35vw, 280px);
+    width: min(29.75vw, 238px);
     margin-bottom: 8px;
   }
 
   #final-current-run {
     padding: 0 0;
-    transform: translateY(-6%);
+    transform: translateY(-2px);
   }
 
   #final-current-run p {

@@ -98,7 +98,7 @@ public class RewardedContinuePlugin extends Plugin {
 
         RewardedAd.load(
             activity,
-            activity.getString(R.string.admob_rewarded_ad_unit_id),
+            BuildConfig.ADMOB_REWARDED_AD_UNIT_ID,
             new AdRequest.Builder().build(),
             new RewardedAdLoadCallback() {
                 @Override

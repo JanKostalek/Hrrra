@@ -453,3 +453,7 @@ kdyz zpusim na android emulatoru, tak se objevi intro page, pak grafika page a p
 -------------------
 ted udelej verio bumb, sync to www and android, commit to main, pak priprav aab, vrat se na new a over, ze jsou verze shodne
 -------------------
+které potřebuješ? případně je obě ulož do .key
+-------------------
+udelej novy version bump, sync to www / android, commit to main, vytvor aab, vrat se do main, over, ze je vse ciste
+-------------------

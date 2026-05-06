@@ -272,3 +272,5 @@
 2026-05-05 - Bumped the release metadata to 1.0.75 / versionCode 75 and included the full mine face graphic set in the release sync so the mine message box can map all faces with fallback support.
 2026-05-06 - Added a continue flow split between coin purchase and rewarded ad watch, with a 5-second fake ad countdown on web/local and a native Android rewarded-ad bridge for real continue rewards.
 2026-05-06 - Bumped the release metadata to 1.0.76 / versionCode 76 and synced the release payload into web and Android packaging for the next build.
+2026-05-06 - Moved the Android AdMob app ID and rewarded ad unit ID into local `.key/admob.properties` and wired the Android build to read them from that hidden file.
+2026-05-06 - Bumped the release metadata to 1.0.77 / versionCode 77 and prepared the current continue/AdMob config snapshot for the next build.
