@@ -428,3 +428,14 @@ udelej bump verze, sync do www a android, commit to main a priprav aab. potom se
 
 -------------------
 udělej bump verze, sync do www i do android, commit to main, připrav aab, vrat se na new - ověř, že verze jsou vyčistene
+Ted jeste v shopu změn "Total Points" na "Total Score Poins"
+
+-------------------
+
+prejmenuj "Short Timer" na "Faster Coin Mining (xx s)" kde xx bude hodnota z admin. i v admin zmen název na "Faster Maining"
+
+-------------------
+
+Zatim nic nedelej jen odpovez, zda rozumís co chci a jak bys to udelal. chci udělat změnu v shop strance. na obrázku jsem označil grafiku, z které se dá koupit 1 coin. Chci změnit tu mechaniku. chci aby se tady kupoval kratší timer pro mining coins v mine. nyní je timer nastaveny na 60s - nastavuje se to v administraci . po koupi to kratsiho timeru se zkratí čas - nyní trea na 30s. To znamena, ze je potreba do shop v administraci změnit / pridat cenu za "Short Timer" a do mine v administraci pridat short timer a hodnotu, aby sla taky měnit. V shop page je potreba upravit texty, které se objevují pred nákupem, aby načítal čas, který bude po zkráceném timeru - hodnota co bude v administraci.
+
+-------------------

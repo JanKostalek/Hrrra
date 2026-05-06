@@ -1024,7 +1024,7 @@ Main tuning points:
 
   function createDefaultEconomyStats() {
     var defaultMineStorageCapacity = sanitizeGlobalAdminNumber("mineStorageCapacity", C.mineStorageCapacity);
-    var defaultMineIntervalMs = sanitizeGlobalAdminNumber("mineCoinTimerMs", C.mineCoinTimerMs);
+    var defaultMineIntervalMs = getMineBaseIntervalMs();
     return {
       coinsBalance: 0,
       totalCoinsEarned: 0,
@@ -1035,7 +1035,8 @@ Main tuning points:
       mineMineIntervalMs: defaultMineIntervalMs,
       mineNextCoinAt: 0,
       mineFrozenRemainingMs: 0,
-      mineUnlocked: true
+      mineUnlocked: true,
+      mineShortTimerUnlocked: false
     };
   }
 
@@ -1055,6 +1056,7 @@ Main tuning points:
     out.mineNextCoinAt = Number.isFinite(raw.mineNextCoinAt) ? Math.max(0, Math.floor(Number(raw.mineNextCoinAt))) : defaults.mineNextCoinAt;
     out.mineFrozenRemainingMs = Number.isFinite(raw.mineFrozenRemainingMs) ? Math.max(0, Math.floor(Number(raw.mineFrozenRemainingMs))) : defaults.mineFrozenRemainingMs;
     out.mineUnlocked = typeof raw.mineUnlocked === "boolean" ? raw.mineUnlocked : defaults.mineUnlocked;
+    out.mineShortTimerUnlocked = typeof raw.mineShortTimerUnlocked === "boolean" ? raw.mineShortTimerUnlocked : defaults.mineShortTimerUnlocked;
     out.mineStorageCoins = Math.min(out.mineStorageCoins, out.mineStorageCapacity);
     return out;
   }
@@ -2512,6 +2514,7 @@ Main tuning points:
       key === "shopKrobPrice" ||
       key === "shopSkin05Price" ||
       key === "shopSpecialLevelPrice" ||
+      key === "shopMineShortTimerPrice" ||
       key === "shopMineStorageLevel2Price" ||
       key === "shopMineStorageLevel3Price" ||
       key === "shopMineStorageLevel4Price"
@@ -2521,7 +2524,7 @@ Main tuning points:
     if (key === "shopScorePerCoin" || key === "shopContinueLivesGranted") {
       return Math.max(1, parsed);
     }
-    if (key === "mineCoinTimerMs") {
+    if (key === "mineCoinTimerMs" || key === "mineShortTimerMs") {
       return Math.max(1000, parsed);
     }
     if (
@@ -2551,8 +2554,25 @@ Main tuning points:
     return Math.max(1, Math.floor((economyStats && economyStats.mineStorageCapacity) || 50));
   }
 
+  function getMineBaseIntervalMs() {
+    return Math.max(1000, Math.floor(sanitizeGlobalAdminNumber("mineCoinTimerMs", C.mineCoinTimerMs)));
+  }
+
+  function getMineShortTimerMs() {
+    return Math.max(1000, Math.floor(sanitizeGlobalAdminNumber("mineShortTimerMs", C.mineShortTimerMs)));
+  }
+
+  function formatMineShortTimerSecondsLabel(milliseconds) {
+    var safeMs = Math.max(1000, Math.floor(Number(milliseconds) || 0));
+    return Math.max(1, Math.floor(safeMs / 1000)).toLocaleString("en-US");
+  }
+
+  function isMineShortTimerUnlocked() {
+    return Boolean(economyStats && economyStats.mineShortTimerUnlocked);
+  }
+
   function getMineIntervalMs() {
-    return Math.max(1000, Math.floor((economyStats && economyStats.mineMineIntervalMs) || 60000));
+    return isMineShortTimerUnlocked() ? getMineShortTimerMs() : getMineBaseIntervalMs();
   }
 
   function getMineNextCoinAt() {
@@ -2713,8 +2733,14 @@ Main tuning points:
       economyStats.mineStorageCapacity = expectedStorageCapacity;
       changed = true;
     }
-    if (!Number.isFinite(economyStats.mineMineIntervalMs) || economyStats.mineMineIntervalMs < 1000) {
+    if (!Number.isFinite(economyStats.mineMineIntervalMs) || economyStats.mineMineIntervalMs < 1000 || economyStats.mineMineIntervalMs !== intervalMs) {
       economyStats.mineMineIntervalMs = intervalMs;
+      if (economyStats.mineNextCoinAt > 0) {
+        economyStats.mineNextCoinAt = Math.min(economyStats.mineNextCoinAt, safeNow + intervalMs);
+      }
+      if (economyStats.mineFrozenRemainingMs > 0) {
+        economyStats.mineFrozenRemainingMs = Math.min(economyStats.mineFrozenRemainingMs, intervalMs);
+      }
       changed = true;
     }
     if (!Number.isFinite(economyStats.mineNextCoinAt) || economyStats.mineNextCoinAt < 0) {
@@ -2727,6 +2753,10 @@ Main tuning points:
     }
     if (typeof economyStats.mineUnlocked !== "boolean") {
       economyStats.mineUnlocked = true;
+      changed = true;
+    }
+    if (typeof economyStats.mineShortTimerUnlocked !== "boolean") {
+      economyStats.mineShortTimerUnlocked = false;
       changed = true;
     }
 
@@ -5474,7 +5504,7 @@ Main tuning points:
     preRunGfx2IdleCountdown: 20,
     preRunGfx2WaitActive: false,
     preRunGfx2WaitAnimTime: 0,
-    preRunGfx2ShopSelection: "coin-one",
+    preRunGfx2ShopSelection: "short-timer",
     preRunGfx2ShopVisitCoinTotal: 0,
     preRunGfx2ShopStatus: "",
     preRunGfx2ShopStatusTone: "info",
@@ -5727,6 +5757,7 @@ Main tuning points:
         { key: "shopKrobPrice", label: "Krob Price", type: "number", min: 0, step: 1 },
         { key: "shopSkin05Price", label: "Grey Price", type: "number", min: 0, step: 1 },
         { key: "shopSpecialLevelPrice", label: "New Level Price", type: "number", min: 0, step: 1 },
+        { key: "shopMineShortTimerPrice", label: "Faster Maining Price", type: "number", min: 0, step: 1 },
         { key: "shopMineStorageLevel2Price", label: "Mine Storage Level 2 Price", type: "number", min: 0, step: 1 },
         { key: "shopMineStorageLevel3Price", label: "Mine Storage Level 3 Price", type: "number", min: 0, step: 1 },
         { key: "shopMineStorageLevel4Price", label: "Mine Storage Level 4 Price", type: "number", min: 0, step: 1 }
@@ -5736,6 +5767,7 @@ Main tuning points:
       title: "Mine",
       fields: [
         { key: "mineCoinTimerMs", label: "Coin Timer (ms)", type: "number", min: 1000, step: 1000 },
+        { key: "mineShortTimerMs", label: "Faster Maining (ms)", type: "number", min: 1000, step: 1000 },
         { key: "mineStorageCapacity", label: "Storage", type: "number", min: 1, step: 1 },
         { key: "mineStorageCapacityL2", label: "Storage L2", type: "number", min: 1, step: 1 },
         { key: "mineStorageCapacityL3", label: "Storage L3", type: "number", min: 1, step: 1 },
@@ -8439,19 +8471,28 @@ Main tuning points:
     var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
     var skin05Price = sanitizeGlobalAdminNumber("shopSkin05Price", C.shopSkin05Price);
     var specialLevelPrice = sanitizeGlobalAdminNumber("shopSpecialLevelPrice", C.shopSpecialLevelPrice);
+    var shortTimerPrice = sanitizeGlobalAdminNumber("shopMineShortTimerPrice", C.shopMineShortTimerPrice);
+    var shortTimerMs = getMineShortTimerMs();
+    var shortTimerSecondsLabel = formatMineShortTimerSecondsLabel(shortTimerMs);
     var mineStorageMeta = getMineStorageUpgradeMeta();
     var levelXUnlocked = isLevelXUnlocked();
     var skin05Owned = isSkinUnlocked("Skin05");
+    var shortTimerOwned = isMineShortTimerUnlocked();
+    var shortTimerItem = {
+      key: "short-timer",
+      label: shortTimerOwned
+        ? "Faster Coin Mining (" + shortTimerSecondsLabel + " s) (Owned)"
+        : "Faster Coin Mining (" + shortTimerSecondsLabel + " s)",
+      cost: shortTimerPrice,
+      costUnit: "coins",
+      type: "mine-short-timer",
+      timerMs: shortTimerMs,
+      timerLabel: shortTimerSecondsLabel + " s"
+    };
 
     return {
-      "coin-one": {
-        key: "coin-one",
-        label: "Buy 1 Coin",
-        cost: scorePerCoin,
-        costUnit: "score",
-        type: "score-exchange",
-        amount: 1
-      },
+      "short-timer": shortTimerItem,
+      "coin-one": shortTimerItem,
       "coin-ten": {
         key: "coin-ten",
         label: "Buy 10 Coins",
@@ -8519,6 +8560,9 @@ Main tuning points:
     }
     if (item.type === "skin-05" && isSkinUnlocked("Skin05")) {
       return "Already purchased - enjoy Grey";
+    }
+    if (item.type === "mine-short-timer" && isMineShortTimerUnlocked()) {
+      return "Already purchased - faster coin mining active";
     }
     if (item.type === "storage-upgrade" && item.isSold) {
       return "Sold";
@@ -8821,7 +8865,7 @@ Main tuning points:
 
   function handlePreRunGfx2ShopPurchase() {
     var items = getPreRunGfx2ShopItems();
-    var selectedItem = items[state.preRunGfx2ShopSelection] || items["coin-one"];
+    var selectedItem = items[state.preRunGfx2ShopSelection] || items["short-timer"];
     if (!selectedItem) {
       return;
     }
@@ -8840,6 +8884,27 @@ Main tuning points:
       } else {
         state.preRunGfx2ShopStatus = "Not enough total points for this purchase.";
         state.preRunGfx2ShopStatusTone = "error";
+      }
+      renderPreRunShopScreen();
+      return;
+    }
+
+    if (selectedItem.type === "mine-short-timer") {
+      var shortTimerMs = getMineShortTimerMs();
+      if (isMineShortTimerUnlocked()) {
+        state.preRunGfx2ShopStatus =
+          "Faster Coin Mining is already active. Mine coins now arrive every " + formatMineCountdown(shortTimerMs) + ".";
+        state.preRunGfx2ShopStatusTone = "success";
+      } else if (!spendCoinsFromWallet(selectedItem.cost)) {
+        state.preRunGfx2ShopStatus = "Not enough coins for Faster Coin Mining.";
+        state.preRunGfx2ShopStatusTone = "error";
+      } else {
+        economyStats.mineShortTimerUnlocked = true;
+        economyStats.mineMineIntervalMs = shortTimerMs;
+        writeEconomyStats();
+        state.preRunGfx2ShopStatus =
+          "Faster Coin Mining unlocked. Mine coins now arrive every " + formatMineCountdown(shortTimerMs) + ".";
+        state.preRunGfx2ShopStatusTone = "success";
       }
       renderPreRunShopScreen();
       return;
@@ -8974,13 +9039,16 @@ Main tuning points:
     }
 
     var gfx2Items = getPreRunGfx2ShopItems();
+    if (state.preRunGfx2ShopSelection === "coin-one" && gfx2Items["short-timer"]) {
+      state.preRunGfx2ShopSelection = "short-timer";
+    }
     if (state.preRunGfx2ShopSelection === "skin-cat" && gfx2Items["skin-05"]) {
       state.preRunGfx2ShopSelection = "skin-05";
     }
     if (!gfx2Items[state.preRunGfx2ShopSelection]) {
-      state.preRunGfx2ShopSelection = "coin-one";
+      state.preRunGfx2ShopSelection = "short-timer";
     }
-    var selectedItem = gfx2Items[state.preRunGfx2ShopSelection] || gfx2Items["coin-one"];
+    var selectedItem = gfx2Items[state.preRunGfx2ShopSelection] || gfx2Items["short-timer"];
 
     if (preRunShopGfx2TotalValueEl) {
       preRunShopGfx2TotalValueEl.textContent = persistentScore.toLocaleString("en-US");
@@ -8999,7 +9067,13 @@ Main tuning points:
     }
     if (preRunShopGfx2StatusEl) {
       var statusText = state.preRunGfx2ShopStatus || "Select an item and press Buy.";
-      if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "special-level" && !isLevelXUnlocked() && walletBalance < selectedItem.cost) {
+      if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "mine-short-timer" && isMineShortTimerUnlocked()) {
+        statusText = "Faster Coin Mining is already active. Mine coins arrive every " + formatMineCountdown(selectedItem.timerMs) + ".";
+      } else if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "mine-short-timer" && walletBalance < selectedItem.cost) {
+        statusText = "You don´t have enough coins to buy it.";
+      } else if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "mine-short-timer") {
+        statusText = "Unlock Faster Coin Mining. Mine coins will arrive every " + formatMineCountdown(selectedItem.timerMs) + " after purchase.";
+      } else if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "special-level" && !isLevelXUnlocked() && walletBalance < selectedItem.cost) {
         statusText = "You don´t have enough coins to buy it.";
       } else if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "skin-05" && !skin05Owned && walletBalance < selectedItem.cost) {
         statusText = "You don´t have enough coins to buy it.";
@@ -9018,7 +9092,7 @@ Main tuning points:
     }
 
     var shopButtons = [
-      { button: preRunShopGfx2CoinOneBtn, key: "coin-one" },
+      { button: preRunShopGfx2CoinOneBtn, key: "short-timer" },
       { button: preRunShopGfx2CoinTenBtn, key: "coin-ten" },
       { button: preRunShopGfx2NewLevelBtn, key: "new-level" },
       { button: preRunShopGfx2SkinCatBtn, key: "skin-05" },
@@ -9045,17 +9119,21 @@ Main tuning points:
     if (preRunShopGfx2BuyBtn) {
       var selectedIsSpecialLevel = selectedItem && selectedItem.type === "special-level";
       var selectedIsSkin05 = selectedItem && selectedItem.type === "skin-05";
+      var selectedIsMineShortTimer = selectedItem && selectedItem.type === "mine-short-timer";
       var selectedIsStorageUpgrade = selectedItem && selectedItem.type === "storage-upgrade";
       preRunShopGfx2BuyBtn.disabled = Boolean(
+        (selectedIsMineShortTimer && (isMineShortTimerUnlocked() || walletBalance < selectedItem.cost)) ||
         (selectedIsSpecialLevel && (isLevelXUnlocked() || walletBalance < selectedItem.cost)) ||
         (selectedIsSkin05 && (skin05Owned || walletBalance < selectedItem.cost)) ||
         (selectedIsStorageUpgrade && (mineStorageMeta.isMaxed || walletBalance < selectedItem.cost))
       );
       preRunShopGfx2BuyBtn.textContent =
-        (selectedIsSpecialLevel && isLevelXUnlocked()) || (selectedIsSkin05 && skin05Owned) || (selectedIsStorageUpgrade && mineStorageMeta.isMaxed)
+        (selectedIsMineShortTimer && isMineShortTimerUnlocked()) || (selectedIsSpecialLevel && isLevelXUnlocked()) || (selectedIsSkin05 && skin05Owned) || (selectedIsStorageUpgrade && mineStorageMeta.isMaxed)
           ? "Owned"
           : "Buy";
-      if (selectedIsStorageUpgrade && mineStorageMeta.isMaxed) {
+      if (selectedIsMineShortTimer && isMineShortTimerUnlocked()) {
+        preRunShopGfx2BuyBtn.textContent = "Owned";
+      } else if (selectedIsStorageUpgrade && mineStorageMeta.isMaxed) {
         preRunShopGfx2BuyBtn.textContent = "Sold";
       }
     }
@@ -9688,7 +9766,7 @@ Main tuning points:
       preRunShopGfx2CoinOneBtn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
-        selectPreRunGfx2ShopItem("coin-one");
+        selectPreRunGfx2ShopItem("short-timer");
       });
     }
     if (preRunShopGfx2CoinTenBtn) {
