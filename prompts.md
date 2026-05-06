@@ -428,6 +428,10 @@ udelej bump verze, sync do www a android, commit to main a priprav aab. potom se
 
 -------------------
 udělej bump verze, sync do www i do android, commit to main, připrav aab, vrat se na new - ověř, že verze jsou vyčistene
+dorovnej i remote
+
+-------------------
+
 Ted jeste v shopu změn "Total Points" na "Total Score Poins"
 
 -------------------
