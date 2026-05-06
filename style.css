@@ -612,6 +612,10 @@ body {
   filter: drop-shadow(0 2px 0 rgba(90, 56, 18, 0.18));
 }
 
+#final-watch-ad-btn {
+  filter: drop-shadow(0 2px 0 rgba(90, 56, 18, 0.18));
+}
+
 #continue-purchase-overlay {
   position: fixed;
   inset: 0;

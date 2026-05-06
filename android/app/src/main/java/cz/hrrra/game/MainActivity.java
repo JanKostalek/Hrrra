@@ -40,6 +40,7 @@ public class MainActivity extends BridgeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         registerPlugin(PrivacyOptionsPlugin.class);
+        registerPlugin(RewardedContinuePlugin.class);
         super.onCreate(savedInstanceState);
         adContainer = findViewById(R.id.ad_container);
         if (!ADS_ENABLED && adContainer != null) {

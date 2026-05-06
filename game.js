@@ -56,6 +56,7 @@ Main tuning points:
   var finalContinueStatusEl = document.getElementById("final-continue-status");
   var finalContinueActionsEl = document.getElementById("final-continue-actions");
   var finalContinueBtn = document.getElementById("final-continue-btn");
+  var finalWatchAdBtn = document.getElementById("final-watch-ad-btn");
   var finalEndRunBtn = document.getElementById("final-end-run-btn");
   var continuePurchaseOverlayEl = document.getElementById("continue-purchase-overlay");
   var continuePurchaseHeartsEl = document.getElementById("continue-purchase-hearts");
@@ -2880,20 +2881,28 @@ Main tuning points:
     renderAdminForm();
   }
 
+  function getContinueAdUsesRemaining() {
+    return Math.max(0, 2 - Math.max(0, Math.floor(Number(state.continueAdUsesThisRun) || 0)));
+  }
+
+  function hasFirstContinueOpportunityForCurrentRun() {
+    return state.continueUsesThisRun < 1 && state.continueAdUsesThisRun < 1 && getContinueCoinPrice() > 0;
+  }
+
+  function canUseContinueAdForCurrentRun() {
+    return !state.runFinalized && getContinueAdUsesRemaining() > 0;
+  }
+
   function shouldShowContinueForCurrentRun() {
-    return (
-      !state.runFinalized &&
-      state.continueUsesThisRun < 1 &&
-      getContinueCoinPrice() > 0
-    );
+    return !state.runFinalized && (hasFirstContinueOpportunityForCurrentRun() || canUseContinueAdForCurrentRun());
   }
 
   function canBuyContinueForCurrentRun() {
-    return shouldShowContinueForCurrentRun() && getWalletBalanceAfterRunPreview() >= getContinueCoinPrice();
+    return hasFirstContinueOpportunityForCurrentRun() && getWalletBalanceAfterRunPreview() >= getContinueCoinPrice();
   }
 
   function canReturnToPreRunFromGameOver() {
-    return state.continueUsesThisRun > 0 && !state.continueOfferActive && !state.continuePurchaseOverlayActive;
+    return !state.continueOfferActive && !state.continuePurchaseOverlayActive && !state.continueAdWatchActive;
   }
 
   function getSelectedContinueLifeTotalPrice() {
@@ -2990,6 +2999,112 @@ Main tuning points:
     state.continuePurchaseSelectedLives = 0;
     state.continuePurchaseOverlayActive = true;
     renderContinuePurchaseOverlay();
+  }
+
+  function getContinueAdRewardLives() {
+    return state.gameDifficulty === "hard" ? 2 : 3;
+  }
+
+  function clearContinueAdWatchTimer() {
+    if (state.continueAdWatchTimerId) {
+      window.clearInterval(state.continueAdWatchTimerId);
+      state.continueAdWatchTimerId = 0;
+    }
+  }
+
+  function finishContinueAdWatch(rewarded) {
+    clearContinueAdWatchTimer();
+    state.continueAdWatchActive = false;
+    state.continueAdWatchMode = "";
+    state.continueAdWatchSecondsLeft = 0;
+
+    if (!rewarded) {
+      state.continueOfferActive = shouldShowContinueForCurrentRun();
+      updateGameOverSummary();
+      return;
+    }
+
+    incrementBadgeLifetimeStat("continuesUsed", 1);
+    renderAdminForm();
+    revivePlayerAfterContinue(getContinueAdRewardLives(), "ad");
+  }
+
+  function updateContinueAdCountdown() {
+    if (!state.continueAdWatchActive || state.continueAdWatchMode !== "fake") {
+      return;
+    }
+
+    state.continueAdWatchSecondsLeft = Math.max(0, state.continueAdWatchSecondsLeft - 1);
+    if (state.continueAdWatchSecondsLeft <= 0) {
+      finishContinueAdWatch(true);
+      return;
+    }
+    updateGameOverSummary(true);
+  }
+
+  function startFakeContinueAdWatch() {
+    clearContinueAdWatchTimer();
+    state.continueAdWatchActive = true;
+    state.continueAdWatchMode = "fake";
+    state.continueAdWatchSecondsLeft = 5;
+    state.continueOfferActive = false;
+    updateGameOverSummary();
+    state.continueAdWatchTimerId = window.setInterval(updateContinueAdCountdown, 1000);
+  }
+
+  function handleContinueAdWatchFailure(message) {
+    clearContinueAdWatchTimer();
+    state.continueAdWatchActive = false;
+    state.continueAdWatchMode = "";
+    state.continueAdWatchSecondsLeft = 0;
+    state.continueOfferActive = shouldShowContinueForCurrentRun();
+    updateGameOverSummary();
+  }
+
+  function startNativeContinueAdWatch() {
+    var plugin =
+      window.Capacitor &&
+      window.Capacitor.Plugins &&
+      window.Capacitor.Plugins.RewardedContinue &&
+      typeof window.Capacitor.Plugins.RewardedContinue.show === "function"
+        ? window.Capacitor.Plugins.RewardedContinue
+        : null;
+
+    if (!plugin) {
+      handleContinueAdWatchFailure("Rewarded ads are unavailable on this device.");
+      return;
+    }
+
+    state.continueAdWatchActive = true;
+    state.continueAdWatchMode = "android";
+    state.continueAdWatchSecondsLeft = 0;
+    state.continueOfferActive = false;
+    updateGameOverSummary();
+
+    plugin
+      .show()
+      .then(function (result) {
+        if (!result || result.rewarded !== true) {
+          handleContinueAdWatchFailure("Rewarded ad was not completed.");
+          return;
+        }
+        finishContinueAdWatch(true);
+      })
+      .catch(function (error) {
+        handleContinueAdWatchFailure(error && error.message ? error.message : "Rewarded ad failed.");
+      });
+  }
+
+  function startContinueAdWatch() {
+    if (!state.continueOfferActive || !canUseContinueAdForCurrentRun() || state.continueAdWatchActive) {
+      return;
+    }
+
+    if (isNativeAndroidPlatform()) {
+      startNativeContinueAdWatch();
+      return;
+    }
+    startFakeContinueAdWatch();
   }
 
   function getHardModeUnlockLevel() {
@@ -5476,9 +5591,14 @@ Main tuning points:
     gameOverInputBlockUntil: 0,
     lifeLossInvulnerabilityTimeLeft: 0,
     continueUsesThisRun: 0,
+    continueAdUsesThisRun: 0,
     continueOfferActive: false,
     continuePurchaseOverlayActive: false,
     continuePurchaseSelectedLives: 0,
+    continueAdWatchActive: false,
+    continueAdWatchMode: "",
+    continueAdWatchSecondsLeft: 0,
+    continueAdWatchTimerId: 0,
     runFinalized: false,
     preRunDifficultyLockNoticeActive: false,
     preRunDifficultyFlipTimerId: 0,
@@ -8241,9 +8361,14 @@ Main tuning points:
     state.pendingFreshRunStart = true;
     state.badgeCursedSecondsAccumulator = 0;
     state.continueUsesThisRun = 0;
+    state.continueAdUsesThisRun = 0;
     state.continueOfferActive = false;
     state.continuePurchaseOverlayActive = false;
     state.continuePurchaseSelectedLives = 0;
+    state.continueAdWatchActive = false;
+    state.continueAdWatchMode = "";
+    state.continueAdWatchSecondsLeft = 0;
+    clearContinueAdWatchTimer();
     state.runFinalized = false;
     state.lifeLossInvulnerabilityTimeLeft = 0;
     loadCurrentLevelConfig();
@@ -8422,6 +8547,11 @@ Main tuning points:
     var walletBalance = getCoinWalletBalance();
     var continuePrice = getContinueCoinPrice();
     var canBuyContinue = canBuyContinueForCurrentRun();
+    var canUseAdContinue = canUseContinueAdForCurrentRun();
+    var showFirstCoinContinue = hasFirstContinueOpportunityForCurrentRun();
+    var easyAdRewardLives = 3;
+    var hardAdRewardLives = 2;
+    var isAdWatching = state.continueAdWatchActive;
 
     if (finalScoreEl) {
       finalScoreEl.textContent = "Score: " + state.score;
@@ -8438,22 +8568,61 @@ Main tuning points:
         : "Wallet After Run: " + getWalletBalanceAfterRunPreview().toLocaleString("en-US");
     }
     if (finalContinueStatusEl) {
-      if (state.continueOfferActive) {
-        finalContinueStatusEl.textContent = canBuyContinue
-          ? "Each life costs " + continuePrice.toLocaleString("en-US") + " coins. Tap Continue to choose how many lives to buy."
-          : "Not enough coins to purchase a continue. Each life costs " + continuePrice.toLocaleString("en-US") + " coins.";
+      if (isAdWatching) {
+        if (state.continueAdWatchMode === "fake") {
+          finalContinueStatusEl.textContent =
+            "Watching ad... " + Math.max(0, state.continueAdWatchSecondsLeft).toLocaleString("en-US") + "s left.";
+        } else {
+          finalContinueStatusEl.textContent = "Loading rewarded ad...";
+        }
+      } else if (state.continueOfferActive) {
+        if (showFirstCoinContinue && canUseAdContinue) {
+          finalContinueStatusEl.textContent =
+            "Each life costs " +
+            continuePrice.toLocaleString("en-US") +
+            " coins. Or watch an ad to continue for " +
+            easyAdRewardLives.toLocaleString("en-US") +
+            " lives on Easy or " +
+            hardAdRewardLives.toLocaleString("en-US") +
+            " lives on Hard.";
+        } else if (showFirstCoinContinue) {
+          finalContinueStatusEl.textContent =
+            "Each life costs " + continuePrice.toLocaleString("en-US") + " coins.";
+        } else if (canUseAdContinue) {
+          finalContinueStatusEl.textContent =
+            "Watch an ad to continue for " +
+            easyAdRewardLives.toLocaleString("en-US") +
+            " lives on Easy or " +
+            hardAdRewardLives.toLocaleString("en-US") +
+            " lives on Hard.";
+        } else {
+          finalContinueStatusEl.textContent = "";
+        }
       } else if (canReturnToPreRunFromGameOver()) {
         finalContinueStatusEl.textContent = "Tap anywhere to return to the crossing page.";
       } else {
         finalContinueStatusEl.textContent = "";
       }
-      finalContinueStatusEl.classList.toggle("hidden", !(state.continueOfferActive || canReturnToPreRunFromGameOver()));
+      finalContinueStatusEl.classList.toggle(
+        "hidden",
+        !(state.continueOfferActive || canReturnToPreRunFromGameOver() || isAdWatching)
+      );
     }
     if (finalContinueActionsEl) {
-      finalContinueActionsEl.classList.toggle("hidden", !state.continueOfferActive);
+      finalContinueActionsEl.classList.toggle("hidden", !(state.continueOfferActive || isAdWatching));
     }
     if (finalContinueBtn) {
-      finalContinueBtn.disabled = !canBuyContinue;
+      finalContinueBtn.classList.toggle("hidden", !showFirstCoinContinue || isAdWatching);
+      finalContinueBtn.setAttribute(
+        "aria-label",
+        "Continue - " + continuePrice.toLocaleString("en-US") + " Coins"
+      );
+      finalContinueBtn.disabled = !canBuyContinue || isAdWatching;
+    }
+    if (finalWatchAdBtn) {
+      finalWatchAdBtn.classList.toggle("hidden", !canUseAdContinue || isAdWatching);
+      finalWatchAdBtn.setAttribute("aria-label", "Watch Ad to Continue");
+      finalWatchAdBtn.disabled = !canUseAdContinue || isAdWatching;
     }
     if (finalEndRunBtn) {
       finalEndRunBtn.disabled = false;
@@ -9829,6 +9998,17 @@ Main tuning points:
         openContinuePurchaseOverlay();
       });
     }
+    if (finalWatchAdBtn) {
+      finalWatchAdBtn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        if (!state.continueOfferActive || !canUseContinueAdForCurrentRun()) {
+          return;
+        }
+        startContinueAdWatch();
+      });
+    }
     if (finalEndRunBtn) {
       finalEndRunBtn.addEventListener("click", function (event) {
         event.stopPropagation();
@@ -9863,7 +10043,7 @@ Main tuning points:
         }
         incrementBadgeLifetimeStat("continuesUsed", 1);
         renderAdminForm();
-        revivePlayerAfterContinue(selectedLives);
+        revivePlayerAfterContinue(selectedLives, "coin");
       });
     }
     if (continuePurchaseBackBtn) {
@@ -11702,13 +11882,21 @@ Main tuning points:
     return true;
   }
 
-  function revivePlayerAfterContinue(grantedLivesOverride) {
+  function revivePlayerAfterContinue(grantedLivesOverride, continueSource) {
     var grantedLives = Math.max(
       1,
       Math.min(getContinueMaxPurchasableLives(), Math.floor(Number(grantedLivesOverride) || 0) || 1)
     );
-    state.continueUsesThisRun = 1;
+    if (continueSource === "ad") {
+      state.continueAdUsesThisRun = Math.min(2, Math.max(0, Math.floor(Number(state.continueAdUsesThisRun) || 0)) + 1);
+    } else {
+      state.continueUsesThisRun = 1;
+    }
     state.continueOfferActive = false;
+    state.continueAdWatchActive = false;
+    state.continueAdWatchMode = "";
+    state.continueAdWatchSecondsLeft = 0;
+    clearContinueAdWatchTimer();
     closeContinuePurchaseOverlay();
     state.running = true;
     state.projectileDeathAnimActive = false;

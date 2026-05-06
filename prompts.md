@@ -443,3 +443,13 @@ prejmenuj "Short Timer" na "Faster Coin Mining (xx s)" kde xx bude hodnota z adm
 Zatim nic nedelej jen odpovez, zda rozumís co chci a jak bys to udelal. chci udělat změnu v shop strance. na obrázku jsem označil grafiku, z které se dá koupit 1 coin. Chci změnit tu mechaniku. chci aby se tady kupoval kratší timer pro mining coins v mine. nyní je timer nastaveny na 60s - nastavuje se to v administraci . po koupi to kratsiho timeru se zkratí čas - nyní trea na 30s. To znamena, ze je potreba do shop v administraci změnit / pridat cenu za "Short Timer" a do mine v administraci pridat short timer a hodnotu, aby sla taky měnit. V shop page je potreba upravit texty, které se objevují pred nákupem, aby načítal čas, který bude po zkráceném timeru - hodnota co bude v administraci.
 
 -------------------
+-------------------
+Ted pokračuj v predchozím podle návrhů. připrav to tedy jen pro android. pro web / local tam udělej fake sledování reklamy. 5s counter, který kdyz zkončí, tak to bude jako bychom reklamu přehrali. U androidu to napoj tak aby to opravdu fungovalo
+-------------------
+-------------------
+do slozky game_over_scr jsem dal grafiku pro button conitnue: watch_ad.png pouzij ho pro watch ad
+kdyz zpusim na android emulatoru, tak se objevi intro page, pak grafika page a pak se to restartuje. jednou se objevila i crossing page a pak se to restartovalo. nevim, zda to je emulatorem nebo kodem. nez ale vytvoříme verzi pro store, zkus zkontrolovat, zda nekde nemůže být něco, co způsobuje ten reset. respektive se nerestuje telefon, ale hra se zavre
+-------------------
+-------------------
+ted udelej verio bumb, sync to www and android, commit to main, pak priprav aab, vrat se na new a over, ze jsou verze shodne
+-------------------

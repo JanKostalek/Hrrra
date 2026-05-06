@@ -270,3 +270,5 @@
 2026-05-05 - Added the Shop admin storage-upgrade pricing fields for mine chest upgrades and tightened mine storage capacity syncing so the active capacity follows the current upgrade level.
 2026-05-05 - Bumped the release metadata to 1.0.74 / versionCode 74 and prepared the next web/Android sync plus AAB build around the mine shop storage upgrade work.
 2026-05-05 - Bumped the release metadata to 1.0.75 / versionCode 75 and included the full mine face graphic set in the release sync so the mine message box can map all faces with fallback support.
+2026-05-06 - Added a continue flow split between coin purchase and rewarded ad watch, with a 5-second fake ad countdown on web/local and a native Android rewarded-ad bridge for real continue rewards.
+2026-05-06 - Bumped the release metadata to 1.0.76 / versionCode 76 and synced the release payload into web and Android packaging for the next build.
