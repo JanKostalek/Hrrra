@@ -38,8 +38,8 @@ android {
         applicationId "cz.hrrra.game"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 79
-        versionName "1.0.79"
+        versionCode 80
+        versionName "1.0.80"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [admobAppId: admobAppId]
         buildConfigField "String", "ADMOB_REWARDED_AD_UNIT_ID", "\"${admobRewardedAdUnitId}\""
