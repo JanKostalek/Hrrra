@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 77,
-  versionName: "1.0.77",
+  versionCode: 78,
+  versionName: "1.0.78",
   whatsNew: [
-  "Release bump to version 1.0.77.",
+  "Release bump to version 1.0.78.",
   "Android rewarded continue now reads AdMob IDs from local hidden config while the web/local fake ad flow stays intact.",
   "Continue now supports rewarded watch-ad flow on Android with a web/local fake ad fallback.",
   "Mine face graphics in the mine message box now cover the full 01 to 14 set with fallback support.",
