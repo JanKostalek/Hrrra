@@ -274,3 +274,6 @@
 2026-05-06 - Bumped the release metadata to 1.0.76 / versionCode 76 and synced the release payload into web and Android packaging for the next build.
 2026-05-06 - Moved the Android AdMob app ID and rewarded ad unit ID into local `.key/admob.properties` and wired the Android build to read them from that hidden file.
 2026-05-06 - Bumped the release metadata to 1.0.77 / versionCode 77 and prepared the current continue/AdMob config snapshot for the next build.
+2026-05-06 - Forced the rewarded continue flow to use Google’s test rewarded ad unit in debug builds so Android test devices and emulators can exercise the full ad path.
+2026-05-07 - Switched the Android rewarded continue flow to always use Google test rewarded ads so internal testing builds can exercise the full ad path before public release approval.
+2026-05-07 - Bumped the release metadata to 1.0.79 / versionCode 79 and kept Android rewarded continue on Google test ads for internal testing.
