@@ -1201,15 +1201,19 @@ Main tuning points:
     levelxBlocker: null,
     levelxRocket1: null,
     levelxRocket2: null,
-    level2CaveBack: null,
-    level2CaveFront: null,
-    level3VolcanoBack: null,
-    level3VolcanoFront: null,
+    level2Level1: null,
+    level2Level2: null,
+    level2Level3: null,
+    level2Level4: null,
+    level3Layer1: null,
+    level3Layer2: null,
+    level3Layer3: null,
     level4ForestBack: null,
     level4ForestMid: null,
     level4ForestFront: null,
-    level5Sky: null,
-    level5Foreground: null,
+    level5Layer1: null,
+    level5Layer2: null,
+    level5Layer3: null,
     platform: null,
     elevator: null,
     blocker: null,
@@ -1438,17 +1442,21 @@ Main tuning points:
   var BACKGROUND_FOREGROUND_ART_PATH = "assets/level1/background_foreground_tile.png";
   var LEVEL1_BORDER_ART_PATH = "assets/level1/level1_border.png";
   var LEVEL2_BORDER_ART_PATH = "assets/level2/level2_border.png";
-  var LEVEL2_CAVE_BACK_ART_PATH = "assets/level2/background_back_tile.jpg";
-  var LEVEL2_CAVE_FRONT_ART_PATH = "assets/level2/background_front_tile.png";
+  var LEVEL2_CAVE_LAYER1_ART_PATH = "assets/level2/background 01.jpg";
+  var LEVEL2_CAVE_LAYER2_ART_PATH = "assets/level2/background 02.png";
+  var LEVEL2_CAVE_LAYER3_ART_PATH = "assets/level2/background 03.png";
+  var LEVEL2_CAVE_LAYER4_ART_PATH = "assets/level2/background 04.png";
   var LEVEL3_BORDER_ART_PATH = "assets/level3/level3_border.png";
-  var LEVEL3_VOLCANO_BACK_ART_PATH = "assets/level3/background_back_tile.jpg";
-  var LEVEL3_VOLCANO_FRONT_ART_PATH = "assets/level3/background_front_tile.png";
+  var LEVEL3_LAYER1_ART_PATH = "assets/level3/background 01.jpg";
+  var LEVEL3_LAYER2_ART_PATH = "assets/level3/background 02.png";
+  var LEVEL3_LAYER3_ART_PATH = "assets/level3/background 03.png";
   var LEVEL4_BORDER_ART_PATH = "assets/level4/level4_border.png";
   var LEVEL4_FOREST_BACK_ART_PATH = "assets/level4/background_back_tile.jpg";
   var LEVEL4_FOREST_MID_ART_PATH = "assets/level4/background_mid_tile.png";
   var LEVEL4_FOREST_FRONT_ART_PATH = "assets/level4/background_front_tile.png";
-  var LEVEL5_SKY_ART_PATH = "assets/level5/background_sky_tile.png";
-  var LEVEL5_FOREGROUND_ART_PATH = "assets/level5/background_foreground_tile.png";
+  var LEVEL5_LAYER1_ART_PATH = "assets/level5/background 01.jpg";
+  var LEVEL5_LAYER2_ART_PATH = "assets/level5/background 02.png";
+  var LEVEL5_LAYER3_ART_PATH = "assets/level5/background 03.png";
   var LEVEL5_BORDER_ART_PATH = "assets/level5/level5_border.png";
   var LEVELX_BACK_ART_PATH = "assets/levelx/background_back_tile.jpg";
   var LEVELX_FRONT_ART_PATH = "assets/levelx/background_front_tile.png";
@@ -2099,9 +2107,7 @@ Main tuning points:
     state.gamePauseActive = true;
     state.inGameSettingsActive = true;
     state.inGameSettingsInputLockUntil = performance.now() + 500;
-    if (preRunScreenEl) {
-      preRunScreenEl.classList.remove("hidden");
-    }
+    setPreRunScreenHidden(false);
     input.left = false;
     input.right = false;
     input.jumpDown = false;
@@ -2124,8 +2130,8 @@ Main tuning points:
     state.inGameSettingsActive = false;
     state.gamePauseActive = false;
     state.inGameSettingsInputLockUntil = 0;
-    if (preRunScreenEl && !state.preRunActive) {
-      preRunScreenEl.classList.add("hidden");
+    if (!state.preRunActive) {
+      setPreRunScreenHidden(true);
     }
     if (preRunSettingsScreenEl) {
       preRunSettingsScreenEl.classList.add("hidden");
@@ -6172,20 +6178,29 @@ Main tuning points:
     loadSceneArtAsset(LEVEL2_BORDER_ART_PATH, function (image) {
       sceneArt.level2Border = image;
     });
-    loadSceneArtAsset(LEVEL2_CAVE_BACK_ART_PATH, function (image) {
-      sceneArt.level2CaveBack = image;
+    loadSceneArtAsset(LEVEL2_CAVE_LAYER1_ART_PATH, function (image) {
+      sceneArt.level2Level1 = image;
     });
-    loadSceneArtAsset(LEVEL2_CAVE_FRONT_ART_PATH, function (image) {
-      sceneArt.level2CaveFront = image;
+    loadSceneArtAsset(LEVEL2_CAVE_LAYER2_ART_PATH, function (image) {
+      sceneArt.level2Level2 = image;
+    });
+    loadSceneArtAsset(LEVEL2_CAVE_LAYER3_ART_PATH, function (image) {
+      sceneArt.level2Level3 = image;
+    });
+    loadSceneArtAsset(LEVEL2_CAVE_LAYER4_ART_PATH, function (image) {
+      sceneArt.level2Level4 = image;
     });
     loadSceneArtAsset(LEVEL3_BORDER_ART_PATH, function (image) {
       sceneArt.level3Border = image;
     });
-    loadSceneArtAsset(LEVEL3_VOLCANO_BACK_ART_PATH, function (image) {
-      sceneArt.level3VolcanoBack = image;
+    loadSceneArtAsset(LEVEL3_LAYER1_ART_PATH, function (image) {
+      sceneArt.level3Layer1 = image;
     });
-    loadSceneArtAsset(LEVEL3_VOLCANO_FRONT_ART_PATH, function (image) {
-      sceneArt.level3VolcanoFront = image;
+    loadSceneArtAsset(LEVEL3_LAYER2_ART_PATH, function (image) {
+      sceneArt.level3Layer2 = image;
+    });
+    loadSceneArtAsset(LEVEL3_LAYER3_ART_PATH, function (image) {
+      sceneArt.level3Layer3 = image;
     });
     loadSceneArtAsset(LEVEL4_BORDER_ART_PATH, function (image) {
       sceneArt.level4Border = image;
@@ -6223,11 +6238,14 @@ Main tuning points:
     loadSceneArtAsset(LEVELX_ROCKET2_ART_PATH, function (image) {
       sceneArt.levelxRocket2 = image;
     });
-    loadSceneArtAsset(LEVEL5_SKY_ART_PATH, function (image) {
-      sceneArt.level5Sky = image;
+    loadSceneArtAsset(LEVEL5_LAYER1_ART_PATH, function (image) {
+      sceneArt.level5Layer1 = image;
     });
-    loadSceneArtAsset(LEVEL5_FOREGROUND_ART_PATH, function (image) {
-      sceneArt.level5Foreground = image;
+    loadSceneArtAsset(LEVEL5_LAYER2_ART_PATH, function (image) {
+      sceneArt.level5Layer2 = image;
+    });
+    loadSceneArtAsset(LEVEL5_LAYER3_ART_PATH, function (image) {
+      sceneArt.level5Layer3 = image;
     });
     loadSceneArtAsset(PLATFORM_ART_PATH, function (image) {
       sceneArt.platform = image;
@@ -8415,9 +8433,7 @@ Main tuning points:
     state.storedDoubleJumpTimeLeft = carryStoredDoubleJumpTime;
     state.preRunStep = "details";
     state.preRunActive = true;
-    if (preRunScreenEl) {
-      preRunScreenEl.classList.remove("hidden");
-    }
+    setPreRunScreenHidden(false);
     renderAdminForm();
     refreshPreRunBriefValues();
     applyGameModeToUi();
@@ -8433,9 +8449,7 @@ Main tuning points:
     setAdminOpen(false);
     prepareRunSetup(state.gameMode, state.gameDifficulty);
     state.preRunActive = true;
-    if (preRunScreenEl) {
-      preRunScreenEl.classList.remove("hidden");
-    }
+    setPreRunScreenHidden(false);
     renderPreRunScreen();
     updateOverlayUiVisibility();
     unlockAudioIfNeeded();
@@ -8506,9 +8520,7 @@ Main tuning points:
     state.preRunLaunchPhase = "ready";
     state.preRunActive = false;
     stopBadgesPageMusicIfLeaving();
-    if (preRunScreenEl) {
-      preRunScreenEl.classList.add("hidden");
-    }
+    setPreRunScreenHidden(true);
     updateOverlayUiVisibility();
     refreshMusicPlayback();
   }
@@ -10355,7 +10367,7 @@ Main tuning points:
       preRunSettingsScreenEl.classList.toggle("in-game-pause", state.inGameSettingsActive);
     }
     if (preRunScreenEl) {
-      preRunScreenEl.classList.toggle("hidden", !state.preRunActive && !state.inGameSettingsActive);
+      setPreRunScreenHidden(!state.preRunActive && !state.inGameSettingsActive);
     }
   }
 
@@ -11222,6 +11234,14 @@ Main tuning points:
     openPreRunScreen();
     applyResponsiveLayout();
     renderAdminForm();
+  }
+
+  function setPreRunScreenHidden(isHidden) {
+    if (!preRunScreenEl) {
+      return;
+    }
+    preRunScreenEl.hidden = !!isHidden;
+    preRunScreenEl.classList.toggle("hidden", !!isHidden);
   }
 
   function getDisplayedLivesCount() {
@@ -14321,7 +14341,7 @@ Main tuning points:
     }
 
     var scale = height / image.height;
-    var tileWidth = image.width * scale;
+    var tileWidth = Math.max(1, Math.ceil(image.width * scale));
     if (tileWidth <= 0) {
       return false;
     }
@@ -14331,8 +14351,12 @@ Main tuning points:
       offset -= tileWidth;
     }
 
-    for (var drawX = offset; drawX < canvas.width; drawX += tileWidth) {
-      ctx.drawImage(image, drawX, y, tileWidth, height);
+    var drawStartX = Math.floor(offset) - 1;
+    var drawStep = Math.max(1, tileWidth - 1);
+    var drawWidth = tileWidth + 1;
+
+    for (var drawX = drawStartX; drawX < canvas.width; drawX += drawStep) {
+      ctx.drawImage(image, drawX, y, drawWidth, height);
     }
     return true;
   }
@@ -14357,20 +14381,25 @@ Main tuning points:
     ctx.rect(0, C.topDeathLineY, canvas.width, playableHeight);
     ctx.clip();
     if (state.currentLevel === 2) {
-      drawParallaxStrip(sceneArt.level2CaveBack, 0.08, C.topDeathLineY, playableHeight);
-      drawParallaxStrip(sceneArt.level2CaveFront, 0.2, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level2Level1, 0.06, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level2Level2, 0.12, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level2Level3, 0.2, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level2Level4, 0.32, C.topDeathLineY, playableHeight);
     } else if (state.currentLevel === 3) {
-      drawParallaxStrip(sceneArt.level3VolcanoBack, 0.07, C.topDeathLineY, playableHeight);
-      drawParallaxStrip(sceneArt.level3VolcanoFront, 0.18, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level3Layer1, 0.07, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level3Layer2, 0.18, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(sceneArt.level3Layer3, 0.32, C.topDeathLineY, playableHeight);
     } else if (state.currentLevel === 4) {
       drawParallaxStrip(sceneArt.level4ForestBack, 0.06, C.topDeathLineY, playableHeight);
       drawParallaxStrip(sceneArt.level4ForestMid, 0.14, C.topDeathLineY, playableHeight);
       drawParallaxStrip(sceneArt.level4ForestFront, 0.24, C.topDeathLineY, playableHeight);
     } else if (state.currentLevel === 5) {
       var levelXUnlocked = isLevelXUnlocked();
-      var level5BackArt = levelXUnlocked && sceneArt.levelxBack ? sceneArt.levelxBack : sceneArt.level5Sky;
-      var level5FrontArt = levelXUnlocked && sceneArt.levelxFront ? sceneArt.levelxFront : sceneArt.level5Foreground;
+      var level5BackArt = levelXUnlocked && sceneArt.levelxBack ? sceneArt.levelxBack : sceneArt.level5Layer1;
+      var level5MidArt = sceneArt.level5Layer2;
+      var level5FrontArt = levelXUnlocked && sceneArt.levelxFront ? sceneArt.levelxFront : sceneArt.level5Layer3;
       drawParallaxStrip(level5BackArt, 0.12, C.topDeathLineY, playableHeight);
+      drawParallaxStrip(level5MidArt, 0.22, C.topDeathLineY, playableHeight);
       drawParallaxStrip(level5FrontArt, 0.32, C.topDeathLineY, playableHeight);
     } else {
       drawParallaxStrip(sceneArt.backgroundSky, 0.12, C.topDeathLineY, playableHeight);

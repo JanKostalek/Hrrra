@@ -457,3 +457,5 @@ které potřebuješ? případně je obě ulož do .key
 -------------------
 udelej novy version bump, sync to www / android, commit to main, vytvor aab, vrat se do main, over, ze je vse ciste
 -------------------
+muzes tam tedy pustit testovací reklamu? abychom videli, jak se to bude chovat?
+-------------------

@@ -20,6 +20,8 @@ import com.google.android.ump.UserMessagingPlatform;
 
 @CapacitorPlugin(name = "RewardedContinue")
 public class RewardedContinuePlugin extends Plugin {
+    private static final String TEST_REWARDED_AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
+    private static final boolean USE_TEST_REWARDED_ADS = true;
     private static boolean adsInitialized = false;
     private PluginCall pendingCall;
     private RewardedAd rewardedAd;
@@ -98,7 +100,7 @@ public class RewardedContinuePlugin extends Plugin {
 
         RewardedAd.load(
             activity,
-            BuildConfig.ADMOB_REWARDED_AD_UNIT_ID,
+            getRewardedAdUnitId(),
             new AdRequest.Builder().build(),
             new RewardedAdLoadCallback() {
                 @Override
@@ -137,6 +139,14 @@ public class RewardedContinuePlugin extends Plugin {
                 }
             }
         );
+    }
+
+    private String getRewardedAdUnitId() {
+        if (USE_TEST_REWARDED_ADS) {
+            return TEST_REWARDED_AD_UNIT_ID;
+        }
+
+        return BuildConfig.ADMOB_REWARDED_AD_UNIT_ID;
     }
 
     private void finishSuccess() {

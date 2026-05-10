@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 80,
-  "latestVersionName": "1.0.80",
+  "latestVersionCode": 81,
+  "latestVersionName": "1.0.81",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.80 build is available. Android rewarded continue now uses Google test ads for internal testing.",
+  "message": "A new Hrrra 1.0.81 build is available. Level 2, 3, and 5 now use the new layered background art.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }
