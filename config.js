@@ -50,6 +50,7 @@
     shopMineStorageLevel2Price: 1000,
     shopMineStorageLevel3Price: 3000,
     shopMineStorageLevel4Price: 6000,
+    level5ScoreGoal: 200000,
     mineCoinTimerMs: 60000,
     mineShortTimerMs: 30000,
     mineStorageCapacity: 50,

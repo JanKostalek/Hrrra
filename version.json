@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 81,
-  "latestVersionName": "1.0.81",
+  "latestVersionCode": 82,
+  "latestVersionName": "1.0.82",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.81 build is available. Level 2, 3, and 5 now use the new layered background art.",
+  "message": "A new Hrrra 1.0.82 build is available. Level 5 finish screen is fixed and Level X no longer mixes Level 5 art.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

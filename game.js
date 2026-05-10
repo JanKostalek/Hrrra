@@ -1470,7 +1470,8 @@ Main tuning points:
     1: "assets/level1/level1_finished.jpg",
     2: "assets/level2/level2_finished.jpg",
     3: "assets/level3/level3_finished.jpg",
-    4: "assets/level4/level4_finished.jpg"
+    4: "assets/level4/level4_finished.jpg",
+    5: "assets/level5/level5_finished.jpg"
   };
   var ELEVATOR_ART_PATH = "assets/vytah01-clean.png";
   var BLOCKER_ART_PATH = "assets/blocker01-clean.png";
@@ -2523,7 +2524,8 @@ Main tuning points:
       key === "shopMineShortTimerPrice" ||
       key === "shopMineStorageLevel2Price" ||
       key === "shopMineStorageLevel3Price" ||
-      key === "shopMineStorageLevel4Price"
+      key === "shopMineStorageLevel4Price" ||
+      key === "level5ScoreGoal"
     ) {
       return Math.max(0, parsed);
     }
@@ -5302,7 +5304,7 @@ Main tuning points:
 
   function getLevelAudioPathOverrides(level) {
     var normalizedLevel = Math.max(1, Math.min(LEVEL_COUNT, Math.floor(Number(level) || 1)));
-    var audioLevelFolder = normalizedLevel === 5 && isLevelXUnlocked() ? "levelx" : "level" + String(normalizedLevel);
+    var audioLevelFolder = normalizedLevel === 5 && state.levelXEndlessActive ? "levelx" : "level" + String(normalizedLevel);
     var prefix = audioLevelFolder === "levelx" ? "lx" : "l" + String(normalizedLevel);
     var basePath = "assets/" + audioLevelFolder + "/sound/" + prefix;
     return {
@@ -5406,7 +5408,10 @@ Main tuning points:
     return mode === 1 ? "Jump Advanced" : "Jump Classic";
   }
 
-  function getLevelDisplayName(level) {
+  function getLevelDisplayName(level, showLevelXName) {
+    if (level === 5 && showLevelXName) {
+      return "Level X";
+    }
     return "Level " + String(level);
   }
 
@@ -5415,6 +5420,11 @@ Main tuning points:
     for (var currentLevel = 1; currentLevel <= level; currentLevel += 1) {
       var cfg = buildModeConfig(currentLevel, mode, difficulty);
       var required = Math.max(0, Math.floor(Number(cfg.finishScore) || 0));
+      if (currentLevel === 5) {
+        required = isLevelXUnlocked() && !state.levelXEndlessActive
+          ? Math.max(0, Math.floor(Number(cfg.level5ScoreGoal) || 0))
+          : 0;
+      }
       if (required <= 0) {
         return total;
       }
@@ -5425,10 +5435,19 @@ Main tuning points:
 
   function getCurrentLevelGoalTargetScore() {
     var required = Math.max(0, Math.floor(Number(C.finishScore) || 0));
+    if (state.currentLevel === 5) {
+      required = isLevelXUnlocked() && !state.levelXEndlessActive
+        ? Math.max(0, Math.floor(Number(C.level5ScoreGoal) || 0))
+        : 0;
+    }
     if (required <= 0) {
       return 0;
     }
     return Math.max(0, Math.floor(Number(state.scoreCarryOver) || 0)) + required;
+  }
+
+  function getLevel5ScoreGoal() {
+    return Math.max(0, Math.floor(Number(C.level5ScoreGoal) || 0));
   }
 
   function getFinishScoreGoalText(targetScore) {
@@ -5658,6 +5677,7 @@ Main tuning points:
     },
     maxLives: 1,
     livesLeft: 1,
+    levelXEndlessActive: false,
     lifeLossFlashTimeLeft: 0,
     speedPercent: 0,
     scrollSpeed: C.worldAutoRunSpeed,
@@ -5914,7 +5934,8 @@ Main tuning points:
     {
       title: "Level Goal",
       fields: [
-        { key: "finishScore", label: "Level Goal Score (0 = endless)", min: 0, step: 1 }
+        { key: "finishScore", label: "Level Goal Score (0 = endless)", min: 0, step: 1, levels: [1, 2, 3, 4] },
+        { key: "level5ScoreGoal", label: "Level 5 Score Goal", min: 0, step: 1, levels: [5] }
       ]
     },
     {
@@ -6387,16 +6408,16 @@ Main tuning points:
   }
 
   function getCurrentLevelSceneArt(key) {
-    if (key === "platform" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxPlatform) {
+    if (key === "platform" && state.currentLevel === 5 && state.levelXEndlessActive && sceneArt.levelxPlatform) {
       return sceneArt.levelxPlatform;
     }
-    if (key === "blocker" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxBlocker) {
+    if (key === "blocker" && state.currentLevel === 5 && state.levelXEndlessActive && sceneArt.levelxBlocker) {
       return sceneArt.levelxBlocker;
     }
-    if (key === "rocket1" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxRocket1) {
+    if (key === "rocket1" && state.currentLevel === 5 && state.levelXEndlessActive && sceneArt.levelxRocket1) {
       return sceneArt.levelxRocket1;
     }
-    if (key === "rocket2" && state.currentLevel === 5 && isLevelXUnlocked() && sceneArt.levelxRocket2) {
+    if (key === "rocket2" && state.currentLevel === 5 && state.levelXEndlessActive && sceneArt.levelxRocket2) {
       return sceneArt.levelxRocket2;
     }
     var levelEntry = sceneArt.levelVariants[state.currentLevel];
@@ -6715,10 +6736,10 @@ Main tuning points:
       preRunDetailSubtitleEl.textContent = getDifficultyDisplayName() + " | Lives: " + getLivesSummaryText();
     }
     if (preRunDetailLevelEl) {
-      preRunDetailLevelEl.textContent = getLevelDisplayName(state.currentLevel);
+      preRunDetailLevelEl.textContent = getLevelDisplayName(state.currentLevel, state.currentLevel === 5 && state.levelXEndlessActive);
     }
     if (preRunCompactLevelEl) {
-      preRunCompactLevelEl.textContent = getLevelDisplayName(state.currentLevel);
+      preRunCompactLevelEl.textContent = getLevelDisplayName(state.currentLevel, state.currentLevel === 5 && state.levelXEndlessActive);
     }
     var currentLevelGoalTarget = getCurrentLevelGoalTargetScore();
     if (preRunLevelGoalCopyEl) {
@@ -8388,6 +8409,7 @@ Main tuning points:
     clearContinueAdWatchTimer();
     state.runFinalized = false;
     state.lifeLossInvulnerabilityTimeLeft = 0;
+    state.levelXEndlessActive = false;
     loadCurrentLevelConfig();
     restartGame(true);
     state.preRunActive = true;
@@ -8399,7 +8421,7 @@ Main tuning points:
     refreshMusicPlayback();
   }
 
-  function prepareLevelContinuation(level) {
+  function prepareLevelContinuation(level, levelXEndlessActive) {
     closeInGameSettings();
     var carryDoubleJumpTime = 0;
     var carryTripleJumpTime = 0;
@@ -8413,6 +8435,7 @@ Main tuning points:
     }
 
     state.currentLevel = Math.max(1, Math.min(LEVEL_COUNT, level));
+    state.levelXEndlessActive = Boolean(levelXEndlessActive) && state.currentLevel === 5 && isLevelXUnlocked();
     state.highestLevelReached = Math.max(state.highestLevelReached, state.currentLevel);
     if (isHardDifficultyUnlocked() && !state.lastHardUnlockShown) {
       state.lastHardUnlockShown = true;
@@ -9089,7 +9112,7 @@ Main tuning points:
 
     if (selectedItem.type === "special-level") {
       if (isLevelXUnlocked()) {
-        state.preRunGfx2ShopStatus = "Bonus level already unlocked.";
+        state.preRunGfx2ShopStatus = "Bonus level already unlocked. Level 5 now requires " + getLevel5ScoreGoal().toLocaleString("en-US") + " score before Level X begins.";
         state.preRunGfx2ShopStatusTone = "success";
       } else if (!spendCoinsFromWallet(selectedItem.cost)) {
         state.preRunGfx2ShopStatus = "Not enough coins for the bonus level.";
@@ -9097,7 +9120,8 @@ Main tuning points:
       } else {
         state.levelXUnlocked = true;
         writePlayerSkinProgress();
-        state.preRunGfx2ShopStatus = "Bonus level unlocked. See the new visuals in level 5. Have a nice psilocytime!";
+        refreshPreRunBriefValues();
+        state.preRunGfx2ShopStatus = "Bonus level unlocked. Level 5 now requires " + getLevel5ScoreGoal().toLocaleString("en-US") + " score before Level X begins.";
         state.preRunGfx2ShopStatusTone = "success";
       }
       renderPreRunShopScreen();
@@ -9207,8 +9231,8 @@ Main tuning points:
     }
     if (preRunShopSpecialLevelStatusEl) {
       preRunShopSpecialLevelStatusEl.textContent = isLevelXUnlocked()
-        ? "Already purchased - enjoy new level 5 skin"
-        : "Unlock the bonus Level 5 pack for " + specialLevelPrice.toLocaleString("en-US") + " coins.";
+        ? "Already purchased - Level 5 is now a " + getLevel5ScoreGoal().toLocaleString("en-US") + " score challenge before Level X begins."
+        : "Unlock the bonus Level 5 pack for " + specialLevelPrice.toLocaleString("en-US") + " coins. Level 5 will then require " + getLevel5ScoreGoal().toLocaleString("en-US") + " score before Level X begins.";
     }
 
     if (!isGfx2StartScreenEnabled()) {
@@ -9327,6 +9351,17 @@ Main tuning points:
         levelFinishedArtEl.classList.add("hidden");
       }
     }
+  }
+
+  function updateLevelFinishedContinueButtonLabel() {
+    if (!levelFinishedContinueBtn) {
+      return;
+    }
+    var isBonusLevelTransition = state.currentLevel === 5 && isLevelXUnlocked() && !state.levelXEndlessActive;
+    levelFinishedContinueBtn.setAttribute(
+      "aria-label",
+      isBonusLevelTransition ? "Continue to Level X" : "Continue to the next level"
+    );
   }
 
   function attachPreRunScreen() {
@@ -10278,7 +10313,9 @@ Main tuning points:
         levelFinishedEl.classList.add("hidden");
       }
       if (state.currentLevel < LEVEL_COUNT) {
-        prepareLevelContinuation(state.currentLevel + 1);
+        prepareLevelContinuation(state.currentLevel + 1, false);
+      } else if (state.currentLevel === 5 && isLevelXUnlocked() && !state.levelXEndlessActive) {
+        prepareLevelContinuation(5, true);
       }
       refreshMusicPlayback();
     });
@@ -10942,6 +10979,9 @@ Main tuning points:
               var section = adminSections[sectionIndex];
               for (var fieldIndex = 0; fieldIndex < section.fields.length; fieldIndex += 1) {
                 var field = section.fields[fieldIndex];
+                if (!isFieldVisibleForLevel(field, targetLevel)) {
+                  continue;
+                }
                 var key = field.key;
                 var value = configDefaultsSnapshot[key];
                 if (Object.prototype.hasOwnProperty.call(modeFileOverrides, key)) {
@@ -10993,6 +11033,9 @@ Main tuning points:
 
             for (var fieldIndex = 0; fieldIndex < section.fields.length; fieldIndex += 1) {
               var field = section.fields[fieldIndex];
+              if (!isFieldVisibleForLevel(field, level)) {
+                continue;
+              }
               if (!isFieldVisibleForMode(mode, field.key)) {
                 continue;
               }
@@ -12593,6 +12636,7 @@ Main tuning points:
     finalizeLevelBadgeProgress();
     flushBadgeStatsStorage(true, 0);
     updateLevelFinishedSummary();
+    updateLevelFinishedContinueButtonLabel();
     if (levelFinishedEl) {
       levelFinishedEl.classList.remove("hidden");
     }
@@ -14361,6 +14405,13 @@ Main tuning points:
     return true;
   }
 
+  function isFieldVisibleForLevel(field, level) {
+    if (!field || !field.levels || !field.levels.length) {
+      return true;
+    }
+    return field.levels.indexOf(level) !== -1;
+  }
+
   function drawBackground() {
     var isLevel2Cave = state.currentLevel === 2 && useModernVisuals();
     var isLevel3Volcano = state.currentLevel === 3 && useModernVisuals();
@@ -14394,12 +14445,10 @@ Main tuning points:
       drawParallaxStrip(sceneArt.level4ForestMid, 0.14, C.topDeathLineY, playableHeight);
       drawParallaxStrip(sceneArt.level4ForestFront, 0.24, C.topDeathLineY, playableHeight);
     } else if (state.currentLevel === 5) {
-      var levelXUnlocked = isLevelXUnlocked();
-      var level5BackArt = levelXUnlocked && sceneArt.levelxBack ? sceneArt.levelxBack : sceneArt.level5Layer1;
-      var level5MidArt = sceneArt.level5Layer2;
-      var level5FrontArt = levelXUnlocked && sceneArt.levelxFront ? sceneArt.levelxFront : sceneArt.level5Layer3;
+      var level5UsesLevelXArt = state.levelXEndlessActive && isLevelXUnlocked();
+      var level5BackArt = level5UsesLevelXArt && sceneArt.levelxBack ? sceneArt.levelxBack : sceneArt.level5Layer1;
+      var level5FrontArt = level5UsesLevelXArt && sceneArt.levelxFront ? sceneArt.levelxFront : sceneArt.level5Layer3;
       drawParallaxStrip(level5BackArt, 0.12, C.topDeathLineY, playableHeight);
-      drawParallaxStrip(level5MidArt, 0.22, C.topDeathLineY, playableHeight);
       drawParallaxStrip(level5FrontArt, 0.32, C.topDeathLineY, playableHeight);
     } else {
       drawParallaxStrip(sceneArt.backgroundSky, 0.12, C.topDeathLineY, playableHeight);
@@ -14435,7 +14484,9 @@ Main tuning points:
       return sceneArt.level4Border;
     }
     if (level === 5) {
-      return sceneArt.level5Border || sceneArt.levelxBorder;
+      return state.levelXEndlessActive && isLevelXUnlocked()
+        ? (sceneArt.levelxBorder || sceneArt.level5Border)
+        : sceneArt.level5Border || sceneArt.levelxBorder;
     }
     return null;
   }
@@ -15671,7 +15722,7 @@ Main tuning points:
     }
     ctx.textAlign = "right";
     ctx.font = "24px Arial";
-    var levelLabel = getLevelDisplayName(state.currentLevel);
+    var levelLabel = getLevelDisplayName(state.currentLevel, state.currentLevel === 5 && state.levelXEndlessActive);
     var levelLabelWidth = ctx.measureText(levelLabel).width;
     ctx.fillText(levelLabel, canvas.width - 18 - levelLabelWidth * 0.83, 36);
     ctx.font = "20px Arial";
