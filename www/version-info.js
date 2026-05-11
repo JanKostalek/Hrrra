@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 83,
-  versionName: "1.0.83",
+  versionCode: 84,
+  versionName: "1.0.84",
   whatsNew: [
-  "Release bump to version 1.0.83.",
-  "Shop opens with a welcome message and Level 5 finish screen stays fixed."
+  "Release bump to version 1.0.84.",
+  "Admin now requires a password gate and Mine transfer plays a rewarded ad first."
 ]
 });

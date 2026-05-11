@@ -1,5 +1,6 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-11: Added an admin password gate (`H3510`) for both admin entry points and made Mine storage transfer require a rewarded ad before moving coins to the wallet.
 - 2026-05-06: Renamed the mine timer shop item to `Faster Coin Mining (xx s)` with the duration pulled from the admin-configurable short timer value, and relabeled the mine admin timer field and shop price entry to `Faster Maining`/`Faster Maining Price` in `game.js` and `index.html`.
 - 2026-05-06: Reworked the GFX2 shop coin graphic into a `Short Timer` purchase, added admin controls for the short-timer price and mine short-timer duration in `game.js`/`config.js`, and updated the shop text in `index.html` and `game.js` to preview the new mine cadence before buying.
 - 2026-05-04: Removed the visible debug styling from the mine exit hotspot and the crossing mine entrance hotspot, leaving both as invisible clickable areas only.

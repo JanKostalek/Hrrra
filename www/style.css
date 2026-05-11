@@ -2167,6 +2167,31 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+.pre-run-mine-gfx2-transfer-btn::after {
+  content: attr(data-ad-label);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  max-width: 95%;
+  color: #fff2bf;
+  font-size: clamp(12px, 1.6vw, 20px);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.72),
+    0 0 10px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.pre-run-mine-gfx2-transfer-btn[data-ad-label]:not([data-ad-label=""])::after {
+  opacity: 1;
+}
+
 .pre-run-mine-gfx2-message {
   position: absolute;
   left: 18.8%;

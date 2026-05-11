@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 83,
-  "latestVersionName": "1.0.83",
+  "latestVersionCode": 84,
+  "latestVersionName": "1.0.84",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.83 build is available. Shop opens with a welcome message and Level 5 finish screen stays fixed.",
+  "message": "A new Hrrra 1.0.84 build is available. Admin now requires a password gate and Mine transfer plays a rewarded ad first.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }
