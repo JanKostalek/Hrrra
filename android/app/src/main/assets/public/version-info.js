@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 82,
-  versionName: "1.0.82",
+  versionCode: 83,
+  versionName: "1.0.83",
   whatsNew: [
-  "Release bump to version 1.0.82.",
-  "Level 5 finish screen is fixed and Level X no longer mixes Level 5 art."
+  "Release bump to version 1.0.83.",
+  "Shop opens with a welcome message and Level 5 finish screen stays fixed."
 ]
 });
