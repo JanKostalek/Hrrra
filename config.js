@@ -45,6 +45,7 @@
     shopContinueLivesGranted: 1,
     shopKrobPrice: 150,
     shopSkin05Price: 1000,
+    shopSkin06Price: 1000,
     shopSpecialLevelPrice: 10000,
     shopMineShortTimerPrice: 1000,
     shopMineStorageLevel2Price: 10,

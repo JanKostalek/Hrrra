@@ -1,5 +1,8 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-12: Increased only the mine message face for message `15` by 50% in `game.js` and `style.css` so `mine_face_15.png` renders larger without affecting the other mine face graphics.
+- 2026-05-12: Nudged the run-screen life hearts 2% upward in the responsive HUD layout so the right-side life row sits slightly higher while keeping the larger 150% sizing.
+- 2026-05-12: Moved the run-screen life hearts lower in `game.js` and increased their size to roughly 150% of the previous value by adjusting the responsive `#game-shell`-based HUD layout.
 - 2026-05-12: Bumped the release metadata to `1.0.86` / `versionCode 86` so the updated Advanced and Classic hard game-over PNG assets can ship in a fresh Android bundle.
 - 2026-05-12: Bumped the release metadata to `1.0.85` / `versionCode 85` and refreshed the live update text in `version-info.js` and `version.json` to match the current HUD release.
 - 2026-05-12: Hid the `Jump Advanced` label from the in-game mode switch and forced the top-right lives row to use the same right-side HUD slot as the classic mode so the Advanced HUD matches the Classic layout while still showing its own life count.
@@ -282,3 +285,9 @@
 2026-05-06 - Forced the rewarded continue flow to use Google’s test rewarded ad unit in debug builds so Android test devices and emulators can exercise the full ad path.
 2026-05-07 - Switched the Android rewarded continue flow to always use Google test rewarded ads so internal testing builds can exercise the full ad path before public release approval.
 2026-05-07 - Bumped the release metadata to 1.0.79 / versionCode 79 and kept Android rewarded continue on Google test ads for internal testing.
+2026-05-12 - Wired Skin06 into the shop, classic/advanced detail slots, admin skin list, skin pickup configuration, and jump animation so it behaves like the other playable skins while using the new six-frame jump timing.
+2026-05-12 - Synced the Skin06 classic/advance layout PNGs from the `www` mirror back into the root asset tree so the local file:// build can show the real selected/unselected artwork instead of the old placeholder question-mark art.
+2026-05-12 - Renamed the visible Skin06 UI label to Kaja across the admin, shop, and pre-run skin select surfaces while keeping the internal `Skin06` key unchanged.
+2026-05-12 - Switched the advanced skin layout resolver over to the classic layout path and removed the duplicated `assets/gfx2/advance/layout` image copies so the release package no longer ships the same skin artwork twice.
+2026-05-12 - Switched the classic/advanced skin slot resolver from PNG to JPG skin assets in `assets/gfx2/classic/layout` so both modes now load the JPG copies the user uploaded.
+2026-05-12 - Bumped the release metadata to 1.0.87 / versionCode 87 for the JPG skin-layout release and prepared the next store build flow around it.

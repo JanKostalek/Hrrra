@@ -2226,6 +2226,11 @@ body {
   image-rendering: auto;
 }
 
+.pre-run-mine-gfx2-message-face.is-mine-face-15 {
+  width: calc(clamp(42px, 4.4vw, 64px) * 1.75);
+  height: calc(clamp(42px, 4.4vw, 64px) * 1.75);
+}
+
 .pre-run-mine-gfx2-message-text {
   display: block;
   flex: 1 1 auto;
@@ -3542,6 +3547,13 @@ body {
   height: 14.4%;
 }
 
+.pre-run-shop-gfx2-hitbox-skin-06 {
+  left: 24.3%;
+  top: 27.3%;
+  width: 10.8%;
+  height: 14.4%;
+}
+
 .pre-run-shop-gfx2-hitbox-chest {
   left: 5.1%;
   top: 42.32%;
@@ -3854,6 +3866,11 @@ body {
   height: 18.2%;
 }
 
+.pre-run-classic-gfx2-hitbox-skin-6 {
+  width: 10.2%;
+  height: 18.2%;
+}
+
 .pre-run-classic-gfx2-hitbox-skin-1 {
   left: 9.92%;
   top: 26.8%;
@@ -3880,6 +3897,11 @@ body {
 }
 
 .pre-run-classic-gfx2-hitbox-skin-future-2 {
+  left: 33.27%;
+  top: 46.9%;
+}
+
+.pre-run-classic-gfx2-hitbox-skin-6 {
   left: 33.27%;
   top: 46.9%;
 }

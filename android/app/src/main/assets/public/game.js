@@ -419,7 +419,7 @@ Main tuning points:
   var preRunShopGfx2NewLevelBtn = document.getElementById("pre-run-shop-gfx2-new-level-btn");
   var preRunShopGfx2SkinCatBtn = document.getElementById("pre-run-shop-gfx2-skin-cat-btn");
   var preRunShopGfx2SkinGhostBtn = document.getElementById("pre-run-shop-gfx2-skin-ghost-btn");
-  var preRunShopGfx2SkinWizardBtn = document.getElementById("pre-run-shop-gfx2-skin-wizard-btn");
+  var preRunShopGfx2Skin06Btn = document.getElementById("pre-run-shop-gfx2-skin-06-btn");
   var preRunShopGfx2ChestBtn = document.getElementById("pre-run-shop-gfx2-chest-btn");
   var preRunShopGfx2CoinOneBtn = document.getElementById("pre-run-shop-gfx2-coin-one-btn");
   var preRunShopGfx2CoinTenBtn = document.getElementById("pre-run-shop-gfx2-coin-ten-btn");
@@ -448,7 +448,7 @@ Main tuning points:
   var preRunClassicGfx2Skin3Btn = document.getElementById("pre-run-classic-gfx2-skin-3-btn");
   var preRunClassicGfx2Skin4Btn = document.getElementById("pre-run-classic-gfx2-skin-4-btn");
   var preRunClassicGfx2SkinFuture1Btn = document.getElementById("pre-run-classic-gfx2-skin-future-1-btn");
-  var preRunClassicGfx2SkinFuture2Btn = document.getElementById("pre-run-classic-gfx2-skin-future-2-btn");
+  var preRunClassicGfx2Skin6Btn = document.getElementById("pre-run-classic-gfx2-skin-6-btn");
   var preRunClassicGfx2Skin1Img = document.getElementById("pre-run-classic-gfx2-skin-1-img");
   var preRunClassicGfx2Skin2Img = document.getElementById("pre-run-classic-gfx2-skin-2-img");
   var preRunClassicGfx2Skin3Img = document.getElementById("pre-run-classic-gfx2-skin-3-img");
@@ -473,7 +473,7 @@ Main tuning points:
   var preRunAdvancedGfx2Skin3Btn = document.getElementById("pre-run-advanced-gfx2-skin-3-btn");
   var preRunAdvancedGfx2Skin4Btn = document.getElementById("pre-run-advanced-gfx2-skin-4-btn");
   var preRunAdvancedGfx2SkinFuture1Btn = document.getElementById("pre-run-advanced-gfx2-skin-future-1-btn");
-  var preRunAdvancedGfx2SkinFuture2Btn = document.getElementById("pre-run-advanced-gfx2-skin-future-2-btn");
+  var preRunAdvancedGfx2Skin6Btn = document.getElementById("pre-run-advanced-gfx2-skin-6-btn");
   var preRunAdvancedGfx2Skin1Img = document.getElementById("pre-run-advanced-gfx2-skin-1-img");
   var preRunAdvancedGfx2Skin2Img = document.getElementById("pre-run-advanced-gfx2-skin-2-img");
   var preRunAdvancedGfx2Skin3Img = document.getElementById("pre-run-advanced-gfx2-skin-3-img");
@@ -1353,12 +1353,31 @@ Main tuning points:
     "hero-jump-04.png",
     "hero-jump-05.png"
   ];
+  var HERO_WALK_FRAME_FILENAMES_SKIN06 = [
+    "hero-walk-01.png",
+    "hero-walk-02.png",
+    "hero-walk-03.png",
+    "hero-walk-04.png",
+    "hero-walk-05.png",
+    "hero-walk-06.png",
+    "hero-walk-07.png",
+    "hero-walk-08.png"
+  ];
+  var HERO_JUMP_FRAME_FILENAMES_SKIN06 = [
+    "hero-jump-01.png",
+    "hero-jump-02.png",
+    "hero-jump-03.png",
+    "hero-jump-04.png",
+    "hero-jump-05.png",
+    "hero-jump-06.png"
+  ];
   var SKIN_DISPLAY_NAMES = {
     Skin01: "Zyro",
     Skin02: "Vexi",
     Skin03: "Nemu",
     Skin04: "Krob",
-    Skin05: "Grey"
+    Skin05: "Grey",
+    Skin06: "Kaja"
   };
   var FUTURE_SKIN_SLOT_COUNT = 2;
   var FUTURE_SKIN_ICON_PATH = "assets/hero-question-mark-icon.png";
@@ -1369,9 +1388,10 @@ Main tuning points:
     { value: "Skin02", label: "Vexi" },
     { value: "Skin03", label: "Nemu" },
     { value: "Skin04", label: "Krob" },
-    { value: "Skin05", label: "Grey" }
+    { value: "Skin05", label: "Grey" },
+    { value: "Skin06", label: "Kaja" }
   ];
-  var DISCOVERABLE_SKIN_OPTIONS = ["Skin02", "Skin03", "Skin04", "Skin05"];
+  var DISCOVERABLE_SKIN_OPTIONS = ["Skin02", "Skin03", "Skin04", "Skin05", "Skin06"];
   var SKIN_UI_CONFIGS = {
     Skin01: {
       label: "Zyro",
@@ -1397,6 +1417,11 @@ Main tuning points:
       label: "Grey",
       previewAssetPath: "assets/skins/Skin05/hero-icon.png",
       pickupAssetPath: "assets/skins/Skin05/hero-icon.png"
+    },
+    Skin06: {
+      label: "Kaja",
+      previewAssetPath: "assets/skins/Skin06/hero-icon.png",
+      pickupAssetPath: "assets/skins/Skin06/hero-icon.png"
     }
   };
   for (var skinOptionIndex = 0; skinOptionIndex < SKIN_OPTIONS.length; skinOptionIndex += 1) {
@@ -1432,6 +1457,11 @@ Main tuning points:
     Skin05: {
       walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN05,
       jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN05,
+      usesFullFrameSourceRects: true
+    },
+    Skin06: {
+      walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN06,
+      jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN06,
       usesFullFrameSourceRects: true
     }
   };
@@ -2379,7 +2409,8 @@ Main tuning points:
     Skin02: "assets/gfx2/trophy_pics/trophy_vexi.png",
     Skin03: "assets/gfx2/trophy_pics/trophy_nemu.png",
     Skin04: "assets/gfx2/trophy_pics/trophy_krob.png",
-    Skin05: "assets/gfx2/trophy_pics/trophy_grey.png"
+    Skin05: "assets/gfx2/trophy_pics/trophy_grey.png",
+    Skin06: "assets/skins/Skin06/hero-icon.png"
   };
 
   function getSkinRewardTrophyArtPath(skinName) {
@@ -2394,7 +2425,8 @@ Main tuning points:
           Skin02: false,
           Skin03: false,
           Skin04: false,
-          Skin05: false
+          Skin05: false,
+          Skin06: false
         },
       selectedSkin: "Skin01",
       highestLevelReached: 1,
@@ -2529,6 +2561,7 @@ Main tuning points:
       key === "shopContinuePrice1" ||
       key === "shopKrobPrice" ||
       key === "shopSkin05Price" ||
+      key === "shopSkin06Price" ||
       key === "shopSpecialLevelPrice" ||
       key === "shopMineShortTimerPrice" ||
       key === "shopMineStorageLevel2Price" ||
@@ -3694,7 +3727,7 @@ Main tuning points:
       { button: preRunClassicGfx2Skin3Btn, skin: "Skin03" },
       { button: preRunClassicGfx2Skin4Btn, skin: "Skin04" },
       { button: preRunClassicGfx2SkinFuture1Btn, skin: "Skin05" },
-      { button: preRunClassicGfx2SkinFuture2Btn, skin: "" }
+      { button: preRunClassicGfx2Skin6Btn, skin: "Skin06" }
     ];
   }
 
@@ -3705,13 +3738,13 @@ Main tuning points:
       { img: preRunClassicGfx2Skin3Img, skin: "Skin03", slotIndex: 3 },
       { img: preRunClassicGfx2Skin4Img, skin: "Skin04", slotIndex: 4 },
       { img: preRunClassicGfx2Skin5Img, skin: "Skin05", slotIndex: 5 },
-      { img: preRunClassicGfx2Skin6Img, skin: "", slotIndex: 6, isFuture: true }
+      { img: preRunClassicGfx2Skin6Img, skin: "Skin06", slotIndex: 6 }
     ];
   }
 
   function getClassicGfx2SkinSlotAssetPath(slotIndex, variant) {
     var slot = slotIndex < 10 ? "0" + String(slotIndex) : String(slotIndex);
-    return "assets/gfx2/classic/layout/skin" + slot + "_" + variant + ".png";
+    return "assets/gfx2/classic/layout/skin" + slot + "_" + variant + ".jpg";
   }
 
   function getPreRunGfx2AdvancedSkinButtons() {
@@ -3721,7 +3754,7 @@ Main tuning points:
       { button: preRunAdvancedGfx2Skin3Btn, skin: "Skin03" },
       { button: preRunAdvancedGfx2Skin4Btn, skin: "Skin04" },
       { button: preRunAdvancedGfx2SkinFuture1Btn, skin: "Skin05" },
-      { button: preRunAdvancedGfx2SkinFuture2Btn, skin: "" }
+      { button: preRunAdvancedGfx2Skin6Btn, skin: "Skin06" }
     ];
   }
 
@@ -3732,13 +3765,12 @@ Main tuning points:
       { img: preRunAdvancedGfx2Skin3Img, skin: "Skin03", slotIndex: 3 },
       { img: preRunAdvancedGfx2Skin4Img, skin: "Skin04", slotIndex: 4 },
       { img: preRunAdvancedGfx2Skin5Img, skin: "Skin05", slotIndex: 5 },
-      { img: preRunAdvancedGfx2Skin6Img, skin: "", slotIndex: 6, isFuture: true }
+      { img: preRunAdvancedGfx2Skin6Img, skin: "Skin06", slotIndex: 6 }
     ];
   }
 
   function getAdvancedGfx2SkinSlotAssetPath(slotIndex, variant) {
-    var slot = slotIndex < 10 ? "0" + String(slotIndex) : String(slotIndex);
-    return "assets/gfx2/advance/layout/skin" + slot + "_" + variant + ".png";
+    return getClassicGfx2SkinSlotAssetPath(slotIndex, variant);
   }
 
   function isPreRunGfx2ClassicInsideActive() {
@@ -6160,6 +6192,7 @@ Main tuning points:
         { key: "shopContinueLivesGranted", label: "Continue Lives Granted", type: "number", min: 1, step: 1 },
         { key: "shopKrobPrice", label: "Krob Price", type: "number", min: 0, step: 1 },
         { key: "shopSkin05Price", label: "Grey Price", type: "number", min: 0, step: 1 },
+        { key: "shopSkin06Price", label: "Kaja Price", type: "number", min: 0, step: 1 },
         { key: "shopSpecialLevelPrice", label: "New Level Price", type: "number", min: 0, step: 1 },
         { key: "shopMineShortTimerPrice", label: "Faster Maining Price", type: "number", min: 0, step: 1 },
         { key: "shopMineStorageLevel2Price", label: "Mine Storage Level 2 Ad Watches", type: "number", min: 0, step: 1 },
@@ -9059,6 +9092,7 @@ Main tuning points:
     var scorePerCoin = sanitizeGlobalAdminNumber("shopScorePerCoin", C.shopScorePerCoin);
     var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
     var skin05Price = sanitizeGlobalAdminNumber("shopSkin05Price", C.shopSkin05Price);
+    var skin06Price = sanitizeGlobalAdminNumber("shopSkin06Price", C.shopSkin06Price);
     var specialLevelPrice = sanitizeGlobalAdminNumber("shopSpecialLevelPrice", C.shopSpecialLevelPrice);
     var shortTimerPrice = sanitizeGlobalAdminNumber("shopMineShortTimerPrice", C.shopMineShortTimerPrice);
     var shortTimerMs = getMineShortTimerMs();
@@ -9067,6 +9101,7 @@ Main tuning points:
     var storageAdWatches = getMineStorageAdWatches();
     var levelXUnlocked = isLevelXUnlocked();
     var skin05Owned = isSkinUnlocked("Skin05");
+    var skin06Owned = isSkinUnlocked("Skin06");
     var shortTimerOwned = isMineShortTimerUnlocked();
     var shortTimerItem = {
       key: "short-timer",
@@ -9104,6 +9139,13 @@ Main tuning points:
         cost: skin05Price,
         costUnit: "coins",
         type: "skin-05"
+      },
+      "skin-06": {
+        key: "skin-06",
+        label: skin06Owned ? "Kaja (Owned)" : "Kaja",
+        cost: skin06Price,
+        costUnit: "coins",
+        type: "skin-06"
       },
       "skin-cat": {
         key: "skin-cat",
@@ -9152,6 +9194,9 @@ Main tuning points:
     }
     if (item.type === "skin-05" && isSkinUnlocked("Skin05")) {
       return "Already purchased - enjoy Grey";
+    }
+    if (item.type === "skin-06" && isSkinUnlocked("Skin06")) {
+      return "Already purchased - enjoy Kaja";
     }
     if (item.type === "mine-short-timer" && isMineShortTimerUnlocked()) {
       return "Already purchased - faster coin mining active";
@@ -9425,6 +9470,7 @@ Main tuning points:
     if (preRunMineGfx2MessageFaceEl) {
       var nextMineMessageFaceSrc = getMineMessageFaceSrc(messageKey);
       var nextMineMessageFaceKey = String(messageKey || "");
+      preRunMineGfx2MessageFaceEl.classList.toggle("is-mine-face-15", nextMineMessageFaceKey === "15");
       if (
         preRunMineGfx2MessageFaceEl.dataset.faceKey !== nextMineMessageFaceKey ||
         (
@@ -9597,6 +9643,24 @@ Main tuning points:
       return;
     }
 
+    if (selectedItem.type === "skin-06") {
+      if (isSkinUnlocked("Skin06")) {
+        state.preRunGfx2ShopStatus = "Kaja already unlocked.";
+        state.preRunGfx2ShopStatusTone = "success";
+      } else if (!spendCoinsFromWallet(selectedItem.cost)) {
+        state.preRunGfx2ShopStatus = "Not enough coins for Kaja.";
+        state.preRunGfx2ShopStatusTone = "error";
+      } else {
+        unlockSkin("Skin06");
+        state.preRunGfx2ShopStatus = "Kaja unlocked. Use it from the skin select.";
+        state.preRunGfx2ShopStatusTone = "success";
+        refreshPreRunSkinSelection();
+        renderAdminForm();
+      }
+      renderPreRunShopScreen();
+      return;
+    }
+
     if (selectedItem.type === "storage-upgrade") {
       if (state.preRunGfx2ShopStorageAdWatchActive) {
         return;
@@ -9638,6 +9702,7 @@ Main tuning points:
     var scorePerCoin = sanitizeGlobalAdminNumber("shopScorePerCoin", C.shopScorePerCoin);
     var krobPrice = sanitizeGlobalAdminNumber("shopKrobPrice", C.shopKrobPrice);
     var skin05Price = sanitizeGlobalAdminNumber("shopSkin05Price", C.shopSkin05Price);
+    var skin06Price = sanitizeGlobalAdminNumber("shopSkin06Price", C.shopSkin06Price);
     var specialLevelPrice = sanitizeGlobalAdminNumber("shopSpecialLevelPrice", C.shopSpecialLevelPrice);
     var mineStorageMeta = getMineStorageUpgradeMeta();
     var persistentScore = getPersistentTotalScore();
@@ -9646,6 +9711,7 @@ Main tuning points:
     var canBuyTenCoins = persistentScore >= scorePerCoin * 10;
     var krobOwned = isSkinUnlocked("Skin04");
     var skin05Owned = isSkinUnlocked("Skin05");
+    var skin06Owned = isSkinUnlocked("Skin06");
     if (preRunShopGfx2El) {
       preRunShopGfx2El.classList.remove("hidden");
     }
@@ -9734,6 +9800,12 @@ Main tuning points:
         statusText = skin05Owned
           ? "Grey is already unlocked."
           : "Unlock Grey for " + skin05Price.toLocaleString("en-US") + " coins.";
+      } else if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "skin-06" && !skin06Owned && walletBalance < selectedItem.cost) {
+        statusText = "You don´t have enough coins to buy it.";
+      } else if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "skin-06") {
+        statusText = skin06Owned
+          ? "Kaja is already unlocked."
+          : "Unlock Kaja for " + skin06Price.toLocaleString("en-US") + " coins.";
       } else if (!state.preRunGfx2ShopStatus && selectedItem && selectedItem.type === "storage-upgrade") {
         var storageAdsRequired = Math.max(0, Math.floor(Number(selectedItem.adWatchRequired) || Number(selectedItem.cost) || 0));
         var storageAdsProgress = Math.max(0, Math.floor(Number(selectedItem.adWatchProgress) || getMineStorageAdWatches() || 0));
@@ -9754,7 +9826,7 @@ Main tuning points:
       { button: preRunShopGfx2NewLevelBtn, key: "new-level" },
       { button: preRunShopGfx2SkinCatBtn, key: "skin-05" },
       { button: preRunShopGfx2SkinGhostBtn, key: "skin-ghost" },
-      { button: preRunShopGfx2SkinWizardBtn, key: "skin-wizard" },
+      { button: preRunShopGfx2Skin06Btn, key: "skin-06" },
       { button: preRunShopGfx2ChestBtn, key: "chest" }
     ];
     shopButtons.forEach(function (entry) {
@@ -9770,12 +9842,16 @@ Main tuning points:
     if (preRunShopGfx2SkinCatBtn) {
       preRunShopGfx2SkinCatBtn.classList.toggle("is-sold", skin05Owned);
     }
+    if (preRunShopGfx2Skin06Btn) {
+      preRunShopGfx2Skin06Btn.classList.toggle("is-sold", skin06Owned);
+    }
     if (preRunShopGfx2ChestBtn) {
       preRunShopGfx2ChestBtn.classList.toggle("is-sold", mineStorageMeta.isMaxed);
     }
     if (preRunShopGfx2BuyBtn) {
       var selectedIsSpecialLevel = selectedItem && selectedItem.type === "special-level";
       var selectedIsSkin05 = selectedItem && selectedItem.type === "skin-05";
+      var selectedIsSkin06 = selectedItem && selectedItem.type === "skin-06";
       var selectedIsMineShortTimer = selectedItem && selectedItem.type === "mine-short-timer";
       var selectedIsStorageUpgrade = selectedItem && selectedItem.type === "storage-upgrade";
       var storageAdsRequired = selectedIsStorageUpgrade ? Math.max(0, Math.floor(Number(selectedItem.adWatchRequired) || Number(selectedItem.cost) || 0)) : 0;
@@ -9789,10 +9865,11 @@ Main tuning points:
         (selectedIsMineShortTimer && (isMineShortTimerUnlocked() || walletBalance < selectedItem.cost)) ||
         (selectedIsSpecialLevel && (isLevelXUnlocked() || walletBalance < selectedItem.cost)) ||
         (selectedIsSkin05 && (skin05Owned || walletBalance < selectedItem.cost)) ||
+        (selectedIsSkin06 && (skin06Owned || walletBalance < selectedItem.cost)) ||
         (selectedIsStorageUpgrade && mineStorageMeta.isMaxed)
       );
       preRunShopGfx2BuyBtn.textContent =
-        selectedItem && ((selectedIsMineShortTimer && isMineShortTimerUnlocked()) || (selectedIsSpecialLevel && isLevelXUnlocked()) || (selectedIsSkin05 && skin05Owned) || (selectedIsStorageUpgrade && mineStorageMeta.isMaxed))
+        selectedItem && ((selectedIsMineShortTimer && isMineShortTimerUnlocked()) || (selectedIsSpecialLevel && isLevelXUnlocked()) || (selectedIsSkin05 && skin05Owned) || (selectedIsSkin06 && skin06Owned) || (selectedIsStorageUpgrade && mineStorageMeta.isMaxed))
           ? "Owned"
           : storageAdsLoading || storageAdsNeedsWatch
             ? "Watch Ad"
@@ -10475,11 +10552,11 @@ Main tuning points:
         selectPreRunGfx2ShopItem("skin-ghost");
       });
     }
-    if (preRunShopGfx2SkinWizardBtn) {
-      preRunShopGfx2SkinWizardBtn.addEventListener("click", function () {
+    if (preRunShopGfx2Skin06Btn) {
+      preRunShopGfx2Skin06Btn.addEventListener("click", function () {
         unlockAudioIfNeeded();
         playUiButtonSound();
-        selectPreRunGfx2ShopItem("skin-wizard");
+        selectPreRunGfx2ShopItem("skin-06");
       });
     }
     if (preRunShopGfx2ChestBtn) {
@@ -11830,10 +11907,10 @@ Main tuning points:
     var modeSwitchTop = Math.max(4, Math.round(shellHeight * 0.0115));
     var modeSwitchHeight = Math.max(24, Math.round(shellHeight * 0.045));
     var modeSlotGap = Math.max(4, Math.round(shellHeight * 0.008));
-    var modeLivesTop = Math.max(8, Math.round(shellHeight * 0.0257));
+    var modeLivesTop = Math.max(8, Math.round(shellHeight * 0.0557));
     var modeLivesShift = Math.max(24, Math.round(shellWidth * 0.0475));
     var modeLivesGap = Math.max(3, Math.round(shellWidth * 0.005));
-    var lifeSize = Math.max(12, Math.round(shellHeight * 0.0257));
+    var lifeSize = Math.max(12, Math.round(shellHeight * 0.0386));
 
     modeSwitchEl.style.setProperty("--mode-switch-top", modeSwitchTop + "px");
     modeSwitchEl.style.setProperty("--mode-switch-height", modeSwitchHeight + "px");
@@ -15287,6 +15364,35 @@ Main tuning points:
     }
 
     var selectedSkinName = getSelectedHeroSkinName();
+    if (selectedSkinName === "Skin06" && loadedFrames.length >= 6) {
+      if (state.heroJumpAnimStarted && player.velocityY < 0) {
+        var skin06AscentFrameIndex = Math.min(2, Math.floor(state.heroJumpAnimTime / HERO_JUMP_FRAME_SECONDS));
+        return {
+          image: loadedFrames[skin06AscentFrameIndex] || loadedFrames[2] || loadedFrames[1] || loadedFrames[0] || null,
+          index: skin06AscentFrameIndex,
+          type: "jump"
+        };
+      }
+      if (!player.isGrounded && player.velocityY <= 0) {
+        return {
+          image: loadedFrames[3] || loadedFrames[2] || loadedFrames[1] || loadedFrames[0] || null,
+          index: 3,
+          type: "jump"
+        };
+      }
+      if (!player.isGrounded && player.velocityY > 0) {
+        return {
+          image: loadedFrames[4] || loadedFrames[3] || loadedFrames[2] || loadedFrames[1] || loadedFrames[0] || null,
+          index: 4,
+          type: "jump"
+        };
+      }
+      return {
+        image: loadedFrames[5] || loadedFrames[4] || loadedFrames[3] || loadedFrames[2] || loadedFrames[1] || loadedFrames[0] || null,
+        index: 5,
+        type: "jump"
+      };
+    }
     if (selectedSkinName === "Skin05" && loadedFrames.length >= 5) {
       if (state.heroJumpAnimStarted && state.heroJumpAnimTime < HERO_JUMP_FRAME_SECONDS) {
         return {

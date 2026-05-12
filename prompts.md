@@ -467,3 +467,21 @@ v advaneced easy modu jsou srdíčka zobrazována uplně divně . Je tam navíc 
 -------------------
 teckované soubory jsou moje backup, pptx je pomocný soubor, ale ty dva png soubory urcite do commitu zarh. pokud tam tedy nejsou, tak je pridej. stejne tak pokud nejsou v aab, tak jej priprav znovu i s nima
 -------------------
+Napoj Skin06 do hry, shopu i administrace. V shopu má být v označeném místě, v run select/detail obrazovkách má být jako běžně volitelný skin, v adminu má mít stejné přepínače pro pickup levely jako ostatní skiny a v jump animaci má používat walk frames pro běh, při skoku frame 03 držet po celou dobu výstupu, na vrcholu použít frame 04, při sestupu frame 05 a při dopadu pokračovat ostatními skin frames.
+-------------------
+Skin06 layout PNG byly ve `www/assets/...` připravené správně, ale root `assets/...` ještě ukazoval placeholdery s otazníkem. Srovnej root mirror podle `www`, aby local file:// běh ukazoval skin06_selected / skin06_unselected i po koupi Skin06.
+-------------------
+Přejmenuj v administraci Skin06 na Kaja. Interní klíč `Skin06` může zůstat, ale všechny viditelné labely v adminu, shopu a pre-run skin selectu mají ukazovat Kaja místo Skin 06.
+-------------------
+Skin layout PNG pro classic a advance jsou duplicitní, takže advance má začít používat classic layout cestu a duplicity v `assets/gfx2/advance/layout` se mají odstranit, aby se zmenšil release/AAB.
+posun srdce (zivoty) v run screen o 5% a zároveň je zvětši o 50% (tedy na 150% současné velikosti)
+-------------------
+ted srdce posun o 2% nahoru
+-------------------
+muzes v mine shop u hlašky č 15 - a jen u této zvětšit zobrazovanou grafiku mine_face_15, aby se zobrazovala o 50% větší?
+-------------------
+ted je grafika na 150% původní velikosti. udělej, aby byla na 175%
+-------------------
+Místo PNG skin slotů v classic/advanced pre-run selectu použij JPG soubory z `assets/gfx2/classic/layout` a jen přepni resolver cesty, bez změny logiky výběru.
+tak to udelej znovu podle workflow
+-------------------
