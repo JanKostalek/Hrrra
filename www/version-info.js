@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 85,
-  versionName: "1.0.85",
+  versionCode: 86,
+  versionName: "1.0.86",
   whatsNew: [
-  "Top-right life HUD now scales with the window.",
-  "Advanced mode no longer shows the extra Jump Advanced label in the in-game lives HUD."
+  "Added the updated Advanced and Classic hard game-over artwork into the release bundle.",
+  "Top-right life HUD now scales with the window."
 ]
 });

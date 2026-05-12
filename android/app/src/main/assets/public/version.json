@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 85,
-  "latestVersionName": "1.0.85",
+  "latestVersionCode": 86,
+  "latestVersionName": "1.0.86",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.85 build is available. The top-right life HUD now scales with the window, and Advanced mode no longer shows the extra Jump Advanced label.",
+  "message": "A new Hrrra 1.0.86 build is available. The updated Advanced and Classic hard game-over artwork is now included in the release bundle.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

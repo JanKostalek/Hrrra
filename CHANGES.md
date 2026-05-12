@@ -1,5 +1,6 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-12: Bumped the release metadata to `1.0.86` / `versionCode 86` so the updated Advanced and Classic hard game-over PNG assets can ship in a fresh Android bundle.
 - 2026-05-12: Bumped the release metadata to `1.0.85` / `versionCode 85` and refreshed the live update text in `version-info.js` and `version.json` to match the current HUD release.
 - 2026-05-12: Hid the `Jump Advanced` label from the in-game mode switch and forced the top-right lives row to use the same right-side HUD slot as the classic mode so the Advanced HUD matches the Classic layout while still showing its own life count.
 - 2026-05-12: Reworked the top-right life HUD in `game.js` and `style.css` so the mode switch positions and heart sizes are recalculated from the current `#game-shell` dimensions instead of staying tied to fixed overlay offsets.

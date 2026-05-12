@@ -465,3 +465,5 @@ pri zmenšeném okne je videt, ze pozice je stále pevná. tedy pokud jsi dělal
 -------------------
 v advaneced easy modu jsou srdíčka zobrazována uplně divně . Je tam navíc ten text jump advanced, který tam nepatří a srdíčka dej na stejné místo se stejnou logikou jako u classic easy modu. Jen je rozdíl v počtu životů tady v tom modu, to je v poradku
 -------------------
+teckované soubory jsou moje backup, pptx je pomocný soubor, ale ty dva png soubory urcite do commitu zarh. pokud tam tedy nejsou, tak je pridej. stejne tak pokud nejsou v aab, tak jej priprav znovu i s nima
+-------------------
