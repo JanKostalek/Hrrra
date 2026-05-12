@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 84,
-  versionName: "1.0.84",
+  versionCode: 85,
+  versionName: "1.0.85",
   whatsNew: [
-  "Release bump to version 1.0.84.",
-  "Admin now requires a password gate and Mine transfer plays a rewarded ad first."
+  "Top-right life HUD now scales with the window.",
+  "Advanced mode no longer shows the extra Jump Advanced label in the in-game lives HUD."
 ]
 });

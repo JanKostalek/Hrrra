@@ -555,6 +555,7 @@ Main tuning points:
   var mode2Wrap = document.getElementById("mode-2-wrap");
   var mode2Btn = document.getElementById("mode-2-btn");
   var mode2LivesEl = document.getElementById("mode-2-lives");
+  var modeSwitchEl = document.getElementById("mode-switch");
   var levelFinishedEl = document.getElementById("level-finished");
   var levelFinishedArtEl = document.getElementById("level-finished-art");
   var levelFinishedContinueBtn = document.getElementById("level-finished-continue");
@@ -11804,22 +11805,43 @@ Main tuning points:
   }
 
   function updateLivesUi() {
-    if (mode1Wrap) {
-      mode1Wrap.classList.toggle("active", state.gameMode === 1);
-    }
     if (mode2Wrap) {
       mode2Wrap.classList.toggle("active", state.gameMode === 2);
     }
 
-    renderLivesInto(mode1LivesEl);
     renderLivesInto(mode2LivesEl);
 
-    if (mode1LivesEl) {
-      mode1LivesEl.style.visibility = state.gameMode === 1 ? "visible" : "hidden";
-    }
     if (mode2LivesEl) {
-      mode2LivesEl.style.visibility = state.gameMode === 2 ? "visible" : "hidden";
+      mode2LivesEl.style.visibility = "visible";
     }
+    if (mode1LivesEl) {
+      mode1LivesEl.style.visibility = "hidden";
+    }
+  }
+
+  function updateModeSwitchLayout() {
+    if (!gameShell || !modeSwitchEl) {
+      return;
+    }
+
+    var shellRect = gameShell.getBoundingClientRect ? gameShell.getBoundingClientRect() : null;
+    var shellWidth = Math.max(1, shellRect ? shellRect.width : canvas.width || 1);
+    var shellHeight = Math.max(1, shellRect ? shellRect.height : canvas.height || 1);
+    var modeSwitchTop = Math.max(4, Math.round(shellHeight * 0.0115));
+    var modeSwitchHeight = Math.max(24, Math.round(shellHeight * 0.045));
+    var modeSlotGap = Math.max(4, Math.round(shellHeight * 0.008));
+    var modeLivesTop = Math.max(8, Math.round(shellHeight * 0.0257));
+    var modeLivesShift = Math.max(24, Math.round(shellWidth * 0.0475));
+    var modeLivesGap = Math.max(3, Math.round(shellWidth * 0.005));
+    var lifeSize = Math.max(12, Math.round(shellHeight * 0.0257));
+
+    modeSwitchEl.style.setProperty("--mode-switch-top", modeSwitchTop + "px");
+    modeSwitchEl.style.setProperty("--mode-switch-height", modeSwitchHeight + "px");
+    modeSwitchEl.style.setProperty("--mode-slot-gap", modeSlotGap + "px");
+    modeSwitchEl.style.setProperty("--mode-lives-top", modeLivesTop + "px");
+    modeSwitchEl.style.setProperty("--mode-lives-shift", modeLivesShift + "px");
+    modeSwitchEl.style.setProperty("--mode-lives-gap", modeLivesGap + "px");
+    modeSwitchEl.style.setProperty("--life-square-size", lifeSize + "px");
   }
 
   function applyGameModeToUi() {
@@ -11828,8 +11850,8 @@ Main tuning points:
       mode2Btn.classList.toggle("active", state.gameMode === 2);
     }
     if (mode1Wrap && mode2Wrap) {
-      mode1Wrap.classList.toggle("hidden", state.gameMode !== 1);
-      mode2Wrap.classList.toggle("hidden", state.gameMode !== 2);
+      mode1Wrap.classList.add("hidden");
+      mode2Wrap.classList.remove("hidden");
     }
 
     if (touchControls) {
@@ -11838,6 +11860,7 @@ Main tuning points:
     }
 
     updateLivesUi();
+    updateModeSwitchLayout();
   }
 
   function attachModeSwitch() {
@@ -11869,6 +11892,7 @@ Main tuning points:
       applyGameModeToUi();
       updatePreRunClassicGfx2BoardMetrics();
       updatePreRunGfx2InsideBoardMetrics(preRunAdvancedGfx2BoardEl);
+      updateModeSwitchLayout();
       return;
     }
 
@@ -11887,6 +11911,7 @@ Main tuning points:
     applyGameModeToUi();
     updatePreRunClassicGfx2BoardMetrics();
     updatePreRunGfx2InsideBoardMetrics(preRunAdvancedGfx2BoardEl);
+    updateModeSwitchLayout();
   }
 
   function scheduleResponsiveLayoutRefresh() {

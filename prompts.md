@@ -459,3 +459,9 @@ udelej novy version bump, sync to www / android, commit to main, vytvor aab, vra
 -------------------
 muzes tam tedy pustit testovací reklamu? abychom videli, jak se to bude chovat?
 -------------------
+ty srdíčka - počet se mění podle počtu životů ve hře. od 1 do 5. Ubývají z levé strany. respektive zustane tam "obrys". aby bylo i videt, kolik srdíček bylo a kolik je
+-------------------
+pri zmenšeném okne je videt, ze pozice je stále pevná. tedy pokud jsi dělal upravu pro classic easy mode
+-------------------
+v advaneced easy modu jsou srdíčka zobrazována uplně divně . Je tam navíc ten text jump advanced, který tam nepatří a srdíčka dej na stejné místo se stejnou logikou jako u classic easy modu. Jen je rozdíl v počtu životů tady v tom modu, to je v poradku
+-------------------

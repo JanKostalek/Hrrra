@@ -1,5 +1,8 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-12: Bumped the release metadata to `1.0.85` / `versionCode 85` and refreshed the live update text in `version-info.js` and `version.json` to match the current HUD release.
+- 2026-05-12: Hid the `Jump Advanced` label from the in-game mode switch and forced the top-right lives row to use the same right-side HUD slot as the classic mode so the Advanced HUD matches the Classic layout while still showing its own life count.
+- 2026-05-12: Reworked the top-right life HUD in `game.js` and `style.css` so the mode switch positions and heart sizes are recalculated from the current `#game-shell` dimensions instead of staying tied to fixed overlay offsets.
 - 2026-05-11: Added an admin password gate (`H3510`) for both admin entry points and made Mine storage transfer require a rewarded ad before moving coins to the wallet.
 - 2026-05-06: Renamed the mine timer shop item to `Faster Coin Mining (xx s)` with the duration pulled from the admin-configurable short timer value, and relabeled the mine admin timer field and shop price entry to `Faster Maining`/`Faster Maining Price` in `game.js` and `index.html`.
 - 2026-05-06: Reworked the GFX2 shop coin graphic into a `Short Timer` purchase, added admin controls for the short-timer price and mine short-timer duration in `game.js`/`config.js`, and updated the shop text in `index.html` and `game.js` to preview the new mine cadence before buying.

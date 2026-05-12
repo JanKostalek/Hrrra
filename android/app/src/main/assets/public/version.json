@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 84,
-  "latestVersionName": "1.0.84",
+  "latestVersionCode": 85,
+  "latestVersionName": "1.0.85",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.84 build is available. Admin now requires a password gate and Mine transfer plays a rewarded ad first.",
+  "message": "A new Hrrra 1.0.85 build is available. The top-right life HUD now scales with the window, and Advanced mode no longer shows the extra Jump Advanced label.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

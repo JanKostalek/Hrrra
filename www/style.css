@@ -7190,10 +7190,10 @@ body.visual-theme-retro .brief-live::before {
 
 #mode-switch {
   position: absolute;
-  top: 10px;
+  top: var(--mode-switch-top, 10px);
   left: 0;
   right: 0;
-  height: 30px;
+  height: var(--mode-switch-height, 30px);
   display: block;
   z-index: 18;
   pointer-events: none;
@@ -7204,7 +7204,7 @@ body.visual-theme-retro .brief-live::before {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: var(--mode-slot-gap, 6px);
   min-width: 170px;
 }
 
@@ -7245,18 +7245,18 @@ body.visual-theme-retro .brief-live::before {
 }
 
 .mode-lives {
-  min-height: 18px;
+  min-height: var(--life-square-size, 18px);
   display: flex;
   justify-content: center;
-  gap: 6px;
-  margin-top: 18px;
-  transform: translateX(57px);
+  gap: var(--mode-lives-gap, 6px);
+  margin-top: var(--mode-lives-top, 18px);
+  transform: translateX(var(--mode-lives-shift, 57px));
   pointer-events: none;
 }
 
 .life-square {
-  width: 18px;
-  height: 18px;
+  width: var(--life-square-size, 18px);
+  height: var(--life-square-size, 18px);
 }
 
 .life-heart.modern {
