@@ -209,6 +209,8 @@ Main tuning points:
   var PRE_RUN_GFX2_BADGES_FRAMES = buildPreRunFrameSet("assets/gfx2/badges", 10, 8);
   var PRE_RUN_GFX2_SHOP_FRAMES = buildPreRunFrameSet("assets/gfx2/shop", 10, 7);
   var PRE_RUN_GFX2_SETTINGS_FRAMES = buildPreRunFrameSet("assets/gfx2/settings", 10, 9);
+  var PRE_RUN_GFX2_MINE_ENTRY_FRAMES = buildPreRunFrameSet("assets/gfx2/mine", 24, 24);
+  var PRE_RUN_GFX2_MINE_ENTRY_ANIM_SECONDS = 1;
   var PRE_RUN_GFX2_CLASSIC_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/classic_back", 10, 8);
   var PRE_RUN_GFX2_ADVANCE_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/advance_back", 10, 7);
   var PRE_RUN_GFX2_BADGES_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/badges_back", 10, 8);
@@ -360,6 +362,7 @@ Main tuning points:
       .concat(PRE_RUN_GFX2_BADGES_FRAMES)
       .concat(PRE_RUN_GFX2_SHOP_FRAMES)
       .concat(PRE_RUN_GFX2_SETTINGS_FRAMES)
+      .concat(PRE_RUN_GFX2_MINE_ENTRY_FRAMES)
       .concat(PRE_RUN_GFX2_CLASSIC_BACK_FRAMES)
       .concat(PRE_RUN_GFX2_ADVANCE_BACK_FRAMES)
       .concat(PRE_RUN_GFX2_BADGES_BACK_FRAMES)
@@ -5887,6 +5890,10 @@ Main tuning points:
     preRunGfx2ShopExitTime: 0,
     preRunGfx2SettingsExitActive: false,
     preRunGfx2SettingsExitTime: 0,
+    preRunGfx2MineEntryActive: false,
+    preRunGfx2MineEntryTime: 0,
+    preRunGfx2MineExitActive: false,
+    preRunGfx2MineExitTime: 0,
     preRunGfx2IdleCountdown: 20,
     preRunGfx2WaitActive: false,
     preRunGfx2WaitAnimTime: 0,
@@ -5911,6 +5918,7 @@ Main tuning points:
     mineMessageFollowUpKey: "",
     mineMessageFollowUpDurationMs: 0,
     mineTransferMessagePhase: null,
+    mineIdleTipStartedAt: 0,
     mineHalfFullAnnounced: false,
     mineIntroShown: false,
     preRunScores: createInitialPreRunScoresState(),
@@ -7327,6 +7335,8 @@ Main tuning points:
       state.preRunStep === "select" &&
       isGfx2StartScreenEnabled() &&
       !state.preRunGfx2BackActive &&
+      !state.preRunGfx2MineEntryActive &&
+      !state.preRunGfx2MineExitActive &&
       !state.preRunGfx2ClassicExitActive &&
       !state.preRunGfx2AdvanceExitActive &&
       !state.preRunGfx2ScoresExitActive &&
@@ -7349,7 +7359,9 @@ Main tuning points:
       state.preRunGfx2ScoresExitActive ||
       state.preRunGfx2BadgesExitActive ||
       state.preRunGfx2ShopExitActive ||
-      state.preRunGfx2SettingsExitActive;
+      state.preRunGfx2SettingsExitActive ||
+      state.preRunGfx2MineEntryActive ||
+      state.preRunGfx2MineExitActive;
   }
 
   function resetPreRunGfx2SelectScene() {
@@ -7360,6 +7372,10 @@ Main tuning points:
     state.preRunGfx2BackActive = false;
     state.preRunGfx2BackTime = 0;
     state.preRunGfx2BackFrames = null;
+    state.preRunGfx2MineEntryActive = false;
+    state.preRunGfx2MineEntryTime = 0;
+    state.preRunGfx2MineExitActive = false;
+    state.preRunGfx2MineExitTime = 0;
     state.preRunGfx2IdleCountdown = 20;
     state.preRunGfx2WaitActive = false;
     state.preRunGfx2WaitAnimTime = 0;
@@ -7387,6 +7403,50 @@ Main tuning points:
     state.preRunGfx2EntranceAnimTime = 0;
     resetPreRunGfx2IdleCountdown();
     setPreRunGfx2ForegroundFrame(0, frames);
+    renderPreRunScreen();
+  }
+
+  function startPreRunGfx2MineEntryAnimation() {
+    if (!Array.isArray(PRE_RUN_GFX2_MINE_ENTRY_FRAMES) || !PRE_RUN_GFX2_MINE_ENTRY_FRAMES.length) {
+      openPreRunMineScreen();
+      return;
+    }
+    state.preRunStep = "select";
+    state.preRunGfx2MineEntryActive = true;
+    state.preRunGfx2MineEntryTime = 0;
+    resetPreRunGfx2IdleCountdown();
+    setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_MINE_ENTRY_FRAMES.length - 1, PRE_RUN_GFX2_MINE_ENTRY_FRAMES);
+    renderPreRunScreen();
+  }
+
+  function startPreRunGfx2MineExitAnimation() {
+    if (!Array.isArray(PRE_RUN_GFX2_MINE_ENTRY_FRAMES) || !PRE_RUN_GFX2_MINE_ENTRY_FRAMES.length) {
+      handlePreRunMineBackNavigationImmediate();
+      return;
+    }
+    state.preRunStep = "select";
+    state.preRunGfx2MineExitActive = true;
+    state.preRunGfx2MineExitTime = 0;
+    state.preRunGfx2SelectAnimEnabled = false;
+    state.preRunGfx2SelectFrames = PRE_RUN_GFX2_ENTRANCE_FRAMES;
+    resetPreRunGfx2IdleCountdown();
+    setPreRunGfx2ForegroundFrame(PRE_RUN_GFX2_MINE_ENTRY_FRAMES.length - 1, PRE_RUN_GFX2_MINE_ENTRY_FRAMES);
+    renderPreRunScreen();
+  }
+
+  function handlePreRunMineBackNavigationImmediate() {
+    playUiPageOpenSound();
+    state.preRunGfx2MineEntryActive = false;
+    state.preRunGfx2MineEntryTime = 0;
+    state.preRunGfx2MineExitActive = false;
+    state.preRunGfx2MineExitTime = 0;
+    state.preRunGfx2SelectAnimEnabled = false;
+    state.preRunGfx2SelectFrames = PRE_RUN_GFX2_ENTRANCE_FRAMES;
+    clearMineTransferAdWatchTimer();
+    state.mineTransferAdWatchActive = false;
+    state.mineTransferAdWatchMode = "";
+    state.mineTransferAdWatchSecondsLeft = 0;
+    state.preRunStep = "select";
     renderPreRunScreen();
   }
 
@@ -7419,7 +7479,9 @@ Main tuning points:
       !state.preRunGfx2ScoresExitActive &&
       !state.preRunGfx2BadgesExitActive &&
       !state.preRunGfx2ShopExitActive &&
-      !state.preRunGfx2SettingsExitActive;
+      !state.preRunGfx2SettingsExitActive &&
+      !state.preRunGfx2MineEntryActive &&
+      !state.preRunGfx2MineExitActive;
 
     if (!canRunIdleWait) {
       if (state.preRunGfx2WaitActive) {
@@ -7487,6 +7549,10 @@ Main tuning points:
       return;
     }
 
+    if (state.preRunGfx2MineEntryActive || state.preRunGfx2MineExitActive) {
+      return;
+    }
+
     var activeFrames = getPreRunGfx2SelectFrames();
 
     if (!getPreRunGfx2EntranceAnimationActive()) {
@@ -7520,6 +7586,74 @@ Main tuning points:
       Math.floor(progress * activeFrames.length)
     );
     setPreRunGfx2ForegroundFrame(frameIndex, activeFrames);
+  }
+
+  function updatePreRunGfx2MineEntryAnimation(dt) {
+    if (!preRunGfx2ForegroundEl) {
+      return;
+    }
+
+    if (!state.preRunGfx2MineEntryActive) {
+      state.preRunGfx2MineEntryTime = 0;
+      return;
+    }
+
+    if (!arePreRunGfx2FramesReady(PRE_RUN_GFX2_MINE_ENTRY_FRAMES)) {
+      preloadPreRunGfx2EntranceFrames();
+      setPreRunGfx2ForegroundFrame(0, PRE_RUN_GFX2_MINE_ENTRY_FRAMES);
+      return;
+    }
+
+    if (dt > 0) {
+      state.preRunGfx2MineEntryTime = Math.min(PRE_RUN_GFX2_MINE_ENTRY_ANIM_SECONDS, state.preRunGfx2MineEntryTime + dt);
+    }
+
+    var progress = Math.max(0, Math.min(1, state.preRunGfx2MineEntryTime / PRE_RUN_GFX2_MINE_ENTRY_ANIM_SECONDS));
+    var frameIndex = Math.max(
+      0,
+      (PRE_RUN_GFX2_MINE_ENTRY_FRAMES.length - 1) - Math.floor(progress * (PRE_RUN_GFX2_MINE_ENTRY_FRAMES.length - 1))
+    );
+    setPreRunGfx2ForegroundFrame(frameIndex, PRE_RUN_GFX2_MINE_ENTRY_FRAMES);
+
+    if (progress >= 1) {
+      state.preRunGfx2MineEntryActive = false;
+      state.preRunGfx2MineEntryTime = 0;
+      openPreRunMineScreen();
+    }
+  }
+
+  function updatePreRunMineExitAnimation(dt) {
+    if (!preRunGfx2ForegroundEl) {
+      return;
+    }
+
+    if (!state.preRunGfx2MineExitActive) {
+      state.preRunGfx2MineExitTime = 0;
+      return;
+    }
+
+    if (!arePreRunGfx2FramesReady(PRE_RUN_GFX2_MINE_ENTRY_FRAMES)) {
+      preloadPreRunGfx2EntranceFrames();
+      setPreRunGfx2ForegroundFrame(0, PRE_RUN_GFX2_MINE_ENTRY_FRAMES);
+      return;
+    }
+
+    if (dt > 0) {
+      state.preRunGfx2MineExitTime = Math.min(PRE_RUN_GFX2_MINE_ENTRY_ANIM_SECONDS, state.preRunGfx2MineExitTime + dt);
+    }
+
+    var progress = Math.max(0, Math.min(1, state.preRunGfx2MineExitTime / PRE_RUN_GFX2_MINE_ENTRY_ANIM_SECONDS));
+    var frameIndex = Math.min(
+      PRE_RUN_GFX2_MINE_ENTRY_FRAMES.length - 1,
+      Math.floor(progress * (PRE_RUN_GFX2_MINE_ENTRY_FRAMES.length - 1))
+    );
+    setPreRunGfx2ForegroundFrame(frameIndex, PRE_RUN_GFX2_MINE_ENTRY_FRAMES);
+
+    if (progress >= 1) {
+      state.preRunGfx2MineExitActive = false;
+      state.preRunGfx2MineExitTime = 0;
+      handlePreRunMineBackNavigationImmediate();
+    }
   }
 
   function updatePreRunGfx2BackAnimation(dt) {
@@ -9130,14 +9264,9 @@ Main tuning points:
   }
 
   var MINE_IDLE_TIPS = [
+    { key: "15", text: "Clicking transfer you will watch a short ad and then the coins will be transfered." },
     { key: "07", text: "Transfer coins whenever storage is ready." },
-    { key: "08", text: "You can upgrade storage size in the Shop." },
-    { key: "09", text: "The mine keeps counting even when you leave and come back." },
-    { key: "10", text: "A full storage freezes the mine until you transfer." },
-    { key: "11", text: "Transfer early if you want the mine to keep flowing." },
-    { key: "12", text: "A bigger storage means fewer trips to the mine." },
-    { key: "13", text: "The mine rewards patience, but full storage stops the clock." },
-    { key: "14", text: "Shop upgrades will make each visit worth more." }
+    { key: "08", text: "You can upgrade storage size in the Shop." }
   ];
 
   var MINE_MESSAGE_FACE_FALLBACK_SRC = "assets/gfx2/mine_scr/mine_face_00.png";
@@ -9147,12 +9276,17 @@ Main tuning points:
     if (!key) {
       return MINE_MESSAGE_FACE_FALLBACK_SRC;
     }
+    if (key === "15") {
+      return "assets/gfx2/mine_scr/mine_face_15.png";
+    }
     return "assets/gfx2/mine_scr/mine_face_" + key + ".png";
   }
 
   function getMineIdleTip(now) {
     var safeNow = Number.isFinite(now) ? Math.max(0, Math.floor(now)) : Date.now();
-    return MINE_IDLE_TIPS[Math.floor(safeNow / 30000) % MINE_IDLE_TIPS.length];
+    var cycleStartAt = Math.max(0, Math.floor(Number(state.mineIdleTipStartedAt) || 0));
+    var elapsedMs = cycleStartAt > 0 ? Math.max(0, safeNow - cycleStartAt) : 0;
+    return MINE_IDLE_TIPS[Math.floor(elapsedMs / 30000) % MINE_IDLE_TIPS.length];
   }
 
   function renderPreRunMineScreen() {
@@ -9268,13 +9402,18 @@ Main tuning points:
       preRunMineGfx2CountdownEl.classList.toggle("is-full", isFull);
     }
     if (preRunMineGfx2TransferBtn) {
-      preRunMineGfx2TransferBtn.disabled = !!transferAdActive;
-      preRunMineGfx2TransferBtn.setAttribute("aria-disabled", transferAdActive ? "true" : "false");
+      var mineControlsDisabled = !!transferAdActive || !!state.preRunGfx2MineExitActive;
+      preRunMineGfx2TransferBtn.disabled = mineControlsDisabled;
+      preRunMineGfx2TransferBtn.setAttribute("aria-disabled", mineControlsDisabled ? "true" : "false");
       preRunMineGfx2TransferBtn.dataset.adLabel = transferAdActive
         ? (state.mineTransferAdWatchMode === "fake"
             ? "WATCH AD " + Math.max(0, state.mineTransferAdWatchSecondsLeft).toLocaleString("en-US") + "S"
             : "LOADING AD")
         : "";
+    }
+    if (preRunMineGfx2ExitBtn) {
+      preRunMineGfx2ExitBtn.disabled = !!state.preRunGfx2MineExitActive;
+      preRunMineGfx2ExitBtn.setAttribute("aria-disabled", state.preRunGfx2MineExitActive ? "true" : "false");
     }
     if (preRunMineGfx2MessageEl) {
       preRunMineGfx2MessageEl.classList.remove("is-info", "is-success", "is-warning");
@@ -9314,6 +9453,10 @@ Main tuning points:
   function openPreRunMineScreen() {
     unlockAudioIfNeeded();
     playUiPageOpenSound();
+    state.preRunGfx2MineEntryActive = false;
+    state.preRunGfx2MineEntryTime = 0;
+    state.preRunGfx2MineExitActive = false;
+    state.preRunGfx2MineExitTime = 0;
     clearMineTransferAdWatchTimer();
     state.mineTransferAdWatchActive = false;
     state.mineTransferAdWatchMode = "";
@@ -9326,18 +9469,16 @@ Main tuning points:
     clearMineTransferMessagePhase();
     state.mineHalfFullAnnounced = false;
     state.mineIntroShown = false;
+    state.mineIdleTipStartedAt = Date.now();
     state.preRunStep = "mine";
     renderPreRunScreen();
   }
 
   function handlePreRunMineBackNavigation() {
-    playUiPageOpenSound();
-    clearMineTransferAdWatchTimer();
-    state.mineTransferAdWatchActive = false;
-    state.mineTransferAdWatchMode = "";
-    state.mineTransferAdWatchSecondsLeft = 0;
-    state.preRunStep = "select";
-    renderPreRunScreen();
+    if (state.preRunGfx2MineExitActive) {
+      return;
+    }
+    startPreRunGfx2MineExitAnimation();
   }
 
   function handleMineTransfer(skipAdWatch) {
@@ -9939,7 +10080,7 @@ Main tuning points:
         }
         unlockAudioIfNeeded();
         playUiButtonSound();
-        openPreRunMineScreen();
+        startPreRunGfx2MineEntryAnimation();
       });
     }
     function openPreRunShop() {
@@ -12734,6 +12875,10 @@ Main tuning points:
     } else if (state.preRunActive && !state.adminPaused) {
       if (state.preRunGfx2BackActive) {
         updatePreRunGfx2BackAnimation(dt);
+      } else if (state.preRunGfx2MineEntryActive) {
+        updatePreRunGfx2MineEntryAnimation(dt);
+      } else if (state.preRunGfx2MineExitActive) {
+        updatePreRunMineExitAnimation(dt);
       } else if (state.preRunGfx2ClassicExitActive) {
         updatePreRunGfx2ClassicExitAnimation(dt);
       } else if (state.preRunGfx2AdvanceExitActive) {
