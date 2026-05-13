@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 87,
-  "latestVersionName": "1.0.87",
+  "latestVersionCode": 88,
+  "latestVersionName": "1.0.88",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.87 build is available. The release now uses the JPG classic skin layout assets across Classic and Advanced and keeps the latest skin/shop changes in sync.",
+  "message": "A new Hrrra 1.0.88 build is available. The release adds Android mine storage reminders and keeps the latest skin/shop changes in sync.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

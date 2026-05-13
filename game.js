@@ -1462,6 +1462,24 @@ Main tuning points:
     Skin06: {
       walkFilenames: HERO_WALK_FRAME_FILENAMES_SKIN06,
       jumpFilenames: HERO_JUMP_FRAME_FILENAMES_SKIN06,
+      walkSourceRects: [
+        { x: 40, y: 1, w: 121, h: 194 },
+        { x: 52, y: 4, w: 115, h: 191 },
+        { x: 10, y: 7, w: 154, h: 188 },
+        { x: 19, y: 7, w: 142, h: 188 },
+        { x: 46, y: 1, w: 115, h: 194 },
+        { x: 16, y: 1, w: 133, h: 194 },
+        { x: 10, y: 4, w: 151, h: 191 },
+        { x: 28, y: 4, w: 112, h: 191 }
+      ],
+      jumpSourceRects: [
+        { x: 71, y: 64, w: 81, h: 149 },
+        { x: 52, y: 4, w: 106, h: 193 },
+        { x: 71, y: 10, w: 81, h: 199 },
+        { x: 49, y: 13, w: 118, h: 200 },
+        { x: 43, y: 28, w: 112, h: 185 },
+        { x: 61, y: 37, w: 88, h: 176 }
+      ],
       usesFullFrameSourceRects: true
     }
   };
@@ -2821,6 +2839,7 @@ Main tuning points:
     }
 
     if (!isMineUnlocked()) {
+      syncMineStorageReminder(false, economyStats.mineStorageCoins, storageCapacity);
       if (changed) {
         writeEconomyStats();
       }
@@ -2843,6 +2862,7 @@ Main tuning points:
       if (changed) {
         writeEconomyStats();
       }
+      syncMineStorageReminder(true, economyStats.mineStorageCoins, storageCapacity);
       return {
         minedCoins: 0,
         becameFull: false,
@@ -2874,6 +2894,7 @@ Main tuning points:
     if (changed) {
       writeEconomyStats();
     }
+    syncMineStorageReminder(economyStats.mineStorageCoins >= storageCapacity, economyStats.mineStorageCoins, storageCapacity);
 
     return {
       minedCoins: minedCoins,
@@ -2901,6 +2922,7 @@ Main tuning points:
     economyStats.mineFrozenRemainingMs = 0;
     economyStats.mineNextCoinAt = now + (resumeDelay > 0 ? resumeDelay : intervalMs);
     writeEconomyStats();
+    syncMineStorageReminder(false, 0, getMineStorageCapacity());
     return transferAmount;
   }
 
@@ -3925,12 +3947,20 @@ Main tuning points:
 
   function getHeroWalkFrameSourceRects() {
     var skinName = getSelectedHeroSkinName();
-    return getHeroSkinFrameConfig(skinName).usesFullFrameSourceRects ? HERO_FRAME_SOURCE_RECTS_FULL_FRAME : HERO_WALK_FRAME_SOURCE_RECTS_SKIN01;
+    var skinConfig = getHeroSkinFrameConfig(skinName);
+    if (skinConfig.walkSourceRects && skinConfig.walkSourceRects.length) {
+      return skinConfig.walkSourceRects;
+    }
+    return skinConfig.usesFullFrameSourceRects ? HERO_FRAME_SOURCE_RECTS_FULL_FRAME : HERO_WALK_FRAME_SOURCE_RECTS_SKIN01;
   }
 
   function getHeroJumpFrameSourceRects() {
     var skinName = getSelectedHeroSkinName();
-    return getHeroSkinFrameConfig(skinName).usesFullFrameSourceRects ? HERO_FRAME_SOURCE_RECTS_FULL_FRAME : HERO_JUMP_FRAME_SOURCE_RECTS_SKIN01;
+    var skinConfig = getHeroSkinFrameConfig(skinName);
+    if (skinConfig.jumpSourceRects && skinConfig.jumpSourceRects.length) {
+      return skinConfig.jumpSourceRects;
+    }
+    return skinConfig.usesFullFrameSourceRects ? HERO_FRAME_SOURCE_RECTS_FULL_FRAME : HERO_JUMP_FRAME_SOURCE_RECTS_SKIN01;
   }
 
   function getHeroFrameSourceRect(heroFrame) {
@@ -3938,6 +3968,12 @@ Main tuning points:
     var skinConfig = getHeroSkinFrameConfig(skinName);
     if (!heroFrame || !heroFrame.image) {
       return { x: 0, y: 0, w: 0, h: 0 };
+    }
+    if (heroFrame.type === "walk" && skinConfig.walkSourceRects && skinConfig.walkSourceRects[heroFrame.index]) {
+      return skinConfig.walkSourceRects[heroFrame.index];
+    }
+    if (heroFrame.type === "jump" && skinConfig.jumpSourceRects && skinConfig.jumpSourceRects[heroFrame.index]) {
+      return skinConfig.jumpSourceRects[heroFrame.index];
     }
     if (skinConfig.usesFullFrameSourceRects) {
       return {
@@ -5954,6 +5990,7 @@ Main tuning points:
     mineIdleTipStartedAt: 0,
     mineHalfFullAnnounced: false,
     mineIntroShown: false,
+    mineStorageReminderSyncKey: "",
     preRunScores: createInitialPreRunScoresState(),
     onlineHighscore: {
       loading: false,
@@ -8132,6 +8169,49 @@ Main tuning points:
     );
   }
 
+  function getMineStorageReminderPlugin() {
+    var plugin =
+      window.Capacitor &&
+      window.Capacitor.Plugins &&
+      window.Capacitor.Plugins.MineStorageReminder &&
+      typeof window.Capacitor.Plugins.MineStorageReminder.sync === "function"
+        ? window.Capacitor.Plugins.MineStorageReminder
+        : null;
+    return plugin;
+  }
+
+  function syncMineStorageReminder(isFull, storageCoins, storageCapacity) {
+    if (!isNativeAndroidPlatform()) {
+      return;
+    }
+
+    var reminderKey =
+      (isFull ? "1" : "0") +
+      ":" +
+      String(Math.max(0, Math.floor(Number(storageCoins) || 0))) +
+      ":" +
+      String(Math.max(1, Math.floor(Number(storageCapacity) || 1)));
+
+    if (state.mineStorageReminderSyncKey === reminderKey) {
+      return;
+    }
+
+    state.mineStorageReminderSyncKey = reminderKey;
+
+    var plugin = getMineStorageReminderPlugin();
+    if (!plugin) {
+      return;
+    }
+
+    plugin
+      .sync({
+        enabled: Boolean(isFull),
+      })
+      .catch(function () {
+        state.mineStorageReminderSyncKey = "";
+      });
+  }
+
   function setUpdateNoticeOpen(isOpen, forceUpdate) {
     state.updateNoticeActive = Boolean(isOpen);
     state.updateNoticeForce = Boolean(forceUpdate);
@@ -9494,6 +9574,7 @@ Main tuning points:
     }
     if (preRunMineGfx2MessageTextEl) {
       preRunMineGfx2MessageTextEl.textContent = messageText;
+      preRunMineGfx2MessageTextEl.classList.toggle("is-mine-face-15", String(messageKey || "") === "15");
     }
   }
 

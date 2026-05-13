@@ -484,4 +484,11 @@ ted je grafika na 150% původní velikosti. udělej, aby byla na 175%
 -------------------
 Místo PNG skin slotů v classic/advanced pre-run selectu použij JPG soubory z `assets/gfx2/classic/layout` a jen přepni resolver cesty, bez změny logiky výběru.
 tak to udelej znovu podle workflow
+v mine screen se hlaska č. 15 zobrazuje výš než ostatní hlasky. je to proto, ze tam je zvetsena grafika mine_face_15?
+ano udel
+u hlasky č. 15 (jen u ní) nech obrázek tak jak ted je, ale posun text o 5% do prava
+u skin 06 animace pri hrani dochazi k "trhnuti" mezi posledním a prvním walk framem. jsou napojene vsechny 8 frames? protoze kdyz zkousim obrazky, tak nevidim důvod, proc by mel byt skok. není zadny rozdíl mezi 0+ a 08, které by na sebe meli navazovat
+tak to rovnou uprav
+uprav stejnym způsobem i jump obrazky, protoze tedka vypada skin jinak ve walk a jump fazi
+tak to priprav
 -------------------

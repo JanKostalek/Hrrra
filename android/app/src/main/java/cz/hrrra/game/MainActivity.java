@@ -41,6 +41,7 @@ public class MainActivity extends BridgeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         registerPlugin(PrivacyOptionsPlugin.class);
         registerPlugin(RewardedContinuePlugin.class);
+        registerPlugin(MineStorageReminderPlugin.class);
         super.onCreate(savedInstanceState);
         adContainer = findViewById(R.id.ad_container);
         if (!ADS_ENABLED && adContainer != null) {

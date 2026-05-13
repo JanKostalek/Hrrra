@@ -1,5 +1,6 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-13: Added an Android-only mine storage reminder bridge that schedules recurring local notifications when mine storage is full and cancels them once the coins are transferred back to the wallet.
 - 2026-05-12: Increased only the mine message face for message `15` by 50% in `game.js` and `style.css` so `mine_face_15.png` renders larger without affecting the other mine face graphics.
 - 2026-05-12: Nudged the run-screen life hearts 2% upward in the responsive HUD layout so the right-side life row sits slightly higher while keeping the larger 150% sizing.
 - 2026-05-12: Moved the run-screen life hearts lower in `game.js` and increased their size to roughly 150% of the previous value by adjusting the responsive `#game-shell`-based HUD layout.
@@ -291,3 +292,7 @@
 2026-05-12 - Switched the advanced skin layout resolver over to the classic layout path and removed the duplicated `assets/gfx2/advance/layout` image copies so the release package no longer ships the same skin artwork twice.
 2026-05-12 - Switched the classic/advanced skin slot resolver from PNG to JPG skin assets in `assets/gfx2/classic/layout` so both modes now load the JPG copies the user uploaded.
 2026-05-12 - Bumped the release metadata to 1.0.87 / versionCode 87 for the JPG skin-layout release and prepared the next store build flow around it.
+2026-05-12 - Kept mine message face 15 enlarged with a transform in `style.css` so the artwork stays bigger without pushing the whole message row upward.
+2026-05-12 - Shifted the text part of mine message 15 slightly to the right while leaving the enlarged face art unchanged.
+2026-05-13 - Gave Skin06 its own cropped walk source rects in `game.js` so the walk loop uses a stable anchor and no longer jumps between the last and first frame.
+2026-05-13 - Added matching cropped jump source rects for Skin06 in `game.js` so walk and jump now share the same frame anchoring behavior.

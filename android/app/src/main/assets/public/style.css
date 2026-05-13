@@ -2224,17 +2224,21 @@ body {
   height: clamp(42px, 4.4vw, 64px);
   object-fit: contain;
   image-rendering: auto;
+  transform-origin: center center;
 }
 
 .pre-run-mine-gfx2-message-face.is-mine-face-15 {
-  width: calc(clamp(42px, 4.4vw, 64px) * 1.75);
-  height: calc(clamp(42px, 4.4vw, 64px) * 1.75);
+  transform: scale(1.75);
 }
 
 .pre-run-mine-gfx2-message-text {
   display: block;
   flex: 1 1 auto;
   min-width: 0;
+}
+
+.pre-run-mine-gfx2-message-text.is-mine-face-15 {
+  transform: translateX(5%);
 }
 
 .pre-run-mine-gfx2-message.is-success {

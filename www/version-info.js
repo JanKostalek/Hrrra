@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 87,
-  versionName: "1.0.87",
+  versionCode: 88,
+  versionName: "1.0.88",
   whatsNew: [
-  "Added the updated Advanced and Classic hard game-over artwork into the release bundle.",
+  "Added Android mine storage reminders for full storage states.",
   "Top-right life HUD now scales with the window."
 ]
 });
