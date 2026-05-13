@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 90,
-  "latestVersionName": "1.0.90",
+  "latestVersionCode": 91,
+  "latestVersionName": "1.0.91",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.90 build is available. The release restores the pre-run difficulty image selector and keeps the classic and advanced board layout tweaks.",
+  "message": "A new Hrrra 1.0.91 build is available. The release restores the classic Double Jump briefing, keeps the advanced lives note accurate, and adds an admin password gate toggle.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

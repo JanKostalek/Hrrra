@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 90,
-  versionName: "1.0.90",
+  versionCode: 91,
+  versionName: "1.0.91",
   whatsNew: [
-  "Pre-run difficulty now uses the fixed image selector in the classic and advanced boards.",
-  "The level line sits lower and the button stays anchored in the board corner."
+  "Classic pre-run text now again calls out permanent Double Jump, while advanced shows the true lives note.",
+  "Admin password gate can now be toggled and edited from the admin panel."
 ]
 });

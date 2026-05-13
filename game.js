@@ -503,7 +503,7 @@ Main tuning points:
   var preRunFutureReleaseBtn = document.getElementById("pre-run-future-release-btn");
   var preRunDetailAdminBtn = document.getElementById("pre-run-detail-admin-btn");
   var APP_VERSION_INFO = window.HrrraVersionInfo || { versionCode: 0, versionName: "0.0.0" };
-  var ADMIN_PASSWORD = "H3510";
+  var DEFAULT_ADMIN_PASSWORD = "H3510";
   var TESTER_INFO_URL = "https://hrrra.vercel.app/TESTER_INFO.md";
   var FUTURE_RELEASE_URL = "https://hrrra.vercel.app/future-release.html";
   var VERSION_INFO_URL = "https://hrrra.vercel.app/version.json";
@@ -5456,9 +5456,7 @@ Main tuning points:
       } else if (typeof C[key] === "number" && Number.isFinite(value)) {
         C[key] = sanitizeGlobalAdminNumber(key, value);
       } else if (typeof C[key] === "string" && typeof value === "string") {
-        C[key] = key === "selectedSkin"
-          ? normalizeSkinName(value)
-          : (isAudioGlobalPathKey(key) ? sanitizeAudioPathValue(value) : value);
+        C[key] = normalizeGlobalAdminStringValue(key, value);
       }
     }
   }
@@ -5653,9 +5651,7 @@ Main tuning points:
       } else if (typeof C[globalKey] === "number" && Number.isFinite(C[globalKey])) {
         exportData.global[globalKey] = sanitizeGlobalAdminNumber(globalKey, C[globalKey]);
       } else if (typeof C[globalKey] === "string") {
-        exportData.global[globalKey] = globalKey === "selectedSkin"
-          ? normalizeSkinName(C[globalKey])
-          : String(C[globalKey]);
+        exportData.global[globalKey] = normalizeGlobalAdminStringValue(globalKey, C[globalKey]);
       } else if (typeof globalState[globalKey] === "string") {
         exportData.global[globalKey] = globalState[globalKey];
       } else if (typeof globalState[globalKey] === "boolean") {
@@ -5746,12 +5742,9 @@ Main tuning points:
       } else if (typeof C[globalKey] === "number" && Number.isFinite(parsed.global[globalKey])) {
         saveGlobalAdminField(globalKey, sanitizeGlobalAdminNumber(globalKey, parsed.global[globalKey]));
       } else if (typeof C[globalKey] === "string" && typeof parsed.global[globalKey] === "string") {
-        saveGlobalAdminField(
-          globalKey,
-          globalKey === "selectedSkin" ? normalizeSkinName(parsed.global[globalKey]) : parsed.global[globalKey]
-        );
+        saveGlobalAdminField(globalKey, normalizeGlobalAdminStringValue(globalKey, parsed.global[globalKey]));
       } else if (typeof parsed.global[globalKey] === "string") {
-        saveGlobalAdminField(globalKey, parsed.global[globalKey]);
+        saveGlobalAdminField(globalKey, normalizeGlobalAdminStringValue(globalKey, parsed.global[globalKey]));
       } else if (Number.isFinite(parsed.global[globalKey])) {
         saveGlobalAdminField(globalKey, parsed.global[globalKey]);
       }
@@ -6456,6 +6449,8 @@ Main tuning points:
         { key: "fullscreenAutoEnabled", label: "Auto fullscreen on mobile", type: "checkbox" },
         { key: "modernVisualsEnabled", label: "Modern visuals", type: "checkbox" },
         { key: "badgesV2Enabled", label: "Badges v2", type: "checkbox" },
+        { key: "adminPasswordRequired", label: "Require admin password", type: "checkbox" },
+        { key: "adminPassword", label: "Admin password", type: "password" },
         { key: "selectedSkin", label: "Skin", type: "select", options: SKIN_OPTIONS },
         { key: "skinPickupLevels", label: "Skin Pickup Level", type: "skin-pickup-levels" },
         { key: "hardModeUnlockLevel", label: "Jump Classic Hard unlock at Level", type: "number", min: 1, max: LEVEL_COUNT, step: 1 },
@@ -7158,6 +7153,15 @@ Main tuning points:
     return String(C.livesCount);
   }
 
+  function getPreRunIntroNoteText(mode) {
+    var lives = Math.max(1, Math.floor(Number(C.livesCount) || 1));
+    var note = "Starting with " + lives.toLocaleString("en-US") + (lives === 1 ? " life" : " lives");
+    if (mode === 2) {
+      note += " and Double Jump always enabled";
+    }
+    return note + ".";
+  }
+
   function getLifeRuleText(applies) {
     if (C.livesCount <= 1) {
       return "InstaDeath";
@@ -7423,7 +7427,7 @@ Main tuning points:
     if (config.noteEl) {
       var showIntroNote = state.currentLevel === 1;
       config.noteEl.classList.toggle("hidden", !showIntroNote);
-      config.noteEl.textContent = "Starting with 5 lives and Double Jump always enabled";
+      config.noteEl.textContent = getPreRunIntroNoteText(state.gameMode);
     }
     if (config.startBtn) {
       config.startBtn.setAttribute("aria-label", state.currentLevel > 1 ? "Continue run" : "Start run");
@@ -11275,12 +11279,31 @@ Main tuning points:
     adminPrivacy.classList.toggle("hidden", !isNativePrivacyOptionsAvailable());
   }
 
+  function sanitizeAdminPasswordValue(value) {
+    var normalized = String(value || "").trim();
+    return normalized || DEFAULT_ADMIN_PASSWORD;
+  }
+
+  function normalizeGlobalAdminStringValue(key, value) {
+    if (key === "selectedSkin") {
+      return normalizeSkinName(value);
+    }
+    if (key === "adminPassword") {
+      return sanitizeAdminPasswordValue(value);
+    }
+    return isAudioGlobalPathKey(key) ? sanitizeAudioPathValue(value) : String(value || "");
+  }
+
   function promptForAdminPasswordAndOpenAdmin() {
+    if (!C.adminPasswordRequired) {
+      setAdminOpen(true);
+      return;
+    }
     var enteredPassword = window.prompt("Enter admin password:");
     if (enteredPassword === null) {
       return;
     }
-    if (String(enteredPassword).trim() !== ADMIN_PASSWORD) {
+    if (sanitizeAdminPasswordValue(enteredPassword) !== sanitizeAdminPasswordValue(C.adminPassword)) {
       window.alert("Wrong password.");
       return;
     }
@@ -11432,6 +11455,13 @@ Main tuning points:
           globalInput = document.createElement("input");
           globalInput.type = "checkbox";
           globalInput.checked = Boolean(C[globalField.key]);
+        } else if (globalField.type === "password") {
+          if (typeof C[globalField.key] !== "string") {
+            continue;
+          }
+          globalInput = document.createElement("input");
+          globalInput.type = "password";
+          globalInput.value = sanitizeAdminPasswordValue(C[globalField.key]);
         } else if (globalField.type === "text") {
           if (typeof C[globalField.key] !== "string") {
             continue;
@@ -11451,9 +11481,7 @@ Main tuning points:
             option.textContent = selectOptions[optionIndex].label;
             globalInput.appendChild(option);
           }
-          globalInput.value = globalField.key === "selectedSkin"
-            ? normalizeSkinName(C[globalField.key])
-            : String(C[globalField.key]);
+          globalInput.value = normalizeGlobalAdminStringValue(globalField.key, C[globalField.key]);
         } else if (globalField.type === "number") {
           if (typeof C[globalField.key] !== "number") {
             continue;
@@ -11695,6 +11723,9 @@ Main tuning points:
               nextValue = String(target.value);
               if (key === "selectedSkin") {
                 nextValue = normalizeSkinName(nextValue);
+                target.value = nextValue;
+              } else if (key === "adminPassword") {
+                nextValue = sanitizeAdminPasswordValue(nextValue);
                 target.value = nextValue;
               } else if (isAudioGlobalPathKey(key)) {
                 nextValue = sanitizeAudioPathValue(nextValue);

@@ -23,6 +23,8 @@
     fullscreenAutoEnabled: true,
     modernVisualsEnabled: true,
     badgesV2Enabled: false,
+    adminPasswordRequired: false,
+    adminPassword: "H3510",
     audioMusicEnabled: true,
     audioSfxEnabled: true,
     audioMasterVolumePercent: 75,

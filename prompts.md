@@ -1,6 +1,10 @@
 ﻿# Prompts
 
 -------------------
+Přidej do administrace přepínač pro zapínání a vypínání admin password gate a také textové pole pro nastavení hesla, které se má při otevření adminu vyžadovat.
+
+Při přípravě release nezapomeň zvýšit versionCode/versionName a sladit root i public version metadata, aby AAB odpovídalo live verzi.
+
 Ted chci další změnu. na stránce badges se vykreslují trophy_xxx (badge name). Jsou tam bez ohledu na to, zda je už badge získaný. Změn to tak, aby pokud nemám žádny badge (bronze / silver / gold), tak se tam ta trophy obrázek nebude zobrazovat. Teprve po získání badge se objeví tady trophy
 
 -------------------

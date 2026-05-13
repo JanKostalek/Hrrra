@@ -1,5 +1,8 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-13: Bumped the release metadata to 1.0.91 / versionCode 91 and folded in the latest pre-run briefing and admin password gate changes for the next store build.
+- 2026-05-13: Restored the classic pre-run briefing to explicitly say Double Jump is always enabled, while keeping the advanced briefing on the actual dynamic lives-only note.
+- 2026-05-13: Added admin-panel controls for enabling/disabling the admin password gate and editing the required password text, while keeping the existing password prompt behavior when the gate is enabled.
 - 2026-05-13: Bumped the release metadata to 1.0.89 / versionCode 89 for the account-scoped local profile release and prepared the next store build flow around it.
 - 2026-05-13: Split local profile persistence by active user so badges, skins, wallet, mine storage, and max scores now load per account while Guest always starts from a clean, empty profile.
 - 2026-05-13: Switched the Android mine reminder scheduler from full-storage tracking to transfer-time scheduling so the reminder delay is now computed from the transferred storage coin count and current harvest interval.

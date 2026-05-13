@@ -22,6 +22,17 @@ body {
   justify-content: center;
 }
 
+button,
+a,
+input,
+select,
+textarea,
+summary,
+[role="button"],
+[onclick] {
+  -webkit-tap-highlight-color: transparent;
+}
+
 #game-shell {
   position: relative;
   width: min(96vw, 1200px);
