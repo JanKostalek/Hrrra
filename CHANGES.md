@@ -300,3 +300,10 @@
 2026-05-12 - Shifted the text part of mine message 15 slightly to the right while leaving the enlarged face art unchanged.
 2026-05-13 - Gave Skin06 its own cropped walk source rects in `game.js` so the walk loop uses a stable anchor and no longer jumps between the last and first frame.
 2026-05-13 - Added matching cropped jump source rects for Skin06 in `game.js` so walk and jump now share the same frame anchoring behavior.
+2026-05-13 - Restored the Easy/Hard difficulty toggle on the gfx2 pre-run classic and advanced detail screens by reintroducing the shared toggle row and attaching it to the active board.
+2026-05-13 - Reworked the gfx2 pre-run difficulty control into a plain Easy/Hard text selector with lit/grey states while keeping the hard-lock message flow unchanged.
+2026-05-13 - Replaced the gfx2 pre-run difficulty selector with a fixed image button in the board corner that swaps `easy.png`, `hard.png`, and `reachl5tounlock.png`, while moving the level line slightly lower.
+2026-05-13 - Shifted the gfx2 pre-run difficulty image button 5% to the right inside the classic and advanced detail boards.
+2026-05-13 - Shifted the gfx2 pre-run difficulty image button another 5% to the right, keeping the same fixed board anchor.
+2026-05-13 - Allowed the gfx2 pre-run classic/advanced board to overflow visibly so the difficulty image button can sit slightly outside the panel without being clipped.
+2026-05-13 - Bumped the release metadata to 1.0.90 / versionCode 90 for the image-button pre-run difficulty release and prepared the next store build flow around it.

@@ -495,4 +495,8 @@ posun na prerun obrazovkách ve vsech modech textové pole o 5% dolů
 tak změn systém, aby se plánování nedělo az po naplnění storage, ale v okamzik, kdy se presunou coins do peněženky.  V ten okamžik se podívej, kolik je storage (počet coins) a jak dloho se jeden coin těží (harvest time). Ty čísla vynásob a naplánuj reminder. pak je jedno, kdyz se hra zavře jeste pred naplněním storage. Musís se ale podívat, aby se načítala odpovídající čísla, tak jak jsou nastavená v administraci / koupením větší storage / koupením rychlejšího těžení.
 udělej lokální ukládání profilu podle uživatele, aby při změně usera měly total score, koupene věci, badges, skin unlocky a mine wallet/storage vlastní data; guest má být vždy prázdný a nemá zdědit nic z jiného účtu.
 priprav aab podle workflow, takže je potřeba bumpnout release verzi, srovnat version-info/version.json v rootu i public mirroru, synchronizovat assets, udělat release commit, pushnout main a až pak zbuildit finální .aab.
+vrátit Easy/Hard přepínač na gfx2 pre-run detail obrazovky pro classic i advanced, protože v administraci už existují oddělená nastavení pro obě obtížnosti.
+zjednodušit gfx2 pre-run difficulty UI na textové Easy/Hard volby, kde aktivní bude vysvícená a neaktivní zasedlá, a při zamčeném Hard se má zobrazit stejná hláška jako doteď a pak se vrátit výběr.
+posunout `Level 1` trochu dolů, nechat `Difficulty` nahoře a dát do pravého rohu pevný image button z `assets/gfx2/buttons/` se stavy `easy.png`, `hard.png` a `reachl5tounlock.png`, kde locked Hard ukáže lock grafiku na 2 sekundy a pak se vrátí na Easy.
+prepare aab podle workflow po přepnutí difficulty controlu na image button a release bumpu na 1.0.90 / versionCode 90.
 -------------------

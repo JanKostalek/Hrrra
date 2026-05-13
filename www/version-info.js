@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 89,
-  versionName: "1.0.89",
+  versionCode: 90,
+  versionName: "1.0.90",
   whatsNew: [
-  "Local progress now follows the active user, and Guest starts empty.",
-  "Android mine reminders still work from transfer time."
+  "Pre-run difficulty now uses the fixed image selector in the classic and advanced boards.",
+  "The level line sits lower and the button stays anchored in the board corner."
 ]
 });

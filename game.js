@@ -133,6 +133,8 @@ Main tuning points:
   var preRunJumpBtn = document.getElementById("pre-run-jump-btn");
   var preRunFullBtn = document.getElementById("pre-run-full-btn");
   var preRunDifficultyToggleEl = document.getElementById("pre-run-difficulty-toggle");
+  var preRunDifficultyImageEl = document.getElementById("pre-run-difficulty-image");
+  var preRunDifficultyRowEl = document.getElementById("pre-run-difficulty-row");
   var preRunRulesBtn = document.getElementById("pre-run-rules-btn");
   var preRunCreditsBtn = document.getElementById("pre-run-credits-btn");
   var preRunShopBtn = document.getElementById("pre-run-shop-btn");
@@ -492,7 +494,6 @@ Main tuning points:
   var preRunBadgesTotalValueEl = document.getElementById("pre-run-badges-total-value");
   var preRunBadgesTotalLabelEl = document.getElementById("pre-run-badges-total-label");
   var preRunFullLockEl = document.getElementById("pre-run-full-lock");
-  var preRunDifficultyLockEl = document.getElementById("pre-run-difficulty-lock");
   var preRunBackBtn = document.getElementById("pre-run-back-btn");
   var preRunCompactBackBtn = document.getElementById("pre-run-compact-back-btn");
   var preRunCompactAdminBtn = document.getElementById("pre-run-compact-admin-btn");
@@ -7572,22 +7573,38 @@ Main tuning points:
       preRunScreenEl.classList.toggle("is-launch-transition", state.preRunLaunchActive);
     }
     if (preRunDifficultyToggleEl) {
-      var showHardVisualState = state.gameDifficulty === "hard" || state.preRunDifficultyLockNoticeActive;
-      preRunDifficultyToggleEl.classList.toggle("easy-active", !showHardVisualState);
-      preRunDifficultyToggleEl.classList.toggle("hard-active", showHardVisualState);
-      preRunDifficultyToggleEl.classList.toggle("show-lock-note", state.preRunDifficultyLockNoticeActive);
-      preRunDifficultyToggleEl.classList.toggle("locked", !hardUnlocked);
+      var difficultyImageName = state.preRunDifficultyLockNoticeActive
+        ? "reachl5tounlock.png"
+        : state.gameDifficulty === "hard"
+          ? "hard.png"
+          : "easy.png";
+      if (preRunDifficultyImageEl) {
+        preRunDifficultyImageEl.src = "assets/gfx2/buttons/" + difficultyImageName;
+        preRunDifficultyImageEl.alt = state.preRunDifficultyLockNoticeActive
+          ? "Reach level 5 to unlock hard difficulty"
+          : state.gameDifficulty === "hard"
+            ? "Hard difficulty"
+            : "Easy difficulty";
+      }
+      preRunDifficultyToggleEl.classList.toggle("locked", !hardUnlocked && state.gameDifficulty !== "hard");
       preRunDifficultyToggleEl.title = hardUnlocked ? "" : getHardDifficultyLockText();
       preRunDifficultyToggleEl.setAttribute(
         "aria-label",
-        state.gameDifficulty === "hard"
-          ? "Difficulty set to Hard"
-          : "Difficulty set to Easy"
+        state.preRunDifficultyLockNoticeActive
+          ? "Hard difficulty locked"
+          : state.gameDifficulty === "hard"
+            ? "Difficulty set to Hard"
+            : "Difficulty set to Easy"
       );
     }
-    if (preRunDifficultyLockEl) {
-      preRunDifficultyLockEl.classList.toggle("hidden", !state.preRunDifficultyLockNoticeActive);
-      preRunDifficultyLockEl.textContent = getHardDifficultyLockText();
+    if (preRunDifficultyRowEl) {
+      var difficultyBoardEl = showClassicGfx2Inside
+        ? preRunClassicGfx2BoardEl
+        : (showAdvancedGfx2Inside ? preRunAdvancedGfx2BoardEl : null);
+      preRunDifficultyRowEl.classList.toggle("hidden", !difficultyBoardEl);
+      if (difficultyBoardEl && preRunDifficultyRowEl.parentNode !== difficultyBoardEl) {
+        difficultyBoardEl.insertBefore(preRunDifficultyRowEl, difficultyBoardEl.firstChild);
+      }
     }
     if (preRunFullBtn) {
       preRunFullBtn.classList.toggle("locked", !fullUnlocked);
@@ -9285,7 +9302,7 @@ Main tuning points:
     window.setTimeout(function () {
       state.preRunDifficultyLockNoticeActive = false;
       renderPreRunScreen();
-    }, 1400);
+    }, 2000);
   }
 
   function setPreRunDifficulty(difficulty) {
