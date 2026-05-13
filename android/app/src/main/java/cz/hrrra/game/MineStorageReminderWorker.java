@@ -11,43 +11,41 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.PeriodicWorkRequest;
+import androidx.work.Data;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-
-import java.util.concurrent.TimeUnit;
 
 public class MineStorageReminderWorker extends Worker {
     static final String WORK_NAME = "mine_storage_reminder_work";
     static final String PREFS_NAME = "mine_storage_reminder_state";
     static final String PREF_ENABLED = "enabled";
+    static final String INPUT_DELAY_MS = "delayMs";
 
     private static final String CHANNEL_ID = "mine_storage_reminder";
     private static final int NOTIFICATION_ID = 6106;
-    private static final long INITIAL_DELAY_MINUTES = 30L;
-    private static final long PERIOD_HOURS = 6L;
 
     public MineStorageReminderWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 
-    static void scheduleReminder(Context context) {
+    static void scheduleReminder(Context context, long delayMs) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putBoolean(PREF_ENABLED, true).apply();
 
-        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(
-            MineStorageReminderWorker.class,
-            PERIOD_HOURS,
-            TimeUnit.HOURS
+        long safeDelayMs = Math.max(0L, delayMs);
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(
+            MineStorageReminderWorker.class
         )
-            .setInitialDelay(INITIAL_DELAY_MINUTES, TimeUnit.MINUTES)
+            .setInitialDelay(safeDelayMs, java.util.concurrent.TimeUnit.MILLISECONDS)
+            .setInputData(new Data.Builder().putLong(INPUT_DELAY_MS, safeDelayMs).build())
             .build();
 
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+        WorkManager.getInstance(context).enqueueUniqueWork(
             WORK_NAME,
-            ExistingPeriodicWorkPolicy.KEEP,
+            ExistingWorkPolicy.REPLACE,
             request
         );
     }
@@ -91,14 +89,15 @@ public class MineStorageReminderWorker extends Worker {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("Mine storage is full")
-            .setContentText("Open Hrrra and transfer the coins to your wallet.")
-            .setStyle(new NotificationCompat.BigTextStyle().bigText("Mine storage is full. Open Hrrra and transfer the coins from storage to your wallet."))
+            .setContentTitle("Mine storage reminder")
+            .setContentText("Open Hrrra and check the mine storage.")
+            .setStyle(new NotificationCompat.BigTextStyle().bigText("Open Hrrra and check the mine storage. It should be ready to transfer again."))
             .setContentIntent(contentIntent)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat.from(context).notify(NOTIFICATION_ID, builder.build());
+        prefs.edit().putBoolean(PREF_ENABLED, false).apply();
         return Result.success();
     }
 
@@ -117,7 +116,7 @@ public class MineStorageReminderWorker extends Worker {
             "Mine reminders",
             NotificationManager.IMPORTANCE_DEFAULT
         );
-        channel.setDescription("Reminders when mine storage is full.");
+        channel.setDescription("Reminders after mine transfers.");
         manager.createNotificationChannel(channel);
     }
 }

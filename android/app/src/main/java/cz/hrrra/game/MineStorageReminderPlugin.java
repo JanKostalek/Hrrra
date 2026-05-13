@@ -22,10 +22,10 @@ public class MineStorageReminderPlugin extends Plugin {
 
     @PluginMethod
     public void sync(PluginCall call) {
-        boolean enabled = call.getBoolean("enabled", false);
-        if (!enabled) {
+        long delayMs = Math.max(0L, Math.round(call.getDouble("delayMs", 0.0)));
+        if (delayMs <= 0L) {
             MineStorageReminderWorker.cancelReminder(getContext());
-            resolveResult(call, false, false);
+            resolveResult(call, 0L, false, false);
             return;
         }
 
@@ -51,22 +51,22 @@ public class MineStorageReminderPlugin extends Plugin {
     }
 
     private void syncReminder(PluginCall call, boolean permissionGranted) {
-        boolean enabled = call.getBoolean("enabled", false);
-        if (!enabled || !permissionGranted) {
+        long delayMs = Math.max(0L, Math.round(call.getDouble("delayMs", 0.0)));
+        if (delayMs <= 0L || !permissionGranted) {
             MineStorageReminderWorker.cancelReminder(getContext());
-            resolveResult(call, enabled, permissionGranted);
+            resolveResult(call, delayMs, permissionGranted, false);
             return;
         }
 
-        MineStorageReminderWorker.scheduleReminder(getContext());
-        resolveResult(call, true, true);
+        MineStorageReminderWorker.scheduleReminder(getContext(), delayMs);
+        resolveResult(call, delayMs, true, true);
     }
 
-    private void resolveResult(PluginCall call, boolean enabled, boolean permissionGranted) {
+    private void resolveResult(PluginCall call, long delayMs, boolean permissionGranted, boolean scheduled) {
         JSObject result = new JSObject();
-        result.put("enabled", enabled);
+        result.put("delayMs", delayMs);
         result.put("permissionGranted", permissionGranted);
-        result.put("scheduled", enabled && permissionGranted);
+        result.put("scheduled", scheduled);
         call.resolve(result);
     }
 }

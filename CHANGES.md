@@ -1,6 +1,10 @@
 # Hrrra - Working Changes Log
 
-- 2026-05-13: Added an Android-only mine storage reminder bridge that schedules recurring local notifications when mine storage is full and cancels them once the coins are transferred back to the wallet.
+- 2026-05-13: Bumped the release metadata to 1.0.89 / versionCode 89 for the account-scoped local profile release and prepared the next store build flow around it.
+- 2026-05-13: Split local profile persistence by active user so badges, skins, wallet, mine storage, and max scores now load per account while Guest always starts from a clean, empty profile.
+- 2026-05-13: Switched the Android mine reminder scheduler from full-storage tracking to transfer-time scheduling so the reminder delay is now computed from the transferred storage coin count and current harvest interval.
+- 2026-05-13: Shifted the pre-run detail level-goal text box 5% lower across the mode screens by nudging the shared `pre-run-level-panel` in `style.css`.
+- 2026-05-13: Added an Android-only mine storage reminder bridge and then switched it to transfer-time scheduling so the reminder delay is computed from the transferred storage coin count and the current harvest interval.
 - 2026-05-12: Increased only the mine message face for message `15` by 50% in `game.js` and `style.css` so `mine_face_15.png` renders larger without affecting the other mine face graphics.
 - 2026-05-12: Nudged the run-screen life hearts 2% upward in the responsive HUD layout so the right-side life row sits slightly higher while keeping the larger 150% sizing.
 - 2026-05-12: Moved the run-screen life hearts lower in `game.js` and increased their size to roughly 150% of the previous value by adjusting the responsive `#game-shell`-based HUD layout.

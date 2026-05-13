@@ -5178,6 +5178,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  transform: translateY(5%);
 }
 
 .pre-run-level-panel p {

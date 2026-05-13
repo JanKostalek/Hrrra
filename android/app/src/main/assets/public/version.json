@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 88,
-  "latestVersionName": "1.0.88",
+  "latestVersionCode": 89,
+  "latestVersionName": "1.0.89",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.88 build is available. The release adds Android mine storage reminders and keeps the latest skin/shop changes in sync.",
+  "message": "A new Hrrra 1.0.89 build is available. The release adds account-scoped local progress and keeps Guest profiles empty on each device.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

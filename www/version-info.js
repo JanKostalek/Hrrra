@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 88,
-  versionName: "1.0.88",
+  versionCode: 89,
+  versionName: "1.0.89",
   whatsNew: [
-  "Added Android mine storage reminders for full storage states.",
-  "Top-right life HUD now scales with the window."
+  "Local progress now follows the active user, and Guest starts empty.",
+  "Android mine reminders still work from transfer time."
 ]
 });

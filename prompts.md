@@ -491,4 +491,8 @@ u skin 06 animace pri hrani dochazi k "trhnuti" mezi posledním a prvním walk f
 tak to rovnou uprav
 uprav stejnym způsobem i jump obrazky, protoze tedka vypada skin jinak ve walk a jump fazi
 tak to priprav
+posun na prerun obrazovkách ve vsech modech textové pole o 5% dolů
+tak změn systém, aby se plánování nedělo az po naplnění storage, ale v okamzik, kdy se presunou coins do peněženky.  V ten okamžik se podívej, kolik je storage (počet coins) a jak dloho se jeden coin těží (harvest time). Ty čísla vynásob a naplánuj reminder. pak je jedno, kdyz se hra zavře jeste pred naplněním storage. Musís se ale podívat, aby se načítala odpovídající čísla, tak jak jsou nastavená v administraci / koupením větší storage / koupením rychlejšího těžení.
+udělej lokální ukládání profilu podle uživatele, aby při změně usera měly total score, koupene věci, badges, skin unlocky a mine wallet/storage vlastní data; guest má být vždy prázdný a nemá zdědit nic z jiného účtu.
+priprav aab podle workflow, takže je potřeba bumpnout release verzi, srovnat version-info/version.json v rootu i public mirroru, synchronizovat assets, udělat release commit, pushnout main a až pak zbuildit finální .aab.
 -------------------

@@ -562,14 +562,19 @@ Main tuning points:
   var ADMIN_STORAGE_KEY_PREFIX = "hrrra_admin_config_v3_";
   var LEGACY_ADMIN_STORAGE_KEY_PREFIX = "hrrra_admin_config_v2_";
   var GLOBAL_ADMIN_STORAGE_KEY = "hrrra_admin_global_v1";
-  var MAX_SCORE_STORAGE_KEY_PREFIX = "hrrra_max_score_v2_";
-  var PLAYER_SKIN_PROGRESS_STORAGE_KEY = "hrrra_player_skin_progress_v1";
+  var LEGACY_MAX_SCORE_STORAGE_KEY_PREFIX = "hrrra_max_score_v2_";
+  var MAX_SCORE_STORAGE_KEY_PREFIX = "hrrra_max_score_v3_";
+  var LEGACY_PLAYER_SKIN_PROGRESS_STORAGE_KEY = "hrrra_player_skin_progress_v1";
+  var PLAYER_SKIN_PROGRESS_STORAGE_KEY_PREFIX = "hrrra_player_skin_progress_v2_";
   var PLAYER_NAME_STORAGE_KEY = "hrrra_player_name_v1";
   var PLAYER_ID_STORAGE_KEY = "hrrra_player_id_v1";
-  var BADGE_STATS_STORAGE_KEY = "hrrra_badge_stats_v1";
-  var ECONOMY_STORAGE_KEY = "hrrra_economy_v1";
+  var LEGACY_BADGE_STATS_STORAGE_KEY = "hrrra_badge_stats_v1";
+  var BADGE_STATS_STORAGE_KEY_PREFIX = "hrrra_badge_stats_v2_";
+  var LEGACY_ECONOMY_STORAGE_KEY = "hrrra_economy_v1";
+  var ECONOMY_STORAGE_KEY_PREFIX = "hrrra_economy_v2_";
   var WHATS_NEW_SEEN_VERSION_STORAGE_KEY = "hrrra_whats_new_seen_version_v1";
   var START_SCREEN_GFX2_MIGRATION_STORAGE_KEY = "hrrra_start_screen_default_gfx2_v34";
+  var activeProfilePlayerId = "";
   function getOnlineApiBaseOrigin() {
     var fallbackOrigin = "https://hrrra.vercel.app";
     if (typeof window === "undefined" || !window.location) {
@@ -1006,9 +1011,194 @@ Main tuning points:
     return out;
   }
 
+  function getActiveProfileStoragePlayerId() {
+    return isAuthenticatedPlayerId(activeProfilePlayerId) ? normalizePlayerId(activeProfilePlayerId) : "";
+  }
+
+  function setActiveProfileStoragePlayerId(playerId) {
+    activeProfilePlayerId = isAuthenticatedPlayerId(playerId) ? normalizePlayerId(playerId) : "";
+  }
+
+  function getScopedStorageKey(prefix, playerId) {
+    var normalizedPlayerId = normalizePlayerId(playerId);
+    return normalizedPlayerId ? prefix + normalizedPlayerId : "";
+  }
+
+  function getActiveProfileStorageKey(prefix) {
+    var playerId = getActiveProfileStoragePlayerId();
+    return playerId ? prefix + playerId : "";
+  }
+
+  function getScopedMaxScoreStorageKey(playerId, mode, difficulty) {
+    var normalizedPlayerId = normalizePlayerId(playerId);
+    if (!normalizedPlayerId) {
+      return "";
+    }
+    return MAX_SCORE_STORAGE_KEY_PREFIX + normalizedPlayerId + "_" + String(difficulty) + "_" + String(mode);
+  }
+
+  function hasLocalStorageKeyWithPrefix(prefix) {
+    try {
+      for (var index = 0; index < window.localStorage.length; index += 1) {
+        var key = window.localStorage.key(index);
+        if (key && key.indexOf(prefix) === 0) {
+          return true;
+        }
+      }
+    } catch (error) {
+      // ignore storage failures
+    }
+    return false;
+  }
+
+  function readLegacyBadgeStatsFromStorage() {
+    try {
+      var raw = window.localStorage.getItem(LEGACY_BADGE_STATS_STORAGE_KEY);
+      if (!raw) {
+        return null;
+      }
+      return sanitizeBadgeStats(JSON.parse(raw));
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function readLegacyEconomyStatsFromStorage() {
+    try {
+      var raw = window.localStorage.getItem(LEGACY_ECONOMY_STORAGE_KEY);
+      if (!raw) {
+        return null;
+      }
+      return sanitizeEconomyStats(JSON.parse(raw));
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function readLegacyPlayerSkinProgressFromStorage() {
+    try {
+      var raw = window.localStorage.getItem(LEGACY_PLAYER_SKIN_PROGRESS_STORAGE_KEY);
+      if (!raw) {
+        return null;
+      }
+      var parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object") {
+        return null;
+      }
+      return {
+        unlockedSkins: cloneSkinUnlocks(parsed.unlockedSkins),
+        selectedSkin: normalizeSkinName(parsed.selectedSkin),
+        highestLevelReached: sanitizeHighestLevelReached(parsed.highestLevelReached),
+        levelXUnlocked: Boolean(parsed.levelXUnlocked),
+        hardModeOverride: parsed.hardModeOverride === "locked" || parsed.hardModeOverride === "unlocked"
+          ? parsed.hardModeOverride
+          : "default",
+        fullModeOverride: parsed.fullModeOverride === "locked" || parsed.fullModeOverride === "unlocked"
+          ? parsed.fullModeOverride
+          : "default"
+      };
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function hasScopedPlayerProgressStorage(playerId) {
+    var normalizedPlayerId = normalizePlayerId(playerId);
+    if (!normalizedPlayerId) {
+      return false;
+    }
+    if (window.localStorage.getItem(getScopedStorageKey(BADGE_STATS_STORAGE_KEY_PREFIX, normalizedPlayerId)) !== null) {
+      return true;
+    }
+    if (window.localStorage.getItem(getScopedStorageKey(ECONOMY_STORAGE_KEY_PREFIX, normalizedPlayerId)) !== null) {
+      return true;
+    }
+    if (window.localStorage.getItem(getScopedStorageKey(PLAYER_SKIN_PROGRESS_STORAGE_KEY_PREFIX, normalizedPlayerId)) !== null) {
+      return true;
+    }
+    return hasLocalStorageKeyWithPrefix(MAX_SCORE_STORAGE_KEY_PREFIX + normalizedPlayerId + "_");
+  }
+
+  function removeLegacyProfileStorage() {
+    try {
+      var keysToRemove = [];
+      for (var i = 0; i < window.localStorage.length; i += 1) {
+        var key = window.localStorage.key(i);
+        if (!key) {
+          continue;
+        }
+        if (
+          key === LEGACY_BADGE_STATS_STORAGE_KEY ||
+          key === LEGACY_ECONOMY_STORAGE_KEY ||
+          key === LEGACY_PLAYER_SKIN_PROGRESS_STORAGE_KEY ||
+          key.indexOf(LEGACY_MAX_SCORE_STORAGE_KEY_PREFIX) === 0
+        ) {
+          keysToRemove.push(key);
+        }
+      }
+      for (var keyIndex = 0; keyIndex < keysToRemove.length; keyIndex += 1) {
+        window.localStorage.removeItem(keysToRemove[keyIndex]);
+      }
+    } catch (error) {
+      // ignore storage failures
+    }
+  }
+
+  function migrateLegacyProfileStorageIfNeeded(playerId) {
+    var normalizedPlayerId = isAuthenticatedPlayerId(playerId) ? normalizePlayerId(playerId) : "";
+    if (!normalizedPlayerId || hasScopedPlayerProgressStorage(normalizedPlayerId)) {
+      return;
+    }
+
+    var legacyBadgeStats = readLegacyBadgeStatsFromStorage();
+    var legacyEconomyStats = readLegacyEconomyStatsFromStorage();
+    var legacySkinProgress = readLegacyPlayerSkinProgressFromStorage();
+    var hasLegacyMaxScores = hasLocalStorageKeyWithPrefix(LEGACY_MAX_SCORE_STORAGE_KEY_PREFIX);
+    if (!legacyBadgeStats && !legacyEconomyStats && !legacySkinProgress && !hasLegacyMaxScores) {
+      return;
+    }
+
+    try {
+      if (legacyBadgeStats) {
+        window.localStorage.setItem(getScopedStorageKey(BADGE_STATS_STORAGE_KEY_PREFIX, normalizedPlayerId), JSON.stringify(legacyBadgeStats));
+      }
+      if (legacyEconomyStats) {
+        window.localStorage.setItem(getScopedStorageKey(ECONOMY_STORAGE_KEY_PREFIX, normalizedPlayerId), JSON.stringify(legacyEconomyStats));
+      }
+      if (legacySkinProgress) {
+        window.localStorage.setItem(getScopedStorageKey(PLAYER_SKIN_PROGRESS_STORAGE_KEY_PREFIX, normalizedPlayerId), JSON.stringify(legacySkinProgress));
+      }
+      var legacyMaxScoreEntries = [];
+      for (var index = 0; index < window.localStorage.length; index += 1) {
+        var key = window.localStorage.key(index);
+        if (!key || key.indexOf(LEGACY_MAX_SCORE_STORAGE_KEY_PREFIX) !== 0) {
+          continue;
+        }
+        legacyMaxScoreEntries.push({
+          suffix: key.slice(LEGACY_MAX_SCORE_STORAGE_KEY_PREFIX.length),
+          value: window.localStorage.getItem(key)
+        });
+      }
+      for (var entryIndex = 0; entryIndex < legacyMaxScoreEntries.length; entryIndex += 1) {
+        var legacyEntry = legacyMaxScoreEntries[entryIndex];
+        if (legacyEntry.value === null) {
+          continue;
+        }
+        window.localStorage.setItem(MAX_SCORE_STORAGE_KEY_PREFIX + normalizedPlayerId + "_" + legacyEntry.suffix, legacyEntry.value);
+      }
+      removeLegacyProfileStorage();
+    } catch (error) {
+      // ignore migration failures
+    }
+  }
+
   function readBadgeStats() {
     try {
-      var raw = window.localStorage.getItem(BADGE_STATS_STORAGE_KEY);
+      var storageKey = getActiveProfileStorageKey(BADGE_STATS_STORAGE_KEY_PREFIX);
+      if (!storageKey) {
+        return createDefaultBadgeStats();
+      }
+      var raw = window.localStorage.getItem(storageKey);
       if (!raw) {
         return createDefaultBadgeStats();
       }
@@ -1020,13 +1210,17 @@ Main tuning points:
 
   function writeBadgeStats() {
     try {
-      window.localStorage.setItem(BADGE_STATS_STORAGE_KEY, JSON.stringify(badgeStats));
+      var storageKey = getActiveProfileStorageKey(BADGE_STATS_STORAGE_KEY_PREFIX);
+      if (!storageKey) {
+        return;
+      }
+      window.localStorage.setItem(storageKey, JSON.stringify(badgeStats));
     } catch (error) {
       // ignore write failures
     }
   }
 
-  var badgeStats = readBadgeStats();
+  var badgeStats = createDefaultBadgeStats();
 
   function createDefaultEconomyStats() {
     var defaultMineStorageCapacity = sanitizeGlobalAdminNumber("mineStorageCapacity", C.mineStorageCapacity);
@@ -1072,7 +1266,11 @@ Main tuning points:
 
   function readEconomyStats() {
     try {
-      var raw = window.localStorage.getItem(ECONOMY_STORAGE_KEY);
+      var storageKey = getActiveProfileStorageKey(ECONOMY_STORAGE_KEY_PREFIX);
+      if (!storageKey) {
+        return createDefaultEconomyStats();
+      }
+      var raw = window.localStorage.getItem(storageKey);
       if (!raw) {
         return createDefaultEconomyStats();
       }
@@ -1084,13 +1282,17 @@ Main tuning points:
 
   function writeEconomyStats() {
     try {
-      window.localStorage.setItem(ECONOMY_STORAGE_KEY, JSON.stringify(economyStats));
+      var storageKey = getActiveProfileStorageKey(ECONOMY_STORAGE_KEY_PREFIX);
+      if (!storageKey) {
+        return;
+      }
+      window.localStorage.setItem(storageKey, JSON.stringify(economyStats));
     } catch (error) {
       // ignore write failures
     }
   }
 
-  var economyStats = readEconomyStats();
+  var economyStats = createDefaultEconomyStats();
 
   function readWhatsNewSeenVersionCode() {
     try {
@@ -2481,7 +2683,11 @@ Main tuning points:
   function readPlayerSkinProgress() {
     var fallback = createDefaultSkinProgress();
     try {
-      var raw = window.localStorage.getItem(PLAYER_SKIN_PROGRESS_STORAGE_KEY);
+      var storageKey = getActiveProfileStorageKey(PLAYER_SKIN_PROGRESS_STORAGE_KEY_PREFIX);
+      if (!storageKey) {
+        return fallback;
+      }
+      var raw = window.localStorage.getItem(storageKey);
       if (!raw) {
         return fallback;
       }
@@ -2508,21 +2714,22 @@ Main tuning points:
 
   function writePlayerSkinProgress() {
     try {
-      window.localStorage.setItem(
-        PLAYER_SKIN_PROGRESS_STORAGE_KEY,
-        JSON.stringify({
-          unlockedSkins: cloneSkinUnlocks(state.unlockedSkins),
-          selectedSkin: normalizeOwnedSkinName(C.selectedSkin),
-          highestLevelReached: sanitizeHighestLevelReached(state.highestLevelReached),
-          levelXUnlocked: Boolean(state.levelXUnlocked),
-          hardModeOverride: state.hardModeOverride === "locked" || state.hardModeOverride === "unlocked"
-            ? state.hardModeOverride
-            : "default",
-          fullModeOverride: state.fullModeOverride === "locked" || state.fullModeOverride === "unlocked"
-            ? state.fullModeOverride
-            : "default"
-        })
-      );
+      var storageKey = getActiveProfileStorageKey(PLAYER_SKIN_PROGRESS_STORAGE_KEY_PREFIX);
+      if (!storageKey) {
+        return;
+      }
+      window.localStorage.setItem(storageKey, JSON.stringify({
+        unlockedSkins: cloneSkinUnlocks(state.unlockedSkins),
+        selectedSkin: normalizeOwnedSkinName(C.selectedSkin),
+        highestLevelReached: sanitizeHighestLevelReached(state.highestLevelReached),
+        levelXUnlocked: Boolean(state.levelXUnlocked),
+        hardModeOverride: state.hardModeOverride === "locked" || state.hardModeOverride === "unlocked"
+          ? state.hardModeOverride
+          : "default",
+        fullModeOverride: state.fullModeOverride === "locked" || state.fullModeOverride === "unlocked"
+          ? state.fullModeOverride
+          : "default"
+      }));
     } catch (error) {
       // ignore broken localStorage data
     }
@@ -2545,7 +2752,31 @@ Main tuning points:
     return isSkinUnlocked(normalized) ? normalized : "Skin01";
   }
 
-  function loadPlayerSkinProgress() {
+  function loadPlayerSkinProgress(allowLegacyMigration) {
+    var playerId = getActiveProfileStoragePlayerId();
+    if (!playerId) {
+      badgeStats = createDefaultBadgeStats();
+      economyStats = createDefaultEconomyStats();
+      var defaultProgress = createDefaultSkinProgress();
+      state.unlockedSkins = cloneSkinUnlocks(defaultProgress.unlockedSkins);
+      C.selectedSkin = normalizeOwnedSkinName(defaultProgress.selectedSkin);
+      state.highestLevelReached = sanitizeHighestLevelReached(defaultProgress.highestLevelReached);
+      state.levelXUnlocked = Boolean(defaultProgress.levelXUnlocked);
+      state.hardModeOverride = defaultProgress.hardModeOverride;
+      state.fullModeOverride = defaultProgress.fullModeOverride;
+      sessionMaxScore = 0;
+      state.badgeStatsDirty = false;
+      state.badgeStatsWriteElapsed = 0;
+      return;
+    }
+
+    if (allowLegacyMigration !== false) {
+      migrateLegacyProfileStorageIfNeeded(playerId);
+    }
+
+    badgeStats = readBadgeStats();
+    economyStats = readEconomyStats();
+
     var progress = readPlayerSkinProgress();
     state.unlockedSkins = cloneSkinUnlocks(progress.unlockedSkins);
     C.selectedSkin = normalizeOwnedSkinName(progress.selectedSkin);
@@ -2553,7 +2784,12 @@ Main tuning points:
     state.levelXUnlocked = Boolean(progress.levelXUnlocked);
     state.hardModeOverride = progress.hardModeOverride;
     state.fullModeOverride = progress.fullModeOverride;
+    sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
+    writeBadgeStats();
+    writeEconomyStats();
     writePlayerSkinProgress();
+    state.badgeStatsDirty = false;
+    state.badgeStatsWriteElapsed = 0;
   }
 
   function sanitizeGlobalAdminNumber(key, value) {
@@ -2839,7 +3075,7 @@ Main tuning points:
     }
 
     if (!isMineUnlocked()) {
-      syncMineStorageReminder(false, economyStats.mineStorageCoins, storageCapacity);
+      syncMineStorageReminder(0);
       if (changed) {
         writeEconomyStats();
       }
@@ -2862,7 +3098,6 @@ Main tuning points:
       if (changed) {
         writeEconomyStats();
       }
-      syncMineStorageReminder(true, economyStats.mineStorageCoins, storageCapacity);
       return {
         minedCoins: 0,
         becameFull: false,
@@ -2894,7 +3129,6 @@ Main tuning points:
     if (changed) {
       writeEconomyStats();
     }
-    syncMineStorageReminder(economyStats.mineStorageCoins >= storageCapacity, economyStats.mineStorageCoins, storageCapacity);
 
     return {
       minedCoins: minedCoins,
@@ -2922,7 +3156,7 @@ Main tuning points:
     economyStats.mineFrozenRemainingMs = 0;
     economyStats.mineNextCoinAt = now + (resumeDelay > 0 ? resumeDelay : intervalMs);
     writeEconomyStats();
-    syncMineStorageReminder(false, 0, getMineStorageCapacity());
+    syncMineStorageReminder(Math.max(0, transferAmount * intervalMs));
     return transferAmount;
   }
 
@@ -4040,13 +4274,17 @@ Main tuning points:
         }
         if (
           key === GLOBAL_ADMIN_STORAGE_KEY ||
-          key === PLAYER_SKIN_PROGRESS_STORAGE_KEY ||
-          key === BADGE_STATS_STORAGE_KEY ||
-          key === ECONOMY_STORAGE_KEY ||
+          key === LEGACY_PLAYER_SKIN_PROGRESS_STORAGE_KEY ||
+          key === LEGACY_BADGE_STATS_STORAGE_KEY ||
+          key === LEGACY_ECONOMY_STORAGE_KEY ||
           key === WHATS_NEW_SEEN_VERSION_STORAGE_KEY ||
           key.indexOf(ADMIN_STORAGE_KEY_PREFIX) === 0 ||
           key.indexOf(LEGACY_ADMIN_STORAGE_KEY_PREFIX) === 0 ||
-          key.indexOf(MAX_SCORE_STORAGE_KEY_PREFIX) === 0
+          key.indexOf(PLAYER_SKIN_PROGRESS_STORAGE_KEY_PREFIX) === 0 ||
+          key.indexOf(BADGE_STATS_STORAGE_KEY_PREFIX) === 0 ||
+          key.indexOf(ECONOMY_STORAGE_KEY_PREFIX) === 0 ||
+          key.indexOf(MAX_SCORE_STORAGE_KEY_PREFIX) === 0 ||
+          key.indexOf(LEGACY_MAX_SCORE_STORAGE_KEY_PREFIX) === 0
         ) {
           keysToRemove.push(key);
         }
@@ -4070,8 +4308,8 @@ Main tuning points:
     state.currentLevel = 1;
     applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
     loadGlobalAdminConfig();
-    loadPlayerSkinProgress();
-    sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
+    setActiveProfileStoragePlayerId(state.playerId);
+    loadPlayerSkinProgress(false);
     openPreRunScreen();
     renderAdminForm();
     refreshPreRunBriefValues();
@@ -5225,12 +5463,20 @@ Main tuning points:
   }
 
   function getMaxScoreStorageKey(mode, difficulty) {
-    return MAX_SCORE_STORAGE_KEY_PREFIX + String(difficulty) + "_" + String(mode);
+    var playerId = getActiveProfileStoragePlayerId();
+    if (!playerId) {
+      return "";
+    }
+    return MAX_SCORE_STORAGE_KEY_PREFIX + playerId + "_" + String(difficulty) + "_" + String(mode);
   }
 
   function readMaxScoreFromStorage(mode, difficulty) {
     try {
-      var raw = window.localStorage.getItem(getMaxScoreStorageKey(mode, difficulty));
+      var storageKey = getMaxScoreStorageKey(mode, difficulty);
+      if (!storageKey) {
+        return 0;
+      }
+      var raw = window.localStorage.getItem(storageKey);
       if (raw === null || raw === "") {
         return 0;
       }
@@ -5246,8 +5492,12 @@ Main tuning points:
 
   function writeMaxScoreToStorage(mode, difficulty, maxScore) {
     var safeValue = Math.max(0, Math.floor(maxScore));
+    var storageKey = getMaxScoreStorageKey(mode, difficulty);
+    if (!storageKey) {
+      return;
+    }
     try {
-      window.localStorage.setItem(getMaxScoreStorageKey(mode, difficulty), String(safeValue));
+      window.localStorage.setItem(storageKey, String(safeValue));
     } catch (error) {
       // ignore write failures
     }
@@ -6487,16 +6737,16 @@ Main tuning points:
     });
     applyModeConfig(state.currentLevel, state.gameMode, state.gameDifficulty);
     loadGlobalAdminConfig();
-    loadPlayerSkinProgress();
     state.playerName = readPlayerNameFromStorage();
     state.playerId = readPlayerIdFromStorage();
     if (!isAuthenticatedPlayerId(state.playerId) && !isGuestPlayerId(state.playerId)) {
       state.playerId = "";
       writePlayerIdToStorage("");
     }
+    setActiveProfileStoragePlayerId(state.playerId);
+    loadPlayerSkinProgress(true);
     resetOnlineHighscoreUi("");
     applyVisualThemeToUi();
-    sessionMaxScore = readMaxScoreFromStorage(state.gameMode, state.gameDifficulty);
     openPreRunScreen();
     attachInput();
     attachTouchControls();
@@ -8180,21 +8430,13 @@ Main tuning points:
     return plugin;
   }
 
-  function syncMineStorageReminder(isFull, storageCoins, storageCapacity) {
+  function syncMineStorageReminder(delayMs) {
     if (!isNativeAndroidPlatform()) {
       return;
     }
 
-    var reminderKey =
-      (isFull ? "1" : "0") +
-      ":" +
-      String(Math.max(0, Math.floor(Number(storageCoins) || 0))) +
-      ":" +
-      String(Math.max(1, Math.floor(Number(storageCapacity) || 1)));
-
-    if (state.mineStorageReminderSyncKey === reminderKey) {
-      return;
-    }
+    var safeDelayMs = Math.max(0, Math.floor(Number(delayMs) || 0));
+    var reminderKey = String(safeDelayMs);
 
     state.mineStorageReminderSyncKey = reminderKey;
 
@@ -8205,7 +8447,7 @@ Main tuning points:
 
     plugin
       .sync({
-        enabled: Boolean(isFull),
+        delayMs: safeDelayMs,
       })
       .catch(function () {
         state.mineStorageReminderSyncKey = "";
@@ -8320,13 +8562,43 @@ Main tuning points:
     setPlayerNamePromptOpen(true);
   }
 
-  function continueAsGuest() {
-    state.playerName = "Guest";
-    state.playerId = createGuestPlayerId();
-    writePlayerNameToStorage(state.playerName);
-    writePlayerIdToStorage(state.playerId);
+  function refreshProfileDependentUi() {
+    renderPreRunScreen();
+    renderAdminForm();
+    refreshPreRunBriefValues();
+    updateLivesUi();
+  }
+
+  function persistActivePlayerProfile() {
+    if (!isAuthenticatedPlayerId(getActiveProfileStoragePlayerId())) {
+      return;
+    }
+    writeBadgeStats();
+    writeEconomyStats();
+    writePlayerSkinProgress();
+    writeMaxScoreToStorage(state.gameMode, state.gameDifficulty, sessionMaxScore);
+  }
+
+  function switchPlayerSession(nextPlayerName, nextPlayerId, shouldPersistCurrentProfile) {
+    var normalizedName = normalizePlayerName(nextPlayerName);
+    var normalizedPlayerId = normalizePlayerId(nextPlayerId);
+    var currentPlayerId = getActiveProfileStoragePlayerId();
+    if (shouldPersistCurrentProfile && currentPlayerId && currentPlayerId !== normalizedPlayerId) {
+      persistActivePlayerProfile();
+    }
+    state.playerName = normalizedName;
+    state.playerId = normalizedPlayerId;
+    writePlayerNameToStorage(normalizedName);
+    writePlayerIdToStorage(normalizedPlayerId);
+    setActiveProfileStoragePlayerId(normalizedPlayerId);
+    loadPlayerSkinProgress(false);
     syncPlayerNameUi();
+    refreshProfileDependentUi();
     setPlayerNamePromptOpen(false);
+  }
+
+  function continueAsGuest() {
+    switchPlayerSession("Guest", createGuestPlayerId(), true);
   }
 
   function authenticatePlayer(name, password) {
@@ -10058,12 +10330,7 @@ Main tuning points:
             if (!accountId) {
               throw new Error("Invalid authentication response.");
             }
-            state.playerName = normalizedName;
-            state.playerId = accountId;
-            writePlayerNameToStorage(normalizedName);
-            writePlayerIdToStorage(accountId);
-            syncPlayerNameUi();
-            setPlayerNamePromptOpen(false);
+            switchPlayerSession(normalizedName, accountId, true);
           })
           .catch(function (error) {
             if (playerNameErrorEl) {
