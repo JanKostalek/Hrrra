@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 91,
-  versionName: "1.0.91",
+  versionCode: 92,
+  versionName: "1.0.92",
   whatsNew: [
-  "Classic pre-run text now again calls out permanent Double Jump, while advanced shows the true lives note.",
-  "Admin password gate can now be toggled and edited from the admin panel."
+  "Rules now includes the Shop and Mine pages, with the page counter shown in a brighter beige.",
+  "Rules bonus and hazard rows were tightened so the icon and description sit together more cleanly."
 ]
 });

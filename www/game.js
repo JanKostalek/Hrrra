@@ -125,6 +125,11 @@ Main tuning points:
   var preRunScoresScreenEl = document.getElementById("pre-run-scores-screen");
   var preRunRulesScreenEl = document.getElementById("pre-run-rules-screen");
   var preRunCreditsScreenEl = document.getElementById("pre-run-credits-screen");
+  var preRunRulesPageTitleEl = document.getElementById("pre-run-rules-page-title");
+  var preRunRulesTextEl = document.getElementById("pre-run-rules-text");
+  var preRunRulesPageLabelEl = document.getElementById("pre-run-rules-page-label");
+  var preRunRulesPrevBtn = document.getElementById("pre-run-rules-prev-btn");
+  var preRunRulesNextBtn = document.getElementById("pre-run-rules-next-btn");
   var preRunCreditsVersionEl = document.getElementById("pre-run-credits-version");
   var preRunShopScreenEl = document.getElementById("pre-run-shop-screen");
   var preRunSettingsScreenEl = document.getElementById("pre-run-settings-screen");
@@ -216,6 +221,8 @@ Main tuning points:
   var PRE_RUN_GFX2_CLASSIC_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/classic_back", 10, 8);
   var PRE_RUN_GFX2_ADVANCE_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/advance_back", 10, 7);
   var PRE_RUN_GFX2_BADGES_BACK_FRAMES = buildPreRunFrameSet("assets/gfx2/badges_back", 10, 8);
+  var preRunRulesPagesPromise = null;
+  var preRunRulesPagesCache = null;
   var PRE_RUN_GFX2_BADGE_TROPHY_SLUGS = {
     bag_collector: true,
     big_spender: true,
@@ -6236,6 +6243,7 @@ Main tuning points:
     mineIntroShown: false,
     mineStorageReminderSyncKey: "",
     preRunScores: createInitialPreRunScoresState(),
+    preRunRulesPageIndex: 0,
     onlineHighscore: {
       loading: false,
       message: "",
@@ -7520,6 +7528,153 @@ Main tuning points:
     boardEl.style.setProperty("--classic-board-row-gap", Math.max(6, Math.min(12, 8 * scale)).toFixed(2) + "px");
   }
 
+  function escapeHtml(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function getRulesPageCount() {
+    var pages = preRunRulesPagesCache || [];
+    return pages.length;
+  }
+
+  function getCurrentRulesPageIndex() {
+    var pageCount = getRulesPageCount();
+    if (!pageCount) {
+      return 0;
+    }
+    return Math.max(0, Math.min(pageCount - 1, Math.floor(Number(state.preRunRulesPageIndex) || 0)));
+  }
+
+  function setCurrentRulesPageIndex(nextIndex) {
+    var pageCount = getRulesPageCount();
+    if (!pageCount) {
+      return;
+    }
+    state.preRunRulesPageIndex = ((Math.floor(Number(nextIndex) || 0) % pageCount) + pageCount) % pageCount;
+    renderPreRunScreen();
+  }
+
+  function buildRulesIconRow(iconClass, labelHtml, valueHtml) {
+    var row = '<div class="brief-row">';
+    row += '<span class="brief-icon ' + iconClass + '" aria-hidden="true"></span>';
+    row += '<span><strong>' + labelHtml + ':</strong> ' + valueHtml + '</span>';
+    row += '</div>';
+    return row;
+  }
+
+  function buildRulesPages() {
+    var pages = [];
+    pages.push({
+      title: "Overal Info",
+      body: "Hrrra is a classic Run & Jump (Jump&Run) game.\n\nYou’ll play through several levels, and in each one you must earn a certain number of points for the teleport to the next level to appear. Only the last level is endless. You’ll keep playing it until you lose all your lives or fall into the lava at the bottom of the screen.\n\nIn each run, you can use one Continue, where you can buy lives with coins, and two Continues, where you get 3 lives for watching an ad.\n\nAt the start, only Classic Easy mode is unlocked, but you’ll gradually unlock Classic Hard, Advanced Easy, and Advanced Hard as well."
+    });
+    pages.push({
+      title: "Classic Mode",
+      body: "In Classic mode, double jump is always enabled. Collecting the Double Jump bonus grants you a triple jump for a short time.\n\nYou’ll see the number of lives for Easy and Hard modes at the start of the run, as well as the score required to complete each level."
+    });
+    pages.push({
+      title: "Advanced Mode",
+      body: "In Advanced mode, in addition to jumping, you can also speed up and slow down your character's movement. To speed up, hold the top-right corner of the screen; to slow down, hold the bottom-right corner of the screen. Tap the left half of the screen to jump."
+    });
+
+    pages.push({
+      title: "Bonuses",
+      bodyHtml:
+        '<div class="pre-run-brief-columns pre-run-brief-columns-single">' +
+          buildRulesIconRow("brief-coin", "Coin", "<span>+<strong>" + escapeHtml(C.coinScoreBonus) + "</strong> score.</span>") +
+          buildRulesIconRow("brief-money", "Money Bag", "<span>+<strong>" + escapeHtml(C.scoreBagBonus) + "</strong> score.</span>") +
+          buildRulesIconRow("brief-live", "Extra Live", "<span>restore 1 lost life up to max.</span>") +
+          buildRulesIconRow("brief-jump-bonus", "Double / Triple Jump", "<span>Gain ability to jump more and higher.</span>") +
+          buildRulesIconRow("brief-shield", "Shield", "<span>blocks one deadly hit and can save you from bottom death zone.</span>") +
+          buildRulesIconRow("brief-skin-pickup", "Skin Unlock", "<span>collect it to unlock a new character skin.</span>") +
+        '</div>'
+    });
+
+    pages.push({
+      title: "Hazards",
+      bodyHtml:
+        '<div class="pre-run-brief-columns pre-run-brief-columns-single">' +
+          buildRulesIconRow("brief-blocker", "Blocker", "<span>do not touch, always jump over it.</span>") +
+          buildRulesIconRow("brief-projectile", "Projectile", "<span>do not touch.</span>") +
+          buildRulesIconRow("brief-cracked-coin", "Cracked Coin", "<span>removes <strong>" + escapeHtml(C.crackedCoinPenaltyPercent) + "%</strong> of score earned in this level.</span>") +
+          buildRulesIconRow("brief-question-coin", "Question Coin", "<span>gamble for a big score win or loss. Win <strong>+" + escapeHtml(C.questionCoinWinPercent) + "%</strong>, lose <strong>-" + escapeHtml(C.questionCoinLosePercent) + "%</strong>.</span>") +
+          buildRulesIconRow("brief-curse", "Curse", "<span>normal score gain is frozen for <strong>" + escapeHtml(C.curseEffectSeconds) + "s</strong>.</span>") +
+        '</div>'
+    });
+
+    pages.push({
+      title: "Shop",
+      body: "In the shop, you can purchase new skins that aren’t available in-game, as well as a new bonus level for the game, additional storage space, and faster coin mining in Mine.\n\nSome items can be purchased with coins, while others can be obtained by watching ads."
+    });
+
+    pages.push({
+      title: "Mine",
+      body: "Here you can mine coins, which you can use to buy extra lives for continues or purchase items in the shop.\n\nCoins are mined and automatically stored in your storage. Once it is full, mining stops. The moment you transfer them to your wallet, mining resumes. You can increase the storage size several times over in the shop, just as you can increase the mining speed."
+    });
+
+    return pages;
+  }
+
+  function loadRulesPages() {
+    if (preRunRulesPagesCache) {
+      return Promise.resolve(preRunRulesPagesCache);
+    }
+    if (preRunRulesPagesPromise) {
+      return preRunRulesPagesPromise;
+    }
+    preRunRulesPagesCache = buildRulesPages();
+    preRunRulesPagesPromise = Promise.resolve(preRunRulesPagesCache).then(function (pages) {
+      preRunRulesPagesPromise = null;
+      return pages;
+    });
+    return preRunRulesPagesPromise;
+  }
+
+  function renderPreRunRulesPage() {
+    var pageCount = getRulesPageCount();
+    var pageIndex = getCurrentRulesPageIndex();
+    var page = preRunRulesPagesCache && preRunRulesPagesCache[pageIndex] ? preRunRulesPagesCache[pageIndex] : null;
+    var pageTitle = page ? page.title : "Rules";
+
+    if (preRunRulesPageTitleEl) {
+      preRunRulesPageTitleEl.textContent = pageTitle;
+    }
+    if (preRunRulesTextEl) {
+      var isHtml = Boolean(page && page.bodyHtml);
+      preRunRulesTextEl.classList.toggle("is-html", isHtml);
+      if (isHtml) {
+        preRunRulesTextEl.innerHTML = page.bodyHtml;
+      } else {
+        preRunRulesTextEl.textContent = page && page.body ? page.body : "";
+      }
+    }
+    if (preRunRulesPageLabelEl) {
+      preRunRulesPageLabelEl.textContent = pageCount ? (pageIndex + 1) + " / " + pageCount : "0 / 0";
+    }
+    if (preRunRulesPrevBtn) {
+      preRunRulesPrevBtn.disabled = pageCount <= 1;
+    }
+    if (preRunRulesNextBtn) {
+      preRunRulesNextBtn.disabled = pageCount <= 1;
+    }
+  }
+
+  function openPreRunRulesScreen() {
+    state.preRunStep = "rules";
+    state.preRunRulesPageIndex = 0;
+    renderPreRunScreen();
+    loadRulesPages().then(function () {
+      if (state.preRunStep === "rules") {
+        renderPreRunScreen();
+      }
+    });
+  }
+
   function renderPreRunScreen() {
     var hardUnlocked = isHardDifficultyUnlocked();
     var fullUnlocked = isFullModeUnlocked();
@@ -7545,6 +7700,9 @@ Main tuning points:
     }
     if (preRunRulesScreenEl) {
       preRunRulesScreenEl.classList.toggle("hidden", state.preRunStep !== "rules");
+    }
+    if (state.preRunStep === "rules") {
+      renderPreRunRulesPage();
     }
     if (preRunCreditsScreenEl) {
       preRunCreditsScreenEl.classList.toggle("hidden", state.preRunStep !== "credits");
@@ -8664,9 +8822,9 @@ Main tuning points:
       case "jump_hard":
         return "Classic Hard";
       case "full_easy":
-        return "Full Easy";
+        return "Advanced Easy";
       case "full_hard":
-        return "Full Hard";
+        return "Advanced Hard";
       default:
         return "Classic Easy";
     }
@@ -9223,10 +9381,10 @@ Main tuning points:
     var carryStoredDoubleJumpTime = 0;
 
     if (state.tripleJumpTimeLeft > 0) {
-      carryTripleJumpTime = state.tripleJumpTimeLeft * 2;
-      carryStoredDoubleJumpTime = state.storedDoubleJumpTimeLeft * 2;
+      carryTripleJumpTime = state.tripleJumpTimeLeft;
+      carryStoredDoubleJumpTime = state.storedDoubleJumpTimeLeft;
     } else if (state.doubleJumpTimeLeft > 0) {
-      carryDoubleJumpTime = state.doubleJumpTimeLeft * 2;
+      carryDoubleJumpTime = state.doubleJumpTimeLeft;
     }
 
     state.currentLevel = Math.max(1, Math.min(LEVEL_COUNT, level));
@@ -10507,8 +10665,7 @@ Main tuning points:
         unlockAudioIfNeeded();
         playUiButtonSound();
         playUiPageOpenSound();
-        state.preRunStep = "rules";
-        renderPreRunScreen();
+        openPreRunRulesScreen();
       });
     }
     if (preRunGfx2RulesBtn) {
@@ -10516,8 +10673,21 @@ Main tuning points:
         unlockAudioIfNeeded();
         playUiButtonSound();
         playUiPageOpenSound();
-        state.preRunStep = "rules";
-        renderPreRunScreen();
+        openPreRunRulesScreen();
+      });
+    }
+    if (preRunRulesPrevBtn) {
+      preRunRulesPrevBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        setCurrentRulesPageIndex(getCurrentRulesPageIndex() - 1);
+      });
+    }
+    if (preRunRulesNextBtn) {
+      preRunRulesNextBtn.addEventListener("click", function () {
+        unlockAudioIfNeeded();
+        playUiButtonSound();
+        setCurrentRulesPageIndex(getCurrentRulesPageIndex() + 1);
       });
     }
     if (preRunGfx2MineBtn) {
@@ -15501,6 +15671,12 @@ Main tuning points:
 
     var borderArt = getLevelBorderArt(state.currentLevel);
     if (!borderArt || borderArt.width <= 0 || borderArt.height <= 0) {
+      return;
+    }
+
+    if (state.currentLevel === 5 && state.levelXEndlessActive && borderArt === sceneArt.levelxBorder) {
+      // levelX border art ends with a transparent tail, so crop it off to avoid a white seam at the bottom.
+      ctx.drawImage(borderArt, 0, 0, borderArt.width, Math.max(1, borderArt.height - 4), 0, 0, canvas.width, canvas.height);
       return;
     }
 

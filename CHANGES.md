@@ -1,5 +1,14 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-14: Halved the Rules text side padding again in `style.css` so the content stretches further toward both edges of the framed page.
+- 2026-05-14: Halved the side padding of the Rules text frame in `style.css` so the readable area expands further left and right.
+- 2026-05-14: Tightened the Rules text framing in `style.css` by making the side padding more stable and reducing the bottom gap so the text sits closer to the image frame.
+- 2026-05-14: Expanded the Rules text layout in `style.css` by reducing the frame padding so the readable area grows roughly 20% wider and taller.
+- 2026-05-14: Removed the inner beige Rules text card in `style.css` so the page text now sits directly on the framed background artwork.
+- 2026-05-14: Embedded the first three Rules/Instructions pages directly into `game.js` and switched the on-screen pager to a 3-page in-memory flow so the viewer no longer depends on external text loading.
+- 2026-05-14: Switched the Rules/Instructions page loader in `game.js` from `fetch()` to `XMLHttpRequest` so the `assets/gfx2/rules_scr/page_01.txt` through `page_07.txt` files load reliably in local `file://` runs.
+- 2026-05-14: Reworked the Rules/Instructions screen in `index.html`, `game.js`, and `style.css` so the page now loads text from `assets/gfx2/rules_scr/page_01.txt` through `page_07.txt` and switches pages with top-right arrows.
+- 2026-05-13: Renamed the advanced scores boards so `full_easy` and `full_hard` now display as `Advanced Easy` and `Advanced Hard` instead of `Full Easy` and `Full Hard`.
 - 2026-05-13: Bumped the release metadata to 1.0.91 / versionCode 91 and folded in the latest pre-run briefing and admin password gate changes for the next store build.
 - 2026-05-13: Restored the classic pre-run briefing to explicitly say Double Jump is always enabled, while keeping the advanced briefing on the actual dynamic lives-only note.
 - 2026-05-13: Added admin-panel controls for enabling/disabling the admin password gate and editing the required password text, while keeping the existing password prompt behavior when the gate is enabled.
@@ -310,3 +319,17 @@
 2026-05-13 - Shifted the gfx2 pre-run difficulty image button another 5% to the right, keeping the same fixed board anchor.
 2026-05-13 - Allowed the gfx2 pre-run classic/advanced board to overflow visibly so the difficulty image button can sit slightly outside the panel without being clipped.
 2026-05-13 - Bumped the release metadata to 1.0.90 / versionCode 90 for the image-button pre-run difficulty release and prepared the next store build flow around it.
+[2026-05-14 - Cropped the transparent bottom tail from the LevelX border overlay in `game.js` so the endless Level 5/LevelX screen no longer leaves a thin white seam at the bottom edge.]
+[2026-05-14 - Cropped an additional 2 pixels from the LevelX border overlay in `game.js` so the bottom seam is trimmed a bit further without affecting other levels.]
+[2026-05-14 - Expanded the Rules pager to five pages and added icon-based Bonus and Hazard pages with real config values for Coin, Money Bag, Extra Live, Double/Tripple Jump, Shield, Blocker, Projectile, Cracked Coin, Question Coin, and Curse.]
+[2026-05-14 - Reflowed the Rules Bonus and Hazard pages into a single wide column, removed the extra unlock callouts, and lifted the whole Rules text block closer to the top edge.]
+[2026-05-14 - Removed the redundant Bonus/Hazard subheads from the Rules pages, switched the double-jump icon to an inline canvas-style arrow, and lifted the Rules frame further toward the top of the panel.]
+[2026-05-14 - Replaced the full Rules frame translation with a smaller top-only offset, kept the bottom spacing stable, and collapsed the Double Jump row to a single-line icon plus short description.]
+[2026-05-14 - Expanded the Rules text field by 20px at the top and 20px at the bottom via frame margins so the visible area is 40px taller without shifting the inner text block.]
+[2026-05-14 - Extended the Rules text field bottom margin by another 20px so the visible area now hangs 40px lower than before.]
+[2026-05-14 - Changed the Rules page counter to beige text for visibility and added Shop and Mine pages to the five-page rules set, bringing the pager to seven pages total.]
+[2026-05-14 - Added the Shop and Mine rules pages to the pager and restyled the page counter to beige for better contrast on the top bar.]
+[2026-05-14 - Tightened the Rules bonus row layout so icons and text stay on the same line and enlarged the jump icon slightly for closer match with gameplay art.]
+[2026-05-14 - Gave the Rules bonus rows a Rules-only icon override and top-aligned row layout so the icon size and baseline no longer collapse inside the page 4/5 text flow.]
+[2026-05-14 - Enlarged the Rules projectile icon so it matches the visual weight of the other bonus and hazard icons again.]
+[2026-05-14 - Bumped the Android/web release metadata to 1.0.92 / versionCode 92 and regenerated the synced public assets for the new AAB build.]

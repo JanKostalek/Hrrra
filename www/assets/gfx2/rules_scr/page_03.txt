@@ -1,0 +1,3 @@
+Advanced Mode
+
+V Advanced mode můžete kromě skákání i zrychlovat a zpomalovat běh postavičky. Zrychlení probíhá držením pravého horního rohu displeje, zpomalení držením pravého dolního rohu displeje. Skáčeme tapnutím na levou půlku obrazovky. 

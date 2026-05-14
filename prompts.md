@@ -504,3 +504,59 @@ zjednodušit gfx2 pre-run difficulty UI na textové Easy/Hard volby, kde aktivn�
 posunout `Level 1` trochu dolů, nechat `Difficulty` nahoře a dát do pravého rohu pevný image button z `assets/gfx2/buttons/` se stavy `easy.png`, `hard.png` a `reachl5tounlock.png`, kde locked Hard ukáže lock grafiku na 2 sekundy a pak se vrátí na Easy.
 prepare aab podle workflow po přepnutí difficulty controlu na image button a release bumpu na 1.0.90 / versionCode 90.
 -------------------
+Při hraní levelX je úplně dole na obrazovce tenký bílý proužek. to znamená, že asi pozadí není od kraje ke kraji? ostatní levels to zobrazují v pořádku
+
+-------------------
+orizni jeste dva pixely stejnym způsobem
+
+-------------------
+kdyz během runnu (zkousím classic easy - ověř i ostatní) mám double jump ve chvíli kdyz probíhám teleportem / level end, tak v další úrovni začínám s dvojnásobným časem double jumpu, nez jsem měl na konci úrovně. Tak to být nemá. mám začínat se stejným časem se kterým jsem teleport proběhl
+
+-------------------
+ano, projdi
+
+-------------------
+chtěl bych nyní změnit zobrazování Rules / Instructions stranky. Můžeš ji upravit tak, aby v pravém horním rohu byly šipky, ktere budou přepínat text, který se zobrazuje v rámu. Zdroj jednotlivých stránek by byly txt soubory, ktere jsou ulozeny c:\-_WeB_-\Hrrra\assets\gfx2\rules_scr\.
+
+-------------------
+proč to nemůže načíst txt soubor? Je tam pripravenych 7 souborů pro sedm stránek.
+
+-------------------
+zatím uděláme první tři stránky:
+Page 1
+Overal Info
+
+Hrrra is a classic Run & Jump (Jump&Run) game.
+
+You’ll play through several levels, and in each one you must earn a certain number of points for the teleport to the next level to appear. Only the last level is endless. You’ll keep playing it until you lose all your lives or fall into the lava at the bottom of the screen. 
+
+In each run, you can use one Continue, where you can buy lives with coins, and two Continues, where you get 3 lives for watching an ad.
+
+At the start, only Classic Easy mode is unlocked, but you’ll gradually unlock Classic Hard, Advanced Easy, and Advanced Hard as well.
+
+Page 2
+Classic Mode
+
+In Classic mode, double jump is always enabled. Collecting the Double Jump bonus grants you a triple jump for a short time.
+
+You’ll see the number of lives for Easy and Hard modes at the start of the run, as well as the score required to complete each level.
+
+Page 3
+Advanced Mode
+
+In Advanced mode, in addition to jumping, you can also speed up and slow down your character's movement. To speed up, hold the top-right corner of the screen; to slow down, hold the bottom-right corner of the screen. Tap the left half of the screen to jump.
+
+-------------------
+odstran ten vnitřní rámeček. nech tam jen ten "rám obrazu" který je pozadí. Promítej text přímo na něho
+
+-------------------
+zmenší postranní padding - na obou stranách na polovinu
+
+-------------------
+Podobně jako bylo dřív v rules vysvětlení jednotlivých bonusu / mechanik, tak to připrav i pro dvě další stránky. Rozdělení ti sepisuji níže. Vzdy Tam pridej grafiku - například z Level1 a reálné informace, tak jak jsou v administraci (například u Coin, Boney Bag, question coin, cracked coin, curse...) Page 4 Bonuses: Coin, Money Bag, Extra Live, Double / Tripple Jump, Shield, Skin Unlock. Page 5 Hazards: Blocker, Projectile, Cracked Coin, Question Coin, Curse.
+Nerozděluj bonusy na dva různé druhy, ale piš je pod sebou, tak jak jsem je sepsal. Nepoužívej dva sloupce, ale udělej jeden široky - stejně jako u predchozích stránek. Název bonusu (a ostatního) dávej vzdy za grafiku, nikoliv na další řádek. Pro double Jump použij tu grafiku, kteoru používáš ve hře. u žádného prvku nepiš "Unlocks...." to tam není potřeba dávat U všech stránek posun Nadpis (a tedy i texty pod ním) blíž k hornímu okraji. Textové pole je stále ukotvené v rámci výšky obrazovky na pevném bodě.
+o kolik pixelů jsi posouval textové pole nahoru? posun jej jeste 3x o tolik. b) Double jump - ve hře se používá grafika, tu pouzij i tady c) změn text u Double / Gripple Jump - Gain ability to jump more and higer d) jak u Bonuses tak Hazards je pod nadpisem jeste jednou to bonuses a hazards. to tam je navíc. odstran to. na druhém obrázku je videt grafika pro double/tripple jump, jak jej zobrazujeme ve hře, použij ji i tady v rules page
+ty jsi posunul celkově to textové pole nahoru, nikoliv jen jeho horní okraj. tudíž je nyní dole strašně velký škálující se okraj. b) u double jump at je grafika a popis na jednom řádku, stejně jako u ostatních položek c) u double / triple jumpu nech pouze to "Gain ability to jump more and higher.". ostatní text co tam u toho je odstran
+a) v horním rohu je zobrazní stránek která/z kolika. ale je to černým písmem a není to skoro videt. udělej ty čísla béžová. b) přidej jeste dvě další stránky Page 6 Shop: In the shop, you can purchase new skins that aren’t available in-game, as well as a new bonus level for the game, additional storage space, and faster coin mining in Mine. Some items can be purchased with coins, while others can be obtained by watching ads. Page 7 Mine: Here you can mine coins, which you can use to buy extra lives for continues or purchase items in the shop. Coins are mined and automatically stored in your storage. Once it is full, mining stops. The moment you transfer them to your wallet, mining resumes. You can increase the storage size several times over in the shop, just as you can increase the mining speed.
+vůbec nic se nezměnilo. grafika je uplne stejne velká a půl řádkové odsazení tam stále je.
+priprav aab

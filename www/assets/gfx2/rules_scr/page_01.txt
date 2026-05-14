@@ -1,0 +1,9 @@
+Overal
+
+Hrrra is a classic Run & Jump (Jump&Run) game.
+
+Budeš probíhat několika úrovněmi a v každé musíš získat určitý počet bodů, aby se objevil teleport do další úrovně. Pouze poslední úrověn je nekonečná. Budeš v ní pokračovat, dokud nepřijdeš o všechny životy či nespadneš do lávy na spodním okraji obrazovky. 
+
+Na začátku máš odemčenou pouze Classic Easy mode, ale postupně odemkneš i Classic Hard, Advanced Easy a Advanced Hard. 
+
+Získáváním score se hra postupně zrychluje.

@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 91,
-  "latestVersionName": "1.0.91",
+  "latestVersionCode": 92,
+  "latestVersionName": "1.0.92",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.91 build is available. The release restores the classic Double Jump briefing, keeps the advanced lives note accurate, and adds an admin password gate toggle.",
+  "message": "A new Hrrra 1.0.92 build is available. The release expands Rules with Shop and Mine pages and refines the bonus and hazard layouts.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }
