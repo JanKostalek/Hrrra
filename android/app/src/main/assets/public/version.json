@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 92,
-  "latestVersionName": "1.0.92",
+  "latestVersionCode": 93,
+  "latestVersionName": "1.0.93",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.92 build is available. The release expands Rules with Shop and Mine pages and refines the bonus and hazard layouts.",
+  "message": "A new Hrrra 1.0.93 build is available. The release adds the Cube floor visual mode in pre-run, hides borders when Modern Visuals are off, and keeps the Rules Shop and Mine pages.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

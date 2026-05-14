@@ -1,0 +1,5 @@
+Classic Mode
+
+In Classic mode, double jump is always enabled. Collecting the Double Jump bonus grants you a triple jump for a short time.
+
+You’ll see the number of lives for Easy and Hard modes at the start of the run, as well as the score required to complete each level.

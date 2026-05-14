@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 92,
-  versionName: "1.0.92",
+  versionCode: 93,
+  versionName: "1.0.93",
   whatsNew: [
-  "Rules now includes the Shop and Mine pages, with the page counter shown in a brighter beige.",
-  "Rules bonus and hazard rows were tightened so the icon and description sit together more cleanly."
+  "Cube now sits on the pre-run floor as a Skin07 visual mode and hides the level border when Modern Visuals are off.",
+  "Rules now includes the Shop and Mine pages, with the page counter shown in a brighter beige."
 ]
 });

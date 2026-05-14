@@ -333,3 +333,16 @@
 [2026-05-14 - Gave the Rules bonus rows a Rules-only icon override and top-aligned row layout so the icon size and baseline no longer collapse inside the page 4/5 text flow.]
 [2026-05-14 - Enlarged the Rules projectile icon so it matches the visual weight of the other bonus and hazard icons again.]
 [2026-05-14 - Bumped the Android/web release metadata to 1.0.92 / versionCode 92 and regenerated the synced public assets for the new AAB build.]
+[2026-05-14 - Forced a visible thin scrollbar style onto the Rules text area so Android users can see that the content continues beyond the visible panel.]
+[2026-05-14 - Restored the GFX2 pre-run skin slot resolver so all classic and advanced slots use the shared classic layout skinXX locked/selected/unselected JPGs again.]
+[2026-05-14 - Unified the pre-run skin grid preview image size so all skins render at the same size as the smaller slot 6 preview instead of enlarging Skin01.]
+[2026-05-14 - Standardized the GFX2 pre-run classic and advanced slot artwork sizes to the slot 6 dimensions so slots 1 through 6 render consistently.]
+## 2026-05-14
+- Added Skin07 as Cube and wired it to the shop/admin flow.
+- Cube now toggles Modern Visuals off when selected and re-enables them on any other skin.
+- Pre-run skin preview uses `skin07_unselected.png` / `skin07_selected.png`, with a question mark placeholder while locked.
+- Made the pre-run skin grid show the Cube slot in the visible 3-column layout instead of hiding it in an auto-fit overflow.
+- Added a red debug outline for the Cube skin card and tightened the skin cards so the Cube slot stays visible in the panel.
+- Release 1.0.93: added the Cube floor visual mode in pre-run, hid level borders when Modern Visuals are off, and bundled the updated Rules pages and assets for Android release.
+- Removed the Cube debug frame and hid level border art whenever Modern Visuals are disabled, including when Skin07/Cube is selected or forced off in admin.
+- Pre-run Cube moved out of the skin grid and onto the floor in the classic/advanced GFX2 scene, with a visible debug outline and selected/unselected Skin07 PNGs.
