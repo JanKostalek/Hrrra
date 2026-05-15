@@ -1,5 +1,7 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-15: Added the `Shopaholic` badge to the `Skills` admin section and wired it to track unique shop-family completion, including the special one-time `Buy 10 Coins` purchase flag and the final `Sold` state for multi-level shop branches.
+- 2026-05-15: Reworked the Android mine reminder sync so transfer and storage-upgrade actions now schedule a primary reminder plus a 6-hour follow-up from the current mine state, instead of the older single-delay transfer-only worker.
 - 2026-05-14: Halved the Rules text side padding again in `style.css` so the content stretches further toward both edges of the framed page.
 - 2026-05-14: Halved the side padding of the Rules text frame in `style.css` so the readable area expands further left and right.
 - 2026-05-14: Tightened the Rules text framing in `style.css` by making the side padding more stable and reducing the bottom gap so the text sits closer to the image frame.
@@ -346,3 +348,5 @@
 - Release 1.0.93: added the Cube floor visual mode in pre-run, hid level borders when Modern Visuals are off, and bundled the updated Rules pages and assets for Android release.
 - Removed the Cube debug frame and hid level border art whenever Modern Visuals are disabled, including when Skin07/Cube is selected or forced off in admin.
 - Pre-run Cube moved out of the skin grid and onto the floor in the classic/advanced GFX2 scene, with a visible debug outline and selected/unselected Skin07 PNGs.
+- 2026-05-15: Mapped `Shopaholic` badge trophies so Badges v2 uses `trophy_shopaholic.png` and Badges v1 falls back to `trophy_clean.png`, including the local `www` copy.
+- 2026-05-15: Prepared release 1.0.94 by bumping version metadata and mirroring the updated runtime assets into `android/app/src/main/assets/public` for the Android bundle.

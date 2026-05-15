@@ -267,6 +267,7 @@ Main tuning points:
     magneto: true,
     martyr: true,
     purist: true,
+    shopaholic: true,
     speed_demon: true,
     starter: true,
     still_runing: true,
@@ -609,7 +610,7 @@ Main tuning points:
   var BADGE_CATEGORY_COPY = {
     "Single Run": "Push a single run as far as possible and hit big one-shot milestones.",
     "All Runs": "Long-term collection goals that reward steady return play.",
-    "Skills": "Style, survival, and mechanic-driven challenges for mastery runs.",
+    "Skills": "Style, survival, shop mastery, and mechanic-driven challenges for mastery runs.",
     "Lifetime Legends": "Rare long-term badges for players who keep building a real Hrrra career.",
     "Discovery": "Badges tied to unlocking more of Hrrra over time."
   };
@@ -859,6 +860,17 @@ Main tuning points:
         { tier: "Bronze", value: "Reach Level 2 clean", sprite: "bronze" },
         { tier: "Silver", value: "Reach Level 4 clean", sprite: "silver" },
         { tier: "Gold", value: "Reach Level 5 clean", sprite: "gold" }
+      ]
+    },
+    {
+      id: "shopaholic_skills",
+      category: "Skills",
+      name: "Shopaholic",
+      description: "Buy across the shop until every unique branch is completed.",
+      tiers: [
+        { tier: "Bronze", value: "1 unique shop item", sprite: "bronze" },
+        { tier: "Silver", value: "3 unique shop items", sprite: "silver" },
+        { tier: "Gold", value: "7 unique shop items", sprite: "gold" }
       ]
     },
     {
@@ -1241,6 +1253,7 @@ Main tuning points:
       coinsBalance: 0,
       totalCoinsEarned: 0,
       totalCoinsSpent: 0,
+      buy10CoinsPurchasedOnce: false,
       mineStorageCoins: 0,
       mineStorageCapacity: defaultMineStorageCapacity,
       mineStorageUpgradeLevel: 1,
@@ -1262,6 +1275,7 @@ Main tuning points:
     out.coinsBalance = Number.isFinite(raw.coinsBalance) ? Math.max(0, Math.floor(Number(raw.coinsBalance))) : defaults.coinsBalance;
     out.totalCoinsEarned = Number.isFinite(raw.totalCoinsEarned) ? Math.max(0, Math.floor(Number(raw.totalCoinsEarned))) : defaults.totalCoinsEarned;
     out.totalCoinsSpent = Number.isFinite(raw.totalCoinsSpent) ? Math.max(0, Math.floor(Number(raw.totalCoinsSpent))) : defaults.totalCoinsSpent;
+    out.buy10CoinsPurchasedOnce = typeof raw.buy10CoinsPurchasedOnce === "boolean" ? raw.buy10CoinsPurchasedOnce : defaults.buy10CoinsPurchasedOnce;
     out.mineStorageCoins = Number.isFinite(raw.mineStorageCoins) ? Math.max(0, Math.floor(Number(raw.mineStorageCoins))) : defaults.mineStorageCoins;
     out.mineStorageCapacity = Number.isFinite(raw.mineStorageCapacity) ? Math.max(1, Math.floor(Number(raw.mineStorageCapacity))) : defaults.mineStorageCapacity;
     out.mineStorageUpgradeLevel = Number.isFinite(raw.mineStorageUpgradeLevel) ? Math.max(1, Math.min(4, Math.floor(Number(raw.mineStorageUpgradeLevel)))) : defaults.mineStorageUpgradeLevel;
@@ -1305,6 +1319,23 @@ Main tuning points:
   }
 
   var economyStats = createDefaultEconomyStats();
+
+  function migrateEconomyShopProgressFromBadgeHistory() {
+    if (!economyStats || typeof economyStats !== "object") {
+      return false;
+    }
+    if (economyStats.buy10CoinsPurchasedOnce) {
+      return false;
+    }
+    if (!badgeStats || !badgeStats.lifetime || !Number.isFinite(badgeStats.lifetime.exchangedCoins)) {
+      return false;
+    }
+    if (Math.max(0, Math.floor(Number(badgeStats.lifetime.exchangedCoins) || 0)) <= 0) {
+      return false;
+    }
+    economyStats.buy10CoinsPurchasedOnce = true;
+    return true;
+  }
 
   function readWhatsNewSeenVersionCode() {
     try {
@@ -2809,6 +2840,7 @@ Main tuning points:
 
     badgeStats = readBadgeStats();
     economyStats = readEconomyStats();
+    migrateEconomyShopProgressFromBadgeHistory();
 
     var progress = readPlayerSkinProgress();
     state.unlockedSkins = cloneSkinUnlocks(progress.unlockedSkins);
@@ -3191,7 +3223,7 @@ Main tuning points:
     economyStats.mineFrozenRemainingMs = 0;
     economyStats.mineNextCoinAt = now + (resumeDelay > 0 ? resumeDelay : intervalMs);
     writeEconomyStats();
-    syncMineStorageReminder(Math.max(0, transferAmount * intervalMs));
+    syncMineStorageReminderFromCurrentState();
     return transferAmount;
   }
 
@@ -3213,7 +3245,9 @@ Main tuning points:
     badgeStats.lifetime.totalScore = Math.max(0, getPersistentTotalScore() - totalScoreCost);
     incrementBadgeLifetimeStat("exchangedCoins", safeCoinCount);
     addCoinsToWallet(safeCoinCount);
+    economyStats.buy10CoinsPurchasedOnce = true;
     writeBadgeStats();
+    writeEconomyStats();
     return true;
   }
 
@@ -4548,6 +4582,8 @@ Main tuning points:
         return [5, 20, 50][tierIndex] || 0;
       case "purist_skills":
         return [2, 4, 5][tierIndex] || 0;
+      case "shopaholic_skills":
+        return [1, 3, 7][tierIndex] || 0;
       case "heart_hunter_legends":
       case "still_running_legends":
       case "cursed_legends":
@@ -4609,6 +4645,32 @@ Main tuning points:
       return parseLegacyBadgeTarget(series, tierIndex, legacyOverride);
     }
     return getDefaultBadgeTierTarget(series, tierIndex);
+  }
+
+  function getShopaholicCollectedValue() {
+    var collected = 0;
+    if (economyStats && economyStats.buy10CoinsPurchasedOnce) {
+      collected += 1;
+    }
+    if (isMineShortTimerUnlocked()) {
+      collected += 1;
+    }
+    if (isLevelXUnlocked()) {
+      collected += 1;
+    }
+    if (isSkinUnlocked("Skin05")) {
+      collected += 1;
+    }
+    if (isSkinUnlocked("Skin06")) {
+      collected += 1;
+    }
+    if (isSkinUnlocked("Skin07")) {
+      collected += 1;
+    }
+    if (getMineStorageUpgradeMeta().isMaxed) {
+      collected += 1;
+    }
+    return collected;
   }
 
   function formatBadgeCompactNumber(value) {
@@ -4685,6 +4747,8 @@ Main tuning points:
         return "Lose " + target + " lives in one run";
       case "purist_skills":
         return "Reach Level " + target + " clean";
+      case "shopaholic_skills":
+        return formatBadgeCompactNumber(target) + " unique shop item" + (target === 1 ? "" : "s");
       case "first_runner_legends":
         return appendBadgeInlineProgress("Start " + target + " run", series, tierIndex);
       case "heart_hunter_legends":
@@ -4749,6 +4813,8 @@ Main tuning points:
         return "lives lost in one run";
       case "purist_skills":
         return "clean level reached";
+      case "shopaholic_skills":
+        return "unique shop items";
       case "first_runner_legends":
         return "runs";
       case "heart_hunter_legends":
@@ -4826,6 +4892,8 @@ Main tuning points:
         return badgeStats.best.livesLostSingleRun;
       case "purist_skills":
         return badgeStats.best.puristLevel;
+      case "shopaholic_skills":
+        return getShopaholicCollectedValue();
       case "first_runner_legends":
         return badgeStats.lifetime.runsStarted;
       case "heart_hunter_legends":
@@ -5595,6 +5663,7 @@ Main tuning points:
     magneto: "trophy_magneto.png",
     martyr: "trophy_martyr.png",
     purist: "trophy_purist.png",
+    shopaholic: "trophy_shopaholic.png",
     speed_demon: "trophy_speed_demon.png",
     starter: "trophy_starter.png",
     still_runing: "trophy_still_runing.png",
@@ -8685,28 +8754,49 @@ Main tuning points:
     return plugin;
   }
 
-  function syncMineStorageReminder(delayMs) {
+  function getMineStorageReminderScheduleDelays() {
+    var storageCoins = getMineStorageCoins();
+    var storageCapacity = getMineStorageCapacity();
+    var intervalMs = getMineIntervalMs();
+    var storageCoinsToFull = Math.max(0, storageCapacity - storageCoins);
+    var firstDelayMs = Math.max(0, storageCoinsToFull * intervalMs + 30 * 60 * 1000);
+    var secondDelayMs = Math.max(firstDelayMs + 6 * 60 * 60 * 1000, firstDelayMs);
+    return {
+      firstDelayMs: firstDelayMs,
+      secondDelayMs: secondDelayMs
+    };
+  }
+
+  function syncMineStorageReminder(delayMs, followupDelayMs) {
     if (!isNativeAndroidPlatform()) {
       return;
     }
 
     var safeDelayMs = Math.max(0, Math.floor(Number(delayMs) || 0));
-    var reminderKey = String(safeDelayMs);
+    var safeFollowupDelayMs = Math.max(0, Math.floor(Number(followupDelayMs) || 0));
+    var reminderKey = String(safeDelayMs) + ":" + String(safeFollowupDelayMs);
 
     state.mineStorageReminderSyncKey = reminderKey;
 
     var plugin = getMineStorageReminderPlugin();
     if (!plugin) {
+      state.mineStorageReminderSyncKey = "";
       return;
     }
 
     plugin
       .sync({
         delayMs: safeDelayMs,
+        followupDelayMs: safeFollowupDelayMs,
       })
       .catch(function () {
         state.mineStorageReminderSyncKey = "";
       });
+  }
+
+  function syncMineStorageReminderFromCurrentState() {
+    var schedule = getMineStorageReminderScheduleDelays();
+    syncMineStorageReminder(schedule.firstDelayMs, schedule.secondDelayMs);
   }
 
   function setUpdateNoticeOpen(isOpen, forceUpdate) {
@@ -10313,6 +10403,7 @@ Main tuning points:
           economyStats.mineStorageCoins = economyStats.mineStorageCapacity;
         }
         writeEconomyStats();
+        syncMineStorageReminderFromCurrentState();
         state.preRunGfx2ShopStatus =
           "Storage capacity upgraded to Level " +
           mineMeta.nextLevel +

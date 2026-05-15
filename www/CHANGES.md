@@ -1,5 +1,32 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-15: Added the `Shopaholic` badge to the `Skills` admin section and wired it to track unique shop-family completion, including the special one-time `Buy 10 Coins` purchase flag and the final `Sold` state for multi-level shop branches.
+- 2026-05-15: Reworked the Android mine reminder sync so transfer and storage-upgrade actions now schedule a primary reminder plus a 6-hour follow-up from the current mine state, instead of the older single-delay transfer-only worker.
+- 2026-05-14: Halved the Rules text side padding again in `style.css` so the content stretches further toward both edges of the framed page.
+- 2026-05-14: Halved the side padding of the Rules text frame in `style.css` so the readable area expands further left and right.
+- 2026-05-14: Tightened the Rules text framing in `style.css` by making the side padding more stable and reducing the bottom gap so the text sits closer to the image frame.
+- 2026-05-14: Expanded the Rules text layout in `style.css` by reducing the frame padding so the readable area grows roughly 20% wider and taller.
+- 2026-05-14: Removed the inner beige Rules text card in `style.css` so the page text now sits directly on the framed background artwork.
+- 2026-05-14: Embedded the first three Rules/Instructions pages directly into `game.js` and switched the on-screen pager to a 3-page in-memory flow so the viewer no longer depends on external text loading.
+- 2026-05-14: Switched the Rules/Instructions page loader in `game.js` from `fetch()` to `XMLHttpRequest` so the `assets/gfx2/rules_scr/page_01.txt` through `page_07.txt` files load reliably in local `file://` runs.
+- 2026-05-14: Reworked the Rules/Instructions screen in `index.html`, `game.js`, and `style.css` so the page now loads text from `assets/gfx2/rules_scr/page_01.txt` through `page_07.txt` and switches pages with top-right arrows.
+- 2026-05-13: Renamed the advanced scores boards so `full_easy` and `full_hard` now display as `Advanced Easy` and `Advanced Hard` instead of `Full Easy` and `Full Hard`.
+- 2026-05-13: Bumped the release metadata to 1.0.91 / versionCode 91 and folded in the latest pre-run briefing and admin password gate changes for the next store build.
+- 2026-05-13: Restored the classic pre-run briefing to explicitly say Double Jump is always enabled, while keeping the advanced briefing on the actual dynamic lives-only note.
+- 2026-05-13: Added admin-panel controls for enabling/disabling the admin password gate and editing the required password text, while keeping the existing password prompt behavior when the gate is enabled.
+- 2026-05-13: Bumped the release metadata to 1.0.89 / versionCode 89 for the account-scoped local profile release and prepared the next store build flow around it.
+- 2026-05-13: Split local profile persistence by active user so badges, skins, wallet, mine storage, and max scores now load per account while Guest always starts from a clean, empty profile.
+- 2026-05-13: Switched the Android mine reminder scheduler from full-storage tracking to transfer-time scheduling so the reminder delay is now computed from the transferred storage coin count and current harvest interval.
+- 2026-05-13: Shifted the pre-run detail level-goal text box 5% lower across the mode screens by nudging the shared `pre-run-level-panel` in `style.css`.
+- 2026-05-13: Added an Android-only mine storage reminder bridge and then switched it to transfer-time scheduling so the reminder delay is computed from the transferred storage coin count and the current harvest interval.
+- 2026-05-12: Increased only the mine message face for message `15` by 50% in `game.js` and `style.css` so `mine_face_15.png` renders larger without affecting the other mine face graphics.
+- 2026-05-12: Nudged the run-screen life hearts 2% upward in the responsive HUD layout so the right-side life row sits slightly higher while keeping the larger 150% sizing.
+- 2026-05-12: Moved the run-screen life hearts lower in `game.js` and increased their size to roughly 150% of the previous value by adjusting the responsive `#game-shell`-based HUD layout.
+- 2026-05-12: Bumped the release metadata to `1.0.86` / `versionCode 86` so the updated Advanced and Classic hard game-over PNG assets can ship in a fresh Android bundle.
+- 2026-05-12: Bumped the release metadata to `1.0.85` / `versionCode 85` and refreshed the live update text in `version-info.js` and `version.json` to match the current HUD release.
+- 2026-05-12: Hid the `Jump Advanced` label from the in-game mode switch and forced the top-right lives row to use the same right-side HUD slot as the classic mode so the Advanced HUD matches the Classic layout while still showing its own life count.
+- 2026-05-12: Reworked the top-right life HUD in `game.js` and `style.css` so the mode switch positions and heart sizes are recalculated from the current `#game-shell` dimensions instead of staying tied to fixed overlay offsets.
+- 2026-05-11: Added an admin password gate (`H3510`) for both admin entry points and made Mine storage transfer require a rewarded ad before moving coins to the wallet.
 - 2026-05-06: Renamed the mine timer shop item to `Faster Coin Mining (xx s)` with the duration pulled from the admin-configurable short timer value, and relabeled the mine admin timer field and shop price entry to `Faster Maining`/`Faster Maining Price` in `game.js` and `index.html`.
 - 2026-05-06: Reworked the GFX2 shop coin graphic into a `Short Timer` purchase, added admin controls for the short-timer price and mine short-timer duration in `game.js`/`config.js`, and updated the shop text in `index.html` and `game.js` to preview the new mine cadence before buying.
 - 2026-05-04: Removed the visible debug styling from the mine exit hotspot and the crossing mine entrance hotspot, leaving both as invisible clickable areas only.
@@ -274,3 +301,52 @@
 2026-05-06 - Bumped the release metadata to 1.0.76 / versionCode 76 and synced the release payload into web and Android packaging for the next build.
 2026-05-06 - Moved the Android AdMob app ID and rewarded ad unit ID into local `.key/admob.properties` and wired the Android build to read them from that hidden file.
 2026-05-06 - Bumped the release metadata to 1.0.77 / versionCode 77 and prepared the current continue/AdMob config snapshot for the next build.
+2026-05-06 - Forced the rewarded continue flow to use Google’s test rewarded ad unit in debug builds so Android test devices and emulators can exercise the full ad path.
+2026-05-07 - Switched the Android rewarded continue flow to always use Google test rewarded ads so internal testing builds can exercise the full ad path before public release approval.
+2026-05-07 - Bumped the release metadata to 1.0.79 / versionCode 79 and kept Android rewarded continue on Google test ads for internal testing.
+2026-05-12 - Wired Skin06 into the shop, classic/advanced detail slots, admin skin list, skin pickup configuration, and jump animation so it behaves like the other playable skins while using the new six-frame jump timing.
+2026-05-12 - Synced the Skin06 classic/advance layout PNGs from the `www` mirror back into the root asset tree so the local file:// build can show the real selected/unselected artwork instead of the old placeholder question-mark art.
+2026-05-12 - Renamed the visible Skin06 UI label to Kaja across the admin, shop, and pre-run skin select surfaces while keeping the internal `Skin06` key unchanged.
+2026-05-12 - Switched the advanced skin layout resolver over to the classic layout path and removed the duplicated `assets/gfx2/advance/layout` image copies so the release package no longer ships the same skin artwork twice.
+2026-05-12 - Switched the classic/advanced skin slot resolver from PNG to JPG skin assets in `assets/gfx2/classic/layout` so both modes now load the JPG copies the user uploaded.
+2026-05-12 - Bumped the release metadata to 1.0.87 / versionCode 87 for the JPG skin-layout release and prepared the next store build flow around it.
+2026-05-12 - Kept mine message face 15 enlarged with a transform in `style.css` so the artwork stays bigger without pushing the whole message row upward.
+2026-05-12 - Shifted the text part of mine message 15 slightly to the right while leaving the enlarged face art unchanged.
+2026-05-13 - Gave Skin06 its own cropped walk source rects in `game.js` so the walk loop uses a stable anchor and no longer jumps between the last and first frame.
+2026-05-13 - Added matching cropped jump source rects for Skin06 in `game.js` so walk and jump now share the same frame anchoring behavior.
+2026-05-13 - Restored the Easy/Hard difficulty toggle on the gfx2 pre-run classic and advanced detail screens by reintroducing the shared toggle row and attaching it to the active board.
+2026-05-13 - Reworked the gfx2 pre-run difficulty control into a plain Easy/Hard text selector with lit/grey states while keeping the hard-lock message flow unchanged.
+2026-05-13 - Replaced the gfx2 pre-run difficulty selector with a fixed image button in the board corner that swaps `easy.png`, `hard.png`, and `reachl5tounlock.png`, while moving the level line slightly lower.
+2026-05-13 - Shifted the gfx2 pre-run difficulty image button 5% to the right inside the classic and advanced detail boards.
+2026-05-13 - Shifted the gfx2 pre-run difficulty image button another 5% to the right, keeping the same fixed board anchor.
+2026-05-13 - Allowed the gfx2 pre-run classic/advanced board to overflow visibly so the difficulty image button can sit slightly outside the panel without being clipped.
+2026-05-13 - Bumped the release metadata to 1.0.90 / versionCode 90 for the image-button pre-run difficulty release and prepared the next store build flow around it.
+[2026-05-14 - Cropped the transparent bottom tail from the LevelX border overlay in `game.js` so the endless Level 5/LevelX screen no longer leaves a thin white seam at the bottom edge.]
+[2026-05-14 - Cropped an additional 2 pixels from the LevelX border overlay in `game.js` so the bottom seam is trimmed a bit further without affecting other levels.]
+[2026-05-14 - Expanded the Rules pager to five pages and added icon-based Bonus and Hazard pages with real config values for Coin, Money Bag, Extra Live, Double/Tripple Jump, Shield, Blocker, Projectile, Cracked Coin, Question Coin, and Curse.]
+[2026-05-14 - Reflowed the Rules Bonus and Hazard pages into a single wide column, removed the extra unlock callouts, and lifted the whole Rules text block closer to the top edge.]
+[2026-05-14 - Removed the redundant Bonus/Hazard subheads from the Rules pages, switched the double-jump icon to an inline canvas-style arrow, and lifted the Rules frame further toward the top of the panel.]
+[2026-05-14 - Replaced the full Rules frame translation with a smaller top-only offset, kept the bottom spacing stable, and collapsed the Double Jump row to a single-line icon plus short description.]
+[2026-05-14 - Expanded the Rules text field by 20px at the top and 20px at the bottom via frame margins so the visible area is 40px taller without shifting the inner text block.]
+[2026-05-14 - Extended the Rules text field bottom margin by another 20px so the visible area now hangs 40px lower than before.]
+[2026-05-14 - Changed the Rules page counter to beige text for visibility and added Shop and Mine pages to the five-page rules set, bringing the pager to seven pages total.]
+[2026-05-14 - Added the Shop and Mine rules pages to the pager and restyled the page counter to beige for better contrast on the top bar.]
+[2026-05-14 - Tightened the Rules bonus row layout so icons and text stay on the same line and enlarged the jump icon slightly for closer match with gameplay art.]
+[2026-05-14 - Gave the Rules bonus rows a Rules-only icon override and top-aligned row layout so the icon size and baseline no longer collapse inside the page 4/5 text flow.]
+[2026-05-14 - Enlarged the Rules projectile icon so it matches the visual weight of the other bonus and hazard icons again.]
+[2026-05-14 - Bumped the Android/web release metadata to 1.0.92 / versionCode 92 and regenerated the synced public assets for the new AAB build.]
+[2026-05-14 - Forced a visible thin scrollbar style onto the Rules text area so Android users can see that the content continues beyond the visible panel.]
+[2026-05-14 - Restored the GFX2 pre-run skin slot resolver so all classic and advanced slots use the shared classic layout skinXX locked/selected/unselected JPGs again.]
+[2026-05-14 - Unified the pre-run skin grid preview image size so all skins render at the same size as the smaller slot 6 preview instead of enlarging Skin01.]
+[2026-05-14 - Standardized the GFX2 pre-run classic and advanced slot artwork sizes to the slot 6 dimensions so slots 1 through 6 render consistently.]
+## 2026-05-14
+- Added Skin07 as Cube and wired it to the shop/admin flow.
+- Cube now toggles Modern Visuals off when selected and re-enables them on any other skin.
+- Pre-run skin preview uses `skin07_unselected.png` / `skin07_selected.png`, with a question mark placeholder while locked.
+- Made the pre-run skin grid show the Cube slot in the visible 3-column layout instead of hiding it in an auto-fit overflow.
+- Added a red debug outline for the Cube skin card and tightened the skin cards so the Cube slot stays visible in the panel.
+- Release 1.0.93: added the Cube floor visual mode in pre-run, hid level borders when Modern Visuals are off, and bundled the updated Rules pages and assets for Android release.
+- Removed the Cube debug frame and hid level border art whenever Modern Visuals are disabled, including when Skin07/Cube is selected or forced off in admin.
+- Pre-run Cube moved out of the skin grid and onto the floor in the classic/advanced GFX2 scene, with a visible debug outline and selected/unselected Skin07 PNGs.
+- 2026-05-15: Mapped `Shopaholic` badge trophies so Badges v2 uses `trophy_shopaholic.png` and Badges v1 falls back to `trophy_clean.png`, including the local `www` copy.
+- 2026-05-15: Prepared release 1.0.94 by bumping version metadata and mirroring the updated runtime assets into `android/app/src/main/assets/public` for the Android bundle.

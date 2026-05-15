@@ -12,7 +12,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
 
-@CapacitorPlugin(
+@CapacitorPlugin(name = "MineStorageReminder",
     permissions = {
         @Permission(strings = { Manifest.permission.POST_NOTIFICATIONS }, alias = "PostNotifications")
     }
@@ -25,7 +25,7 @@ public class MineStorageReminderPlugin extends Plugin {
         long delayMs = Math.max(0L, Math.round(call.getDouble("delayMs", 0.0)));
         if (delayMs <= 0L) {
             MineStorageReminderWorker.cancelReminder(getContext());
-            resolveResult(call, 0L, false, false);
+            resolveResult(call, 0L, 0L, false, false);
             return;
         }
 
@@ -52,19 +52,46 @@ public class MineStorageReminderPlugin extends Plugin {
 
     private void syncReminder(PluginCall call, boolean permissionGranted) {
         long delayMs = Math.max(0L, Math.round(call.getDouble("delayMs", 0.0)));
+        long followupDelayMs = Math.max(0L, Math.round(call.getDouble("followupDelayMs", 0.0)));
         if (delayMs <= 0L || !permissionGranted) {
             MineStorageReminderWorker.cancelReminder(getContext());
-            resolveResult(call, delayMs, permissionGranted, false);
+            resolveResult(call, delayMs, followupDelayMs, permissionGranted, false);
             return;
         }
 
-        MineStorageReminderWorker.scheduleReminder(getContext(), delayMs);
-        resolveResult(call, delayMs, true, true);
+        MineStorageReminderWorker.scheduleReminder(
+            getContext(),
+            MineStorageReminderWorker.WORK_NAME_PRIMARY,
+            MineStorageReminderWorker.PREF_ENABLED_PRIMARY,
+            6106,
+            delayMs,
+            "Mine storage reminder",
+            "Open Hrrra and check the mine storage.",
+            "Open Hrrra and check the mine storage. It should be ready to transfer again."
+        );
+
+        if (followupDelayMs > 0L) {
+            MineStorageReminderWorker.scheduleReminder(
+                getContext(),
+                MineStorageReminderWorker.WORK_NAME_FOLLOWUP,
+                MineStorageReminderWorker.PREF_ENABLED_FOLLOWUP,
+                6107,
+                followupDelayMs,
+                "Mine storage reminder",
+                "Open Hrrra and check the mine storage.",
+                "Open Hrrra and check the mine storage. If the storage is still full, it is a good time to transfer again."
+            );
+        } else {
+            MineStorageReminderWorker.cancelFollowupReminder(getContext());
+        }
+
+        resolveResult(call, delayMs, followupDelayMs, true, true);
     }
 
-    private void resolveResult(PluginCall call, long delayMs, boolean permissionGranted, boolean scheduled) {
+    private void resolveResult(PluginCall call, long delayMs, long followupDelayMs, boolean permissionGranted, boolean scheduled) {
         JSObject result = new JSObject();
         result.put("delayMs", delayMs);
+        result.put("followupDelayMs", followupDelayMs);
         result.put("permissionGranted", permissionGranted);
         result.put("scheduled", scheduled);
         call.resolve(result);

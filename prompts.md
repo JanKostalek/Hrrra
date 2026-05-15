@@ -571,3 +571,16 @@ Srovnej i classic/advanced slot artwork na pre-run obrazovce tak, aby všechny s
 - User asked to prepare an Android `.aab` and to include all modified files in the commit, including asset changes.
 - User asked to remove the Cube debug outline and to suppress levelXX_border.png whenever Modern Visuals are off, whether via Skin07/Cube or the admin toggle.
 - User asked to move Cube from the skin grid to the floor area next to Start Run in the classic/advanced pre-run GFX2 scene, keep it above the background layer, and show selected/unselected Skin07 PNGs when unlocked.
+V android části, jsi nastavoval timer a reminder, aby se v mobilu ukázalo upozornění, že v shop screen je dobré vybrat storage, ze je plny coins. Nastavoval jsi to tak, aby ve chvíli, kdy provedeme transfer, se spočítalo, kolik coins se vejde a jak dlouho se jedna těží, tyto položky vynásobíš, přidáš 30 minut a v tu dobu by mělo přijít upozornění v mobilu, že je storage plná. Další upozornění by mělo přijít po 6 hodinách. pokud vybereme storage - kdykoliv, i kdyz není jeste plná - tak se ten časovač resetuje. Nicméně, žádné upozornění v současné chvíli nechodí. - ověř, zda to tak je, proč asi nechodí upozornění a navrhni upravu, aby začaly chodit
+
+-------------------
+ tak to implementuj
+
+-------------------
+# 2026-05-15: User asked to map Shopaholic badge trophies so Badges v2 uses trophy_shopaholic.png while Badges v1 falls back to trophy_clean.
+připrav aab - podle pravidel co máme zaznamenaný
+
+-------------------
+ano
+
+-------------------
