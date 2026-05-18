@@ -574,7 +574,7 @@ Srovnej i classic/advanced slot artwork na pre-run obrazovce tak, aby všechny s
 V android části, jsi nastavoval timer a reminder, aby se v mobilu ukázalo upozornění, že v shop screen je dobré vybrat storage, ze je plny coins. Nastavoval jsi to tak, aby ve chvíli, kdy provedeme transfer, se spočítalo, kolik coins se vejde a jak dlouho se jedna těží, tyto položky vynásobíš, přidáš 30 minut a v tu dobu by mělo přijít upozornění v mobilu, že je storage plná. Další upozornění by mělo přijít po 6 hodinách. pokud vybereme storage - kdykoliv, i kdyz není jeste plná - tak se ten časovač resetuje. Nicméně, žádné upozornění v současné chvíli nechodí. - ověř, zda to tak je, proč asi nechodí upozornění a navrhni upravu, aby začaly chodit
 
 -------------------
- tak to implementuj
+tak to implementuj
 
 -------------------
 # 2026-05-15: User asked to map Shopaholic badge trophies so Badges v2 uses trophy_shopaholic.png while Badges v1 falls back to trophy_clean.
@@ -584,3 +584,22 @@ připrav aab - podle pravidel co máme zaznamenaný
 ano
 
 -------------------
+v tom workflow, jak jsi jej vypsal a sledoval, mezi bod 5 a 6 dej nový bod (6 posun na 7, 7 na 8) a nový bod 6 je připrav aab. Ověř, zda tento workflov odpovídá tomu ulozenemu ve workflow.md
+
+-------------------
+v prerun obrazovce, udělej kolem slotů na výběr skin debug cervené rámečky, abych videl, kde presne sedí tlačítka
+
+-------------------
+debug rámečky nevidim. nejsou schované ve spodní vrstve?
+
+-------------------
+udělej sync do www a androidu - abych to videl i na emulatoru
+
+-------------------
+můžeš nyní vsechny debug rámečky odstranit
+
+-------------------
+Udelej, protoze myslím, ze slotč. 3 je mensi nez ostatní
+
+-------------------
+podle pravidel připrav aab

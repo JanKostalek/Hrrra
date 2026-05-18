@@ -350,3 +350,7 @@
 - Pre-run Cube moved out of the skin grid and onto the floor in the classic/advanced GFX2 scene, with a visible debug outline and selected/unselected Skin07 PNGs.
 - 2026-05-15: Mapped `Shopaholic` badge trophies so Badges v2 uses `trophy_shopaholic.png` and Badges v1 falls back to `trophy_clean.png`, including the local `www` copy.
 - 2026-05-15: Prepared release 1.0.94 by bumping version metadata and mirroring the updated runtime assets into `android/app/src/main/assets/public` for the Android bundle.
+- 2026-05-15: Added a temporary red outline to `.pre-run-skin-btn` in `style.css` to debug exact pre-run skin slot hitbox placement.
+- 2026-05-15: Added a temporary red debug outline to the classic and advanced pre-run skin hitboxes in `style.css` so the clickable slot boundaries are visible over the artwork.
+- 2026-05-15: Removed the temporary red pre-run skin debug outlines from `style.css` after finishing the slot alignment check.
+- 2026-05-15: Nudged the classic and advanced pre-run Skin03 slot art slightly larger in `style.css` so slot 3 visually matches the neighboring skin slots.

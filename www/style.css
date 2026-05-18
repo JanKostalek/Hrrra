@@ -3801,6 +3801,8 @@ summary,
 .pre-run-classic-gfx2-skin-slot-3 {
   left: 33.20%;
   top: 26.07%;
+  transform: scale(1.07);
+  transform-origin: center center;
 }
 
 .pre-run-classic-gfx2-skin-slot-4 {
@@ -3856,6 +3858,8 @@ summary,
 .pre-run-advanced-gfx2-skin-slot-3 {
   left: 33.20%;
   top: 26.07%;
+  transform: scale(1.07);
+  transform-origin: center center;
 }
 
 .pre-run-advanced-gfx2-skin-slot-4 {
@@ -3980,7 +3984,6 @@ summary,
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  outline: none;
   z-index: 3;
 }
 
