@@ -1,5 +1,6 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-18: Rebuilt the runtime tuning defaults from the current local admin export so the live default values now include the latest global settings and per-level mechanics, then mirrored the result to `www/` and Android public.
 - 2026-05-14: Halved the Rules text side padding again in `style.css` so the content stretches further toward both edges of the framed page.
 - 2026-05-14: Halved the side padding of the Rules text frame in `style.css` so the readable area expands further left and right.
 - 2026-05-14: Tightened the Rules text framing in `style.css` by making the side padding more stable and reducing the bottom gap so the text sits closer to the image frame.

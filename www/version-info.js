@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 96,
-  versionName: "1.0.96",
+  versionCode: 97,
+  versionName: "1.0.97",
   whatsNew: [
-  "The current admin configuration now becomes the built-in default seed for fresh installs and Reset All.",
-  "The in-game Admin button is hidden during active gameplay and stays available only from the pre-run screens."
+  "Cube now sits on the pre-run floor as a Skin07 visual mode and hides the level border when Modern Visuals are off.",
+  "Rules now includes the Shop and Mine pages, with the page counter shown in a brighter beige."
 ]
 });

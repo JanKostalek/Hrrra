@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 96,
-  "latestVersionName": "1.0.96",
+  "latestVersionCode": 97,
+  "latestVersionName": "1.0.97",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.96 build is available. The release refreshes the built-in admin default seed from the current local settings and hides the in-game Admin button during active gameplay.",
+  "message": "A new Hrrra 1.0.93 build is available. The release adds the Cube floor visual mode in pre-run, hides borders when Modern Visuals are off, and keeps the Rules Shop and Mine pages.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }
