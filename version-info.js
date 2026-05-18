@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 95,
-  versionName: "1.0.95",
+  versionCode: 96,
+  versionName: "1.0.96",
   whatsNew: [
-    "Shopaholic now appears in Skills with its own trophy art and admin card.",
-    "Release 1.0.95 keeps the latest visual and admin polish bundled for Android."
-  ]
+  "The current admin configuration now becomes the built-in default seed for fresh installs and Reset All.",
+  "The in-game Admin button is hidden during active gameplay and stays available only from the pre-run screens."
+]
 });

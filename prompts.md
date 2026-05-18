@@ -571,35 +571,46 @@ Srovnej i classic/advanced slot artwork na pre-run obrazovce tak, aby všechny s
 - User asked to prepare an Android `.aab` and to include all modified files in the commit, including asset changes.
 - User asked to remove the Cube debug outline and to suppress levelXX_border.png whenever Modern Visuals are off, whether via Skin07/Cube or the admin toggle.
 - User asked to move Cube from the skin grid to the floor area next to Start Run in the classic/advanced pre-run GFX2 scene, keep it above the background layer, and show selected/unselected Skin07 PNGs when unlocked.
-V android části, jsi nastavoval timer a reminder, aby se v mobilu ukázalo upozornění, že v shop screen je dobré vybrat storage, ze je plny coins. Nastavoval jsi to tak, aby ve chvíli, kdy provedeme transfer, se spočítalo, kolik coins se vejde a jak dlouho se jedna těží, tyto položky vynásobíš, přidáš 30 minut a v tu dobu by mělo přijít upozornění v mobilu, že je storage plná. Další upozornění by mělo přijít po 6 hodinách. pokud vybereme storage - kdykoliv, i kdyz není jeste plná - tak se ten časovač resetuje. Nicméně, žádné upozornění v současné chvíli nechodí. - ověř, zda to tak je, proč asi nechodí upozornění a navrhni upravu, aby začaly chodit
+podle pravidel připrav kompletní technickou dokumentaci po částech, bez jakýchkoli dalších změn
 
 -------------------
-tak to implementuj
+ano, pokračuj dalším logickým krokem
+ 
+-------------------
+jeste udelej bod 2
 
 -------------------
-# 2026-05-15: User asked to map Shopaholic badge trophies so Badges v2 uses trophy_shopaholic.png while Badges v1 falls back to trophy_clean.
-připrav aab - podle pravidel co máme zaznamenaný
+za co se ve hre může získat odznak banger?
 
 -------------------
-ano
+a big spender?
 
 -------------------
-v tom workflow, jak jsi jej vypsal a sledoval, mezi bod 5 a 6 dej nový bod (6 posun na 7, 7 na 8) a nový bod 6 je připrav aab. Ověř, zda tento workflov odpovídá tomu ulozenemu ve workflow.md
+ano, chci aby to co já mam ted v local defaul - admin storage se propsalo jako nový default do zdrojáků. To znamená, že každý kdo si stáhne novou verzi, která toto uz bude mít a klikne na reset to default, dostane ty hodnoty, jak je ted mám zadané já v mojí administraci. Ucite chci, aby se propsaly i do www - online a do android verze
 
 -------------------
-v prerun obrazovce, udělej kolem slotů na výběr skin debug cervené rámečky, abych videl, kde presne sedí tlačítka
+v game run screen je v pravem dolním rohu vzdy videt "admin" tlačítko. Shovej ho, aby nebylo videt a nebylo možno na nej kliknout. Zatím ponech jen to tlačítko, které je v pravém horním rohu v pre-run obrazovkách
 
 -------------------
-debug rámečky nevidim. nejsou schované ve spodní vrstve?
+Stále v tom levém dolním rohu tlačítko vidim
 
 -------------------
-udělej sync do www a androidu - abych to videl i na emulatoru
+Jeste jednou vezmi moje settings v administraci a priprav z nich znovu default. Provedl jsem jeste nekolik zmen v nastavení, které chci aby se promítly do defaultu
 
 -------------------
-můžeš nyní vsechny debug rámečky odstranit
+jeste jsem provedl nekolik změn v nastavení, priprav ještě jednou prosím nový default
 
 -------------------
-Udelej, protoze myslím, ze slotč. 3 je mensi nez ostatní
+ted podle pravidel priprav aab
+ted podobným způsobem připrav podrobnou uživatelskou dokumentaci s popisem co v které obeazovce lze dělat
 
 -------------------
-podle pravidel připrav aab
+Ano, pokračuj krokem 1 a 3
+
+-------------------
+ted se vrat k technické dokumentaci a pokračuj " dalším logickym krokem", jak jsi jej navrhoval
+
+-------------------
+ano, pokračuj dalším logickým krokem
+
+-------------------

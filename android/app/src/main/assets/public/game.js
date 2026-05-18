@@ -4341,6 +4341,66 @@ Main tuning points:
     }
   }
 
+  function seedDefaultAdminStorageIfMissing() {
+    var seed = window.HrrraDefaultAdminSettings;
+    var levelSeed;
+    var levelKey;
+    var difficultyKey;
+    var modeKey;
+    var storageKey;
+
+    if (!seed || typeof seed !== "object") {
+      return;
+    }
+
+    try {
+      if (!window.localStorage.getItem(GLOBAL_ADMIN_STORAGE_KEY) && seed.global && typeof seed.global === "object") {
+        writeGlobalAdminStorageObject(seed.global);
+      }
+
+      levelSeed = seed.levels;
+      if (!levelSeed || typeof levelSeed !== "object") {
+        return;
+      }
+
+      for (levelKey in levelSeed) {
+        if (!Object.prototype.hasOwnProperty.call(levelSeed, levelKey)) {
+          continue;
+        }
+        var numericLevel = Number(levelKey);
+        var levelEntry = levelSeed[levelKey];
+        if (!Number.isFinite(numericLevel) || !levelEntry || typeof levelEntry !== "object") {
+          continue;
+        }
+        for (difficultyKey in levelEntry) {
+          if (!Object.prototype.hasOwnProperty.call(levelEntry, difficultyKey)) {
+            continue;
+          }
+          var difficultyEntry = levelEntry[difficultyKey];
+          if (!difficultyEntry || typeof difficultyEntry !== "object") {
+            continue;
+          }
+          for (modeKey in difficultyEntry) {
+            if (!Object.prototype.hasOwnProperty.call(difficultyEntry, modeKey)) {
+              continue;
+            }
+            var numericMode = Number(modeKey);
+            var modeEntry = difficultyEntry[modeKey];
+            if (!Number.isFinite(numericMode) || !modeEntry || typeof modeEntry !== "object") {
+              continue;
+            }
+            storageKey = getModeStorageKey(numericLevel, numericMode, difficultyKey);
+            if (!window.localStorage.getItem(storageKey)) {
+              writeAdminStorageObject(numericLevel, numericMode, difficultyKey, modeEntry);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      // ignore seeding failures
+    }
+  }
+
   function saveGlobalAdminField(key, value) {
     var stored = readGlobalAdminStorageObject();
     stored[key] = value;
@@ -4384,6 +4444,7 @@ Main tuning points:
   function resetAllSettingsToDefaults() {
     setAdminOpen(false);
     clearAllHrrraStorageData();
+    seedDefaultAdminStorageIfMissing();
     badgeStats = createDefaultBadgeStats();
     economyStats = createDefaultEconomyStats();
     state.gameMode = 2;
@@ -6810,6 +6871,7 @@ Main tuning points:
   function init() {
     canvas.width = baseCanvasWidth;
     canvas.height = baseCanvasHeight;
+    seedDefaultAdminStorageIfMissing();
     primeSceneArt();
     scheduleResponsiveLayoutRefresh();
     window.addEventListener("resize", scheduleResponsiveLayoutRefresh);
@@ -11706,7 +11768,7 @@ Main tuning points:
 
   function updateOverlayUiVisibility() {
     if (adminToggle) {
-      adminToggle.classList.toggle("hidden", state.preRunActive || state.levelFinishedActive);
+      adminToggle.classList.toggle("hidden", !state.preRunActive || state.levelFinishedActive);
     }
     if (state.preRunActive || state.levelFinishedActive) {
       if (state.inGameSettingsActive) {

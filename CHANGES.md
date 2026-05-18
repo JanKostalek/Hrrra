@@ -1,7 +1,5 @@
 # Hrrra - Working Changes Log
 
-- 2026-05-15: Added the `Shopaholic` badge to the `Skills` admin section and wired it to track unique shop-family completion, including the special one-time `Buy 10 Coins` purchase flag and the final `Sold` state for multi-level shop branches.
-- 2026-05-15: Reworked the Android mine reminder sync so transfer and storage-upgrade actions now schedule a primary reminder plus a 6-hour follow-up from the current mine state, instead of the older single-delay transfer-only worker.
 - 2026-05-14: Halved the Rules text side padding again in `style.css` so the content stretches further toward both edges of the framed page.
 - 2026-05-14: Halved the side padding of the Rules text frame in `style.css` so the readable area expands further left and right.
 - 2026-05-14: Tightened the Rules text framing in `style.css` by making the side padding more stable and reducing the bottom gap so the text sits closer to the image frame.
@@ -348,9 +346,16 @@
 - Release 1.0.93: added the Cube floor visual mode in pre-run, hid level borders when Modern Visuals are off, and bundled the updated Rules pages and assets for Android release.
 - Removed the Cube debug frame and hid level border art whenever Modern Visuals are disabled, including when Skin07/Cube is selected or forced off in admin.
 - Pre-run Cube moved out of the skin grid and onto the floor in the classic/advanced GFX2 scene, with a visible debug outline and selected/unselected Skin07 PNGs.
-- 2026-05-15: Mapped `Shopaholic` badge trophies so Badges v2 uses `trophy_shopaholic.png` and Badges v1 falls back to `trophy_clean.png`, including the local `www` copy.
-- 2026-05-15: Prepared release 1.0.94 by bumping version metadata and mirroring the updated runtime assets into `android/app/src/main/assets/public` for the Android bundle.
-- 2026-05-15: Added a temporary red outline to `.pre-run-skin-btn` in `style.css` to debug exact pre-run skin slot hitbox placement.
-- 2026-05-15: Added a temporary red debug outline to the classic and advanced pre-run skin hitboxes in `style.css` so the clickable slot boundaries are visible over the artwork.
-- 2026-05-15: Removed the temporary red pre-run skin debug outlines from `style.css` after finishing the slot alignment check.
-- 2026-05-15: Nudged the classic and advanced pre-run Skin03 slot art slightly larger in `style.css` so slot 3 visually matches the neighboring skin slots.
+- 2026-05-18: Started `TECHNICAL_REFERENCE.md` as a project-wide technical map covering runtime layers, persistence, Android sync, online APIs, assets, and pre-run screen structure.
+- 2026-05-18: Added `USER_GUIDE.md` as a player-facing walkthrough of what can be done on each game screen, from sign-in through pre-run, shop, mine, admin, game over, and badges.
+- 2026-05-18: Added `SCREEN_REFERENCE.md` and `PLAYER_MANUAL.md` to expand the player-facing documentation with a per-screen control map and a practical how-to-play guide.
+- 2026-05-18: Expanded `TECHNICAL_REFERENCE.md` with the badge model, shop item model, mine economy, admin renderer, render pipeline, and release/AAB flow.
+- 2026-05-18: Expanded `TECHNICAL_REFERENCE.md` again with a screen-by-screen asset atlas, save lifecycle notes, and troubleshooting paths for stale UI or storage issues.
+- 2026-05-18: Expanded `TECHNICAL_REFERENCE.md` with a feature locator index that maps core screens, badges, shop, mine, admin, online scores, Android bridge, and release mirrors to the main code entry points.
+- 2026-05-18: Expanded `TECHNICAL_REFERENCE.md` with a screen button handler map that traces major UI buttons to their handlers and the storage or overlay flow they affect.
+- 2026-05-18: Promoted the current local admin configuration snapshot into a built-in default seed via `default-admin-settings.js`, with startup/reset seeding in `game.js` and mirrored copies in `www/` and Android public assets.
+- 2026-05-18: Hid the lower pre-run admin button in the detail and compact run screens via `style.css`, leaving only the pre-run admin entry points that are meant to stay visible.
+- 2026-05-18: Changed the global `#admin-toggle` visibility logic in `game.js` so it only shows during pre-run screens and stays hidden during active gameplay.
+- 2026-05-18: Refreshed the built-in admin seed in `default-admin-settings.js` from the current local admin storage snapshot and mirrored it into `www/` and Android public assets.
+- 2026-05-18: Refreshed the built-in admin seed again from the latest local admin storage snapshot so the source defaults track the newest admin adjustments.
+- 2026-05-18: Release 1.0.96 bumped the web, Android, and live version metadata to match the newer online 1.0.95 baseline and bundled the current admin-default seed plus gameplay/admin UI polish.

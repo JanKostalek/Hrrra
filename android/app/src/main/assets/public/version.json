@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 95,
-  "latestVersionName": "1.0.95",
+  "latestVersionCode": 96,
+  "latestVersionName": "1.0.96",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.95 build is available. The release keeps the latest Shopaholic and admin polish bundled for Android.",
+  "message": "A new Hrrra 1.0.96 build is available. The release refreshes the built-in admin default seed from the current local settings and hides the in-game Admin button during active gameplay.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }
