@@ -288,7 +288,7 @@
         "liveUnlockScore": 30000,
         "liveRespawnMinSeconds": 10,
         "liveRespawnMaxSeconds": 20,
-        "slowUnlockSpeedPercent": 50,
+        "slowUnlockSpeedPercent": 100,
         "slowRespawnMinSeconds": 10,
         "slowRespawnMaxSeconds": 20,
         "elevatorSpeed": 95,
@@ -441,7 +441,7 @@
         "shieldRespawnMinSeconds": 15,
         "shieldRespawnMaxSeconds": 30,
         "magnetUnlockScore": 10000,
-        "slowUnlockSpeedPercent": 200,
+        "slowUnlockSpeedPercent": 100,
         "levelMusicLoopPath": "assets/level1/sound/l1-music-loop.mp3",
         "levelJumpSoundPath": "assets/level1/sound/l1-sfx-jump.wav",
         "levelCoinSoundPath": "assets/level1/sound/l1-sfx-coin.wav",
@@ -594,8 +594,8 @@
         "slowUnlockSpeedPercent": 150,
         "slowDownByPercent": 50,
         "slowEffectSeconds": 10,
-        "slowRespawnMinSeconds": 10,
-        "slowRespawnMaxSeconds": 20,
+        "slowRespawnMinSeconds": 20,
+        "slowRespawnMaxSeconds": 40,
         "elevatorSpeed": 95
       },
       "2": {
@@ -621,7 +621,7 @@
         "doubleJumpUnlockScore": 0,
         "shieldUnlockScore": 0,
         "magnetUnlockScore": 0,
-        "slowUnlockSpeedPercent": 200,
+        "slowUnlockSpeedPercent": 150,
         "projectileRespawnMinSeconds": 4,
         "level5ScoreGoal": 200000,
         "moveSpeedGroundPercentL": 75,
@@ -676,8 +676,8 @@
         "magnetRespawnMaxSeconds": 22,
         "slowDownByPercent": 50,
         "slowEffectSeconds": 10,
-        "slowRespawnMinSeconds": 10,
-        "slowRespawnMaxSeconds": 20,
+        "slowRespawnMinSeconds": 20,
+        "slowRespawnMaxSeconds": 40,
         "elevatorSpeed": 95
       }
     },
@@ -760,8 +760,8 @@
         "slowUnlockSpeedPercent": 150,
         "slowDownByPercent": 50,
         "slowEffectSeconds": 10,
-        "slowRespawnMinSeconds": 10,
-        "slowRespawnMaxSeconds": 20,
+        "slowRespawnMinSeconds": 20,
+        "slowRespawnMaxSeconds": 40,
         "elevatorSpeed": 95
       },
       "2": {
@@ -795,7 +795,7 @@
         "magnetEffectSeconds": 10,
         "magnetRespawnMinSeconds": 20,
         "magnetRespawnMaxSeconds": 30,
-        "slowUnlockSpeedPercent": 200,
+        "slowUnlockSpeedPercent": 150,
         "level5ScoreGoal": 200000,
         "moveSpeedGroundPercentL": 75,
         "moveSpeedGroundPercentR": 75,
@@ -842,8 +842,8 @@
         "tripleJumpEffectSeconds": 10,
         "slowDownByPercent": 50,
         "slowEffectSeconds": 10,
-        "slowRespawnMinSeconds": 10,
-        "slowRespawnMaxSeconds": 20,
+        "slowRespawnMinSeconds": 20,
+        "slowRespawnMaxSeconds": 40,
         "elevatorSpeed": 95
       }
     }
@@ -928,8 +928,8 @@
         "slowUnlockSpeedPercent": 150,
         "slowDownByPercent": 50,
         "slowEffectSeconds": 10,
-        "slowRespawnMinSeconds": 10,
-        "slowRespawnMaxSeconds": 20,
+        "slowRespawnMinSeconds": 20,
+        "slowRespawnMaxSeconds": 40,
         "elevatorSpeed": 95
       },
       "2": {
@@ -1010,8 +1010,8 @@
         "slowUnlockSpeedPercent": 150,
         "slowDownByPercent": 50,
         "slowEffectSeconds": 10,
-        "slowRespawnMinSeconds": 10,
-        "slowRespawnMaxSeconds": 20,
+        "slowRespawnMinSeconds": 20,
+        "slowRespawnMaxSeconds": 40,
         "elevatorSpeed": 95
       }
     },
@@ -1341,11 +1341,11 @@
         "magnetEffectSeconds": 5,
         "magnetRespawnMinSeconds": 12,
         "magnetRespawnMaxSeconds": 22,
-        "slowUnlockSpeedPercent": 150,
+        "slowUnlockSpeedPercent": 200,
         "slowDownByPercent": 50,
         "slowEffectSeconds": 10,
-        "slowRespawnMinSeconds": 10,
-        "slowRespawnMaxSeconds": 20,
+        "slowRespawnMinSeconds": 20,
+        "slowRespawnMaxSeconds": 40,
         "elevatorSpeed": 95
       }
     },
@@ -1459,7 +1459,7 @@
         "magnetRespawnMinSeconds": 15,
         "magnetRespawnMaxSeconds": 35,
         "slowUnlockSpeedPercent": 200,
-        "slowRespawnMinSeconds": 20,
+        "slowRespawnMinSeconds": 30,
         "slowRespawnMaxSeconds": 60,
         "level5ScoreGoal": 200000,
         "moveSpeedGroundPercentL": 75,
@@ -1593,11 +1593,11 @@
         "magnetEffectSeconds": 5,
         "magnetRespawnMinSeconds": 12,
         "magnetRespawnMaxSeconds": 22,
-        "slowUnlockSpeedPercent": 150,
+        "slowUnlockSpeedPercent": 200,
         "slowDownByPercent": 50,
         "slowEffectSeconds": 10,
-        "slowRespawnMinSeconds": 10,
-        "slowRespawnMaxSeconds": 20,
+        "slowRespawnMinSeconds": 30,
+        "slowRespawnMaxSeconds": 60,
         "elevatorSpeed": 95
       },
       "2": {
@@ -1675,11 +1675,11 @@
         "magnetEffectSeconds": 5,
         "magnetRespawnMinSeconds": 12,
         "magnetRespawnMaxSeconds": 22,
-        "slowUnlockSpeedPercent": 150,
+        "slowUnlockSpeedPercent": 200,
         "slowDownByPercent": 50,
         "slowEffectSeconds": 10,
-        "slowRespawnMinSeconds": 10,
-        "slowRespawnMaxSeconds": 20,
+        "slowRespawnMinSeconds": 30,
+        "slowRespawnMaxSeconds": 60,
         "elevatorSpeed": 95
       }
     },
@@ -1759,11 +1759,11 @@
         "magnetEffectSeconds": 5,
         "magnetRespawnMinSeconds": 12,
         "magnetRespawnMaxSeconds": 22,
-        "slowUnlockSpeedPercent": 150,
+        "slowUnlockSpeedPercent": 200,
         "slowDownByPercent": 50,
         "slowEffectSeconds": 10,
-        "slowRespawnMinSeconds": 10,
-        "slowRespawnMaxSeconds": 20,
+        "slowRespawnMinSeconds": 30,
+        "slowRespawnMaxSeconds": 60,
         "elevatorSpeed": 95
       },
       "2": {
@@ -1841,11 +1841,11 @@
         "magnetEffectSeconds": 5,
         "magnetRespawnMinSeconds": 12,
         "magnetRespawnMaxSeconds": 22,
-        "slowUnlockSpeedPercent": 150,
+        "slowUnlockSpeedPercent": 200,
         "slowDownByPercent": 50,
         "slowEffectSeconds": 10,
-        "slowRespawnMinSeconds": 10,
-        "slowRespawnMaxSeconds": 20,
+        "slowRespawnMinSeconds": 30,
+        "slowRespawnMaxSeconds": 60,
         "elevatorSpeed": 95
       }
     }

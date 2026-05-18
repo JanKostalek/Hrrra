@@ -575,3 +575,4 @@ Srovnej i classic/advanced slot artwork na pre-run obrazovce tak, aby všechny s
 - [2026-05-18] Znovu převést aktuální admin nastavení na nové defaulty, včetně ověření per-level Mechanics nastavení, a pak sync do www a Android + release commit/push.
 - [2026-05-18] Připravit nový AAB podle workflow a ověřit aktuální release verzi před bumpem.
 - [2026-05-18] Uprav release bump na 1.0.98, protože aktuální verze v mainu je už 1.0.97.
+- [2026-05-18] Znovu převést nový export z `admin_json` na defaulty, udělat release bump, sync to www/android, commit/push na main, připravit AAB a vrátit se na New.

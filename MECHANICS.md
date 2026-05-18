@@ -1,5 +1,6 @@
 # Hrrra - Mechanics Log
 
+- 2026-05-18: Rebuilt the per-level Mechanics defaults from the latest admin export so the release baseline now follows the current tuned values rather than the older seed.
 - 2026-05-18: Rebuilt the tuning defaults from the current local admin export so the per-level Mechanics values now act as the new base defaults after reset and on fresh installs, not just the live admin storage.
 - 2026-05-13: Switched local progress storage to be account-scoped on device so badges, skins, score, and mine wallet/storage now follow the active user, while Guest always loads an empty profile.
 - 2026-05-13: Moved the Android mine reminder to the transfer moment: the reminder delay is now computed from the transferred storage coin count and the current harvest interval, so the reminder can fire even if the game is closed before the mine fills again.
