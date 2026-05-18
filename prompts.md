@@ -573,3 +573,5 @@ Srovnej i classic/advanced slot artwork na pre-run obrazovce tak, aby všechny s
 - User asked to move Cube from the skin grid to the floor area next to Start Run in the classic/advanced pre-run GFX2 scene, keep it above the background layer, and show selected/unselected Skin07 PNGs when unlocked.
 - [2026-05-18] Ověřit, zda se do nového default-admin-settings.js propsaly i per-level admin nastavení, protože to uživatel nevidí v adminu.
 - [2026-05-18] Znovu převést aktuální admin nastavení na nové defaulty, včetně ověření per-level Mechanics nastavení, a pak sync do www a Android + release commit/push.
+- [2026-05-18] Připravit nový AAB podle workflow a ověřit aktuální release verzi před bumpem.
+- [2026-05-18] Uprav release bump na 1.0.98, protože aktuální verze v mainu je už 1.0.97.
