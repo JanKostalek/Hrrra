@@ -1,5 +1,6 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-21: Bumped the release metadata to 1.0.101 / versionCode 101 for the public release, with the live release note reduced to just `First public version.`
 - 2026-05-21: Bumped the release metadata to 1.0.94 / versionCode 94 for the first production Google Play build, and updated the release workflow rules to call out the full bump, sync, commit, push, and AAB flow.
 - 2026-05-21: Switched the Android rewarded continue flow from Google test rewarded ads to the production rewarded ad unit from `.key/admob.properties`, while leaving the banner path disabled.
 - 2026-05-14: Halved the Rules text side padding again in `style.css` so the content stretches further toward both edges of the framed page.

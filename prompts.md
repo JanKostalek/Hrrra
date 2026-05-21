@@ -587,3 +587,7 @@ tak prepni reklamy z testovacích na ostre
 Ted chci vytvořit balíček pro první produkční release na google play. zatim vse bylo pro testovací provoz. takze udělej  bump verze, sync do www, android, Commit to main, push to online, priprav aab a vrat se do new. takhle by to mělo být napsané i v pravidlech
 
 -------------------
+
+udělej jeste jednou version bump a vse dalsí (sync, commit, push, return to new - jak je t v pravidlech). Jen do release notes napis First public version. nic vic at tam uvedeno neni
+
+-------------------
