@@ -1,8 +1,8 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 93,
-  versionName: "1.0.93",
+  versionCode: 94,
+  versionName: "1.0.94",
   whatsNew: [
-  "Cube now sits on the pre-run floor as a Skin07 visual mode and hides the level border when Modern Visuals are off.",
-  "Rules now includes the Shop and Mine pages, with the page counter shown in a brighter beige."
+  "First production Google Play release with rewarded ads switched to production IDs.",
+  "Banner ads remain disabled while rewarded continue, shop, and mine ad flows stay active."
 ]
 });

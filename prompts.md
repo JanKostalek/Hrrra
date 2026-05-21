@@ -571,3 +571,19 @@ Srovnej i classic/advanced slot artwork na pre-run obrazovce tak, aby všechny s
 - User asked to prepare an Android `.aab` and to include all modified files in the commit, including asset changes.
 - User asked to remove the Cube debug outline and to suppress levelXX_border.png whenever Modern Visuals are off, whether via Skin07/Cube or the admin toggle.
 - User asked to move Cube from the skin grid to the floor area next to Start Run in the classic/advanced pre-run GFX2 scene, keep it above the background layer, and show selected/unselected Skin07 PNGs when unlocked.
+
+Nasti projekt hrrra z md souborů
+
+-------------------
+
+projdi kod a vypis mi místa, kde se ve hre používá zobrazování reklami
+
+-------------------
+
+tak prepni reklamy z testovacích na ostre
+
+-------------------
+
+Ted chci vytvořit balíček pro první produkční release na google play. zatim vse bylo pro testovací provoz. takze udělej  bump verze, sync do www, android, Commit to main, push to online, priprav aab a vrat se do new. takhle by to mělo být napsané i v pravidlech
+
+-------------------
