@@ -1,5 +1,6 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-21: Bumped the release metadata to 1.0.100 / versionCode 100 for the first production Google Play build, updated the release workflow rules to call out the full bump, sync, commit, push, and AAB flow, and switched Android rewarded continue to production IDs while leaving the banner path disabled.
 - 2026-05-18: Rebuilt the runtime tuning defaults from the latest local admin export and prepared release 1.0.99 / versionCode 99 for the next AAB build.
 - 2026-05-18: Rebuilt the runtime tuning defaults from the current local admin export so the live default values now include the latest global settings and per-level mechanics, then mirrored the result to `www/` and Android public.
 - 2026-05-18: Prepared release 1.0.98 by bumping the version metadata to versionCode 98 / 1.0.98 for the next AAB build.

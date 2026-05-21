@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 99,
-  "latestVersionName": "1.0.99",
+  "latestVersionCode": 100,
+  "latestVersionName": "1.0.100",
   "minSupportedVersionCode": 1,
-  "message": "A new Hrrra 1.0.93 build is available. The release adds the Cube floor visual mode in pre-run, hides borders when Modern Visuals are off, and keeps the Rules Shop and Mine pages.",
+  "message": "A new Hrrra 1.0.100 build is available. This is the first production Google Play release with rewarded ads switched to production IDs while banner ads stay disabled.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

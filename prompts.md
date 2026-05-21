@@ -576,3 +576,18 @@ Srovnej i classic/advanced slot artwork na pre-run obrazovce tak, aby všechny s
 - [2026-05-18] Připravit nový AAB podle workflow a ověřit aktuální release verzi před bumpem.
 - [2026-05-18] Uprav release bump na 1.0.98, protože aktuální verze v mainu je už 1.0.97.
 - [2026-05-18] Znovu převést nový export z `admin_json` na defaulty, udělat release bump, sync to www/android, commit/push na main, připravit AAB a vrátit se na New.
+- Nasti projekt hrrra z md souborů
+
+-------------------
+
+projdi kod a vypis mi místa, kde se ve hre používá zobrazování reklami
+
+-------------------
+
+tak prepni reklamy z testovacích na ostre
+
+-------------------
+
+Ted chci vytvořit balíček pro první produkční release na google play. zatim vse bylo pro testovací provoz. takze udělej  bump verze, sync do www, android, Commit to main, push to online, priprav aab a vrat se do new. takhle by to mělo být napsané i v pravidlech
+
+-------------------

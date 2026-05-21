@@ -116,6 +116,7 @@ for (const dirent of fs.readdirSync(base, { withFileTypes: true })) {
   - confirm `version.json` on the live site reports the new release version
   - only treat the release as complete when the in-app update check can see the new version after launch
   - then build the final `.aab`
+- For the first production Google Play release, follow the same release flow explicitly: bump the version, sync `www` and Android public assets, commit to `main`, push to `origin/main`, prepare the `.aab`, then return to `New`.
 - The goal of `prepare aab` is a release state where:
   - Google Play accepts the upload
   - the bundled app reports the shipped version correctly

@@ -21,7 +21,7 @@ import com.google.android.ump.UserMessagingPlatform;
 @CapacitorPlugin(name = "RewardedContinue")
 public class RewardedContinuePlugin extends Plugin {
     private static final String TEST_REWARDED_AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917";
-    private static final boolean USE_TEST_REWARDED_ADS = true;
+    private static final boolean USE_TEST_REWARDED_ADS = false;
     private static boolean adsInitialized = false;
     private PluginCall pendingCall;
     private RewardedAd rewardedAd;

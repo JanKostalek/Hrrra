@@ -16,7 +16,7 @@ if (hasAdmobProperties) {
 }
 
 def admobAppId = admobProperties.getProperty('admobAppId', 'ca-app-pub-6900731066060353~5995679934')
-def admobRewardedAdUnitId = admobProperties.getProperty('admobRewardedAdUnitId', 'ca-app-pub-3940256099942544/5224354917')
+def admobRewardedAdUnitId = admobProperties.getProperty('admobRewardedAdUnitId', 'ca-app-pub-6900731066060353/1599219403')
 
 android {
     namespace = "cz.hrrra.game"
@@ -38,8 +38,8 @@ android {
         applicationId "cz.hrrra.game"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 99
-        versionName "1.0.99"
+        versionCode 100
+        versionName "1.0.100"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [admobAppId: admobAppId]
         buildConfigField "String", "ADMOB_REWARDED_AD_UNIT_ID", "\"${admobRewardedAdUnitId}\""
