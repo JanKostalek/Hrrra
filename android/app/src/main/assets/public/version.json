@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 101,
-  "latestVersionName": "1.0.101",
+  "latestVersionCode": 102,
+  "latestVersionName": "1.0.102",
   "minSupportedVersionCode": 1,
-  "message": "First public version.",
+  "message": "Added AdMob app-ads.txt verification support.",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

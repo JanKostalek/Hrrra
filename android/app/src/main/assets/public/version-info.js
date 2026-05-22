@@ -1,7 +1,7 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 101,
-  versionName: "1.0.101",
+  versionCode: 102,
+  versionName: "1.0.102",
   whatsNew: [
-  "First public version."
+  "Added AdMob app-ads.txt verification support."
 ]
 });
