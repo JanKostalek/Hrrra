@@ -11,6 +11,7 @@ const copyToAndroidPublic = process.argv.includes("--android-public");
 const filesToCopy = [
   "index.html",
   "future-release.html",
+  "app-ads.txt",
   "version.json",
   "version-info.js",
   "style.css",
