@@ -9,6 +9,8 @@ Nastav mi app-ads.txt pro Google Play / AdMob tak, aby šel z webu ověřit publ
 
 Teď to prosím dotáhni do release flow: sync, commit, push a nový AAB, aby nová verze s app-ads.txt byla připravená k vydání.
 
+Reklamy už jsou přepnuté na novou AdMob rewarded jednotku, tak udělej úplný release flow i s novým build číslem.
+
 Ted chci další změnu. na stránce badges se vykreslují trophy_xxx (badge name). Jsou tam bez ohledu na to, zda je už badge získaný. Změn to tak, aby pokud nemám žádny badge (bronze / silver / gold), tak se tam ta trophy obrázek nebude zobrazovat. Teprve po získání badge se objeví tady trophy
 
 -------------------
