@@ -5,6 +5,10 @@ Přidej do administrace přepínač pro zapínání a vypínání admin password
 
 Při přípravě release nezapomeň zvýšit versionCode/versionName a sladit root i public version metadata, aby AAB odpovídalo live verzi.
 
+Nastav mi app-ads.txt pro Google Play / AdMob tak, aby šel z webu ověřit publikační účet a AdMob přestal hlásit nesoulad údajů.
+
+Teď to prosím dotáhni do release flow: sync, commit, push a nový AAB, aby nová verze s app-ads.txt byla připravená k vydání.
+
 Ted chci další změnu. na stránce badges se vykreslují trophy_xxx (badge name). Jsou tam bez ohledu na to, zda je už badge získaný. Změn to tak, aby pokud nemám žádny badge (bronze / silver / gold), tak se tam ta trophy obrázek nebude zobrazovat. Teprve po získání badge se objeví tady trophy
 
 -------------------

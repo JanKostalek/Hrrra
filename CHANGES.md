@@ -1,5 +1,7 @@
 # Hrrra - Working Changes Log
 
+- 2026-05-22: Bumped the release metadata to 1.0.102 / versionCode 102 and added a root-level `app-ads.txt` publisher declaration so AdMob can verify the site and the Play Console setup.
+- 2026-05-22: Added the AdMob `app-ads.txt` publisher declaration to the site root and wired the web sync so Vercel, `www/`, and the Android public mirror all receive the same file.
 - 2026-05-21: Bumped the release metadata to 1.0.101 / versionCode 101 for the public release, with the live release note reduced to just `First public version.`
 - 2026-05-21: Bumped the release metadata to 1.0.94 / versionCode 94 for the first production Google Play build, and updated the release workflow rules to call out the full bump, sync, commit, push, and AAB flow.
 - 2026-05-21: Switched the Android rewarded continue flow from Google test rewarded ads to the production rewarded ad unit from `.key/admob.properties`, while leaving the banner path disabled.
