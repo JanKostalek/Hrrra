@@ -1,7 +1,7 @@
 window.HrrraVersionInfo = Object.freeze({
-  versionCode: 103,
-  versionName: "1.0.103",
+  versionCode: 104,
+  versionName: "1.0.104",
   whatsNew: [
-  "Switched rewarded ads to the new AdMob unit."
+  "Welcome to First Public Release!"
 ]
 });
