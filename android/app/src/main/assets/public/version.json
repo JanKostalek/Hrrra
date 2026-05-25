@@ -1,7 +1,7 @@
 {
-  "latestVersionCode": 103,
-  "latestVersionName": "1.0.103",
+  "latestVersionCode": 104,
+  "latestVersionName": "1.0.104",
   "minSupportedVersionCode": 1,
-  "message": "Switched rewarded ads to the new AdMob unit.",
+  "message": "Welcome to First Public Release!",
   "storeUrl": "https://play.google.com/store/apps/details?id=cz.hrrra.game"
 }

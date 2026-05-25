@@ -13,6 +13,8 @@ Reklamy už jsou přepnuté na novou AdMob rewarded jednotku, tak udělej úpln�
 
 Ted chci další změnu. na stránce badges se vykreslují trophy_xxx (badge name). Jsou tam bez ohledu na to, zda je už badge získaný. Změn to tak, aby pokud nemám žádny badge (bronze / silver / gold), tak se tam ta trophy obrázek nebude zobrazovat. Teprve po získání badge se objeví tady trophy
 
+Udělej v CHANGES.md jen text `Welcome to First Public Release!`, pak bump verze a dotáhni release flow až do AAB.
+
 -------------------
 
 Přepínač `Badges v2` má platit nejen pro stránku badges, ale i pro badge reward po ukončení runu, a to pro všechny mody i obtížnosti.
