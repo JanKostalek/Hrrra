@@ -42,6 +42,7 @@ Main tuning points:
   var Player = window.HrrraPlayer;
   var World = window.HrrraWorld;
   var Physics = window.HrrraPhysics;
+  var DEFAULT_ADMIN_SETTINGS_EXPORT = window.HrrraDefaultAdminSettings || null;
 
   var canvas = document.getElementById("game-canvas");
   var gameShell = document.getElementById("game-shell");
@@ -586,7 +587,72 @@ Main tuning points:
   var ECONOMY_STORAGE_KEY_PREFIX = "hrrra_economy_v2_";
   var WHATS_NEW_SEEN_VERSION_STORAGE_KEY = "hrrra_whats_new_seen_version_v1";
   var START_SCREEN_GFX2_MIGRATION_STORAGE_KEY = "hrrra_start_screen_default_gfx2_v34";
+  var ADMIN_TOGGLE_VISIBILITY_STORAGE_KEY = "hrrra_admin_toggle_visible_v1";
   var activeProfilePlayerId = "";
+  // Store builds keep the admin entry hidden. Local debug sessions can persist a visible override.
+  var SHOW_ADMIN_TOGGLE = readAdminToggleVisibilitySetting();
+  function isAdminToggleVisibilityOverrideAllowed() {
+    if (typeof window === "undefined" || !window.location) {
+      return false;
+    }
+
+    var protocol = String(window.location.protocol || "").toLowerCase();
+    var hostname = String(window.location.hostname || "").toLowerCase();
+
+    if (protocol === "file:") {
+      return true;
+    }
+
+    if (protocol === "http:" || protocol === "https:") {
+      return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]";
+    }
+
+    return protocol === "capacitor:" || protocol === "ionic:" || protocol === "app:";
+  }
+
+  function readAdminToggleVisibilitySetting() {
+    if (!isAdminToggleVisibilityOverrideAllowed()) {
+      return false;
+    }
+
+    try {
+      return window.localStorage.getItem(ADMIN_TOGGLE_VISIBILITY_STORAGE_KEY) === "1";
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function persistAdminToggleVisibilitySetting(isVisible) {
+    if (!isAdminToggleVisibilityOverrideAllowed()) {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(ADMIN_TOGGLE_VISIBILITY_STORAGE_KEY, isVisible ? "1" : "0");
+    } catch (error) {
+      // ignore storage failures
+    }
+  }
+
+  function setAdminToggleVisibility(isVisible) {
+    SHOW_ADMIN_TOGGLE = !!isVisible && isAdminToggleVisibilityOverrideAllowed();
+    persistAdminToggleVisibilitySetting(SHOW_ADMIN_TOGGLE);
+    updateOverlayUiVisibility();
+  }
+
+  function showAdminToggle() {
+    setAdminToggleVisibility(true);
+  }
+
+  function hideAdminToggle() {
+    setAdminToggleVisibility(false);
+  }
+
+  window.HrrraDebug = window.HrrraDebug || {};
+  window.HrrraDebug.showAdminToggle = showAdminToggle;
+  window.HrrraDebug.hideAdminToggle = hideAdminToggle;
+  window.HrrraDebug.setAdminToggleVisibility = setAdminToggleVisibility;
+
   function getOnlineApiBaseOrigin() {
     var fallbackOrigin = "https://hrrra.vercel.app";
     if (typeof window === "undefined" || !window.location) {
@@ -4275,6 +4341,92 @@ Main tuning points:
     };
   }
 
+  function hasStoredAdminSettings() {
+    try {
+      if (window.localStorage.getItem(GLOBAL_ADMIN_STORAGE_KEY) !== null) {
+        return true;
+      }
+      for (var i = 0; i < window.localStorage.length; i += 1) {
+        var key = window.localStorage.key(i);
+        if (!key) {
+          continue;
+        }
+        if (key.indexOf(ADMIN_STORAGE_KEY_PREFIX) === 0 || key.indexOf(LEGACY_ADMIN_STORAGE_KEY_PREFIX) === 0) {
+          return true;
+        }
+      }
+    } catch (error) {
+      // ignore storage failures
+    }
+    return false;
+  }
+
+  function copyPlainObject(source) {
+    var out = {};
+    if (!source || typeof source !== "object") {
+      return out;
+    }
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        out[key] = source[key];
+      }
+    }
+    return out;
+  }
+
+  function seedBundledDefaultSettingsIfNeeded() {
+    if (!DEFAULT_ADMIN_SETTINGS_EXPORT || typeof DEFAULT_ADMIN_SETTINGS_EXPORT !== "object") {
+      return false;
+    }
+    if (hasStoredAdminSettings()) {
+      return false;
+    }
+
+    var globalSeed = copyPlainObject(DEFAULT_ADMIN_SETTINGS_EXPORT.global);
+    if (DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState && typeof DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState === "object") {
+      globalSeed.adminUiState = copyPlainObject(DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState);
+      if (DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.globals && typeof DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.globals === "object") {
+        globalSeed.adminUiState.globals = copyPlainObject(DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.globals);
+      }
+      if (DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.difficulties && typeof DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.difficulties === "object") {
+        globalSeed.adminUiState.difficulties = copyPlainObject(DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.difficulties);
+      }
+      if (DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.levels && typeof DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.levels === "object") {
+        globalSeed.adminUiState.levels = copyPlainObject(DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.levels);
+      }
+    }
+
+    writeGlobalAdminStorageObject(globalSeed);
+    applyObjectConfig(globalSeed);
+
+    if (DEFAULT_ADMIN_SETTINGS_EXPORT.levels && typeof DEFAULT_ADMIN_SETTINGS_EXPORT.levels === "object") {
+      for (var levelIndex = 1; levelIndex <= 5; levelIndex += 1) {
+        var levelKey = String(levelIndex);
+        var levelEntry = DEFAULT_ADMIN_SETTINGS_EXPORT.levels[levelKey];
+        if (!levelEntry || typeof levelEntry !== "object") {
+          continue;
+        }
+        for (var difficultyIndex = 0; difficultyIndex < 2; difficultyIndex += 1) {
+          var difficulty = difficultyIndex === 0 ? "easy" : "hard";
+          var difficultyEntry = levelEntry[difficulty];
+          if (!difficultyEntry || typeof difficultyEntry !== "object") {
+            continue;
+          }
+          for (var modeIndex = 0; modeIndex < 2; modeIndex += 1) {
+            var mode = modeIndex === 0 ? 2 : 1;
+            var modeEntry = difficultyEntry[String(mode)];
+            if (!modeEntry || typeof modeEntry !== "object") {
+              continue;
+            }
+            writeAdminStorageObject(levelIndex, mode, difficulty, copyPlainObject(modeEntry));
+          }
+        }
+      }
+    }
+
+    return true;
+  }
+
   function getModeStorageKey(level, mode, difficulty) {
     return ADMIN_STORAGE_KEY_PREFIX + "level" + String(level) + "_" + String(difficulty) + "_" + String(mode);
   }
@@ -4350,6 +4502,7 @@ Main tuning points:
   function resetAllSettingsToDefaults() {
     setAdminOpen(false);
     clearAllHrrraStorageData();
+    seedBundledDefaultSettingsIfNeeded();
     badgeStats = createDefaultBadgeStats();
     economyStats = createDefaultEconomyStats();
     state.gameMode = 2;
@@ -6136,6 +6289,7 @@ Main tuning points:
     applyStartScreenGfx2Migration();
   }
 
+  seedBundledDefaultSettingsIfNeeded();
   snapshotConfigDefaults();
 
   var state = {
@@ -11613,10 +11767,25 @@ Main tuning points:
     setAdminOpen(true);
   }
 
+  function setAdminButtonVisibility(button, isVisible) {
+    if (!button) {
+      return;
+    }
+
+    button.hidden = !isVisible;
+    button.classList.toggle("hidden", !isVisible);
+    button.setAttribute("aria-hidden", isVisible ? "false" : "true");
+    button.disabled = !isVisible;
+  }
+
   function updateOverlayUiVisibility() {
     if (adminToggle) {
-      adminToggle.classList.toggle("hidden", state.preRunActive || state.levelFinishedActive);
+      setAdminButtonVisibility(adminToggle, SHOW_ADMIN_TOGGLE && !state.preRunActive && !state.levelFinishedActive);
     }
+    setAdminButtonVisibility(preRunClassicGfx2AdminBtn, SHOW_ADMIN_TOGGLE && state.preRunActive && !state.levelFinishedActive);
+    setAdminButtonVisibility(preRunAdvancedGfx2AdminBtn, SHOW_ADMIN_TOGGLE && state.preRunActive && !state.levelFinishedActive);
+    setAdminButtonVisibility(preRunCompactAdminBtn, SHOW_ADMIN_TOGGLE && state.preRunActive && !state.levelFinishedActive);
+    setAdminButtonVisibility(preRunDetailAdminBtn, SHOW_ADMIN_TOGGLE && state.preRunActive && !state.levelFinishedActive);
     if (state.preRunActive || state.levelFinishedActive) {
       if (state.inGameSettingsActive) {
         closeInGameSettings();

@@ -599,3 +599,20 @@ Ted chci vytvořit balíček pro první produkční release na google play. zati
 udělej jeste jednou version bump a vse dalsí (sync, commit, push, return to new - jak je t v pravidlech). Jen do release notes napis First public version. nic vic at tam uvedeno neni
 
 -------------------
+
+Na prerun screen (vsech modů) je videt v pravém horním rohu tlačítko admin, můžeš ho schovat (aby na něj nešlo kliknout)? s tím, že bych chtěl, abys do pravidel napsal na prompt "skrýt admin", tak si zapsat, jak se to skrývá, abys nemusel dlouze hledat a vymýšlet a potom "zobrazit admin" zapsat jak jej zase zobrazíš. Asi jej budu v budoucnosti občas potřebovat na lokale zobrazit a pak zase skrýt. ale ve verzi co je na store, nechci aby uživatele to tlačítko měli zobrazené a aktivní.
+
+-------------------
+naposledy jsem po tobě chtěl, aby jsi pripravil pravidlo a mechaniku, jak na príkaz "skryj admin" jsi skryl tlačítko admin, který je v pravém horním rohu všech prerun obrazovek. a zároven, aby jsi udělal pravidlo a mechaniku na příkaz "odkryj admin" to tlačítko na lokale opět zobrazil, abych mohl udělat případné změny. Sice jsi na tom pracoval, ale na lokale tlačítko stále vidim. zkontroluj, zda jsi to implementoval
+
+-------------------
+
+hrrra-settings_defualt.json v kořeni projektu je export mého default nastavení. Načti tento soubor a udělej z něho nový default. to znamená, abych kdyz se klikne na reset / default, aby jej to načetlo. Zároven, aby vsem novým uživatelům bylo toto defaultní nastavení, které pro hru mají
+
+-------------------
+
+odkryj admin
+
+-------------------
+
+skryj admin
