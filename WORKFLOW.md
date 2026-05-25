@@ -54,7 +54,7 @@ This file captures standing project workflow conventions so they do not get lost
 
 ## Local Storage Cleanup
 
-- If the user asks for `vycistení local storage`, clear only Hrrra progress data for skins and badges.
+- If the user asks for `vycistenÃ­ local storage`, clear only Hrrra progress data for skins and badges.
 - The exact keys to remove are:
   - `hrrra_player_skin_progress_v1`
   - `hrrra_badge_stats_v1`
@@ -123,9 +123,25 @@ for (const dirent of fs.readdirSync(base, { withFileTypes: true })) {
   - the live `version.json` advertises the same newer version
   - an older installed app can detect that update on startup
 
+## Admin Toggle
+
+- The prerun admin entry points are controlled from `game.js` with the `SHOW_ADMIN_TOGGLE` flag and the admin buttons in `index.html`.
+- The local visibility override is stored in `localStorage` under `hrrra_admin_toggle_visible_v1`.
+- `game.js` exposes `window.HrrraDebug.hideAdminToggle()` and `window.HrrraDebug.showAdminToggle()` for quick local switching.
+- For store builds, keep the override off so the prerun admin buttons stay hidden.
+- If a prompt says `skrýt admin`, hide the prerun admin entry points with `window.HrrraDebug.hideAdminToggle()` or by storing `0` in `hrrra_admin_toggle_visible_v1`.
+- If a prompt says `zobrazit admin`, show the prerun admin entry points with `window.HrrraDebug.showAdminToggle()` or by storing `1` in `hrrra_admin_toggle_visible_v1`.
+
 ## Commits
 
 - Do not auto-commit or push unless explicitly requested by the user.
 - Avoid including unrelated helper files, spreadsheets, certificates, or source/reference asset folders unless the user asks for them.
 
-- Pokud budeme na vetvi `main`, vždy to výslovne reknu, aby se na ní omylem nepracovalo.
+- Pokud budeme na vetvi `main`, vzdy to vyslovne reknu, aby se na ni omylem nepracovalo.
+
+## Admin Toggle Clarification
+
+- `odkryj admin` means turn the override on, call `window.HrrraDebug.showAdminToggle()`, and make the top-right `admin-toggle` plus all prerun admin buttons visible and clickable again.
+- `skryj admin` means turn the override off, call `window.HrrraDebug.hideAdminToggle()`, and hide plus disable the top-right `admin-toggle` plus all prerun admin buttons.
+- When hidden, the buttons must be `display: none`, `aria-hidden: true`, and `disabled: true`.
+- The persisted local flag stays in `localStorage` as `hrrra_admin_toggle_visible_v1` with `1` for shown and `0` for hidden.

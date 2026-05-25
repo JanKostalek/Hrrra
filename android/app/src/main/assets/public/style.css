@@ -3916,6 +3916,7 @@ summary,
   top: 3.4%;
   width: 15.2%;
   height: 8.8%;
+  z-index: 12;
 }
 
 .pre-run-classic-gfx2-hitbox-start {
@@ -5035,11 +5036,13 @@ summary,
 
 #pre-run-future-release-btn,
 #pre-run-detail-admin-btn {
+  position: relative;
   width: 190px;
   min-width: 190px;
   min-height: 38px;
   font-size: 0.8em;
   text-align: center;
+  z-index: 3;
 }
 
 #pre-run-start-btn {
@@ -5050,12 +5053,14 @@ summary,
 }
 
 .pre-run-compact-admin-btn {
+  position: relative;
   background: rgba(255, 255, 255, 0.94);
   color: #08293a;
   font-size: clamp(15px, 1.3vw, 20px);
   min-height: 40px;
   min-width: 92px;
   padding: 4px 10px;
+  z-index: 3;
 }
 
 #pre-run-compact-back-btn {
@@ -6713,7 +6718,7 @@ body.visual-theme-retro .brief-live::before {
   position: absolute;
   right: 10px;
   bottom: 10px;
-  z-index: 20;
+  z-index: 50;
   border: 1px solid #222;
   background: rgba(255, 255, 255, 0.9);
   color: #111;
@@ -6721,6 +6726,7 @@ body.visual-theme-retro .brief-live::before {
   padding: 8px 12px;
   font-weight: bold;
   cursor: pointer;
+  pointer-events: auto;
 }
 
 #admin-toggle.hidden {

@@ -42,6 +42,7 @@ Main tuning points:
   var Player = window.HrrraPlayer;
   var World = window.HrrraWorld;
   var Physics = window.HrrraPhysics;
+  var DEFAULT_ADMIN_SETTINGS_EXPORT = window.HrrraDefaultAdminSettings || null;
 
   var canvas = document.getElementById("game-canvas");
   var gameShell = document.getElementById("game-shell");
@@ -267,7 +268,6 @@ Main tuning points:
     magneto: true,
     martyr: true,
     purist: true,
-    shopaholic: true,
     speed_demon: true,
     starter: true,
     still_runing: true,
@@ -587,7 +587,72 @@ Main tuning points:
   var ECONOMY_STORAGE_KEY_PREFIX = "hrrra_economy_v2_";
   var WHATS_NEW_SEEN_VERSION_STORAGE_KEY = "hrrra_whats_new_seen_version_v1";
   var START_SCREEN_GFX2_MIGRATION_STORAGE_KEY = "hrrra_start_screen_default_gfx2_v34";
+  var ADMIN_TOGGLE_VISIBILITY_STORAGE_KEY = "hrrra_admin_toggle_visible_v1";
   var activeProfilePlayerId = "";
+  // Store builds keep the admin entry hidden. Local debug sessions can persist a visible override.
+  var SHOW_ADMIN_TOGGLE = readAdminToggleVisibilitySetting();
+  function isAdminToggleVisibilityOverrideAllowed() {
+    if (typeof window === "undefined" || !window.location) {
+      return false;
+    }
+
+    var protocol = String(window.location.protocol || "").toLowerCase();
+    var hostname = String(window.location.hostname || "").toLowerCase();
+
+    if (protocol === "file:") {
+      return true;
+    }
+
+    if (protocol === "http:" || protocol === "https:") {
+      return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]";
+    }
+
+    return protocol === "capacitor:" || protocol === "ionic:" || protocol === "app:";
+  }
+
+  function readAdminToggleVisibilitySetting() {
+    if (!isAdminToggleVisibilityOverrideAllowed()) {
+      return false;
+    }
+
+    try {
+      return window.localStorage.getItem(ADMIN_TOGGLE_VISIBILITY_STORAGE_KEY) === "1";
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function persistAdminToggleVisibilitySetting(isVisible) {
+    if (!isAdminToggleVisibilityOverrideAllowed()) {
+      return;
+    }
+
+    try {
+      window.localStorage.setItem(ADMIN_TOGGLE_VISIBILITY_STORAGE_KEY, isVisible ? "1" : "0");
+    } catch (error) {
+      // ignore storage failures
+    }
+  }
+
+  function setAdminToggleVisibility(isVisible) {
+    SHOW_ADMIN_TOGGLE = !!isVisible && isAdminToggleVisibilityOverrideAllowed();
+    persistAdminToggleVisibilitySetting(SHOW_ADMIN_TOGGLE);
+    updateOverlayUiVisibility();
+  }
+
+  function showAdminToggle() {
+    setAdminToggleVisibility(true);
+  }
+
+  function hideAdminToggle() {
+    setAdminToggleVisibility(false);
+  }
+
+  window.HrrraDebug = window.HrrraDebug || {};
+  window.HrrraDebug.showAdminToggle = showAdminToggle;
+  window.HrrraDebug.hideAdminToggle = hideAdminToggle;
+  window.HrrraDebug.setAdminToggleVisibility = setAdminToggleVisibility;
+
   function getOnlineApiBaseOrigin() {
     var fallbackOrigin = "https://hrrra.vercel.app";
     if (typeof window === "undefined" || !window.location) {
@@ -610,7 +675,7 @@ Main tuning points:
   var BADGE_CATEGORY_COPY = {
     "Single Run": "Push a single run as far as possible and hit big one-shot milestones.",
     "All Runs": "Long-term collection goals that reward steady return play.",
-    "Skills": "Style, survival, shop mastery, and mechanic-driven challenges for mastery runs.",
+    "Skills": "Style, survival, and mechanic-driven challenges for mastery runs.",
     "Lifetime Legends": "Rare long-term badges for players who keep building a real Hrrra career.",
     "Discovery": "Badges tied to unlocking more of Hrrra over time."
   };
@@ -860,17 +925,6 @@ Main tuning points:
         { tier: "Bronze", value: "Reach Level 2 clean", sprite: "bronze" },
         { tier: "Silver", value: "Reach Level 4 clean", sprite: "silver" },
         { tier: "Gold", value: "Reach Level 5 clean", sprite: "gold" }
-      ]
-    },
-    {
-      id: "shopaholic_skills",
-      category: "Skills",
-      name: "Shopaholic",
-      description: "Buy across the shop until every unique branch is completed.",
-      tiers: [
-        { tier: "Bronze", value: "1 unique shop item", sprite: "bronze" },
-        { tier: "Silver", value: "3 unique shop items", sprite: "silver" },
-        { tier: "Gold", value: "7 unique shop items", sprite: "gold" }
       ]
     },
     {
@@ -1253,7 +1307,6 @@ Main tuning points:
       coinsBalance: 0,
       totalCoinsEarned: 0,
       totalCoinsSpent: 0,
-      buy10CoinsPurchasedOnce: false,
       mineStorageCoins: 0,
       mineStorageCapacity: defaultMineStorageCapacity,
       mineStorageUpgradeLevel: 1,
@@ -1275,7 +1328,6 @@ Main tuning points:
     out.coinsBalance = Number.isFinite(raw.coinsBalance) ? Math.max(0, Math.floor(Number(raw.coinsBalance))) : defaults.coinsBalance;
     out.totalCoinsEarned = Number.isFinite(raw.totalCoinsEarned) ? Math.max(0, Math.floor(Number(raw.totalCoinsEarned))) : defaults.totalCoinsEarned;
     out.totalCoinsSpent = Number.isFinite(raw.totalCoinsSpent) ? Math.max(0, Math.floor(Number(raw.totalCoinsSpent))) : defaults.totalCoinsSpent;
-    out.buy10CoinsPurchasedOnce = typeof raw.buy10CoinsPurchasedOnce === "boolean" ? raw.buy10CoinsPurchasedOnce : defaults.buy10CoinsPurchasedOnce;
     out.mineStorageCoins = Number.isFinite(raw.mineStorageCoins) ? Math.max(0, Math.floor(Number(raw.mineStorageCoins))) : defaults.mineStorageCoins;
     out.mineStorageCapacity = Number.isFinite(raw.mineStorageCapacity) ? Math.max(1, Math.floor(Number(raw.mineStorageCapacity))) : defaults.mineStorageCapacity;
     out.mineStorageUpgradeLevel = Number.isFinite(raw.mineStorageUpgradeLevel) ? Math.max(1, Math.min(4, Math.floor(Number(raw.mineStorageUpgradeLevel)))) : defaults.mineStorageUpgradeLevel;
@@ -1319,23 +1371,6 @@ Main tuning points:
   }
 
   var economyStats = createDefaultEconomyStats();
-
-  function migrateEconomyShopProgressFromBadgeHistory() {
-    if (!economyStats || typeof economyStats !== "object") {
-      return false;
-    }
-    if (economyStats.buy10CoinsPurchasedOnce) {
-      return false;
-    }
-    if (!badgeStats || !badgeStats.lifetime || !Number.isFinite(badgeStats.lifetime.exchangedCoins)) {
-      return false;
-    }
-    if (Math.max(0, Math.floor(Number(badgeStats.lifetime.exchangedCoins) || 0)) <= 0) {
-      return false;
-    }
-    economyStats.buy10CoinsPurchasedOnce = true;
-    return true;
-  }
 
   function readWhatsNewSeenVersionCode() {
     try {
@@ -2840,7 +2875,6 @@ Main tuning points:
 
     badgeStats = readBadgeStats();
     economyStats = readEconomyStats();
-    migrateEconomyShopProgressFromBadgeHistory();
 
     var progress = readPlayerSkinProgress();
     state.unlockedSkins = cloneSkinUnlocks(progress.unlockedSkins);
@@ -3223,7 +3257,7 @@ Main tuning points:
     economyStats.mineFrozenRemainingMs = 0;
     economyStats.mineNextCoinAt = now + (resumeDelay > 0 ? resumeDelay : intervalMs);
     writeEconomyStats();
-    syncMineStorageReminderFromCurrentState();
+    syncMineStorageReminder(Math.max(0, transferAmount * intervalMs));
     return transferAmount;
   }
 
@@ -3245,9 +3279,7 @@ Main tuning points:
     badgeStats.lifetime.totalScore = Math.max(0, getPersistentTotalScore() - totalScoreCost);
     incrementBadgeLifetimeStat("exchangedCoins", safeCoinCount);
     addCoinsToWallet(safeCoinCount);
-    economyStats.buy10CoinsPurchasedOnce = true;
     writeBadgeStats();
-    writeEconomyStats();
     return true;
   }
 
@@ -4309,6 +4341,92 @@ Main tuning points:
     };
   }
 
+  function hasStoredAdminSettings() {
+    try {
+      if (window.localStorage.getItem(GLOBAL_ADMIN_STORAGE_KEY) !== null) {
+        return true;
+      }
+      for (var i = 0; i < window.localStorage.length; i += 1) {
+        var key = window.localStorage.key(i);
+        if (!key) {
+          continue;
+        }
+        if (key.indexOf(ADMIN_STORAGE_KEY_PREFIX) === 0 || key.indexOf(LEGACY_ADMIN_STORAGE_KEY_PREFIX) === 0) {
+          return true;
+        }
+      }
+    } catch (error) {
+      // ignore storage failures
+    }
+    return false;
+  }
+
+  function copyPlainObject(source) {
+    var out = {};
+    if (!source || typeof source !== "object") {
+      return out;
+    }
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        out[key] = source[key];
+      }
+    }
+    return out;
+  }
+
+  function seedBundledDefaultSettingsIfNeeded() {
+    if (!DEFAULT_ADMIN_SETTINGS_EXPORT || typeof DEFAULT_ADMIN_SETTINGS_EXPORT !== "object") {
+      return false;
+    }
+    if (hasStoredAdminSettings()) {
+      return false;
+    }
+
+    var globalSeed = copyPlainObject(DEFAULT_ADMIN_SETTINGS_EXPORT.global);
+    if (DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState && typeof DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState === "object") {
+      globalSeed.adminUiState = copyPlainObject(DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState);
+      if (DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.globals && typeof DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.globals === "object") {
+        globalSeed.adminUiState.globals = copyPlainObject(DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.globals);
+      }
+      if (DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.difficulties && typeof DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.difficulties === "object") {
+        globalSeed.adminUiState.difficulties = copyPlainObject(DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.difficulties);
+      }
+      if (DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.levels && typeof DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.levels === "object") {
+        globalSeed.adminUiState.levels = copyPlainObject(DEFAULT_ADMIN_SETTINGS_EXPORT.adminUiState.levels);
+      }
+    }
+
+    writeGlobalAdminStorageObject(globalSeed);
+    applyObjectConfig(globalSeed);
+
+    if (DEFAULT_ADMIN_SETTINGS_EXPORT.levels && typeof DEFAULT_ADMIN_SETTINGS_EXPORT.levels === "object") {
+      for (var levelIndex = 1; levelIndex <= 5; levelIndex += 1) {
+        var levelKey = String(levelIndex);
+        var levelEntry = DEFAULT_ADMIN_SETTINGS_EXPORT.levels[levelKey];
+        if (!levelEntry || typeof levelEntry !== "object") {
+          continue;
+        }
+        for (var difficultyIndex = 0; difficultyIndex < 2; difficultyIndex += 1) {
+          var difficulty = difficultyIndex === 0 ? "easy" : "hard";
+          var difficultyEntry = levelEntry[difficulty];
+          if (!difficultyEntry || typeof difficultyEntry !== "object") {
+            continue;
+          }
+          for (var modeIndex = 0; modeIndex < 2; modeIndex += 1) {
+            var mode = modeIndex === 0 ? 2 : 1;
+            var modeEntry = difficultyEntry[String(mode)];
+            if (!modeEntry || typeof modeEntry !== "object") {
+              continue;
+            }
+            writeAdminStorageObject(levelIndex, mode, difficulty, copyPlainObject(modeEntry));
+          }
+        }
+      }
+    }
+
+    return true;
+  }
+
   function getModeStorageKey(level, mode, difficulty) {
     return ADMIN_STORAGE_KEY_PREFIX + "level" + String(level) + "_" + String(difficulty) + "_" + String(mode);
   }
@@ -4338,66 +4456,6 @@ Main tuning points:
       window.localStorage.setItem(GLOBAL_ADMIN_STORAGE_KEY, JSON.stringify(obj));
     } catch (error) {
       // ignore write failures
-    }
-  }
-
-  function seedDefaultAdminStorageIfMissing() {
-    var seed = window.HrrraDefaultAdminSettings;
-    var levelSeed;
-    var levelKey;
-    var difficultyKey;
-    var modeKey;
-    var storageKey;
-
-    if (!seed || typeof seed !== "object") {
-      return;
-    }
-
-    try {
-      if (!window.localStorage.getItem(GLOBAL_ADMIN_STORAGE_KEY) && seed.global && typeof seed.global === "object") {
-        writeGlobalAdminStorageObject(seed.global);
-      }
-
-      levelSeed = seed.levels;
-      if (!levelSeed || typeof levelSeed !== "object") {
-        return;
-      }
-
-      for (levelKey in levelSeed) {
-        if (!Object.prototype.hasOwnProperty.call(levelSeed, levelKey)) {
-          continue;
-        }
-        var numericLevel = Number(levelKey);
-        var levelEntry = levelSeed[levelKey];
-        if (!Number.isFinite(numericLevel) || !levelEntry || typeof levelEntry !== "object") {
-          continue;
-        }
-        for (difficultyKey in levelEntry) {
-          if (!Object.prototype.hasOwnProperty.call(levelEntry, difficultyKey)) {
-            continue;
-          }
-          var difficultyEntry = levelEntry[difficultyKey];
-          if (!difficultyEntry || typeof difficultyEntry !== "object") {
-            continue;
-          }
-          for (modeKey in difficultyEntry) {
-            if (!Object.prototype.hasOwnProperty.call(difficultyEntry, modeKey)) {
-              continue;
-            }
-            var numericMode = Number(modeKey);
-            var modeEntry = difficultyEntry[modeKey];
-            if (!Number.isFinite(numericMode) || !modeEntry || typeof modeEntry !== "object") {
-              continue;
-            }
-            storageKey = getModeStorageKey(numericLevel, numericMode, difficultyKey);
-            if (!window.localStorage.getItem(storageKey)) {
-              writeAdminStorageObject(numericLevel, numericMode, difficultyKey, modeEntry);
-            }
-          }
-        }
-      }
-    } catch (error) {
-      // ignore seeding failures
     }
   }
 
@@ -4444,7 +4502,7 @@ Main tuning points:
   function resetAllSettingsToDefaults() {
     setAdminOpen(false);
     clearAllHrrraStorageData();
-    seedDefaultAdminStorageIfMissing();
+    seedBundledDefaultSettingsIfNeeded();
     badgeStats = createDefaultBadgeStats();
     economyStats = createDefaultEconomyStats();
     state.gameMode = 2;
@@ -4643,8 +4701,6 @@ Main tuning points:
         return [5, 20, 50][tierIndex] || 0;
       case "purist_skills":
         return [2, 4, 5][tierIndex] || 0;
-      case "shopaholic_skills":
-        return [1, 3, 7][tierIndex] || 0;
       case "heart_hunter_legends":
       case "still_running_legends":
       case "cursed_legends":
@@ -4706,32 +4762,6 @@ Main tuning points:
       return parseLegacyBadgeTarget(series, tierIndex, legacyOverride);
     }
     return getDefaultBadgeTierTarget(series, tierIndex);
-  }
-
-  function getShopaholicCollectedValue() {
-    var collected = 0;
-    if (economyStats && economyStats.buy10CoinsPurchasedOnce) {
-      collected += 1;
-    }
-    if (isMineShortTimerUnlocked()) {
-      collected += 1;
-    }
-    if (isLevelXUnlocked()) {
-      collected += 1;
-    }
-    if (isSkinUnlocked("Skin05")) {
-      collected += 1;
-    }
-    if (isSkinUnlocked("Skin06")) {
-      collected += 1;
-    }
-    if (isSkinUnlocked("Skin07")) {
-      collected += 1;
-    }
-    if (getMineStorageUpgradeMeta().isMaxed) {
-      collected += 1;
-    }
-    return collected;
   }
 
   function formatBadgeCompactNumber(value) {
@@ -4808,8 +4838,6 @@ Main tuning points:
         return "Lose " + target + " lives in one run";
       case "purist_skills":
         return "Reach Level " + target + " clean";
-      case "shopaholic_skills":
-        return formatBadgeCompactNumber(target) + " unique shop item" + (target === 1 ? "" : "s");
       case "first_runner_legends":
         return appendBadgeInlineProgress("Start " + target + " run", series, tierIndex);
       case "heart_hunter_legends":
@@ -4874,8 +4902,6 @@ Main tuning points:
         return "lives lost in one run";
       case "purist_skills":
         return "clean level reached";
-      case "shopaholic_skills":
-        return "unique shop items";
       case "first_runner_legends":
         return "runs";
       case "heart_hunter_legends":
@@ -4953,8 +4979,6 @@ Main tuning points:
         return badgeStats.best.livesLostSingleRun;
       case "purist_skills":
         return badgeStats.best.puristLevel;
-      case "shopaholic_skills":
-        return getShopaholicCollectedValue();
       case "first_runner_legends":
         return badgeStats.lifetime.runsStarted;
       case "heart_hunter_legends":
@@ -5724,7 +5748,6 @@ Main tuning points:
     magneto: "trophy_magneto.png",
     martyr: "trophy_martyr.png",
     purist: "trophy_purist.png",
-    shopaholic: "trophy_shopaholic.png",
     speed_demon: "trophy_speed_demon.png",
     starter: "trophy_starter.png",
     still_runing: "trophy_still_runing.png",
@@ -6266,6 +6289,7 @@ Main tuning points:
     applyStartScreenGfx2Migration();
   }
 
+  seedBundledDefaultSettingsIfNeeded();
   snapshotConfigDefaults();
 
   var state = {
@@ -6871,7 +6895,6 @@ Main tuning points:
   function init() {
     canvas.width = baseCanvasWidth;
     canvas.height = baseCanvasHeight;
-    seedDefaultAdminStorageIfMissing();
     primeSceneArt();
     scheduleResponsiveLayoutRefresh();
     window.addEventListener("resize", scheduleResponsiveLayoutRefresh);
@@ -8816,49 +8839,28 @@ Main tuning points:
     return plugin;
   }
 
-  function getMineStorageReminderScheduleDelays() {
-    var storageCoins = getMineStorageCoins();
-    var storageCapacity = getMineStorageCapacity();
-    var intervalMs = getMineIntervalMs();
-    var storageCoinsToFull = Math.max(0, storageCapacity - storageCoins);
-    var firstDelayMs = Math.max(0, storageCoinsToFull * intervalMs + 30 * 60 * 1000);
-    var secondDelayMs = Math.max(firstDelayMs + 6 * 60 * 60 * 1000, firstDelayMs);
-    return {
-      firstDelayMs: firstDelayMs,
-      secondDelayMs: secondDelayMs
-    };
-  }
-
-  function syncMineStorageReminder(delayMs, followupDelayMs) {
+  function syncMineStorageReminder(delayMs) {
     if (!isNativeAndroidPlatform()) {
       return;
     }
 
     var safeDelayMs = Math.max(0, Math.floor(Number(delayMs) || 0));
-    var safeFollowupDelayMs = Math.max(0, Math.floor(Number(followupDelayMs) || 0));
-    var reminderKey = String(safeDelayMs) + ":" + String(safeFollowupDelayMs);
+    var reminderKey = String(safeDelayMs);
 
     state.mineStorageReminderSyncKey = reminderKey;
 
     var plugin = getMineStorageReminderPlugin();
     if (!plugin) {
-      state.mineStorageReminderSyncKey = "";
       return;
     }
 
     plugin
       .sync({
         delayMs: safeDelayMs,
-        followupDelayMs: safeFollowupDelayMs,
       })
       .catch(function () {
         state.mineStorageReminderSyncKey = "";
       });
-  }
-
-  function syncMineStorageReminderFromCurrentState() {
-    var schedule = getMineStorageReminderScheduleDelays();
-    syncMineStorageReminder(schedule.firstDelayMs, schedule.secondDelayMs);
   }
 
   function setUpdateNoticeOpen(isOpen, forceUpdate) {
@@ -10465,7 +10467,6 @@ Main tuning points:
           economyStats.mineStorageCoins = economyStats.mineStorageCapacity;
         }
         writeEconomyStats();
-        syncMineStorageReminderFromCurrentState();
         state.preRunGfx2ShopStatus =
           "Storage capacity upgraded to Level " +
           mineMeta.nextLevel +
@@ -11766,10 +11767,25 @@ Main tuning points:
     setAdminOpen(true);
   }
 
+  function setAdminButtonVisibility(button, isVisible) {
+    if (!button) {
+      return;
+    }
+
+    button.hidden = !isVisible;
+    button.classList.toggle("hidden", !isVisible);
+    button.setAttribute("aria-hidden", isVisible ? "false" : "true");
+    button.disabled = !isVisible;
+  }
+
   function updateOverlayUiVisibility() {
     if (adminToggle) {
-      adminToggle.classList.toggle("hidden", !state.preRunActive || state.levelFinishedActive);
+      setAdminButtonVisibility(adminToggle, SHOW_ADMIN_TOGGLE && !state.preRunActive && !state.levelFinishedActive);
     }
+    setAdminButtonVisibility(preRunClassicGfx2AdminBtn, SHOW_ADMIN_TOGGLE && state.preRunActive && !state.levelFinishedActive);
+    setAdminButtonVisibility(preRunAdvancedGfx2AdminBtn, SHOW_ADMIN_TOGGLE && state.preRunActive && !state.levelFinishedActive);
+    setAdminButtonVisibility(preRunCompactAdminBtn, SHOW_ADMIN_TOGGLE && state.preRunActive && !state.levelFinishedActive);
+    setAdminButtonVisibility(preRunDetailAdminBtn, SHOW_ADMIN_TOGGLE && state.preRunActive && !state.levelFinishedActive);
     if (state.preRunActive || state.levelFinishedActive) {
       if (state.inGameSettingsActive) {
         closeInGameSettings();

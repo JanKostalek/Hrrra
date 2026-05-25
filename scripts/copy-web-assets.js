@@ -7,11 +7,15 @@ const outputAssetsDir = path.join(outputDir, "assets");
 const androidPublicDir = path.join(projectRoot, "android", "app", "src", "main", "assets", "public");
 const androidBuildGradlePath = path.join(projectRoot, "android", "app", "build.gradle");
 const generatedVersionInfoPath = path.join(projectRoot, "version-info.js");
+const bundledDefaultSettingsJsonPath = path.join(projectRoot, "hrrra-settings_defualt.json");
+const bundledDefaultSettingsScriptPath = path.join(projectRoot, "hrrra-settings-default.js");
 const copyToAndroidPublic = process.argv.includes("--android-public");
 const filesToCopy = [
   "index.html",
   "future-release.html",
   "app-ads.txt",
+  "hrrra-settings_defualt.json",
+  "hrrra-settings-default.js",
   "version.json",
   "version-info.js",
   "style.css",
@@ -134,6 +138,20 @@ function writeGeneratedVersionInfo() {
   fs.writeFileSync(generatedVersionInfoPath, output, "utf8");
 }
 
+function writeBundledDefaultSettingsScript() {
+  if (!fs.existsSync(bundledDefaultSettingsJsonPath)) {
+    throw new Error(`Missing bundled default settings JSON: ${bundledDefaultSettingsJsonPath}`);
+  }
+
+  const rawJson = fs.readFileSync(bundledDefaultSettingsJsonPath, "utf8");
+  const parsed = JSON.parse(rawJson);
+  const output = [
+    "window.HrrraDefaultAdminSettings = Object.freeze(" + JSON.stringify(parsed, null, 2) + ");",
+    ""
+  ].join("\n");
+  fs.writeFileSync(bundledDefaultSettingsScriptPath, output, "utf8");
+}
+
 function ensureDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true });
 }
@@ -173,6 +191,7 @@ function copyProjectFiles(baseDir, logPrefix) {
 ensureDir(outputDir);
 ensureDir(outputAssetsDir);
 writeGeneratedVersionInfo();
+writeBundledDefaultSettingsScript();
 cleanAssetDirectories(outputDir, "web");
 copyProjectFiles(outputDir, "web");
 console.log(`web assets copied to ${outputDir}`);

@@ -579,12 +579,8 @@ Srovnej i classic/advanced slot artwork na pre-run obrazovce tak, aby všechny s
 - User asked to prepare an Android `.aab` and to include all modified files in the commit, including asset changes.
 - User asked to remove the Cube debug outline and to suppress levelXX_border.png whenever Modern Visuals are off, whether via Skin07/Cube or the admin toggle.
 - User asked to move Cube from the skin grid to the floor area next to Start Run in the classic/advanced pre-run GFX2 scene, keep it above the background layer, and show selected/unselected Skin07 PNGs when unlocked.
-- [2026-05-18] Ověřit, zda se do nového default-admin-settings.js propsaly i per-level admin nastavení, protože to uživatel nevidí v adminu.
-- [2026-05-18] Znovu převést aktuální admin nastavení na nové defaulty, včetně ověření per-level Mechanics nastavení, a pak sync do www a Android + release commit/push.
-- [2026-05-18] Připravit nový AAB podle workflow a ověřit aktuální release verzi před bumpem.
-- [2026-05-18] Uprav release bump na 1.0.98, protože aktuální verze v mainu je už 1.0.97.
-- [2026-05-18] Znovu převést nový export z `admin_json` na defaulty, udělat release bump, sync to www/android, commit/push na main, připravit AAB a vrátit se na New.
-- Nasti projekt hrrra z md souborů
+
+Nasti projekt hrrra z md souborů
 
 -------------------
 
@@ -603,3 +599,20 @@ Ted chci vytvořit balíček pro první produkční release na google play. zati
 udělej jeste jednou version bump a vse dalsí (sync, commit, push, return to new - jak je t v pravidlech). Jen do release notes napis First public version. nic vic at tam uvedeno neni
 
 -------------------
+
+Na prerun screen (vsech modů) je videt v pravém horním rohu tlačítko admin, můžeš ho schovat (aby na něj nešlo kliknout)? s tím, že bych chtěl, abys do pravidel napsal na prompt "skrýt admin", tak si zapsat, jak se to skrývá, abys nemusel dlouze hledat a vymýšlet a potom "zobrazit admin" zapsat jak jej zase zobrazíš. Asi jej budu v budoucnosti občas potřebovat na lokale zobrazit a pak zase skrýt. ale ve verzi co je na store, nechci aby uživatele to tlačítko měli zobrazené a aktivní.
+
+-------------------
+naposledy jsem po tobě chtěl, aby jsi pripravil pravidlo a mechaniku, jak na príkaz "skryj admin" jsi skryl tlačítko admin, který je v pravém horním rohu všech prerun obrazovek. a zároven, aby jsi udělal pravidlo a mechaniku na příkaz "odkryj admin" to tlačítko na lokale opět zobrazil, abych mohl udělat případné změny. Sice jsi na tom pracoval, ale na lokale tlačítko stále vidim. zkontroluj, zda jsi to implementoval
+
+-------------------
+
+hrrra-settings_defualt.json v kořeni projektu je export mého default nastavení. Načti tento soubor a udělej z něho nový default. to znamená, abych kdyz se klikne na reset / default, aby jej to načetlo. Zároven, aby vsem novým uživatelům bylo toto defaultní nastavení, které pro hru mají
+
+-------------------
+
+odkryj admin
+
+-------------------
+
+skryj admin
